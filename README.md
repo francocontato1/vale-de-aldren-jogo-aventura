@@ -7,7 +7,7 @@ Oitenta anos atrás, quatro amigos e quatro gigantes de pedra, os Vigias, atrave
 ## Como jogar
 
 - **Offline:** baixe `jogar-offline.html` e abra no Chrome ou no Edge. Tudo já vem dentro do arquivo.
-- **Online:** com o GitHub Pages ativado (veja abaixo), o jogo fica em `https://francocontato1.github.io/vale-de-aldren-jogo-aventura/`.
+- **Online:** https://francocontato1.github.io/vale-de-aldren-jogo-aventura/
 
 | Tecla | Ação |
 |---|---|
@@ -29,12 +29,9 @@ Oitenta anos atrás, quatro amigos e quatro gigantes de pedra, os Vigias, atrave
   - `magic.js`: lembranças fantasmas, espíritos e vaga-lumes
   - `world/`: terreno, céu, vila e gigantes
   - `actors/`: personagens e lobos
-- `docs/`: versão pronta para jogar, que é a pasta publicada pelo GitHub Pages
-  - `index.html`
-  - `game-<hash>.js`, gerado pelo build
-  - `a/` com modelos, texturas e sons
+- `index.html`, `game-<hash>.js` e `a/`: a versão jogável (modelos, texturas e sons ficam em `a/`), publicada pelo GitHub Pages
 - `jogar-offline.html`: o jogo inteiro num único arquivo
-- `build.sh`: compila `src/` para `docs/`
+- `build.sh`: compila `src/` para `game-<hash>.js` e atualiza `index.html`
 - `standalone.py`: gera o `jogar-offline.html`
 
 ## Compilar
@@ -55,7 +52,7 @@ Os modelos `.glb` ficam com a extensão `.glb.wasm` para que sejam servidos em q
 
 ## Ativar o GitHub Pages
 
-Em **Settings → Pages**, escolha **Deploy from a branch**, branch `main`, pasta `/docs`, e salve.
+Em **Settings → Pages**, escolha **Deploy from a branch**, branch `main`, pasta `/ (root)`, e salve.
 
 ## Créditos
 

@@ -1,6 +1,6 @@
 # Gera jogar-offline.html: um único arquivo com o jogo e todos os recursos embutidos.
 import os, base64, json, re
-here=os.path.dirname(os.path.abspath(__file__)); root=os.path.join(here,'docs')
+here=os.path.dirname(os.path.abspath(__file__)); root=here
 html=open(root+'/index.html').read()
 m=re.search(r'<script type="module" src="(game-[0-9a-f]+\.js)"></script>',html); js=open(root+'/'+m.group(1)).read().replace('</script','<\\/script')
 types={'.jpg':'image/jpeg','.png':'image/png','.mp3':'audio/mpeg','.wasm':'application/octet-stream'}
