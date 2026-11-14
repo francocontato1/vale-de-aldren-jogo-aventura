@@ -29,6 +29,9 @@ html,body{height:100%;margin:0;background:#0b0a08;color:var(--ink);overflow:hidd
 #prompt kbd{font-family:var(--f-ui);font-weight:600;color:var(--gold);margin-right:8px}
 #lapseHint{position:absolute;left:50%;bottom:calc(16px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);font-size:12px;color:var(--ink-dim);letter-spacing:.08em;text-shadow:0 1px 4px #000}
 #lapseHint.on{color:var(--glow)}
+#sailHud{position:absolute;left:50%;top:calc(58px + env(safe-area-inset-top,0px));transform:translateX(-50%);background:rgba(16,13,9,.55);border:1px solid var(--line);border-radius:12px;padding:8px 16px;text-align:center;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);max-width:calc(100vw - 32px)}
+#sailInfo{font-family:var(--f-display);font-size:19px;color:var(--ink)}#sailInfo b{color:var(--gold);font-weight:600}
+#sailKeys{font-size:12px;color:var(--ink-dim);margin-top:3px;letter-spacing:.03em}
 #toasts{position:absolute;left:50%;top:18%;transform:translateX(-50%);display:grid;gap:8px;justify-items:center}
 .toast{font-family:var(--f-display);font-size:28px;font-weight:600;text-shadow:0 2px 14px rgba(0,0,0,.8);animation:toast 5.2s forwards;text-align:center}
 .toast small{display:block;font-family:var(--f-ui);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);font-weight:500;margin-bottom:2px}
@@ -91,7 +94,7 @@ html,body{height:100%;margin:0;background:#0b0a08;color:var(--ink);overflow:hidd
 #ending{opacity:0;transition:opacity 4s}
 #ending.show{opacity:1}
 #mapView{position:fixed;inset:0;display:grid;place-items:center;background:rgba(8,6,4,.75)}
-#mapView .wrap{position:relative;width:min(700px,calc(100vw - 32px),calc(100vh - 80px));aspect-ratio:1;max-width:100%}
+#mapView .wrap{position:relative;width:min(920px,calc(100vw - 32px),calc(100vh - 80px));aspect-ratio:1;max-width:100%}
 #mapView canvas{width:100%;height:100%;border-radius:4px;box-shadow:0 20px 60px rgba(0,0,0,.5)}
 #mapView .cap{text-align:center;font-family:var(--f-display);font-style:italic;font-size:17px;color:var(--ink-dim);margin-top:10px}
 #touch{position:fixed;inset:0;pointer-events:none}
@@ -122,6 +125,7 @@ html,body{height:100%;margin:0;background:#0b0a08;color:var(--ink);overflow:hidd
   <div id="status">Caderno <b id="lumeCount">0/8</b> · <span id="clock">16:30</span> · <span id="keyHint">J caderno · M mapa · L lanterna · F tela cheia · Esc menu</span></div>
   <div id="quest"><div id="questText"></div></div>
   <div id="prompt" hidden></div>
+  <div id="sailHud" hidden><div id="sailInfo"></div><div id="sailKeys"></div></div>
   <div id="lapseHint" hidden>T · deixar o tempo passar · mova-se para levantar</div>
   <div id="toasts"></div>
 </div>
@@ -129,7 +133,7 @@ html,body{height:100%;margin:0;background:#0b0a08;color:var(--ink);overflow:hidd
 <div id="thought" hidden></div>
 <div id="narr" hidden></div>
 <div id="letter" hidden><div class="paper"><small>Uma carta, dobrada em quatro</small><div id="letterText"></div><div class="hint">Clique para guardar a carta</div></div></div>
-<div id="mapView" hidden><div><div class="wrap"><canvas id="mapCv" width="900" height="900"></canvas></div><div class="cap">Mapa do vale · M para fechar</div></div></div>
+<div id="mapView" hidden><div><div class="wrap"><canvas id="mapCv" width="1400" height="1400"></canvas></div><div class="cap">Mapa do vale · M para fechar</div></div></div>
 <div id="touch" hidden>
   <div id="joy"><div id="joyKnob"></div></div>
   <div id="tmap"><button id="tbMap">Mapa</button></div>
@@ -190,5 +194,5 @@ html,body{height:100%;margin:0;background:#0b0a08;color:var(--ink);overflow:hidd
 <div class="overlay" id="journal" hidden><div class="jcard"><div class="eyebrow">Caderno de Lia</div><h1>O mapa do que importa</h1><div id="journalCount"></div><div id="journalList"></div><p class="jhint">J ou Esc para fechar</p></div></div>
 <div class="overlay" id="ending" hidden><div class="card"><div class="eyebrow">Fim, e começo</div><h1 style="font-size:64px">O vale lembra</h1><p class="lede">Os lumes subiram de todo o vale e se misturaram às estrelas. O caderno está cheio. Mas o vale, como disse Odessa, nunca fica pronto: ainda há cantos esperando alguém que olhe com calma.</p><button class="btn" id="endBtn">Continuar andando</button></div></div>
 <div id="fade"></div>
-<script type="module" src="game-dcb1b69b.js"></script>
+<script type="module" src="game-b5484739.js"></script>
 </body></html>

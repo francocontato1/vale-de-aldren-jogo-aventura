@@ -72,6 +72,9 @@ export function makeBoat({ L = 5, B = 1.8, D = 0.75, sail = true, colors } = {})
   for (const s of [-1, 1]) { const pts = []; for (let i = 0; i <= 20; i++) { const t = i / 20; pts.push(new THREE.Vector3((t - 0.5) * L, top(t) + 0.02, half(t) * s)); } const curve = new THREE.CatmullRomCurve3(pts); const rail = new THREE.Mesh(new THREE.TubeGeometry(curve, 40, 0.035, 5), M.dark); rail.castShadow = true; root.add(rail); }
   // leme e cana
   const rud = new THREE.Group(); rud.position.set(-L / 2 - 0.02, 0, 0); root.add(rud); const blade = new THREE.Mesh(new THREE.BoxGeometry(0.32, 0.9, 0.04), M.dark); blade.position.set(-0.12, -0.25, 0); rud.add(blade); const tiller = new THREE.Mesh(new THREE.BoxGeometry(0.9, 0.05, 0.05), M.wood); tiller.position.set(0.45, top(0) + 0.05, 0); rud.add(tiller);
+  // tampa invisível na altura da borda: impede o mar (transparente) de aparecer dentro do casco
+  { const sh = new THREE.Shape(); const N = 24; for (let i = 0; i <= N; i++) { const t = i / N; const x = (t - 0.5) * L; const w = Math.max(0.01, half(t) - 0.04); i ? sh.lineTo(x, w) : sh.moveTo(x, w); } for (let i = N; i >= 0; i--) { const t = i / N; sh.lineTo((t - 0.5) * L, -Math.max(0.01, half(t) - 0.04)); }
+    const mg = new THREE.ShapeGeometry(sh); mg.rotateX(-Math.PI / 2); const mask = new THREE.Mesh(mg, new THREE.MeshBasicMaterial({ colorWrite: false, side: THREE.DoubleSide })); mask.position.y = Math.min(top(0.35), top(0.7)) - 0.1; mask.renderOrder = 1; root.add(mask); }
   const out = { root, hull, rudder: rud, tiller, L, B, D, top, half };
   if (sail) {
     const mx = L * 0.12; const mh = 5.6; const mast = new THREE.Mesh(new THREE.CylinderGeometry(0.045, 0.065, mh, 8), M.wood); mast.position.set(mx, mh / 2 - D * 0.3, 0); mast.castShadow = true; root.add(mast);
@@ -104,18 +107,20 @@ export class SailBoat {
     else { this.rudder = lerp(this.rudder, 0, clamp(dt * 1.5, 0, 1)); }
     // vento real no mar: a brisa do vale, mais firme sobre a água
     const wdir = Math.atan2(wind.x, wind.y); const ws = 3.2 + windStr * 3.5; // m/s
-    const rel = angDiff(this.yaw, wdir + Math.PI); // 0 = vento de popa; ±π = proa ao vento
+    const rel = angDiff(this.yaw, wdir); // 0 = vento de popa (U.wind aponta para onde o vento sopra); ±π = proa ao vento
     const off = Math.PI - Math.abs(rel); // 0 = proa ao vento
     // curva polar simples: nada dentro de ~38° do vento, máximo de través, bom de popa
     const polar = off < 0.66 ? 0 : off < 1.2 ? smooth(0.66, 1.2, off) * 0.85 : off < 2.2 ? 0.85 + 0.15 * Math.sin((off - 1.2) / 1.0 * Math.PI * 0.5) : 1 - (off - 2.2) * 0.12;
     this.luff = off < 0.66 ? 1 - off / 0.66 : 0; // vela panejando
-    const target = (this.sailing ? polar * ws * 0.62 * (0.35 + 0.65 * this.trim) : 0);
+    this.boost = !!(input && input.boost); this.polar = polar; this.ws = ws;
+    const target = (this.sailing ? polar * ws * 0.95 * (0.35 + 0.65 * this.trim) * (this.boost ? 1.65 : 1) : 0);
     const dep = depthAt(this.x, this.z);
     this.speed = lerp(this.speed, target, clamp(dt * (target > this.speed ? 0.35 : 0.6), 0, 1));
     if (this.sailing) this.yaw += this.rudder * (0.15 + this.speed * 0.22) * dt * -1;
     // encalhe: freia no raso
     const nx = this.x + Math.sin(this.yaw) * this.speed * dt, nz = this.z + Math.cos(this.yaw) * this.speed * dt;
-    if (depthAt(nx, nz) > 0.7) { this.x = nx; this.z = nz; } else { this.speed *= Math.exp(-dt * 4); this.grounded = true; }
+    const inside = Math.abs(nx) < 740 && Math.abs(nz) < 740; // além da borda do mapa não há terra desenhada
+    if (depthAt(nx, nz) > 0.7 && inside) { this.x = nx; this.z = nz; } else { this.speed *= Math.exp(-dt * 4); this.grounded = true; if (!inside) this.edge = true; }
     // boia: altura e inclinação pelas ondas sob a proa/popa/bordos
     const fx = Math.sin(this.yaw), fz = Math.cos(this.yaw), rx = Math.cos(this.yaw), rz = -Math.sin(this.yaw);
     const sB = seaSurface(this.x + fx * L * 0.4, this.z + fz * L * 0.4, t), sS = seaSurface(this.x - fx * L * 0.4, this.z - fz * L * 0.4, t), sP = seaSurface(this.x + rx * 0.8, this.z + rz * 0.8, t), sQ = seaSurface(this.x - rx * 0.8, this.z - rz * 0.8, t);

@@ -1,5 +1,5 @@
-import { loadTex, THREE, renderer, scene, camera, U, Q, settings, store, clamp, lerp, smooth, rand, rr, angDiff, lerpAng, makeMacroTexture, loadGLTF, progress, isTouch, trackP } from './core.js';
-import { computeTerrainData, buildTerrain, groundH, normalY, splatAt, sandAt, fromUV, HARBOR, SEA_ROT, POI, PATHS, MIRANTE, TRAIL, NINHO, forestDensity, WATER, HGT, NRM, SPLAT, NV, CELL, HALF, creekDist } from './world/terrain.js';
+import { hash2, loadTex, THREE, renderer, scene, camera, U, Q, settings, store, clamp, lerp, smooth, rand, rr, angDiff, lerpAng, makeMacroTexture, loadGLTF, progress, isTouch, trackP } from './core.js';
+import { computeTerrainData, buildTerrain, groundH, normalY, splatAt, sandAt, seaAt, fromUV, HARBOR, SEA_ROT, POI, PATHS, MIRANTE, TRAIL, NINHO, forestDensity, WATER, HGT, NRM, SPLAT, NV, CELL, HALF, creekDist } from './world/terrain.js';
 import { buildWater, setWaterQuality } from './world/water.js';
 import { buildOcean, updateOcean, seaSurface, depthAt, surfNear } from './world/ocean.js';
 import { SkySystem } from './world/sky.js';
@@ -189,7 +189,9 @@ function updatePlayer(dt) {
   const dir = fwd.clone().multiplyScalar(f).addScaledVector(right, s); if (dir.lengthSq() > 0) dir.normalize();
   const jog = (k.ShiftLeft || k.ShiftRight || touch.run);
   let speed = jog ? 3.7 : 1.75;
-  const gh0 = groundH(player.x, player.z); const depth = WATER - gh0; const inWater = depth > 0.08 && player.y < WATER + 0.1; if (inWater) speed *= clamp(1 - depth * 0.55, 0.35, 1);
+  const gh0 = groundH(player.x, player.z); const depth = WATER - gh0; const inWater = depth > 0.08 && player.y < WATER + 0.1; if (inWater) speed *= clamp(1 - depth * 0.35, 0.5, 1);
+  // nadar em água funda (mar, lagos)
+  player.swim = player.swim ? depth > 0.95 : depth > 1.15; if (player.swim) { speed = jog ? 2.3 : 1.35; if (!S.flags.nadou) { S.flags.nadou = 1; toast('Nadando', isTouch ? 'Correr: nadar mais rápido' : 'Shift: nadar mais rápido'); } }
   const tgt = len * speed; player.speed = lerp(player.speed, tgt, clamp(dt * (tgt > player.speed ? 3.2 : 5), 0, 1));
   if (len > 0.05) player.h = lerpAng(player.h, Math.atan2(dir.x, dir.z), dt * 5.5);
   // anda na direção em que está virada (curvas suaves, sem patinar de lado)
@@ -199,15 +201,16 @@ function updatePlayer(dt) {
   // degraus construídos (soleira, escada, píer) sobem até 40 cm de uma vez; no terreno vale a inclinação máxima
   const builtStep = pr0.h > groundH(nx, nz) + 0.02;
   if (pr0.block || (stepLen > 1e-4 && player.onGround && pr0.h > player.y + 0.05 && (builtStep ? pr0.h - player.y > 0.42 : (pr0.h - player.y) / stepLen > 1.1))) { nx = player.x; nz = player.z; }
-  if (groundH(nx, nz) < WATER - 1.1 && pr0.h < WATER) { nx = player.x; nz = player.z; if (!player.deepWarn) { player.deepWarn = true; toast('A água fica funda', 'Melhor contornar pela margem'); setTimeout(() => player.deepWarn = false, 8000); } }
   const p = { x: nx, z: nz }; collide(p, 0.3, player.y); for (const n of npcs) { if (!n.h.root.visible) continue; const dx = p.x - n.x, dz = p.z - n.z, d = Math.hypot(dx, dz); if (d < 0.6 && d > 1e-3) { p.x = n.x + dx / d * 0.6; p.z = n.z + dz / d * 0.6; } }
   const r = Math.hypot(p.x, p.z); if (r > 690) { p.x *= 690 / r; p.z *= 690 / r; }
   const moved = Math.hypot(p.x - player.x, p.z - player.z); player.x = p.x; player.z = p.z;
   const ground = probe(player.x, player.z, player.y).h;
-  if ((k.Space || touch.jump) && player.onGround && free) { player.vy = 4.2; player.onGround = false; pH.play('jumpStart', 0.1); }
+  if ((k.Space || touch.jump) && player.onGround && free && !player.swim) { player.vy = 4.2; player.onGround = false; pH.play('jumpStart', 0.1); }
   touch.jump = false;
-  player.vy -= 15 * dt; player.y += player.vy * dt;
-  if (player.y <= ground) { if (!player.onGround && player.vy < -3) { Sound.step(surface(), 1.3, player.x, player.z); pH.play('land', 0.08); player.landT = 0.25; } player.y = ground; player.vy = 0; player.onGround = true; }
+  if (player.swim) { const sf = seaSurface(player.x, player.z, elapsed); const surfY = seaAt(player.x, player.z) ? sf.y : WATER; player.vy = 0; player.y = lerp(player.y, surfY - 1.32, clamp(dt * 4, 0, 1)); player.onGround = false; if (rand() < dt * (player.speed > 0.4 ? 5 : 1)) ripple(player.x + rr(-0.4, 0.4), player.z + rr(-0.4, 0.4), 0.8 + player.speed * 0.3); }
+  else { player.vy -= 15 * dt; player.y += player.vy * dt; }
+  if (player.swim) { }
+  else if (player.y <= ground) { if (!player.onGround && player.vy < -3) { Sound.step(surface(), 1.3, player.x, player.z); pH.play('land', 0.08); player.landT = 0.25; } player.y = ground; player.vy = 0; player.onGround = true; }
   else if (player.y - ground > 0.35) player.onGround = false;
   else if (player.onGround) player.y = lerp(player.y, ground, clamp(dt * 18, 0, 1));
   // passos
@@ -216,7 +219,8 @@ function updatePlayer(dt) {
   if (inWater && player.speed < 0.3 && rand() < dt * 0.6) ripple(player.x + rr(-0.3, 0.3), player.z + rr(-0.3, 0.3), 0.6);
   pH.root.position.set(player.x, player.y, player.z); pH.root.rotation.y = player.h;
   player.landT = Math.max(0, (player.landT || 0) - dt);
-  if (!player.onGround && player.vy < -1) pH.locomote(0, { air: true });
+  if (player.swim) pH.locomote(0, { anim: effSpeed > 0.3 ? 'swimFwd' : 'swim', fade: 0.5 });
+  else if (!player.onGround && player.vy < -1) pH.locomote(0, { air: true });
   else if (player.landT > 0 && /land/.test(pH.currentName)) { }
   else pH.locomote(player.onGround ? effSpeed : 0, { idle: lanternOn ? 'lantern' : 'idle' });
   if (state === 'dialog' && dlgNPC && dlgNPC.h) pH.lookAtPoint(dlgNPC.h.headPos, 1); else pH.lookAtPoint(camera.position.clone().addScaledVector(camFwd, 20), 0.5);
@@ -271,7 +275,7 @@ const boatAtDock = () => boat && Math.hypot(boat.x - harbor.sailDock.x, boat.z -
 function startSailing() {
   if (!boat) return; state = 'sail'; $('prompt').hidden = true; curInter = null; boat.sailing = true; boat.grounded = false; player.sit = null; player.speed = 0; timeLapse = 0;
   pH.play('drive', 0.4); Sound.rustle(player.x, player.z); cam.yaw = boat.yaw + Math.PI; cam.pitch = -0.18; cam.boatT = 0;
-  const hint = $('lapseHint'); hint.hidden = false; hint.classList.remove('on'); hint.textContent = isTouch ? 'joystick · leme e vela   ·   Usar · desembarcar perto do píer ou da praia' : 'A D · leme   ·   W S · caçar e folgar a vela   ·   E · desembarcar (perto do píer ou da praia)';
+  $('lapseHint').hidden = true; $('sailHud').hidden = false; $('sailKeys').textContent = isTouch ? 'joystick: leme e vela · Correr: vento forte · Usar: desembarcar' : 'A D leme  ·  W caçar a vela (mais força)  ·  S folgar  ·  Shift vento forte (mais rápido)  ·  E desembarcar perto do píer ou da praia';
   if (!S.sailed) { S.sailed = 1; setTimeout(() => think('li_barco'), 2500); } save(); Music.silence = Math.min(Music.silence, 5);
 }
 function landingSpot() {
@@ -285,11 +289,15 @@ function stopSailing() {
   const L = landingSpot(); if (!L) { toast('Longe da terra', 'Chegue perto do píer ou de uma praia rasa para desembarcar'); return; }
   boat.sailing = false; state = 'play'; player.x = L.x; player.z = L.z; player.y = L.y; player.h = boat.yaw; player.vy = 0; player.onGround = true; cam.yaw = player.h + Math.PI; pH.play('idle', 0.3);
   if (L.dock) { const d = harbor.sailDock; boat.x = d.x; boat.z = d.z; boat.yaw = d.yaw; boat.speed = 0; }
-  S.boatPos = { x: boat.x, z: boat.z, yaw: boat.yaw }; $('lapseHint').hidden = true; $('lapseHint').textContent = lapseText; save();
+  S.boatPos = { x: boat.x, z: boat.z, yaw: boat.yaw }; $('sailHud').hidden = true; $('lapseHint').hidden = true; $('lapseHint').textContent = lapseText; save();
 }
 function updateSailing(dt) {
   const k = keys; const steer = clamp((k.KeyD || k.ArrowRight ? 1 : 0) - (k.KeyA || k.ArrowLeft ? 1 : 0) + touch.mx, -1, 1), thr = clamp((k.KeyW ? 1 : 0) - (k.KeyS ? 1 : 0) + touch.my, -1, 1);
-  boat.update(dt, { steer, throttle: thr }, elapsed);
+  boat.update(dt, { steer, throttle: thr, boost: k.ShiftLeft || k.ShiftRight || touch.run }, elapsed);
+  // painel: vento relativo, velocidade e vela
+  { const w = U.wind.value; const wd = Math.atan2(w.x, w.y); const rel = angDiff(wd + Math.PI, boat.yaw); const deg = Math.round(Math.abs(rel) * 180 / Math.PI); const side = rel > 0.05 ? 'pela esquerda' : rel < -0.05 ? 'pela direita' : '';
+    const how = deg < 38 ? 'de frente: a vela só bate, vire o barco' : deg < 70 ? 'de bolina ' + side : deg < 120 ? 'de través ' + side + ' (o melhor rumo)' : deg < 160 ? 'pela alheta ' + side : 'de popa';
+    $('sailInfo').innerHTML = `Vento <b>${how}</b> · <b>${(boat.speed * 1.944).toFixed(1)}</b> nós · vela <b>${Math.round(boat.trim * 100)}%</b>${boat.boost ? ' · <b>vento forte</b>' : ''}${boat.edge ? ' · <b>fim do mar navegável</b>' : ''}`; boat.edge = false; }
   // Lia sentada na popa, segurando a cana do leme
   const r = boat.b.root; const seat = new THREE.Vector3(-boat.b.L / 2 + 0.85, boat.b.top(0.15) - 0.32 - SIT_H, 0.3).applyMatrix4(r.matrixWorld);
   player.x = seat.x; player.z = seat.z; player.y = seat.y; player.h = boat.yaw;
@@ -373,7 +381,7 @@ function updateCamera(dt) {
   let want = pivot.clone().addScaledVector(camFwd, -dist).addScaledVector(right, shoulder).add(V3(0, 0.12, 0));
   const steps = 14; let last = pivot.clone().addScaledVector(right, shoulder * 0.3);
   for (let i = 1; i <= steps; i++) { const t = i / steps; const q = pivot.clone().lerp(want, t); if (q.y < groundH(q.x, q.z) + 0.3 || insideBox(q.x, q.z, 0.15, player.y) || inSolid(q.x, q.y, q.z, 0.18) || q.y < probe(q.x, q.z, player.y + 0.4).h + 0.25) break; last = q; }
-  want = last;
+  want = last; if (player.swim) want.y = Math.max(want.y, WATER + 0.7);
   if (cam.cine > 0.001 && dlgNPC && dlgNPC.h) {
     const H = dlgNPC.h.headPos; const P = pH.headPos; const d = H.clone().sub(P); d.y = 0; d.normalize(); const rr2 = V3(d.z, 0, -d.x);
     const cpos = P.clone().addScaledVector(d, -0.9).addScaledVector(rr2, -0.6).add(V3(0, 0.1, 0));
@@ -639,7 +647,8 @@ function showNode(node) {
 function choose(i) { const o = dlgNode && dlgNode.opts[i]; if (!o) return; Sound.click(); if (o.act) o.act(); const nx = typeof o.go === 'function' ? o.go() : o.go; showNode(nx || null); refreshQuest(); }
 function closeDialog() { Voice.stop(); document.body.classList.remove('cine'); $('dialog').hidden = true; dlgNode = null; if (state === 'dialog') state = 'play'; post.bokeh.enabled = false; const after = pendingAfterDialog; pendingAfterDialog = null; setTimeout(() => { if (state === 'play') dlgNPC = null; if (after) after(); }, 300); }
 // pensamento da Lia, sem caixa de diálogo: só legenda
-function think(id, after) { const el = $('thought'); el.textContent = lineText(id); el.classList.remove('show'); void el.offsetWidth; el.classList.add('show'); el.hidden = false; Voice.say(id, { onEnd: () => { setTimeout(() => { el.classList.remove('show'); setTimeout(() => { el.hidden = true; }, 900); after && after(); }, 900); } }); }
+let thinkTok = 0;
+function think(id, after) { const el = $('thought'); const tok = ++thinkTok; el.textContent = lineText(id); el.classList.remove('show'); void el.offsetWidth; el.classList.add('show'); el.hidden = false; Voice.say(id, { onEnd: () => { setTimeout(() => { if (tok === thinkTok) { el.classList.remove('show'); setTimeout(() => { if (tok === thinkTok) el.hidden = true; }, 900); } after && after(); }, 900); } }); }
 
 // =====================================================================
 // lumes, caderno, descobertas
@@ -713,7 +722,8 @@ function startFinale() {
     end: () => { hideSub(); finale.speaker = null; odessa.finaleIdle = 'idle'; S.final = 1; save(); refreshQuest(); finalAmbience(); $('ending').hidden = false; setTimeout(() => $('ending').classList.add('show'), 50); setTimeout(() => think('fim11'), 1200); } };
 }
 function finalAmbience() { for (const g of giants) g.target = 0.6; for (let i = 0; i < 4; i++) addSiteSpirits(V3(rr(-40, 40), groundH(0, 0), rr(-40, 40)), 6, 14, 6); }
-function endFinale() { $('ending').hidden = true; $('ending').classList.remove('show'); document.body.classList.remove('cine'); for (const n of npcs) n.finale = false; state = 'play'; finale = null; sky.meteors = 0.25; cam.mode = 'follow'; requestLock(); }
+function endFinale() { if (finale && finale.rain) { const r = finale.rain; let t = 0; const fade = () => { t += 0.05; r.update(0.05); r.mat.opacity = Math.max(0, 0.95 * (1 - t / 6)); if (t < 6) setTimeout(fade, 50); else { scene.remove(r.pts); r.pts.geometry.dispose(); r.mat.dispose(); } }; fade(); }
+  $('ending').hidden = true; $('ending').classList.remove('show'); document.body.classList.remove('cine'); for (const n of npcs) n.finale = false; state = 'play'; finale = null; sky.meteors = 0.25; cam.mode = 'follow'; requestLock(); }
 function showSub(id) { const m = $('memory'); m.hidden = false; $('memTime').textContent = ''; const sp = LINES[id][0]; $('memName').textContent = CAST[sp] ? CAST[sp].name : ''; $('memText').textContent = lineText(id); m.classList.remove('show', 'thought'); void m.offsetWidth; m.classList.add('show'); }
 function hideSub() { $('memory').classList.remove('show'); $('memory').hidden = true; }
 
@@ -772,24 +782,46 @@ function drawCompass() {
   if (o && o.tgt) { const t = o.tgt; const b = (Math.atan2(t.x - player.x, -(t.z - player.z)) * 180 / Math.PI + 360) % 360; let dd = b - head; while (dd > 180) dd -= 360; while (dd < -180) dd += 360; const x = W / 2 + clamp(dd, -96, 96) * ppd;
     cmp.fillStyle = '#ffe2b0'; cmp.shadowColor = 'rgba(255,220,160,.8)'; cmp.shadowBlur = 10; cmp.beginPath(); cmp.arc(x, 12, 5, 0, 7); cmp.fill(); cmp.shadowBlur = 0; cmp.font = '500 17px Inter,system-ui,sans-serif'; cmp.fillStyle = 'rgba(243,236,220,.8)'; cmp.fillText(Math.round(Math.hypot(t.x - player.x, t.z - player.z)) + ' m', x, 64); }
 }
-let mapBase = null;
+let mapBase = null; const MAPV = 1500; // metros cobertos pelo mapa
 function buildMapBase() {
-  const c = document.createElement('canvas'); c.width = c.height = NV; const ctx = c.getContext('2d'); const img = ctx.createImageData(NV, NV);
-  for (let j = 0; j < NV; j++) for (let i = 0; i < NV; i++) { const k = j * NV + i; const h = HGT[k]; let col = [0.72, 0.68, 0.52]; const sp = [SPLAT[k * 4], SPLAT[k * 4 + 1], SPLAT[k * 4 + 2], SPLAT[k * 4 + 3]];
-    const mix = (a, b, t) => a.map((v, q) => lerp(v, b[q], t)); col = mix(col, [0.66, 0.58, 0.44], sp[0]); col = mix(col, [0.62, 0.6, 0.55], sp[1]); col = mix(col, [0.93, 0.92, 0.88], sp[2]);
-    const fd = forestDensity(i * CELL - HALF, j * CELL - HALF); col = mix(col, [0.5, 0.55, 0.4], clamp(fd * 2.5, 0, 0.7) * (1 - sp[1]) * (1 - sp[2]));
-    const sh = clamp(0.85 + (NRM[k * 3] * -0.9 + NRM[k * 3 + 2] * -0.6) * 1.2, 0.5, 1.25); const contour = Math.abs((h % 12) - 6) > 5.6 ? 0.88 : 1; if (h < WATER) col = [0.55, 0.64, 0.66]; else col = col.map(v => v * sh * contour);
-    img.data[k * 4] = clamp(col[0], 0, 1) * 255; img.data[k * 4 + 1] = clamp(col[1], 0, 1) * 255; img.data[k * 4 + 2] = clamp(col[2], 0, 1) * 255; img.data[k * 4 + 3] = 255; }
-  ctx.putImageData(img, 0, 0); mapBase = c;
+  // mapa pintado: relevo sombreado, curvas de nível, mar e lagos por profundidade, areia, mata e rocha
+  const R = 1100; const c = document.createElement('canvas'); c.width = c.height = R; const ctx = c.getContext('2d'); const img = ctx.createImageData(R, R); const sc = MAPV / R;
+  const H = (x, z) => groundH(x, z);
+  for (let j = 0; j < R; j++) for (let i = 0; i < R; i++) {
+    const x = i * sc - MAPV / 2, z = j * sc - MAPV / 2; const h = H(x, z); const k = (j * R + i) * 4;
+    const hx = H(x + sc, z) - H(x - sc, z), hz = H(x, z + sc) - H(x, z - sc); const nx = -hx / (2 * sc), nz = -hz / (2 * sc); const shade = clamp(0.82 + (nx * -0.7 + nz * -0.7) * 0.55, 0.45, 1.25);
+    let col;
+    if (h < WATER) { const d = clamp((WATER - h) / 18, 0, 1); col = [lerp(0.55, 0.16, d), lerp(0.74, 0.34, d), lerp(0.72, 0.5, d)]; if (WATER - h < 0.35) col = col.map(v => v * 0.6 + 0.4); }
+    else {
+      const sp = splatAt(x, z), sand = sandAt(x, z), fd = forestDensity(x, z); const t = clamp(h / 140, 0, 1);
+      col = [lerp(0.6, 0.66, t), lerp(0.7, 0.64, t), lerp(0.42, 0.5, t)];
+      if (fd > 0.08) { const f = clamp((fd - 0.08) * 4, 0, 0.75); const dot = (hash2(Math.floor(x / 6), Math.floor(z / 6)) > 0.45 ? 0.82 : 1); col = col.map((v, q) => lerp(v, [0.32, 0.45, 0.28][q] * dot, f)); }
+      col = col.map((v, q) => lerp(v, [0.78, 0.66, 0.48][q], sp[0] * 0.7)); col = col.map((v, q) => lerp(v, [0.62, 0.6, 0.56][q], sp[1])); col = col.map((v, q) => lerp(v, [0.95, 0.95, 0.93][q], sp[2]));
+      col = col.map((v, q) => lerp(v, [0.9, 0.82, 0.62][q], clamp(sand * 1.3, 0, 1)));
+      col = col.map(v => v * shade); const ct = Math.abs(((h % 10) + 10) % 10 - 5); if (ct > 4.82) col = col.map(v => v * 0.86); if (Math.abs(((h % 50) + 50) % 50 - 25) > 24.75) col = col.map(v => v * 0.75);
+    }
+    img.data[k] = clamp(col[0], 0, 1) * 255; img.data[k + 1] = clamp(col[1], 0, 1) * 255; img.data[k + 2] = clamp(col[2], 0, 1) * 255; img.data[k + 3] = 255;
+  }
+  ctx.putImageData(img, 0, 0);
+  // textura de papel por cima
+  ctx.globalAlpha = 0.08; for (let i = 0; i < 9000; i++) { ctx.fillStyle = Math.random() < 0.5 ? '#3b2e20' : '#fff6e0'; ctx.fillRect(Math.random() * R, Math.random() * R, 1.5, 1.5); } ctx.globalAlpha = 1;
+  mapBase = c;
 }
 function drawMap() {
-  const cv = $('mapCv'), ctx = cv.getContext('2d'); const W = cv.width; const view = 1200; const sc = W / view; const tx = x => (x + view / 2) * sc, tz = z => (z + view / 2) * sc;
-  ctx.fillStyle = '#e8dcc0'; ctx.fillRect(0, 0, W, W); const src = (HALF - view / 2) / CELL; ctx.drawImage(mapBase, src, src, view / CELL, view / CELL, 0, 0, W, W);
-  ctx.strokeStyle = 'rgba(110,80,50,.7)'; ctx.lineWidth = 2; ctx.setLineDash([6, 5]); for (const p of PATHS) { ctx.beginPath(); p.forEach(([x, z], i) => i ? ctx.lineTo(tx(x), tz(z)) : ctx.moveTo(tx(x), tz(z))); ctx.stroke(); } ctx.setLineDash([]);
-  ctx.font = 'italic 600 21px "Cormorant Garamond",Georgia,serif'; ctx.textAlign = 'center';
-  for (const k in POI) { const p = POI[k]; const known = k === 'village' || S.found[k]; if (!known) continue; ctx.fillStyle = '#3a2c1c'; ctx.beginPath(); ctx.arc(tx(p.x), tz(p.z), 4, 0, 7); ctx.fill(); ctx.strokeStyle = 'rgba(250,244,228,.85)'; ctx.lineWidth = 3; ctx.strokeText(p.name, tx(p.x), tz(p.z) - 11); ctx.fillText(p.name, tx(p.x), tz(p.z) - 11); }
-  for (const pl of PLACES) { const sp = SPOTS[pl.place]; if (!sp || !S.lumes[pl.id]) continue; ctx.fillStyle = '#c9902f'; ctx.beginPath(); ctx.arc(tx(sp.x), tz(sp.z), 7, 0, 7); ctx.fill(); ctx.strokeStyle = '#fff6dc'; ctx.lineWidth = 2; ctx.stroke(); }
-  ctx.save(); ctx.translate(tx(player.x), tz(player.z)); ctx.rotate(Math.PI - player.h); ctx.fillStyle = '#7a3a22'; ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(0, -11); ctx.lineTo(7, 8); ctx.lineTo(0, 4); ctx.lineTo(-7, 8); ctx.closePath(); ctx.fill(); ctx.stroke(); ctx.restore();
+  const cv = $('mapCv'), ctx = cv.getContext('2d'); const W = cv.width; const sc = W / MAPV; const tx = x => (x + MAPV / 2) * sc, tz = z => (z + MAPV / 2) * sc;
+  ctx.fillStyle = '#e8dcc0'; ctx.fillRect(0, 0, W, W); ctx.drawImage(mapBase, 0, 0, W, W);
+  ctx.strokeStyle = 'rgba(96,66,40,.75)'; ctx.lineWidth = 2.5; ctx.setLineDash([9, 7]); for (const p of PATHS) { ctx.beginPath(); p.forEach(([x, z], i) => i ? ctx.lineTo(tx(x), tz(z)) : ctx.moveTo(tx(x), tz(z))); ctx.stroke(); } ctx.setLineDash([]);
+  // casas
+  ctx.fillStyle = '#6b3a28'; for (const h of interiors) { ctx.save(); ctx.translate(tx(h.x), tz(h.z)); ctx.rotate(-h.rot); ctx.fillRect(-h.hw * sc - 2, -h.hd * sc - 2, h.hw * 2 * sc + 4, h.hd * 2 * sc + 4); ctx.restore(); }
+  const label = (text, x, y, size = 24, color = '#3a2c1c') => { ctx.font = `italic 600 ${size}px "Cormorant Garamond",Georgia,serif`; ctx.textAlign = 'center'; ctx.strokeStyle = 'rgba(250,244,228,.9)'; ctx.lineWidth = 4; ctx.strokeText(text, x, y); ctx.fillStyle = color; ctx.fillText(text, x, y); };
+  for (const k in POI) { const p = POI[k]; const known = k === 'village' || S.found[k]; if (!known || k === 'ninho') continue; ctx.fillStyle = '#3a2c1c'; ctx.beginPath(); ctx.arc(tx(p.x), tz(p.z), 5, 0, 7); ctx.fill(); label(p.name, tx(p.x), tz(p.z) - 13); }
+  for (const pl of PLACES) { const sp = SPOTS[pl.place]; if (!sp || !S.lumes[pl.id]) continue; ctx.fillStyle = '#c9902f'; ctx.beginPath(); ctx.arc(tx(sp.x), tz(sp.z), 9, 0, 7); ctx.fill(); ctx.strokeStyle = '#fff6dc'; ctx.lineWidth = 2.5; ctx.stroke(); }
+  // a Vésper (sempre marcada), o barco e a jogadora
+  if (alva) { const x = tx(alva.x), y = tz(alva.z); ctx.save(); ctx.translate(x, y); ctx.fillStyle = '#5a2a4a'; ctx.strokeStyle = '#fff6dc'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(0, -12); ctx.quadraticCurveTo(10, -14, 22, -4); ctx.quadraticCurveTo(10, -2, 0, 8); ctx.quadraticCurveTo(-10, -2, -22, -4); ctx.quadraticCurveTo(-10, -14, 0, -12); ctx.fill(); ctx.stroke(); ctx.restore(); label(alva.mode === 'rest' ? 'Vésper (no ninho)' : 'Vésper', x, y + 30, 22, '#5a2a4a'); }
+  if (boat) { const x = tx(boat.x), y = tz(boat.z); ctx.save(); ctx.translate(x, y); ctx.rotate(Math.PI - boat.yaw); ctx.fillStyle = '#2f5d85'; ctx.beginPath(); ctx.moveTo(0, -10); ctx.lineTo(5, 6); ctx.lineTo(-5, 6); ctx.closePath(); ctx.fill(); ctx.restore(); if (S.boat) label('barco', x, y + 22, 17, '#2f5d85'); }
+  ctx.save(); ctx.translate(tx(player.x), tz(player.z)); ctx.rotate(Math.PI - player.h); ctx.fillStyle = '#b23a22'; ctx.strokeStyle = '#fff'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(0, -15); ctx.lineTo(10, 11); ctx.lineTo(0, 5); ctx.lineTo(-10, 11); ctx.closePath(); ctx.fill(); ctx.stroke(); ctx.restore();
+  // rosa dos ventos
+  ctx.save(); ctx.translate(W - 70, 80); ctx.fillStyle = '#3a2c1c'; ctx.beginPath(); ctx.moveTo(0, -38); ctx.lineTo(8, 0); ctx.lineTo(0, 38); ctx.lineTo(-8, 0); ctx.closePath(); ctx.fill(); ctx.font = '600 22px "Cormorant Garamond",Georgia,serif'; ctx.textAlign = 'center'; ctx.fillText('N', 0, -46); ctx.restore();
 }
 function toast(t, sub) { const d = document.createElement('div'); d.className = 'toast'; d.innerHTML = sub ? `<small>${t}</small>${sub}` : t; $('toasts').appendChild(d); setTimeout(() => d.remove(), 5200); }
 function updateHUD() { const hh = Math.floor(hour), mm = Math.floor((hour - hh) * 60); $('clock').textContent = String(hh).padStart(2, '0') + ':' + String(mm).padStart(2, '0'); drawCompass(); if (!$('mapView').hidden) drawMap(); }
