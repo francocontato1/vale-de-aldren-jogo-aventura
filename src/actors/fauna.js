@@ -158,7 +158,10 @@ class School {
     this.f = Array.from({ length: n }, () => ({ o: [rr(-3, 3), rr(-0.6, 0.6), rr(-3, 3)], ph: rand() * 6.28 })); this.m4 = new THREE.Matrix4(); this.q = new THREE.Quaternion(); this.a = rand() * 6;
   }
   update(dt, t) {
-    const dc = Math.hypot(this.c.x - camera.position.x, this.c.z - camera.position.z); this.im.visible = dc < 70; if (!this.im.visible) return;
+    // cardumes do mar se reposicionam perto de quem está olhando (do barco ou da margem), sempre em água funda
+    let dc = Math.hypot(this.c.x - camera.position.x, this.c.z - camera.position.z);
+    if (this.roam && dc > 110 && (this.relocT = (this.relocT || 0) - dt) < 0) { this.relocT = 2; for (let k = 0; k < 8; k++) { const a = rand() * 6.28, r = rr(14, 45); const x = camera.position.x + Math.cos(a) * r, z = camera.position.z + Math.sin(a) * r; if (depthAt(x, z) > 2.5 && Math.abs(x) < 760 && Math.abs(z) < 760) { this.c = { x, z }; dc = r; break; } } }
+    this.im.visible = dc < 80; if (!this.im.visible) return;
     this.a += dt * 0.09; const R = 9; const cx = this.c.x + Math.cos(this.a) * R, cz = this.c.z + Math.sin(this.a) * R; const yaw = -this.a - Math.PI / 2;
     for (let i = 0; i < this.n; i++) { const f = this.f[i]; const x = cx + f.o[0] + Math.sin(t * 0.7 + f.ph) * 0.6, z = cz + f.o[2] + Math.cos(t * 0.6 + f.ph) * 0.6; const dep = depthAt(x, z); const y = WATER - clamp(dep * 0.45, 0.35, 2.2) + f.o[1] * 0.3;
       this.q.setFromAxisAngle(new THREE.Vector3(0, 1, 0), yaw + Math.sin(t + f.ph) * 0.15); this.m4.compose(new THREE.Vector3(x, dep > 0.5 ? y : -50, z), this.q, new THREE.Vector3(1, 1, 1)); this.im.setMatrixAt(i, this.m4); }
@@ -167,12 +170,12 @@ class School {
 }
 // um peixe que salta de vez em quando, perto de quem está olhando o mar
 class Jumper {
-  constructor() { this.mesh = new THREE.Mesh(fishGeo(0.5), new THREE.MeshStandardMaterial({ color: 0x9fb2ba, roughness: 0.3, metalness: 0.6 })); this.mesh.visible = false; this.mesh.castShadow = true; scene.add(this.mesh); this.t = rr(6, 14); this.k = -1; }
+  constructor() { this.mesh = new THREE.Mesh(fishGeo(0.5), new THREE.MeshStandardMaterial({ color: 0x9fb2ba, roughness: 0.3, metalness: 0.6 })); this.mesh.visible = false; this.mesh.castShadow = true; scene.add(this.mesh); this.t = rr(4, 9); this.k = -1; }
   update(dt, emit) {
-    if (this.k < 0) { this.t -= dt; if (this.t > 0) return; const a = rand() * 6.28, r = rr(8, 26); const x = camera.position.x + Math.cos(a) * r, z = camera.position.z + Math.sin(a) * r; if (depthAt(x, z) < 1.5 || coastInfo(x, z).bay < 0.5) { this.t = 2; return; } this.p = new THREE.Vector3(x, WATER, z); this.dir = rand() * 6.28; this.k = 0; this.dur = rr(0.7, 1.0); this.mesh.visible = true; emit && emit(x, z, 0.8); }
+    if (this.k < 0) { this.t -= dt; if (this.t > 0) return; const a = rand() * 6.28, r = rr(8, 26); const x = camera.position.x + Math.cos(a) * r, z = camera.position.z + Math.sin(a) * r; if (depthAt(x, z) < 1.5) { this.t = 2; return; } this.p = new THREE.Vector3(x, WATER, z); this.dir = rand() * 6.28; this.k = 0; this.dur = rr(0.7, 1.0); this.mesh.visible = true; emit && emit(x, z, 0.8); }
     this.k += dt / this.dur; const k = this.k; const h = Math.sin(k * Math.PI) * 0.9; const d = (k - 0.5) * 1.6;
     this.mesh.position.set(this.p.x + Math.sin(this.dir) * d, WATER + h - 0.1, this.p.z + Math.cos(this.dir) * d); this.mesh.rotation.set(0, this.dir - Math.PI / 2, -Math.cos(k * Math.PI) * 1.1);
-    if (k >= 1) { this.k = -1; this.t = rr(7, 16); this.mesh.visible = false; emit && emit(this.mesh.position.x, this.mesh.position.z, 1.1); }
+    if (k >= 1) { this.k = -1; this.t = rr(4, 10); this.mesh.visible = false; emit && emit(this.mesh.position.x, this.mesh.position.z, 1.1); }
   }
 }
 
@@ -206,8 +209,10 @@ export function spawnFauna(flowerZones) {
   // passarinhos ciscando na vila, no pasto, na praça da Maré e em clareiras
   for (const c of [{ x: 6, z: 14 }, { x: -20, z: -4 }, { x: 46, z: 30 }, { x: -60, z: 40 }, { x: 90, z: -70 }, { x: -110, z: -20 }, (([x, z]) => ({ x, z }))(fromUV(HARBOR.u + 10, HARBOR.v + 4))]) F.ground.push(new GroundBirds(c, 6));
   // cardumes perto da praia e do píer
-  for (const [du, dv, col, n, len] of [[96, 2, 0x8899a0, 28, 0.32], [110, -30, 0x7d8f86, 22, 0.42], [118, 40, 0x9aa6ae, 30, 0.28], [104, 75, 0xa49480, 18, 0.5], [140, -8, 0x6f8a95, 26, 0.36], [160, 30, 0x8899a0, 34, 0.3]]) { const [x, z] = fromUV(HARBOR.u + du, HARBOR.v + dv); F.schools.push(new School({ x, z }, n, col, len)); }
-  F.jumper = new Jumper();
+  for (const [du, dv, col, n, len] of [[96, 2, 0x8899a0, 40, 0.32], [110, -30, 0x7d8f86, 30, 0.42], [118, 40, 0x9aa6ae, 44, 0.28], [104, 75, 0xa49480, 22, 0.55], [140, -8, 0x6f8a95, 36, 0.36], [160, 30, 0x8899a0, 46, 0.3], [130, 60, 0x9a8f78, 18, 0.7], [150, -50, 0x7f9aa6, 40, 0.34], [180, 0, 0x8a9fa8, 50, 0.26], [120, 10, 0x6d7f74, 24, 0.5]]) { const [x, z] = fromUV(HARBOR.u + du, HARBOR.v + dv); const sc = new School({ x, z }, n, col, len); sc.roam = true; F.schools.push(sc); }
+  // peixes nos lagos (onde há profundidade)
+  for (const [lx, lz, n] of [[-170, 120, 4], [56, 144, 1], [-226, -180, 2], [214, -175, 1]]) for (let i = 0; i < n; i++) { for (let k = 0; k < 30; k++) { const x = lx + rr(-45, 45), z = lz + rr(-35, 35); if (depthAt(x, z) > 1.6) { F.schools.push(new School({ x, z }, 16 + ((rand() * 12) | 0), [0x7a7d5a, 0x8a7a5a, 0x6a7a6a][i % 3], rr(0.25, 0.45))); break; } } }
+  F.jumper = new Jumper(); F.jumper2 = new Jumper();
   F.butterflies = new Butterflies(flowerZones.map(([x, z, r]) => [x, z, r, 6]));
 }
 export function updateFauna(dt, t, player, dayF, emitSplash) {
@@ -215,5 +220,5 @@ export function updateFauna(dt, t, player, dayF, emitSplash) {
   for (const f of F.flocks) { f.o.dayF = dayF; if (dayF < 0.08) { f.im.visible = false; continue; } f.update(dt, t); }
   for (const g of F.ground) { if (dayF < 0.1) { g.im.visible = false; continue; } g.update(dt, t, player); }
   for (const s of F.schools) s.update(dt, t);
-  if (F.jumper) F.jumper.update(dt, emitSplash); if (F.butterflies) F.butterflies.update(dt, t, dayF);
+  if (F.jumper) F.jumper.update(dt, emitSplash); if (F.jumper2) F.jumper2.update(dt, emitSplash); if (F.butterflies) F.butterflies.update(dt, t, dayF);
 }

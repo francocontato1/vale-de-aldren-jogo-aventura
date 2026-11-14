@@ -238,5 +238,10 @@ vec4 tri(sampler2D t, vec3 p, vec3 w, float s){ return texture2D(t,p.zy*s)*w.x +
   };
   const mesh = new THREE.Mesh(g, mat); mesh.receiveShadow = true; mesh.name = 'terrain';
   scene.add(mesh);
+  // paredão na borda do mapa: o terreno não termina mais 'no ar' visto do mar
+  { const sp = [], si = []; const edge = (k) => { const out = []; for (let t = 0; t <= N; t++) { const [i, j] = k === 0 ? [t, 0] : k === 1 ? [N, t] : k === 2 ? [N - t, N] : [0, N - t]; out.push([i * CELL - HALF, HGT[j * NV + i], j * CELL - HALF]); } return out; };
+    for (let k = 0; k < 4; k++) { const e = edge(k); const b = sp.length / 3; for (const [x, y, z] of e) sp.push(x, y, z, x, -90, z); for (let t = 0; t < e.length - 1; t++) { const a0 = b + t * 2; si.push(a0, a0 + 1, a0 + 2, a0 + 1, a0 + 3, a0 + 2); } }
+    const sg = new THREE.BufferGeometry(); sg.setAttribute('position', new THREE.Float32BufferAttribute(sp, 3)); sg.setIndex(si); sg.computeVertexNormals();
+    const sm = new THREE.MeshStandardMaterial({ color: 0x6f6a60, roughness: 1, side: THREE.DoubleSide }); const skirt = new THREE.Mesh(sg, sm); skirt.receiveShadow = true; scene.add(skirt); }
   return mesh;
 }

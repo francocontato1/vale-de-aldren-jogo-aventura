@@ -151,7 +151,8 @@ export const Voice = {
     this.cache.set(id, p); return p;
   },
   prefetch(ids) { if (!this.ctx) return; for (const id of ids) this.load(id); },
-  stop() { if (this.playing) { const p = this.playing; this.playing = null; try { p.src.onended = null; p.src.stop(); } catch (e) { } } Speech.stop(); },
+  // parar uma fala também conta como terminar (antes a legenda e o final ficavam presos esperando um fim que nunca vinha)
+  stop() { if (this.playing) { const p = this.playing; this.playing = null; try { p.src.onended = null; p.src.stop(); } catch (e) { } p.done && setTimeout(p.done, 0); } Speech.stop(); },
   // toca uma fala; onEnd é chamado quando ela termina (ou após um tempo estimado, sem áudio)
   async say(id, { onStart, onEnd, eco = false } = {}) {
     this.stop(); const token = (this.token = (this.token || 0) + 1);
@@ -165,7 +166,7 @@ export const Voice = {
     else g.connect(this.bus);
     const it = { src, id }; this.playing = it; onStart && onStart();
     // 'ended' às vezes não chega (abas em segundo plano, alguns navegadores): um relógio garante o fim
-    let fin = false; const done = () => { if (fin) return; fin = true; if (this.playing === it) this.playing = null; onEnd && onEnd(); };
+    let fin = false; const done = () => { if (fin) return; fin = true; if (this.playing === it) this.playing = null; onEnd && onEnd(); }; it.done = done;
     src.onended = done; setTimeout(() => { if (!fin && this.playing === it) { try { src.stop(); } catch (e) { } done(); } }, buf.duration * 1000 + 600);
     src.start();
   },
