@@ -20,6 +20,12 @@ export const CAST = {
   tome: { name: 'Tomé', role: 'Menino da vila' },
   irene: { name: 'Irene', role: 'Herbalista e pintora' },
   bastiao: { name: 'Bastião', role: 'Carpinteiro' },
+  marta: { name: 'Dona Marta', role: 'Peixeira, dona da taberna' },
+  joca: { name: 'Joca', role: 'Construtor de barcos' },
+  tiao: { name: 'Tião', role: 'Pescador' },
+  nina: { name: 'Nina', role: 'Menina da praia' },
+  davi: { name: 'Seu Davi', role: 'Faroleiro' },
+  alva: { name: 'Vésper', role: 'Dragoa dos Veladores' },
   eco_m: { name: 'Um Velador', role: 'Lembrança' },
   eco_f: { name: 'Uma Veladora', role: 'Lembrança' },
   narrador: { name: '', role: '' },
@@ -167,6 +173,88 @@ export const LINES = {
   li_sentar3: ['lia', 'As nuvens andam tão devagar. Ou sou eu que finalmente parei.', 'tender'],
   li_mapa_cheio: ['lia', 'Oito lugares. O caderno está cheio de gente que eu nunca vou conhecer. E mesmo assim parece que conheço.', 'tender'],
   li_estrela: ['lia', 'Uma estrela cadente. Esqueci de fazer um pedido. Tudo bem. Ver já foi bom.', 'happy'],
+  // ---------------- Vila da Maré ----------------
+  ma_first: ['marta', 'Olha só, gente nova na Maré! Senta, senta. Você é a moça do mapa? A Odessa mandou avisar que você viria. Quer dizer, mandou avisar há três anos. Mas veio, né?', 'excited'],
+  ma_odessa: ['marta', 'Todo mundo conhece. Ela desce aqui uma vez por década, compra sal e pergunta se o mar continua no mesmo lugar. Continua, eu digo. Ela sempre parece aliviada.', 'happy'],
+  ma_lugar: ['marta', 'É, né? A gente reclama do vento, do sal, do frio. Mas ninguém vai embora.', 'tender'],
+  ma_c1: ['marta', 'Peixe bom a gente reconhece pelo olho. Gente também.', 'neutral'],
+  ma_c2: ['marta', 'O Tião pesca, a Nina canta, o Joca martela. E eu conto tudo para todo mundo. Cada um com o seu talento.', 'happy'],
+  ma_c3: ['marta', 'Quando o farol acende, eu fecho a taberna. É o Davi dizendo boa noite para a vila inteira.', 'tender'],
+  ma_noite: ['marta', 'A taberna já fechou, querida. Mas a porta fica sempre só encostada.', 'tired'],
+  ma_pao: ['marta', 'Pão da Celeste! Ainda morno, como ela consegue? Toma, leva este peixe defumado para ela. E diz que o sal é por minha conta, como sempre.', 'excited'],
+  ma_amiga: ['marta', 'Você já é de casa, sabia? Aqui a gente não pergunta de onde a pessoa veio. Pergunta se ela já comeu.', 'tender'],
+
+  jo_first: ['joca', 'Opa. Cuidado com a serragem. Você é a cartógrafa? Então desenha aí no mapa: aqui mora o melhor construtor de barcos do vale. Que também é o único.', 'happy'],
+  jo_casco: ['joca', 'Um barco para o Tião. O dele já é mais remendo do que barco. Este aqui fica pronto na primavera. Ou na outra.', 'neutral'],
+  jo_barco: ['joca', 'Aquele, no fim do píer? Era do mestre Elias, marido da Celeste. Ele dizia que barco parado apodrece por dentro. Se quiser, leva para passear. Só traz de volta inteiro.', 'tender'],
+  jo_c1: ['joca', 'Tábua de barco a gente curva devagar, com vapor e paciência. Igual gente teimosa.', 'happy'],
+  jo_c2: ['joca', 'Aprendi tudo com o mestre Elias. Ele conversava com os barcos. Eu achava doideira. Hoje eu converso também.', 'tender'],
+  jo_c3: ['joca', 'Vento pelo lado é o melhor. Vento de frente, nem tente: o barco para e a vela fica batendo. Aí é virar um pouco e ir em zigue-zague.', 'neutral'],
+  jo_depois: ['joca', 'E aí, velejou? Ela puxa um pouco para a esquerda, né? O mestre dizia que era saudade.', 'happy'],
+
+  ti_first: ['tiao', 'Psiu. Fala baixinho que os peixes escutam. Brincadeira, peixe não escuta nada. Mas eu gosto do silêncio.', 'happy'],
+  ti_pesca: ['tiao', 'Hoje? Paciência. O peixe é só a desculpa.', 'tender'],
+  ti_nina: ['tiao', 'É sim. Ela coleciona conchas, histórias e perguntas. As perguntas eu não sei responder. As conchas eu ajudo a achar.', 'tender'],
+  ti_c1: ['tiao', 'Tem dia que o peixe não vem. Aí eu fico olhando a água. Não é tempo perdido. É tempo de pescador.', 'tender'],
+  ti_c2: ['tiao', 'Quando o mar fica liso assim, feito espelho, minha avó dizia que era o céu se olhando.', 'tender'],
+  ti_c3: ['tiao', 'Se for velejar, volte antes do farol acender. Não é perigo, não. É que a Marta fica preocupada e fala o dobro.', 'happy'],
+
+  ni_first: ['nina', 'Oi! Você veio das montanhas? Lá tem dragão? A Marta diz que não tem. Mas ela também diz que baleia não canta, e canta sim!', 'excited'],
+  ni_dragao: ['nina', 'Eu sabia! Quando eu crescer vou subir lá e pedir carona. Se ela deixar.', 'excited'],
+  ni_baleia: ['nina', 'Canta! Uma vez eu ouvi, de noite, deitada no píer. Era um som comprido, assim: uuuuuu. O papai disse que era o vento. Não era.', 'excited'],
+  ni_c1: ['nina', 'Sabia que areia é pedra que ficou muito tempo no mar? Daqui a mil anos o gigante do lago vira praia.', 'happy'],
+  ni_c2: ['nina', 'Eu tenho quarenta e sete conchas. Cada uma tem um nome. A favorita se chama Dona Concha.', 'happy'],
+  ni_c3: ['nina', 'Se você deitar na areia de olho fechado, dá para sentir a terra respirando. É a onda. Mas parece respiração.', 'tender'],
+  ni_desenho: ['nina', 'Um gigante! Ele desenha bem, né? Diz para ele que baleia existe sim. Leva esta concha para ele. Encostando no ouvido, dá para ouvir o mar.', 'excited'],
+  ni_noite: ['nina', 'Eu devia estar dormindo. Mas a lua está tão grande hoje. Não conta para o papai.', 'tender'],
+
+  da_first: ['davi', 'Boa tarde. Ou boa noite, daqui a pouco. Sou o Davi, cuido do farol. Quer dizer, o farol se cuida sozinho. Eu só subo para fazer companhia.', 'tender'],
+  da_tempo: ['davi', 'Quarenta e dois anos. Nunca vi um navio passar. Mas acendo toda noite. Vai que um dia alguém se perde.', 'tender'],
+  da_ve: ['davi', 'O mar inteiro, o vale inteiro. E às vezes uma sombra enorme passando na frente da lua. A Odessa diz que é nuvem. Ela mente muito mal.', 'happy'],
+  da_c1: ['davi', 'Farol é igual vela de aniversário. Ninguém repara, até a hora em que precisa.', 'neutral'],
+  da_c2: ['davi', 'Daqui de noite dá para ver o observatório, sabia? Uma luzinha lá no alto. Eu pisco o farol para ela. Ela nunca pisca de volta.', 'tender'],
+  da_c3: ['davi', 'O mar ensina uma coisa: tudo volta. A maré, os barcos, as pessoas. Só demora.', 'tender'],
+  da_carta: ['davi', 'Você conhece a Odessa? Velha amiga. Faz quarenta anos que a gente se escreve, e ela leva uns dez para responder. Leva esta carta? Quem sabe ela responde em cinco.', 'happy'],
+  da_noite: ['davi', 'Boa noite, cartógrafa. Fica aí embaixo e olha para cima. Daqui a pouco eu pisco para você.', 'tender'],
+
+  // ---------------- favores e amizades no vale ----------------
+  ce_cesta: ['celeste', 'Você vai para os lados do mar? Então leva este pão para a Marta, da taberna da Maré. A gente troca pão por peixe desde antes de você nascer.', 'happy'],
+  ce_peixe: ['celeste', 'Peixe da Marta! Ela sempre manda o melhor. Sabia que foi ela que me ensinou a fazer pão de sal? Obrigada, querida. Volta amanhã que eu guardo um para você.', 'excited'],
+  ce_barco: ['celeste', 'Você velejou o barco do Elias? ... Que bom. Ele ia gostar de saber que alguém ainda leva ele para ver o mar.', 'sad'],
+  ce_c4: ['celeste', 'A Marta e eu trocamos pão por peixe há trinta anos. Nunca escrevemos nada. Amizade boa não precisa de recibo.', 'tender'],
+  to_nina: ['tome', 'Você vai para o mar? Lá mora a Nina. Ela diz que já viu uma baleia. Eu acho que é mentira. Entrega este desenho para ela? É um gigante. Para ela ver que aqui também tem coisa grande.', 'excited'],
+  to_concha: ['tome', 'Dá para ouvir o mar mesmo! Ou é o meu ouvido? Tanto faz. Vou guardar debaixo do travesseiro.', 'excited'],
+  to_c4: ['tome', 'A Nina viu uma baleia. Eu vi um gigante. Empate.', 'happy'],
+  od_carta: ['odessa', 'Do Davi? Ele ainda escreve à mão. Bom. Diga a ele que... não, eu mesma digo. Vou responder ainda neste século.', 'tender'],
+  od_alva: ['odessa', 'A sombra no céu? É a Vésper. A última dragoa dos Veladores. Tem o nome da estrela da tarde. Mora lá no alto, perto da gigante do monte. Se você chegar devagar, ela deixa você chegar perto. Se chegar correndo, ela vai embora e só volta daqui a um ano.', 'tender'],
+  an_c4: ['anselmo', 'Você foi até a Maré? A Marta fala por três, mas o peixe dela vale por quatro.', 'happy'],
+  an_c5: ['anselmo', 'Quando eu era moço, desci até o mar com as ovelhas. Elas olharam a água um tempão e voltaram. Ovelha é bicho sábio.', 'tender'],
+  ir_c4: ['irene', 'Tentei pintar o mar uma vez. Usei todo o azul que eu tinha e ainda faltou.', 'happy'],
+  ba_c4: ['bastiao', 'Montei o cimbre embaixo da ponte. Agora falta pedra, tempo e coragem. Pedra tem.', 'neutral'],
+  ba_c5: ['bastiao', 'O Joca, da Maré, me pediu tábua de carvalho. Barco e ponte são parentes. Os dois levam a gente para o outro lado.', 'tender'],
+
+  // ---------------- Vésper, a dragoa ----------------
+  li_alva_corre: ['lia', 'Ela levantou a cabeça. Acho que eu cheguei rápido demais. Devagar, Lia.', 'surprised'],
+  li_alva1: ['lia', 'Ela é enorme. E está me olhando como quem decide se eu sou uma pergunta ou uma resposta.', 'tender'],
+  li_alva2: ['lia', 'Ela abaixou a cabeça até o chão. Acho que é um convite.', 'tender'],
+  li_voo: ['lia', 'O vale inteiro cabe debaixo das asas dela.', 'excited'],
+  li_voo_fim: ['lia', 'Obrigada, Vésper. Eu nunca mais vou olhar para um mapa do mesmo jeito.', 'tender'],
+
+  // ---------------- curiosidades e pequenos momentos ----------------
+  li_mar: ['lia', 'O mar. Daqui de cima, o vale parecia um mundo inteiro. Ele termina aqui, na areia, e começa outra coisa.', 'tender'],
+  li_barco0: ['lia', 'Um barco bonito, bem cuidado. Melhor perguntar de quem é antes de sair com ele.', 'neutral'],
+  li_barco: ['lia', 'O barco do mestre Elias. Puxa um pouco para a esquerda, mesmo. Deve ser saudade.', 'tender'],
+  li_cogumelos: ['lia', 'Um círculo perfeito de cogumelos. A Nina diria que é uma porta. O Anselmo diria que choveu. Os dois devem ter razão.', 'tender'],
+  li_tronco: ['lia', 'Um tronco oco, cheio de folhas secas. Alguma raposa dorme aqui, dá para sentir o cheiro. Melhor não incomodar.', 'neutral'],
+  li_colmeia: ['lia', 'Uma colmeia num toco velho. As abelhas nem ligam para mim. Estão ocupadas demais sendo abelhas.', 'happy'],
+  li_ninho: ['lia', 'Três ovos azulados. A mãe deve estar por perto, me olhando de algum galho. Já estou indo, já estou indo.', 'tender'],
+  li_amoras: ['lia', 'Amoras maduras. Doces, quentes de sol. Agora as minhas mãos estão roxas, mas valeu a pena.', 'happy'],
+  li_estrela_pedra: ['lia', 'Uma estrela gravada na pedra, quase apagada pelo musgo. Igual à do Tomé. Os Veladores marcavam os caminhos que davam para o céu.', 'surprised'],
+  li_fonte: ['lia', 'Água brotando da pedra, gelada. Alguém colocou um cano de ferro aqui há muito tempo, para quem passasse com sede. Obrigada, quem quer que tenha sido.', 'tender'],
+  li_cabana: ['lia', 'Uma cabana de caçador. A lanterna está apagada há anos, mas a lenha está empilhada, pronta. Como se alguém fosse voltar.', 'neutral'],
+  li_arvore_nomes: ['lia', 'Nomes gravados na casca, uns por cima dos outros. Os mais antigos a árvore já engoliu. Ela guarda todo mundo, crescendo devagar por cima.', 'tender'],
+  li_farol: ['lia', 'O farol do Seu Davi. Quarenta e dois anos acendendo uma luz para ninguém. Ou para todo mundo, depende de como se olha.', 'tender'],
+  li_dormindo: ['lia', 'Está dormindo. Melhor não acordar. Amanhã a gente conversa.', 'tender'],
 };
 
 // Os oito lugares de memória. `place` é a chave do ponto no mundo (ver world/landmarks.js).
@@ -208,7 +296,25 @@ export const NOTES = {
   santuario: { title: 'O santuário da floresta', line: 'li_santuario' },
   banco: { title: 'O banco do poente', line: 'li_banco' },
   poco: { title: 'O poço', line: 'li_poco' },
+  cogumelos: { title: 'O círculo de cogumelos', line: 'li_cogumelos' },
+  tronco: { title: 'O tronco oco', line: 'li_tronco' },
+  colmeia: { title: 'A colmeia', line: 'li_colmeia' },
+  ninhoAve: { title: 'O ninho', line: 'li_ninho' },
+  amoras: { title: 'A amoreira', line: 'li_amoras' },
+  estrela: { title: 'A pedra da estrela', line: 'li_estrela_pedra' },
+  fonte: { title: 'A fonte na pedra', line: 'li_fonte' },
+  cabana: { title: 'A cabana do caçador', line: 'li_cabana' },
+  arvoreNomes: { title: 'A árvore dos nomes', line: 'li_arvore_nomes' },
+  farol: { title: 'O farol', line: 'li_farol' },
 };
+
+// amizades: o que a Lia anota no caderno sobre cada um
+export const FRIENDS = {
+  odessa: 'Mora no observatório há seiscentos anos. Coleciona feitiços inúteis.', anselmo: 'Pastor. Diz que ovelha ensina o tamanho certo do dia.', celeste: 'Padeira. Ainda faz pão para dois.', tome: 'Quer acordar os gigantes. Com paciência.', irene: 'Pinta a luz em cima do lago.', bastiao: 'Quer terminar a frase da ponte partida.',
+  marta: 'Dona da taberna da Maré. Fala por três.', joca: 'Constrói barcos e conversa com eles.', tiao: 'Pescador. O peixe é só a desculpa.', nina: 'Coleciona conchas e jura que baleia canta.', davi: 'Acende o farol toda noite, para quem se perder.',
+};
+// coisas que se carregam de uma vila para a outra
+export const ITEMS = { pao: 'Cesta de pão da Celeste (para a Dona Marta)', peixe: 'Peixe defumado da Dona Marta (para a Celeste)', desenho: 'Desenho de gigante do Tomé (para a Nina)', concha: 'Concha da Nina (para o Tomé)', carta: 'Carta do Seu Davi (para a Odessa)' };
 
 export const text = (id) => (LINES[id] ? LINES[id][1] : id);
 export const speaker = (id) => (LINES[id] ? LINES[id][0] : 'narrador');

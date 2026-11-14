@@ -39,8 +39,27 @@ export const Sound = {
     // estalos da lareira/fogueira (ruído filtrado)
     const n = c.sampleRate * 2; const wb = c.createBuffer(1, n, c.sampleRate); const wd = wb.getChannelData(0); for (let i = 0; i < n; i++) wd[i] = Math.random() < 0.002 ? (Math.random() * 2 - 1) : (Math.random() * 2 - 1) * 0.08; this.white = wb;
     const fs = c.createBufferSource(); fs.buffer = wb; fs.loop = true; const ff = c.createBiquadFilter(); ff.type = 'bandpass'; ff.frequency.value = 1800; ff.Q.value = 0.6; this.fireG = c.createGain(); this.fireG.gain.value = 0; fs.connect(ff).connect(this.fireG).connect(this.amb); fs.start();
+    this.buildSurf();
     await Promise.all([Music.init(c, this.mus), Voice.init(c, this.vox, this.dream)]);
     this.ready = true;
+  },
+  // mar: arrebentação sintetizada (ruído marrom em ondas lentas + chiado da espuma voltando)
+  buildSurf() {
+    const c = this.ctx; const n = c.sampleRate * 4; const b = c.createBuffer(2, n, c.sampleRate);
+    for (let ch = 0; ch < 2; ch++) { const d = b.getChannelData(ch); let last = 0; for (let i = 0; i < n; i++) { const w = Math.random() * 2 - 1; last = (last + 0.02 * w) / 1.02; d[i] = last * 3.5; } }
+    const mk = (type, f, q) => { const fl = c.createBiquadFilter(); fl.type = type; fl.frequency.value = f; fl.Q.value = q; return fl; };
+    const src = c.createBufferSource(); src.buffer = b; src.loop = true; const body = mk('lowpass', 500, 0.5); this.surfBody = body; this.surfAmp = c.createGain(); this.surfAmp.gain.value = 0;
+    const src2 = c.createBufferSource(); src2.buffer = this.white || b; src2.loop = true; const hiss = mk('bandpass', 3200, 0.4); this.surfHissAmp = c.createGain(); this.surfHissAmp.gain.value = 0;
+    this.surfG = c.createGain(); this.surfG.gain.value = 0; src.connect(body).connect(this.surfAmp).connect(this.surfG); src2.connect(hiss).connect(this.surfHissAmp).connect(this.surfG); this.surfG.connect(this.amb);
+    src.start(); src2.start(0, 1.3); this.surfT = 0; this.surfP = 8;
+  },
+  updateSurf(dt, k) {
+    if (!this.surfG) return; this.surfG.gain.value = lerp(this.surfG.gain.value, k * 0.8, clamp(dt * 1.5, 0, 1)); if (k < 0.01) return;
+    this.surfT += dt; if (this.surfT > this.surfP) { this.surfT = 0; this.surfP = rr(6.5, 10.5); this.surfBig = rr(0.6, 1.0); }
+    const t = this.surfT / this.surfP; // subida da onda, quebra, espuma voltando
+    const swell = Math.pow(Math.sin(Math.min(1, t / 0.55) * Math.PI * 0.5), 3) * (t < 0.55 ? 1 : Math.exp(-(t - 0.55) * 6)) * (this.surfBig || 0.8);
+    const wash = t > 0.5 ? Math.exp(-(t - 0.5) * 3.2) * (1 - Math.exp(-(t - 0.5) * 30)) : 0;
+    this.surfAmp.gain.value = 0.25 + swell * 1.2; this.surfBody.frequency.value = 280 + swell * 900; this.surfHissAmp.gain.value = wash * 0.5 * (this.surfBig || 0.8);
   },
   loop(k) { const b = this.buf[FILES[k][0]]; if (!b) return; const s = this.ctx.createBufferSource(); s.buffer = b; s.loop = true; const g = this.ctx.createGain(); g.gain.value = 0; s.connect(g).connect(this.amb); s.start(0, Math.random() * b.duration); this.loops[k] = g; },
   setLoop(k, v, dt) { const g = this.loops[k]; if (!g) return; g.gain.value = lerp(g.gain.value, v, clamp(dt * 1.2, 0, 1)); },
@@ -60,6 +79,8 @@ export const Sound = {
     const base = kind === 'wood' ? 0.13 : kind === 'grass' ? 0.11 : 0.12;
     this.play(k, { x, z, vol: base * vol * rr(0.75, 1.0), rate: rr(0.9, 1.06), lp: kind === 'grass' ? 2600 : 3800 });
   },
+  // batida de asa da dragoa: sopro grave de ar empurrado
+  flap(x, z, vol = 1) { if (!this.ctx || !this.white) return; const c = this.ctx, t = c.currentTime; const src = c.createBufferSource(); src.buffer = this.white; const f = c.createBiquadFilter(); f.type = 'lowpass'; f.frequency.setValueAtTime(900, t); f.frequency.exponentialRampToValueAtTime(140, t + 0.6); const g = c.createGain(); g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.9 * vol, t + 0.12); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.75); src.connect(f).connect(g); this.out(g, x, z, 0.3); src.start(t, Math.random()); src.stop(t + 0.8); },
   door(open, x, z) { this.play(open ? 'doorOpen' : 'doorClose', { x, z, vol: 0.35 }); },
   clang(x, z) { this.play('anvil', { x, z, vol: 0.25, verb: 0.3 }); },
   rustle(x, z) { this.play('cloth', { x, z, vol: 0.18, rate: rr(0.9, 1.1) }); },
@@ -71,7 +92,9 @@ export const Sound = {
     if (!this.ctx || !this.ready) return; const L = this.listener; L.x = p.x; L.z = p.z; L.yaw = p.yaw;
     const inside = p.inside ? 1 : 0; const out = 1 - inside * 0.8;
     this.setLoop('ambDay', 0.42 * p.day * out * (0.45 + 0.55 * p.trees), dt);
-    this.setLoop('ambWind', (0.16 + 0.18 * p.windStr + clamp((p.y - 30) / 60, 0, 1) * 0.3) * out, dt);
+    // vento: mais baixo e em rajadas (o chiado contínuo do loop parecia mar o tempo todo)
+    this.setLoop('ambWind', (0.05 + 0.16 * Math.max(0, p.windStr - 0.55) + clamp((p.y - 30) / 60, 0, 1) * 0.32 + (p.flying || 0) * 0.5) * out * (1 - (p.sea || 0) * 0.5), dt);
+    this.updateSurf(dt, (p.sea || 0) * out);
     this.setLoop('ambNight', 0.5 * p.night * out, dt);
     this.setLoop('ambLake', 0.55 * p.lake * out, dt);
     this.setLoop('ambLap', 0.4 * p.shore * out, dt);
@@ -86,7 +109,7 @@ export const Sound = {
 
 // ---------------- música: faixas com silêncios longos entre elas ----------------
 export const Music = {
-  ctx: null, bus: null, man: null, cur: null, silence: 25, t: 0, history: [], forced: null,
+  ctx: null, bus: null, man: null, cur: null, silence: 8, t: 0, history: [], forced: null,
   async init(c, bus) { this.ctx = c; this.bus = bus; try { const r = await fetch(resolveURL('a/music/manifest.json')); if (r.ok) this.man = await r.json(); } catch (e) { } },
   has(cue) { return !!(this.man && this.man[cue]); },
   play(cue, { fade = 3, vol = 1 } = {}) {
@@ -95,7 +118,7 @@ export const Music = {
     const src = this.ctx.createMediaElementSource(el); const g = this.ctx.createGain(); g.gain.value = 0; src.connect(g).connect(this.bus);
     const t = this.ctx.currentTime; g.gain.linearRampToValueAtTime(vol, t + fade);
     el.play().catch(() => { }); const it = { cue, el, g, vol }; this.cur = it; this.history.push(cue); if (this.history.length > 4) this.history.shift();
-    el.onended = () => { if (this.cur === it) { this.cur = null; this.silence = rr(80, 200); } };
+    el.onended = () => { if (this.cur === it) { this.cur = null; this.silence = rr(14, 38); } };
     return true;
   },
   stop(fade = 3) { const it = this.cur; if (!it) return; this.cur = null; const t = this.ctx.currentTime; it.g.gain.cancelScheduledValues(t); it.g.gain.setValueAtTime(it.g.gain.value, t); it.g.gain.linearRampToValueAtTime(0, t + fade); setTimeout(() => { try { it.el.pause(); } catch (e) { } }, fade * 1000 + 100); },
@@ -103,15 +126,17 @@ export const Music = {
   pick(p) {
     const h = p.hour; const opts = [];
     if (p.ruins) opts.push('ruins');
-    if (h >= 5 && h < 10) opts.push('morning'); else if (h >= 10 && h < 16.5) opts.push('afternoon'); else if (h >= 16.5 && h < 19.6) opts.push('dusk'); else { opts.push('night'); if (p.village > 0.5) opts.push('village_night'); }
-    const fresh = opts.filter(o => this.has(o) && this.history[this.history.length - 1] !== o); return fresh[(Math.random() * fresh.length) | 0] || null;
+    if (h >= 5 && h < 10) opts.push('morning', 'title'); else if (h >= 10 && h < 16.5) opts.push('afternoon', 'morning'); else if (h >= 16.5 && h < 19.6) opts.push('dusk', 'title'); else { opts.push('night'); if (p.village > 0.5) opts.push('village_night'); else opts.push('dusk'); }
+    if (p.flying) opts.unshift('title', 'discover');
+    // evita repetir as duas últimas; se não houver alternativa, repete mesmo (melhor que silêncio longo)
+    const ok = opts.filter(o => this.has(o)); const fresh = ok.filter(o => !this.history.slice(-2).includes(o)); const pool = fresh.length ? fresh : ok; return pool[(Math.random() * pool.length) | 0] || null;
   },
   update(dt, p) {
     if (!this.ctx || !this.man) return;
     if (this.cur) { const duck = Voice.playing ? 0.45 : 1; this.cur.g.gain.value = lerp(this.cur.g.gain.value, this.cur.vol * duck, clamp(dt * 2, 0, 1)); return; }
     if (p.cinematic) return;
     this.silence -= dt; if (this.silence > 0) return;
-    const cue = this.pick(p); if (cue) this.play(cue, { fade: 6, vol: 0.9 }); else this.silence = 30;
+    const cue = this.pick(p); if (cue) this.play(cue, { fade: 6, vol: 0.9 }); else this.silence = 12;
   },
 };
 
@@ -132,7 +157,8 @@ export const Voice = {
     this.stop(); const token = (this.token = (this.token || 0) + 1);
     const text = LINES[id] ? LINES[id][1] : id; const who = speaker(id);
     const buf = this.enabled && this.ctx ? await this.load(id) : null; if (token !== this.token) return;
-    if (!buf) { Speech.speak(text, who, onStart, onEnd, this.enabled); return; }
+    // falas novas ainda sem dublagem: só legenda (a voz sintética do navegador destoaria das vozes gravadas)
+    if (!buf) { const silent = this.man && !this.man[id]; Speech.speak(text, who, onStart, onEnd, this.enabled && !silent); return; }
     const c = this.ctx; const src = c.createBufferSource(); src.buffer = buf; const g = c.createGain(); g.gain.value = eco ? 0.85 : 1;
     src.connect(g); g.connect(this.analyser);
     if (eco) { const lp = c.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 5200; const hp = c.createBiquadFilter(); hp.type = 'highpass'; hp.frequency.value = 160; g.connect(hp).connect(lp).connect(this.bus); const send = c.createGain(); send.gain.value = 0.7; g.connect(send).connect(this.dream); }

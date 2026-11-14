@@ -1,17 +1,24 @@
-import { THREE, renderer, scene, camera, U, Q, settings, store, clamp, lerp, smooth, rand, rr, angDiff, lerpAng, makeMacroTexture, loadGLTF, progress, isTouch, trackP } from './core.js';
-import { computeTerrainData, buildTerrain, groundH, normalY, splatAt, POI, PATHS, forestDensity, WATER, HGT, NRM, SPLAT, NV, CELL, HALF, creekDist } from './world/terrain.js';
+import { loadTex, THREE, renderer, scene, camera, U, Q, settings, store, clamp, lerp, smooth, rand, rr, angDiff, lerpAng, makeMacroTexture, loadGLTF, progress, isTouch, trackP } from './core.js';
+import { computeTerrainData, buildTerrain, groundH, normalY, splatAt, sandAt, fromUV, HARBOR, SEA_ROT, POI, PATHS, MIRANTE, TRAIL, NINHO, forestDensity, WATER, HGT, NRM, SPLAT, NV, CELL, HALF, creekDist } from './world/terrain.js';
 import { buildWater, setWaterQuality } from './world/water.js';
+import { buildOcean, updateOcean, seaSurface, depthAt, surfNear } from './world/ocean.js';
 import { SkySystem } from './world/sky.js';
 import { Grass } from './world/grass.js';
 import { Trees } from './world/trees.js';
-import { loadVillageMaterials, buildVillage, colliders, villageDirt, smokes, fires, M, interiors, doors, insideHouse, inFootprint, storySpots, probe, lamps, windmills } from './world/village.js';
+import { loadVillageMaterials, buildVillage, colliders, villageDirt, smokes, fires, M, interiors, doors, insideHouse, inFootprint, storySpots, probe, lamps, windmills, seats, beds, inSolid } from './world/village.js';
+import { Nav } from './actors/nav.js';
+import { SailBoat, boatMaterials } from './actors/boat.js';
+import { harbor, updateHarbor } from './world/harbor.js';
 import { FLOWER_ZONES } from './world/landmarks.js';
-import { LINES, CAST, PLACES, NOTES, FINALE, text as lineText } from './story.js';
+import { LINES, CAST, PLACES, NOTES, FINALE, FRIENDS, ITEMS, text as lineText } from './story.js';
 import { buildGiant, buildHeadFragment, updateGiants, giants } from './world/giants.js';
 import { Lume, initSpirits, addSiteSpirits, updateSpirits, Motes, LumeRain, GLOW } from './magic.js';
 import { buildProps, updateProps, setPropRadius } from './world/props.js';
 import { loadHumanLibrary, Human } from './actors/human.js';
 import { loadAnimals, spawnAnimals, updateAnimals } from './actors/animals.js';
+import { spawnFauna, updateFauna, F as FAUNA } from './actors/fauna.js';
+import { updateCuriosities, CURIO } from './world/curiosities.js';
+import { loadDragon, Dragon } from './actors/dragon.js';
 import { Post } from './post.js';
 import { Sound, Music, Voice, Speech, preloadSounds } from './audio.js';
 
@@ -76,7 +83,7 @@ class Particles {
 // =====================================================================
 // estado
 // =====================================================================
-const S = { met: {}, lumes: {}, notes: {}, final: 0, letter: 0, told: 0, chat: {}, day: 0, found: {}, sat: 0 };
+const S = { met: {}, lumes: {}, notes: {}, final: 0, letter: 0, told: 0, chat: {}, day: 0, found: {}, sat: 0, fr: {}, frDay: {}, inv: {}, fav: {}, boat: 0, sailed: 0, flags: {} };
 let state = 'loading', hour = 16.4, elapsed = 0, timeLapse = 0;
 const player = { x: 2, z: 44, y: 0, vy: 0, h: Math.PI, onGround: true, stepAcc: 0, speed: 0, sit: null, standT: 0 };
 const cam = { yaw: 0, pitch: -0.1, dist: 3.4, cur: V3(), look: V3(), cine: 0, intro: 0, mode: 'follow', orbit: 0 };
@@ -104,20 +111,22 @@ async function boot() {
   const rock = await loadGLTF('a/rock1.glb.wasm'); let rockMat; rock.scene.traverse(o => { if (o.isMesh) rockMat = o.material; });
   await step('Pintando o terreno…', 0.12, () => buildTerrain(scene, rockMat));
   water = await buildWater(scene);
+  buildOcean(scene, await loadTex('a/tex/water_n.jpg', { srgb: false }));
   sky = new SkySystem(scene);
   trees = new Trees(scene);
   await step('Crescendo as árvores…', 0.2, () => trees.build());
-  await loadVillageMaterials(trees.variants[0].bark);
+  await loadVillageMaterials(trees.variants[0].bark); boatMaterials(M.planks.map);
   await step('Erguendo a vila…', 0.35, () => buildVillage(scene));
   for (const c of colliders.circles) addCirc(c[0], c[1], c[2]);
   load();
   await step('Os gigantes descansam…', 0.42, () => placeGiants(rockMat));
   const zones = [[POI.garden.x, POI.garden.z, 18], [POI.observatory.x, POI.observatory.z, 26], [POI.stairs.x, POI.stairs.z, 16], [POI.shrine.x, POI.shrine.z, 6], [POI.tower.x, POI.tower.z, 14], [POI.stones.x, POI.stones.z, 14], [POI.bridge.x, POI.bridge.z, 12], [-74, -34, 6]];
-  const vEx = (x, z) => Math.hypot(x, z) < 62 || zones.some(zn => Math.hypot(x - zn[0], z - zn[1]) < zn[2]) || giants.some(g => Math.hypot(x - g.x, z - g.z) < 18) || creekDist(x, z) < 2.5;
+  const [hbx, hbz] = fromUV(HARBOR.u, HARBOR.v);
+  const vEx = (x, z) => Math.hypot(x, z) < 62 || Math.hypot(x - hbx, z - hbz) < 58 || sandAt(x, z) > 0.3 || zones.some(zn => Math.hypot(x - zn[0], z - zn[1]) < zn[2]) || giants.some(g => Math.hypot(x - g.x, z - g.z) < 18) || creekDist(x, z) < 2.5;
   await step('Espalhando pedras e flores…', 0.48, () => buildProps(scene, { avoid: (x, z, r) => vEx(x, z) || pathDistOK(x, z, r), addCircle: addCirc, villageExclude: vEx, zones: FLOWER_ZONES() }));
-  await step('Plantando a floresta…', 0.56, () => trees.scatter({ avoid: (x, z, r) => vEx(x, z) || pathDistOK(x, z, r + 1) || aqueductNear(x, z), forestDensity, groundH, normalY, onTree: (it) => { if (it.v.sp.type !== 'bush') addCirc(it.x, it.z, (it.v.sp.type === 'pine' ? 0.28 : 0.36) * it.s); }, extra: [[-12, -32, 'oakA', 1], [34, -12, 'oakB', 0.9], [-38, 22, 'ashA', 1], [10, 44, 'oakA', 1.1], [-52, -16, 'pineA', 1], [storySpots.treeRoot.x, storySpots.treeRoot.z, 'oakB', 1.45], [POI.shrine.x - 4, POI.shrine.z - 5, 'oakB', 1.5]] }));
-  grass = new Grass(scene, { exclude: (x, z) => inFootprint(x, z, 0.1) || insideBox(x, z, 0.4) || treeHit(x, z) || Math.hypot(x - POI.observatory.x, z - POI.observatory.z) < 9.3 });
-  await step('Chamando os moradores…', 0.66, () => Promise.all([loadHumanLibrary(), loadAnimals()]));
+  await step('Plantando a floresta…', 0.56, () => trees.scatter({ avoid: (x, z, r) => vEx(x, z) || pathDistOK(x, z, r + 1) || aqueductNear(x, z) || curioNear(x, z), forestDensity, groundH, normalY, onTree: (it) => { if (it.v.sp.type !== 'bush') addCirc(it.x, it.z, (it.v.sp.type === 'pine' ? 0.28 : 0.36) * it.s); }, extra: [[-12, -32, 'oakA', 1], [34, -12, 'oakB', 0.9], [-38, 22, 'ashA', 1], [10, 44, 'oakA', 1.1], [-52, -16, 'pineA', 1], [storySpots.treeRoot.x, storySpots.treeRoot.z, 'oakB', 1.45], [POI.shrine.x - 4, POI.shrine.z - 5, 'oakB', 1.5]] }));
+  grass = new Grass(scene, { exclude: (x, z) => sandAt(x, z) > 0.45 || inFootprint(x, z, 0.1) || insideBox(x, z, 0.4) || treeHit(x, z) || Math.hypot(x - POI.observatory.x, z - POI.observatory.z) < 9.3 });
+  await step('Chamando os moradores…', 0.66, () => Promise.all([loadHumanLibrary(), loadAnimals(), loadDragon()]));
   initSpirits(); motes = new Motes(260);
   const sTex = smokeTex(), dTex = softTex();
   smoke = new Particles(700, sTex, false); fireP = new Particles(400, dTex, true); dust = new Particles(300, sTex, false);
@@ -127,7 +136,7 @@ async function boot() {
   roomLight = new THREE.PointLight(0xfff0dc, 0, 9, 1.4); scene.add(roomLight);
   buildLamps(); buildLantern(); buildRipples();
   const had = !!store.get(SAVE_KEY);
-  await step('Últimos detalhes…', 0.9, () => { buildPlayer(); buildNPCs(); spawnAnimals(); buildMapBase(); });
+  await step('Últimos detalhes…', 0.9, () => { initNav(); buildPlayer(); buildBoat(); buildNPCs(); spawnAnimals(); spawnFauna(FLOWER_ZONES()); buildDragon(); buildMapBase(); });
   post = new Post(); post.setSize(innerWidth, innerHeight);
   player.y = groundH(player.x, player.z);
   for (let i = 0; i < 30; i++) grass.update(player.x, player.z, 100);
@@ -138,6 +147,8 @@ async function boot() {
   clock.start(); if (!MANUAL) requestAnimationFrame(rafFrame); else frame(0.016);
 }
 function pathDistOK(x, z, r) { for (const p of PATHS) for (let i = 0; i < p.length - 1; i++) { const [x1, z1] = p[i], [x2, z2] = p[i + 1]; const dx = x2 - x1, dz = z2 - z1; const t = clamp(((x - x1) * dx + (z - z1) * dz) / (dx * dx + dz * dz), 0, 1); if (Math.hypot(x1 + dx * t - x, z1 + dz * t - z) < 3 + r) return true; } return false; }
+const CURIO_KEYS = ['cogumelos', 'tronco', 'colmeia', 'ninhoAve', 'amoras', 'estrela', 'fonte', 'cabana', 'arvoreNomes'];
+function curioNear(x, z) { for (const k of CURIO_KEYS) { const p = storySpots[k]; if (p && Math.hypot(p.x - x, p.z - z) < 7) return true; } return false; }
 function aqueductNear(x, z) { const A = [-104, 18], B = [-44, 112]; const dx = B[0] - A[0], dz = B[1] - A[1]; const t = clamp(((x - A[0]) * dx + (z - A[1]) * dz) / (dx * dx + dz * dz), 0, 1); return Math.hypot(A[0] + dx * t - x, A[1] + dz * t - z) < 5; }
 
 // os quatro gigantes e o rosto entre as flores
@@ -148,9 +159,10 @@ function placeGiants(rockMat) {
     SPOTS.lake = { x: sx, z: sz, yaw: face(sx, sz, gx, gz) }; }
   { const gx = POI.stones.x - 22, gz = POI.stones.z - 16; buildGiant(scene, rockMat, { pose: 'kneel', x: gx, y: groundH(gx, gz) - 0.4, z: gz, rot: face(gx, gz, POI.stones.x, POI.stones.z), seed: 23, id: 'circulo' }); SPOTS.stones = { x: POI.stones.x + 1.5, z: POI.stones.z + 2, yaw: face(POI.stones.x, POI.stones.z, gx, gz) }; }
   { const gx = POI.tower.x + 26, gz = POI.tower.z + 18; buildGiant(scene, rockMat, { pose: 'lie', x: gx, y: groundH(gx, gz) - 0.5, z: gz, rot: -0.7, seed: 37, id: 'torre' }); SPOTS.tower = { x: storySpots.tower.x, z: storySpots.tower.z, yaw: face(storySpots.tower.x, storySpots.tower.z, POI.tower.x, POI.tower.z) }; }
-  { let best = null; for (let z = -330; z > -520; z -= 6) for (let x = -120; x <= 40; x += 8) { const h = groundH(x, z); const ny = normalY(x, z); if (h > 55 && h < 110 && ny > 0.86) { const sc = h - Math.abs(x + 50) * 0.2; if (!best || sc > best.sc) best = { x, z, sc }; } }
-    if (!best) best = { x: -50, z: -420 }; const gx = best.x, gz = best.z; const g = buildGiant(scene, rockMat, { pose: 'sit', x: gx, y: groundH(gx, gz) - 0.8, z: gz, rot: face(gx, gz, 0, 0), seed: 51, id: 'monte' });
-    const fx = Math.sin(g.rot), fz = Math.cos(g.rot); const sx = gx + fx * 13, sz = gz + fz * 13; SPOTS.peak = { x: sx, z: sz, yaw: g.rot }; POI.peaks.x = sx; POI.peaks.z = sz; }
+  { // a gigante sentada no alto do monte, atrás do mirante (o platô no fim da trilha), olhando a vila
+    const sx = MIRANTE.x, sz = MIRANTE.z; const fx0 = -sx, fz0 = -sz, fl = Math.hypot(fx0, fz0); const gx = sx - fx0 / fl * 13, gz = sz - fz0 / fl * 13;
+    const g = buildGiant(scene, rockMat, { pose: 'sit', x: gx, y: groundH(gx, gz) - 0.8, z: gz, rot: face(gx, gz, 0, 0), seed: 51, id: 'monte' });
+    SPOTS.peak = { x: sx, z: sz, yaw: g.rot }; POI.peaks.x = sx; POI.peaks.z = sz; }
   { const hx = POI.head.x, hz = POI.head.z; const hf = buildHeadFragment(scene, rockMat, hx, hz, 0.9); addCirc(hf[0], hf[1], hf[2] * 0.6); SPOTS.head = { x: storySpots.head.x, z: storySpots.head.z, yaw: face(storySpots.head.x, storySpots.head.z, hx, hz) }; }
   SPOTS.tree = { x: storySpots.tree.x, z: storySpots.tree.z, yaw: face(storySpots.tree.x, storySpots.tree.z, storySpots.treeRoot.x, storySpots.treeRoot.z) };
   SPOTS.garden = { x: storySpots.relogios.x, z: storySpots.relogios.z, yaw: face(storySpots.relogios.x, storySpots.relogios.z, POI.garden.x, POI.garden.z) };
@@ -184,7 +196,9 @@ function updatePlayer(dt) {
   const mvDir = len > 0.05 ? V3(Math.sin(player.h), 0, Math.cos(player.h)).lerp(dir, 0.35).normalize() : V3();
   let nx = player.x + mvDir.x * player.speed * dt, nz = player.z + mvDir.z * player.speed * dt;
   const pr0 = probe(nx, nz, player.y); const stepLen = Math.hypot(nx - player.x, nz - player.z);
-  if (pr0.block || (stepLen > 1e-4 && player.onGround && (pr0.h - player.y) / stepLen > 1.1 && pr0.h > player.y + 0.05)) { nx = player.x; nz = player.z; }
+  // degraus construídos (soleira, escada, píer) sobem até 40 cm de uma vez; no terreno vale a inclinação máxima
+  const builtStep = pr0.h > groundH(nx, nz) + 0.02;
+  if (pr0.block || (stepLen > 1e-4 && player.onGround && pr0.h > player.y + 0.05 && (builtStep ? pr0.h - player.y > 0.42 : (pr0.h - player.y) / stepLen > 1.1))) { nx = player.x; nz = player.z; }
   if (groundH(nx, nz) < WATER - 1.1 && pr0.h < WATER) { nx = player.x; nz = player.z; if (!player.deepWarn) { player.deepWarn = true; toast('A água fica funda', 'Melhor contornar pela margem'); setTimeout(() => player.deepWarn = false, 8000); } }
   const p = { x: nx, z: nz }; collide(p, 0.3, player.y); for (const n of npcs) { if (!n.h.root.visible) continue; const dx = p.x - n.x, dz = p.z - n.z, d = Math.hypot(dx, dz); if (d < 0.6 && d > 1e-3) { p.x = n.x + dx / d * 0.6; p.z = n.z + dz / d * 0.6; } }
   const r = Math.hypot(p.x, p.z); if (r > 690) { p.x *= 690 / r; p.z *= 690 / r; }
@@ -212,30 +226,145 @@ function surface() { if (insideHouse(player.x, player.z) || player.y > groundH(p
 
 // sentar (bancos, lugares dos Veladores)
 function sitAt(spot, onSat) {
-  player.sit = { t: 0, onSat, spot, lapse: false }; player.x = spot.x; player.z = spot.z; player.y = probe(spot.x, spot.z, (spot.y ?? groundH(spot.x, spot.z)) + 0.3).h; player.h = spot.yaw ?? player.h; player.speed = 0;
+  player.sit = { t: 0, onSat, spot, lapse: false }; player.x = spot.x; player.z = spot.z; player.y = spot.seat ? spot.y - SIT_H : probe(spot.x, spot.z, (spot.y ?? groundH(spot.x, spot.z)) + 0.3).h; player.h = spot.yaw ?? player.h; player.speed = 0;
   pH.root.position.set(player.x, player.y, player.z); pH.root.rotation.y = player.h; pH.play('sitDown', 0.3); Sound.rustle(player.x, player.z);
-  cam.mode = 'sit'; cam.orbit = 0;
+  cam.mode = 'sit'; cam.orbit = 0; if (spot.seat) taken.set(spot.seat, 'lia');
+}
+// deitar na cama: a pose é o primeiro quadro de LayToIdle; levantar toca o clipe inteiro
+function lieAt(b) {
+  const L = Human.LIE; const c = Math.cos(b.yaw), sn = Math.sin(b.yaw);
+  player.sit = { t: 0, spot: { x: b.side.x, z: b.side.z, yaw: b.yaw }, lie: b, from: { x: player.x, z: player.z, y: player.y }, k: 0 };
+  player.sit.to = { x: b.x + L.dx * c + L.dz * sn, z: b.z - L.dx * sn + L.dz * c, y: b.y + L.dy, yaw: b.yaw + L.yaw };
+  player.speed = 0; pH.pose('lie', 0, 1.2); Sound.rustle(player.x, player.z); taken.set(b, 'lia');
+  cam.mode = 'lie'; cam.orbit = 0; $('lapseHint').hidden = false; $('lapseHint').textContent = isNight() ? 'T · dormir até de manhã' : 'T · deixar o tempo passar';
 }
 function updateSitting(dt) {
   const st = player.sit; st.t += dt;
+  if (st.lie) { // deitada
+    if (!st.rising) { st.k = Math.min(1, st.k + dt / 1.4); const k = smooth(0, 1, st.k); player.x = lerp(st.from.x, st.to.x, k); player.z = lerp(st.from.z, st.to.z, k); player.y = lerp(st.from.y, st.to.y, k); player.h = lerpAng(player.h, st.to.yaw, dt * 5); }
+    else if (pH.done() || st.t > 5) { player.x = st.lie.side.x; player.z = st.lie.side.z; player.y = probe(player.x, player.z, player.y + 0.3).h; taken.delete(st.lie); player.sit = null; cam.mode = 'follow'; $('lapseHint').hidden = true; $('lapseHint').textContent = lapseText; pH.play('idle', 0.3); }
+    pH.root.position.set(player.x, player.y, player.z); pH.root.rotation.y = player.h; pH.lookAtPoint(null); pH.update(dt); return;
+  }
   if (pH.currentName === 'sitDown' && pH.done()) pH.play('sit', 0.4);
-  if (pH.currentName === 'standUp' && pH.done()) { player.sit = null; cam.mode = 'follow'; }
+  if (pH.currentName === 'standUp' && pH.done()) { const sp = st.spot; if (sp && sp.seat) { const e = seatExit(sp.seat), ex = e.x, ez = e.z; player.x = ex; player.z = ez; player.y = probe(ex, ez, player.y + 0.5).h; } player.sit = null; cam.mode = 'follow'; }
   if (st.onSat && st.t > 2.2) { const f = st.onSat; st.onSat = null; f(); }
   pH.root.position.set(player.x, player.y, player.z); pH.root.rotation.y = player.h; pH.lookAtPoint(null); pH.update(dt);
 }
-function standUp() { if (!player.sit || pH.currentName === 'standUp' || state !== 'play') return; timeLapse = 0; pH.play('standUp', 0.25); $('lapseHint').hidden = true; }
+function standUp() { if (!player.sit || pH.currentName === 'standUp' || state !== 'play') return; timeLapse = 0; $('lapseHint').classList.remove('on'); if (player.sit.lie) { if (!player.sit.rising) { player.sit.rising = true; player.sit.t = 0; pH.unpose(1); } return; } if (player.sit.spot && player.sit.spot.seat) taken.delete(player.sit.spot.seat); pH.play('standUp', 0.25); $('lapseHint').hidden = true; }
+let lapseText = 'T · deixar o tempo passar · mova-se para levantar';
+// dormir: tela escurece, a noite passa, amanhece
+function sleepUntilMorning() {
+  if (state !== 'play' || !player.sit || !player.sit.lie || player.sit.sleeping) return; player.sit.sleeping = true; const f = $('fade'); f.style.opacity = '1'; Music.stop(3);
+  setTimeout(() => { hour = 6.6; S.day++; if (sky) sky.setHour(hour); save(); setTimeout(() => { f.style.opacity = '0'; toast('Bom dia', 'A noite passou num instante'); if (player.sit) player.sit.sleeping = false; Music.silence = 4; }, 900); }, 2200);
+}
+
+// =====================================================================
+// velejar: o barco do mestre Elias
+// =====================================================================
+let boat = null;
+function buildBoat() {
+  const d = harbor.sailDock; if (!d) return; boat = new SailBoat(scene, d.x, d.z, d.yaw);
+  if (S.boatPos && depthAt(S.boatPos.x, S.boatPos.z) > 0.8) { boat.x = S.boatPos.x; boat.z = S.boatPos.z; boat.yaw = S.boatPos.yaw; }
+  const [hx, hz] = fromUV(HARBOR.u, HARBOR.v); POI.mare = { x: hx, z: hz, name: 'Vila da Maré' }; if (storySpots.farol) POI.farol = { x: storySpots.farol.x, z: storySpots.farol.z, name: 'O Farol' };
+}
+const boatAtDock = () => boat && Math.hypot(boat.x - harbor.sailDock.x, boat.z - harbor.sailDock.z) < 3;
+function startSailing() {
+  if (!boat) return; state = 'sail'; $('prompt').hidden = true; curInter = null; boat.sailing = true; boat.grounded = false; player.sit = null; player.speed = 0; timeLapse = 0;
+  pH.play('drive', 0.4); Sound.rustle(player.x, player.z); cam.yaw = boat.yaw + Math.PI; cam.pitch = -0.18; cam.boatT = 0;
+  const hint = $('lapseHint'); hint.hidden = false; hint.classList.remove('on'); hint.textContent = isTouch ? 'joystick · leme e vela   ·   Usar · desembarcar perto do píer ou da praia' : 'A D · leme   ·   W S · caçar e folgar a vela   ·   E · desembarcar (perto do píer ou da praia)';
+  if (!S.sailed) { S.sailed = 1; setTimeout(() => think('li_barco'), 2500); } save(); Music.silence = Math.min(Music.silence, 5);
+}
+function landingSpot() {
+  // procura terra firme em volta do barco (o píer conta)
+  if (Math.hypot(boat.x - harbor.sailDock.x, boat.z - harbor.sailDock.z) < 8) { const p = storySpots.barco; return { x: p.x, z: p.z, y: p.y, dock: true }; }
+  if (depthAt(boat.x, boat.z) > 1.8) return null;
+  for (let r = 2; r < 14; r += 0.5) for (let a = 0; a < 16; a++) { const t = a / 16 * Math.PI * 2; const x = boat.x + Math.cos(t) * r, z = boat.z + Math.sin(t) * r; if (groundH(x, z) > WATER + 0.25 && normalY(x, z) > 0.8) return { x, z, y: groundH(x, z) }; }
+  return null;
+}
+function stopSailing() {
+  const L = landingSpot(); if (!L) { toast('Longe da terra', 'Chegue perto do píer ou de uma praia rasa para desembarcar'); return; }
+  boat.sailing = false; state = 'play'; player.x = L.x; player.z = L.z; player.y = L.y; player.h = boat.yaw; player.vy = 0; player.onGround = true; cam.yaw = player.h + Math.PI; pH.play('idle', 0.3);
+  if (L.dock) { const d = harbor.sailDock; boat.x = d.x; boat.z = d.z; boat.yaw = d.yaw; boat.speed = 0; }
+  S.boatPos = { x: boat.x, z: boat.z, yaw: boat.yaw }; $('lapseHint').hidden = true; $('lapseHint').textContent = lapseText; save();
+}
+function updateSailing(dt) {
+  const k = keys; const steer = clamp((k.KeyD || k.ArrowRight ? 1 : 0) - (k.KeyA || k.ArrowLeft ? 1 : 0) + touch.mx, -1, 1), thr = clamp((k.KeyW ? 1 : 0) - (k.KeyS ? 1 : 0) + touch.my, -1, 1);
+  boat.update(dt, { steer, throttle: thr }, elapsed);
+  // Lia sentada na popa, segurando a cana do leme
+  const r = boat.b.root; const seat = new THREE.Vector3(-boat.b.L / 2 + 0.85, boat.b.top(0.15) - 0.32 - SIT_H, 0.3).applyMatrix4(r.matrixWorld);
+  player.x = seat.x; player.z = seat.z; player.y = seat.y; player.h = boat.yaw;
+  pH.root.position.copy(seat); pH.root.quaternion.copy(r.quaternion).multiply(new THREE.Quaternion().setFromAxisAngle(V3(0, 1, 0), Math.PI / 2 + 0.25));
+  if (pH.currentName !== 'drive') pH.play('drive', 0.4); pH.lookAtPoint(V3(boat.x + Math.sin(boat.yaw) * 20, seat.y + 1.5, boat.z + Math.cos(boat.yaw) * 20), 0.6); pH.update(dt);
+  // esteira e respingos na proa
+  const sp = boat.speed; if (sp > 0.6) { const fx = Math.sin(boat.yaw), fz = Math.cos(boat.yaw);
+    if (rand() < dt * sp * 6) { const s2 = rand() < 0.5 ? -1 : 1; dust.emit({ x: boat.x + fx * 2.4 + fz * 0.5 * s2, y: WATER + 0.15, z: boat.z + fz * 2.4 - fx * 0.5 * s2, vx: fz * s2 * rr(0.5, 1.4) + fx * sp * 0.3, vy: rr(0.6, 1.6) * Math.min(1, sp / 3), vz: -fx * s2 * rr(0.5, 1.4) + fz * sp * 0.3, g: 9, drag: 0.6, life: rr(0.5, 0.9), s0: 0.08, s1: 0.18, c: [0.92, 0.95, 0.96], a0: 0.6, wind: 0.2 }); }
+    boat.wakeT += dt; if (boat.wakeT > 0.35) { boat.wakeT = 0; ripple(boat.x - fx * 2.6 + rr(-0.3, 0.3), boat.z - fz * 2.6 + rr(-0.3, 0.3), 1.2 + sp * 0.25); } }
+}
+
+// =====================================================================
+// voar com a Vésper (no código: alva)
+// =====================================================================
+let alva = null; const seatTmp = {};
+function buildDragon() { alva = new Dragon(); POI.ninho = { x: NINHO.x, z: NINHO.z, name: 'O Ninho da Vésper' }; alva.onFlap = (sp) => Sound.flap(alva.x, alva.z, state === 'fly' ? 1 : 0.6); }
+function mountDragon() {
+  if (!alva || alva.mode !== 'rest' && alva.mode !== 'ground') return; state = 'fly'; $('prompt').hidden = true; curInter = null; player.sit = null; alva.rider = true; alva.takeoff(); pH.play('drive', 0.3); cam.yaw = alva.yaw + Math.PI; cam.pitch = -0.2; cam.flyT = 0; timeLapse = 0;
+  const hint = $('lapseHint'); hint.hidden = false; hint.classList.remove('on'); hint.textContent = isTouch ? 'joystick · voar   ·   Pular · subir   ·   Usar · pousar' : 'W · bater asas   S · frear   A D · curvas   Espaço · subir   Shift · descer   mouse · olhar   E · pousar';
+  if (!S.flags.voou) { S.flags.voou = 1; setTimeout(() => think('li_voo'), 6000); } Music.stop(2); setTimeout(() => Music.play('title', { fade: 4, vol: 0.9 }), 2500); save();
+}
+function updateFlying(dt) {
+  const k = keys; const steerKey = (k.KeyD ? 1 : 0) - (k.KeyA ? 1 : 0) + touch.mx;
+  // mouse: se a jogadora olhou para um lado, a Vésper vira para lá
+  let turn = steerKey; if (Math.abs(steerKey) < 0.1 && cam.flyT < 1.5) { const camHead = cam.yaw + Math.PI; turn = clamp(-angDiff(camHead, alva.yaw) * 1.4, -1, 1); }
+  const climb = clamp((k.Space || touch.jump ? 1 : 0) - (k.ShiftLeft || k.ShiftRight || k.KeyC ? 1 : 0) + (cam.flyT < 1.5 ? clamp(-(cam.pitch + 0.2) * 1.2, -0.6, 0.6) : 0), -1, 1);
+  const inp = { turn, climb, thrust: (k.KeyW ? 1 : 0) + Math.max(0, touch.my), brake: (k.KeyS ? 1 : 0) + Math.max(0, -touch.my) };
+  alva.update(dt, inp, null); cam.flyT = (cam.flyT || 0) + dt;
+  // Lia sentada na base do pescoço
+  alva.seatMatrix(seatTmp); player.x = seatTmp.p.x; player.z = seatTmp.p.z; player.y = seatTmp.p.y - SIT_H; player.speed = 0;
+  pH.root.position.set(seatTmp.p.x, seatTmp.p.y - SIT_H, seatTmp.p.z); pH.root.quaternion.copy(seatTmp.q); if (pH.currentName !== 'drive') pH.play('drive', 0.3);
+  pH.lookAtPoint(V3(alva.x + Math.sin(alva.yaw) * 30, seatTmp.p.y + 2, alva.z + Math.cos(alva.yaw) * 30), 0.7); pH.update(dt);
+  if (alva.mode === 'ground') dismountDragon();
+}
+function dismountDragon() {
+  state = 'play'; alva.rider = false; const sx = Math.cos(alva.yaw), sz = -Math.sin(alva.yaw); let px = alva.x + sx * 6, pz = alva.z + sz * 6; if (groundH(px, pz) < WATER + 0.2) { px = alva.x - sx * 6; pz = alva.z - sz * 6; }
+  player.x = px; player.z = pz; player.y = groundH(px, pz); player.vy = 0; player.onGround = true; player.h = Math.atan2(alva.x - px, alva.z - pz); cam.yaw = player.h + Math.PI; pH.play('idle', 0.3); pH.root.quaternion.identity();
+  $('lapseHint').hidden = true; $('lapseHint').textContent = lapseText; think(S.flags.pousou ? 'li_sentar2' : 'li_voo_fim'); S.flags.pousou = 1; save();
+  // longe do ninho, ela espera um pouco e volta voando sozinha
+  if (Math.hypot(alva.x - NINHO.x, alva.z - NINHO.z) > 40) setTimeout(() => { if (state !== 'fly' && alva.mode === 'rest') alva.takeoff(); }, 9000);
+}
 
 // =====================================================================
 // câmera
 // =====================================================================
 function updateCamera(dt) {
+  if (window.__camOverride) { const o = window.__camOverride; if (pH) pH.root.visible = true; camera.position.set(...o.pos); camera.lookAt(...o.look); camera.fov = o.fov || 50; camera.updateProjectionMatrix(); return; }
   const cy = cam.yaw, cp = cam.pitch;
   camFwd.set(-Math.sin(cy) * Math.cos(cp), Math.sin(cp), -Math.cos(cy) * Math.cos(cp));
   // lume: órbita lenta em volta da lembrança
   if (state === 'lume' && lume) { const c = lume.center; cam.orbit += dt * 0.045; const a = (cam.lumeA ?? Math.atan2(player.x - c.x, player.z - c.z)) + cam.orbit; cam.lumeA = cam.lumeA ?? a; const want = V3(c.x + Math.sin(a) * 6.8, c.y + 2.2, c.z + Math.cos(a) * 6.8); want.y = Math.max(want.y, groundH(want.x, want.z) + 1.2); cam.cur.lerp(want, 1 - Math.exp(-dt * 1.5)); camera.position.copy(cam.cur); camera.lookAt(c.x, c.y + 1.2, c.z); camera.fov = lerp(camera.fov, 42, 1 - Math.exp(-dt * 2)); camera.updateProjectionMatrix(); return; }
   cam.lumeA = undefined;
+  if (state === 'fly' && alva) {
+    const b = alva.bodyPos(); const cy2 = cam.yaw, cp2 = cam.pitch; const fwd2 = V3(-Math.sin(cy2) * Math.cos(cp2), Math.sin(cp2), -Math.cos(cy2) * Math.cos(cp2)); const pivot = b.clone().add(V3(0, 3, 0));
+    const dist = 24 + alva.speed * 0.25; let want = pivot.clone().addScaledVector(fwd2, -dist).add(V3(0, 3.5, 0)); want.y = Math.max(want.y, Math.max(groundH(want.x, want.z), WATER) + 2);
+    if (cam.flyT > 2.5) { cam.yaw = lerpAng(cam.yaw, alva.yaw + Math.PI, dt * 0.9); cam.pitch = lerp(cam.pitch, -0.18 - alva.pitch * 0.4, dt * 0.8); }
+    cam.cur.lerp(want, 1 - Math.exp(-dt * 3.2)); if (cam.cur.distanceTo(want) > 60) cam.cur.copy(want); camera.position.copy(cam.cur);
+    camera.lookAt(pivot.x + Math.sin(alva.yaw) * 10, pivot.y, pivot.z + Math.cos(alva.yaw) * 10); camera.rotateZ(alva.bank * 0.15);
+    camera.fov = lerp(camera.fov, 55 + clamp(alva.speed - 10, 0, 25) * 0.6, 1 - Math.exp(-dt * 2)); camera.updateProjectionMatrix(); if (pH) pH.root.visible = true; return;
+  }
+  if (state === 'sail' && boat) {
+    const b = boat; const cy2 = cam.yaw, cp2 = cam.pitch; const fwd2 = V3(-Math.sin(cy2) * Math.cos(cp2), Math.sin(cp2), -Math.cos(cy2) * Math.cos(cp2)); const pivot = V3(b.x, b.y + 1.6, b.z);
+    let want = pivot.clone().addScaledVector(fwd2, -9.5).add(V3(0, 1.2, 0)); want.y = Math.max(want.y, Math.max(groundH(want.x, want.z), WATER) + 0.8);
+    // a câmera tende a voltar para trás do barco quando não se mexe o mouse
+    cam.boatT = (cam.boatT || 0) + dt; if (cam.boatT > 2.5) cam.yaw = lerpAng(cam.yaw, b.yaw + Math.PI, dt * 0.6);
+    cam.cur.lerp(want, 1 - Math.exp(-dt * 4)); if (cam.cur.distanceTo(want) > 20) cam.cur.copy(want); camera.position.copy(cam.cur); camera.lookAt(pivot.x + Math.sin(b.yaw) * 3, pivot.y, pivot.z + Math.cos(b.yaw) * 3); camera.fov = lerp(camera.fov, 55, 1 - Math.exp(-dt * 3)); camera.updateProjectionMatrix(); if (pH) pH.root.visible = true; return;
+  }
   if (state === 'finale' && finale) { finale.camera(dt); return; }
   cam.inK = lerp(cam.inK || 0, insideHouse(player.x, player.z) ? 1 : 0, 1 - Math.exp(-dt * 4));
+  if (cam.mode === 'lie' && player.sit && player.sit.lie) {
+    const b = player.sit.lie; const head = pH.headPos; const sd = V3(b.side.x - b.x, 0, b.side.z - b.z).normalize(); const fw = V3(Math.sin(b.yaw), 0, Math.cos(b.yaw));
+    let want = head.clone().addScaledVector(sd, 1.25).addScaledVector(fw, 0.9 + Math.sin(elapsed * 0.05) * 0.2).add(V3(0, 1.05, 0)); let last = head.clone();
+    for (let i = 1; i <= 12; i++) { const q = head.clone().lerp(want, i / 12); if (insideBox(q.x, q.z, 0.15, player.y) || inSolid(q.x, q.y, q.z, 0.18)) break; last = q; }
+    cam.cur.lerp(last, 1 - Math.exp(-dt * 3)); camera.position.copy(cam.cur); camera.lookAt(head.x, head.y - 0.15, head.z); camera.fov = lerp(camera.fov, 50, 1 - Math.exp(-dt * 3)); camera.updateProjectionMatrix(); if (pH) pH.root.visible = true; return;
+  }
   const sitK = cam.mode === 'sit' ? 1 : 0; cam.sitK = lerp(cam.sitK || 0, sitK, 1 - Math.exp(-dt * 1.2));
   const dist = lerp(lerp(3.5, 1.9, cam.inK), 5.2, cam.sitK * (1 - cam.inK)), shoulder = lerp(0.3, 0.18, cam.inK), fov = lerp(lerp(52, 62, cam.inK), 46, cam.sitK);
   if (cam.mode === 'sit') { cam.yaw = lerpAng(cam.yaw, player.h + Math.PI + 0.5 + Math.sin(elapsed * 0.05) * 0.15, dt * 0.25); cam.pitch = lerp(cam.pitch, -0.05, dt * 0.4); }
@@ -243,7 +372,7 @@ function updateCamera(dt) {
   const pivot = V3(player.x, player.y + (player.sit ? 1.0 : 1.5), player.z);
   let want = pivot.clone().addScaledVector(camFwd, -dist).addScaledVector(right, shoulder).add(V3(0, 0.12, 0));
   const steps = 14; let last = pivot.clone().addScaledVector(right, shoulder * 0.3);
-  for (let i = 1; i <= steps; i++) { const t = i / steps; const q = pivot.clone().lerp(want, t); if (q.y < groundH(q.x, q.z) + 0.3 || insideBox(q.x, q.z, 0.15, player.y)) break; last = q; }
+  for (let i = 1; i <= steps; i++) { const t = i / steps; const q = pivot.clone().lerp(want, t); if (q.y < groundH(q.x, q.z) + 0.3 || insideBox(q.x, q.z, 0.15, player.y) || inSolid(q.x, q.y, q.z, 0.18) || q.y < probe(q.x, q.z, player.y + 0.4).h + 0.25) break; last = q; }
   want = last;
   if (cam.cine > 0.001 && dlgNPC && dlgNPC.h) {
     const H = dlgNPC.h.headPos; const P = pH.headPos; const d = H.clone().sub(P); d.y = 0; d.normalize(); const rr2 = V3(d.z, 0, -d.x);
@@ -266,9 +395,6 @@ function updateCamera(dt) {
 // =====================================================================
 // moradores
 // =====================================================================
-function addNPC(o) { const h = new Human(o.key); scene.add(h.root); const n = Object.assign({ h, wi: 0, wait: rr(1, 4), speed: 0, talkT: 0, x: o.day[0], z: o.day[1], yaw: o.day[2] || 0, inside: false }, o); h.root.position.set(n.x, groundH(n.x, n.z), n.z); npcs.push(n); return n; }
-let odessa, anselmo, celeste, tome, irene, bastiao;
-function houseOf(role) { return interiors.find(h => h.role === role); }
 function buildNPCs() {
   const od = storySpots.odessa; odessa = addNPC({ id: 'odessa', key: 'odessa', day: [od.x, od.z, Math.atan2(-POI.observatory.x, -POI.observatory.z)], talk: talkOdessa, idle: 'fold', always: true, nightIdle: 'idle', lookSky: true });
   anselmo = addNPC({ id: 'anselmo', key: 'anselmo', day: [44, 47, 0.4], talk: talkAnselmo, idle: 'idle', wander: [[44, 47], [52, 44], [50, 55], [40, 52]], home: houseOf('anselmo'), slow: true });
@@ -278,86 +404,232 @@ function buildNPCs() {
   let ix = -128, iz = 92; { const dx = -ix, dz = -iz, dl = Math.hypot(dx, dz); for (let i = 0; i < 120 && groundH(ix, iz) < 0.9; i++) { ix += dx / dl; iz += dz / dl; } ix += dx / dl * 2; iz += dz / dl * 2; }
   irene = addNPC({ id: 'irene', key: 'irene', day: [ix, iz, Math.atan2(-170 - ix, 120 - iz)], talk: talkIrene, idle: 'idle', home: houseOf('irene') });
   const bs = storySpots.bastiao; bastiao = addNPC({ id: 'bastiao', key: 'bastiao', day: [bs.x, bs.z, storySpots.bastiaoYaw + Math.PI], talk: talkBastiao, idle: 'kneel', home: houseOf('casagrande') });
+  // Vila da Maré
+  { const s2 = storySpots.marta; marta = addNPC({ id: 'marta', key: 'marta', day: [s2.x, s2.z, storySpots.martaYaw], talk: talkMarta, idle: 'idle', home: houseOf('taberna'), slow: true }); }
+  { const s2 = storySpots.joca; joca = addNPC({ id: 'joca', key: 'joca', day: [s2.x, s2.z, storySpots.jocaYaw], talk: talkJoca, idle: 'idle', work: 'kneel', home: houseOf('barqueiro') }); }
+  { const s2 = storySpots.tiao; tiao = addNPC({ id: 'tiao', key: 'tiao', day: [s2.x, s2.z, storySpots.tiaoYaw], talk: talkTiao, idle: 'idle', home: houseOf('tiao'), daySeat: harbor.tiaoSeat }); }
+  { const [a, b] = [fromUV(HARBOR.u + 34, HARBOR.v - 8), fromUV(HARBOR.u + 40, HARBOR.v + 18)], c = fromUV(HARBOR.u + 30, HARBOR.v + 30), d2 = fromUV(HARBOR.u + 12, HARBOR.v + 6);
+    nina = addNPC({ id: 'nina', key: 'nina', day: [d2[0], d2[1], SEA_ROT], talk: talkNina, idle: 'idle', wander: [d2, a, b, c], home: houseOf('tiao') }); }
+  if (storySpots.davi) { const s2 = storySpots.davi; davi = addNPC({ id: 'davi', key: 'davi', day: [s2.x, s2.z, storySpots.daviYaw], talk: talkDavi, idle: 'fold', always: true, nightIdle: 'lantern', lookSky: true, slow: true }); }
   // cavalete de pintura da Irene
   { const ia = Math.atan2(-170 - ix, 120 - iz); const ex = ix + Math.sin(ia) * 1.1 + Math.cos(ia) * 0.6, ez = iz + Math.cos(ia) * 1.1 - Math.sin(ia) * 0.6, ey = groundH(ex, ez); const g = new THREE.Group(); for (const a of [-1, 1]) { const l = new THREE.Mesh(new THREE.BoxGeometry(0.05, 1.6, 0.05), M.oldWood); l.position.set(a * 0.35, 0.8, 0); l.rotation.set(0.12, 0, a * -0.08); g.add(l); } const cv = new THREE.Mesh(new THREE.PlaneGeometry(0.8, 0.6), paintingMat()); cv.position.set(0, 1.15, 0.08); cv.rotation.x = 0.12; g.add(cv); g.position.set(ex, ey, ez); g.rotation.y = ia + Math.PI; scene.add(g); addCirc(ex, ez, 0.4); }
 }
 function paintingMat() { const c = document.createElement('canvas'); c.width = 256; c.height = 192; const g = c.getContext('2d'); const gr = g.createLinearGradient(0, 0, 0, 192); gr.addColorStop(0, '#f2c78a'); gr.addColorStop(0.45, '#e9a06a'); gr.addColorStop(0.55, '#5a7c86'); gr.addColorStop(1, '#2f4f5a'); g.fillStyle = gr; g.fillRect(0, 0, 256, 192); g.fillStyle = 'rgba(255,240,200,0.8)'; for (let i = 0; i < 40; i++) g.fillRect(90 + Math.random() * 80, 110 + Math.random() * 60, 18 + Math.random() * 20, 2); g.fillStyle = '#2b3a2a'; g.beginPath(); g.moveTo(0, 105); g.quadraticCurveTo(60, 70, 120, 100); g.lineTo(256, 95); g.lineTo(256, 108); g.lineTo(0, 110); g.fill(); const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return new THREE.MeshStandardMaterial({ map: t, roughness: 0.9 }); }
 const isNight = () => hour >= 20.2 || hour < 6.3;
+const isBedtime = () => hour >= 22.4 || hour < 6.3;
+// ---------------------------------------------------------------------
+// rotina dos moradores: de dia cada um no seu canto; ao anoitecer vão para casa e sentam perto da
+// lareira; mais tarde dormem na cama (de verdade, dá para vê-los pela janela). Os trajetos são
+// planejados com A* (nav.js) e simulados mesmo longe da câmera, então ninguém fica preso no caminho.
+// ---------------------------------------------------------------------
+let nav = null;
+function initNav() {
+  const stairs = interiors.flatMap(h => h.stair.map(st => [st.foot.x, st.foot.z, st.top.x, st.top.z]));
+  nav = new Nav({ boxes: colliders.boxes,
+    circles: (x, z, cb) => { const cx = Math.floor(x / CG), cz = Math.floor(z / CG); for (let a = -1; a <= 1; a++) for (let b = -1; b <= 1; b++) { const arr = circGrid.get((cx + a) + ',' + (cz + b)); if (!arr) continue; for (let i = 0; i < arr.length; i += 3) cb(arr[i], arr[i + 1], arr[i + 2]); } },
+    extra: (x, z) => { for (const [ax, az, bx, bz] of stairs) { const dx = bx - ax, dz = bz - az; const t = clamp(((x - ax) * dx + (z - az) * dz) / (dx * dx + dz * dz), 0, 1); if (Math.hypot(ax + dx * t - x, az + dz * t - z) < 0.62) return true; } return false; } });
+}
+const SIT_H = 0.48; // altura do assento esperada pelo clipe "Sitting" (calibrada olhando a pose)
+const taken = new Map(); // assento/cama -> morador
+function claim(n, spot) { if (!spot) return null; const o = taken.get(spot); if (o && o !== n) return null; taken.set(spot, n); return spot; }
+// ponto livre ao lado de um assento para sentar/levantar (frente, lados, trás)
+function seatExit(st) { if (st._exit) return st._exit; const f = [Math.sin(st.yaw), Math.cos(st.yaw)], r = [Math.cos(st.yaw), -Math.sin(st.yaw)]; const c = [[st.exit, 0], [0.15, 0.62], [0.15, -0.62], [-0.55, 0], [0.6, 0.5], [0.6, -0.5]];
+  for (const [a, b] of c) { const x = st.x + f[0] * a + r[0] * b, z = st.z + f[1] * a + r[1] * b; if (!nav || nav.free(x, z)) return (st._exit = { x, z }); } return (st._exit = { x: st.x + f[0] * st.exit, z: st.z + f[1] * st.exit }); }
+function release(n) { for (const [k, v] of taken) if (v === n) taken.delete(k); }
+function homeSeat(n) { if (n.homeSeat && taken.get(n.homeSeat) === n) return n.homeSeat; const h = n.home; if (!h) return null; const list = [...h.seats].sort((a, b) => (a.kind === 'chair' ? 0 : 1) - (b.kind === 'chair' ? 0 : 1)); for (const st of list) if (!taken.get(st) || taken.get(st) === n) { n.homeSeat = claim(n, st); return st; } return null; }
+function homeBed(n) { if (n.homeBed && taken.get(n.homeBed) === n) return n.homeBed; const h = n.home; if (!h) return null; for (const b of h.beds) if (!taken.get(b) || taken.get(b) === n) { n.homeBed = claim(n, b); return b; } return null; }
+// o que o morador quer fazer agora: { key, x, z, act, yaw, spot }
+function npcPlan(n) {
+  if (n.home && !n.always) {
+    if (isBedtime()) { const b = homeBed(n); if (b) return { key: 'bed', x: b.side.x, z: b.side.z, act: 'sleep', spot: b }; }
+    if (isNight()) { const st = homeSeat(n); if (st) { const e = seatExit(st); return { key: 'seat', x: e.x, z: e.z, act: 'sit', spot: st }; } }
+  }
+  if (n.daySeat && hour > 6.5 && hour < 19.5) { const st = claim(n, n.daySeat); if (st) { const e = seatExit(st); return { key: 'dseat', x: e.x, z: e.z, act: 'sit', spot: st }; } }
+  if (n.wander) { const t = n.wander[n.wi]; return { key: 'w' + n.wi, x: t[0], z: t[1], act: 'wander' }; }
+  return { key: 'day', x: n.day[0], z: n.day[1], act: 'day', yaw: n.day[2] };
+}
+// rota até o plano: A* no térreo; se a cama for no andar de cima, sobe pela escada
+function planRoute(n, plan) {
+  const pts = []; let from = [n.x, n.z];
+  const up = plan.spot && plan.spot.house && plan.spot.y > plan.spot.house.levels[0] + 1.2;
+  const st = up ? plan.spot.house.stair[0] : null;
+  // descendo do andar de cima, primeiro volta à escada
+  if (n.floorUp && n.floorUp.stair && !(up && n.floorUp.house === plan.spot.house)) { const s2 = n.floorUp.stair; pts.push([s2.landing.x, s2.landing.z], [s2.top.x, s2.top.z], [s2.foot.x, s2.foot.z], [s2.bottom.x, s2.bottom.z]); from = [s2.bottom.x, s2.bottom.z]; }
+  if (up && n.floorUp && n.floorUp.house === plan.spot.house) { pts.push([plan.x, plan.z]); return pts; }
+  const goal = up ? [st.bottom.x, st.bottom.z] : [plan.x, plan.z];
+  const p = nav.path(from[0], from[1], goal[0], goal[1]); if (!p) return null; pts.push(...p);
+  if (up) pts.push([st.foot.x, st.foot.z], [st.top.x, st.top.z], [st.landing.x, st.landing.z], [plan.x, plan.z]);
+  return pts;
+}
+function addNPC(o) { const h = new Human(o.key); scene.add(h.root); const n = Object.assign({ h, wi: 0, wait: rr(1, 4), speed: 0, talkT: 0, x: o.day[0], z: o.day[1], y: groundH(o.day[0], o.day[1]), yaw: o.day[2] || 0, route: null, pose: null, fails: 0, stuckT: 0 }, o); h.root.position.set(n.x, n.y, n.z); npcs.push(n); return n; }
+let odessa, anselmo, celeste, tome, irene, bastiao, marta, joca, tiao, nina, davi;
+function houseOf(role) { return interiors.find(h => h.role === role); }
+function teleportNPC(n, x, z, y) { n.x = x; n.z = z; n.y = y ?? probe(x, z, groundH(x, z) + 0.3).h; n.floorUp = null; }
+function npcVisible(n) { const dx = n.x - camera.position.x, dz = n.z - camera.position.z, d = Math.hypot(dx, dz); if (d < 6) return true; if (d > 95) return false; const f = camFwd; return (dx * f.x + dz * f.z) / d > 0.35; }
+function arrive(n, plan) {
+  if (plan.act === 'sit' && plan.spot) { const st = plan.spot; n.mode = 'settle'; n.settle = { t: 0, x0: n.x, z0: n.z, y0: n.y, x1: st.x, z1: st.z, y1: st.y - SIT_H, yaw: st.yaw, then: 'sitting' }; n.h.play('sitDown', 0.35); return; }
+  if (plan.act === 'sleep' && plan.spot) { const b = plan.spot; const L = Human.LIE; const c = Math.cos(b.yaw), sn = Math.sin(b.yaw); n.mode = 'settle'; n.settle = { t: 0, x0: n.x, z0: n.z, y0: n.y, x1: b.x + L.dx * c + L.dz * sn, z1: b.z - L.dx * sn + L.dz * c, y1: b.y + L.dy, yaw: b.yaw + L.yaw, then: 'lying', dur: 1.6 }; n.h.pose('lie', 0, 1.2); return; }
+  if (plan.act === 'wander') { n.mode = 'wait'; n.wait = rr(5, 14); return; }
+  n.mode = 'idle';
+}
+function rise(n) {
+  // levanta da cadeira ou da cama antes de seguir para o próximo plano
+  if (n.mode === 'sitting') { n.mode = 'rising'; n.riseT = 0; n.h.play('standUp', 0.3); }
+  else if (n.mode === 'lying') { n.mode = 'rising'; n.riseT = 0; n.h.unpose(1); }
+  else n.mode = 'walk';
+}
 function updateNPCs(dt) {
   const lvl = Voice.update();
   for (const n of npcs) {
     const talking = state === 'dialog' && dlgNPC === n; const dp = Math.hypot(player.x - n.x, player.z - n.z); let speed = 0;
-    // rotina: à noite, quase todos vão para casa
-    const wantHome = isNight() && !n.always && n.home && state !== 'finale';
-    if (wantHome && !n.inside) { const d = n.home.door.p; const dx = d.x - n.x, dz = d.z - n.z, dd = Math.hypot(dx, dz); if (dd < 0.6 || dp > 120) { n.inside = true; n.x = n.home.x; n.z = n.home.z; } else if (!talking) { speed = n.slow ? 1.0 : 1.3; n.x += dx / dd * speed * dt; n.z += dz / dd * speed * dt; n.yaw = lerpAng(n.yaw, Math.atan2(dx, dz), dt * 4); const p = { x: n.x, z: n.z }; collide(p, 0.3); n.x = p.x; n.z = p.z; } }
-    else if (!wantHome && n.inside && state !== 'finale') { n.inside = false; const d = n.home.door.p; n.x = d.x; n.z = d.z; }
-    const camDist = Math.hypot(n.x - camera.position.x, n.z - camera.position.z); const vis = !n.inside && camDist < 95; n.h.root.visible = vis || n.finale; if (!vis && !n.finale) continue;
-    const cast = camDist < 32; if (n.cast !== cast) { n.cast = cast; for (const m of n.h.meshes) if (!m.userData.hair) m.castShadow = cast; }
-    if (!wantHome && !talking && !n.finale) {
-      if (n.wander && dp > 2.5) { if (n.wait > 0) n.wait -= dt; else { const t = n.wander[n.wi]; const dx = t[0] - n.x, dz = t[1] - n.z, d = Math.hypot(dx, dz); if (d < 0.4) { n.wi = (n.wi + 1) % n.wander.length; n.wait = rr(4, 12); } else { speed = n.fast ? 2.6 : n.slow ? 0.9 : 1.2; n.x += dx / d * speed * dt; n.z += dz / d * speed * dt; n.yaw = lerpAng(n.yaw, Math.atan2(dx, dz), dt * 4); const p = { x: n.x, z: n.z }; collide(p, 0.3); n.x = p.x; n.z = p.z; } } }
-      else if (!n.wander) { const dx = n.day[0] - n.x, dz = n.day[1] - n.z, d = Math.hypot(dx, dz); if (d > 0.3) { speed = 1.2; n.x += dx / d * speed * dt; n.z += dz / d * speed * dt; n.yaw = lerpAng(n.yaw, Math.atan2(dx, dz), dt * 4); } }
+    if (n.finale) { n.mode = 'idle'; n.route = null; release(n); n.y = probe(n.x, n.z, groundH(n.x, n.z) + 0.5).h; }
+    else if (!talking) {
+      const plan = npcPlan(n);
+      if (n.planKey !== plan.key) { n.planKey = plan.key; n.route = null; n.fails = 0; if (['sitting', 'lying', 'settle'].includes(n.mode)) rise(n); else if (n.mode !== 'rising') n.mode = 'walk'; }
+      if (n.mode === 'rising') { n.riseT += dt; if (n.h.done() || n.riseT > 4) { const back = n.homeBed && n.mode === 'rising' && n.lastPose === 'lying' ? n.homeBed.side : null; if (back) { n.x = back.x; n.z = back.z; } else if (n.settle) { n.x = n.settle.x0; n.z = n.settle.z0; } n.y = probe(n.x, n.z, n.y + 0.4).h; n.mode = 'walk'; n.route = null; } }
+      else if (n.mode === 'settle') { const S2 = n.settle; S2.t += dt; const k = smooth(0, S2.dur || 0.7, S2.t); n.x = lerp(S2.x0, S2.x1, k); n.z = lerp(S2.z0, S2.z1, k); n.y = lerp(S2.y0, S2.y1, k); n.yaw = lerpAng(n.yaw, S2.yaw, dt * 6); if (S2.t > (S2.dur || 0.7) + 0.2) { n.mode = S2.then; n.lastPose = S2.then; n.yaw = S2.yaw; } }
+      else if (n.mode === 'wait') { n.wait -= dt; if (n.wait <= 0) { n.wi = (n.wi + 1) % n.wander.length; } }
+      else if (n.mode === 'walk' || !n.mode) {
+        n.mode = 'walk';
+        if (!n.route) { n.retryT = (n.retryT || 0) - dt; if (n.retryT <= 0) { const pts = planRoute(n, plan); if (pts) n.route = { pts, i: 0, best: 1e9, stuckT: 0 }; else { n.fails++; n.retryT = 2.5; if (n.fails >= 2 && !npcVisible(n)) { teleportNPC(n, plan.x, plan.z, plan.spot && plan.spot.house ? plan.spot.house.levels[plan.spot.y > plan.spot.house.levels[0] + 1.2 ? 1 : 0] : undefined); n.route = { pts: [], i: 0 }; } } } }
+        if (n.route) {
+          const R = n.route; const wp = R.pts[R.i];
+          if (!wp) { n.route = { pts: [], i: 0, done: true }; arrive(n, plan); }
+          else {
+            const dx = wp[0] - n.x, dz = wp[1] - n.z, d = Math.hypot(dx, dz);
+            const pause = n.wander && dp < 2.2 && !isNight();
+            if (d < 0.22) { R.i++; R.best = 1e9; R.stuckT = 0;
+              // passou pelo topo da escada: está no andar de cima
+              if (plan.spot && plan.spot.house && plan.spot.house.stair[0]) { const st = plan.spot.house.stair[0]; if (Math.hypot(wp[0] - st.top.x, wp[1] - st.top.z) < 0.05) n.floorUp = { house: plan.spot.house, stair: st }; }
+              if (n.floorUp && Math.hypot(wp[0] - n.floorUp.stair.bottom.x, wp[1] - n.floorUp.stair.bottom.z) < 0.05) n.floorUp = null; }
+            else if (!pause) {
+              const base = n.fast ? 2.4 : n.slow ? 0.95 : 1.25; const stairK = n.y > groundH(n.x, n.z) + 0.8 ? 0.75 : 1; speed = base * stairK * clamp(d / 0.6 + 0.4, 0.4, 1);
+              const step = Math.min(d, speed * dt); n.x += dx / d * step; n.z += dz / d * step; n.yaw = lerpAng(n.yaw, Math.atan2(dx, dz), dt * 5);
+              n.y = probe(n.x, n.z, n.y + 0.3).h;
+              // preso? (não se aproxima do ponto há alguns segundos) -> replaneja; persistente -> reposiciona fora da vista
+              if (d < R.best - 0.05) { R.best = d; R.stuckT = 0; } else { R.stuckT += dt; if (R.stuckT > 3) { n.route = null; n.fails++; if (n.fails > 3 && !npcVisible(n)) teleportNPC(n, plan.x, plan.z); } }
+            }
+          }
+        }
+      }
     }
-    if (talking || (dp < 3.2 && !n.finale)) { const want = Math.atan2(player.x - n.x, player.z - n.z); if (Math.abs(angDiff(want, n.yaw)) > 0.7 || talking) n.yaw = lerpAng(n.yaw, want, dt * 2.5); }
-    else if (!n.wander && speed === 0 && !n.finale) n.yaw = lerpAng(n.yaw, n.day[2], dt * 1.2);
-    const py = probe(n.x, n.z, (n.h.root.position.y || groundH(n.x, n.z)) + 0.3).h; n.h.root.position.set(n.x, py, n.z); n.h.root.rotation.y = n.yaw;
+    // sobe/desce degraus suavemente quando parado
+    if (n.mode === 'idle' || n.mode === 'wait') n.y = probe(n.x, n.z, n.y + 0.3).h;
+    const camDist = Math.hypot(n.x - camera.position.x, n.z - camera.position.z); const vis = camDist < 95 || n.finale; n.h.root.visible = vis; n.inside = !!insideHouse(n.x, n.z);
+    if (!vis) continue;
+    const cast = camDist < 32; if (n.cast !== cast) { n.cast = cast; for (const m of n.h.meshes) if (!m.userData.hair) m.castShadow = cast; }
+    const posed = ['sitting', 'lying', 'settle', 'rising'].includes(n.mode);
+    if (!posed && (talking || (dp < 3.2 && !n.finale))) { const want = Math.atan2(player.x - n.x, player.z - n.z); if (Math.abs(angDiff(want, n.yaw)) > 0.7 || talking) n.yaw = lerpAng(n.yaw, want, dt * 2.5); }
+    else if (n.mode === 'idle' && !n.finale && n.planKey === 'day') n.yaw = lerpAng(n.yaw, n.day[2], dt * 1.2);
+    n.h.root.position.set(n.x, n.y, n.z); n.h.root.rotation.y = n.yaw;
     const speaking = (talking && Voice.playing) || (n.finale && finale && finale.speaker === n.id && Voice.playing);
     n.h.talking = speaking ? lvl : 0;
-    const idle = n.finale ? (n.finaleIdle || 'idle') : (isNight() && n.nightIdle) ? n.nightIdle : (dp > 6 && n.work && hour > 7 && hour < 17) ? n.work : n.idle;
-    n.h.locomote(speed, { idle: talking ? 'talk' : idle, talk: speaking, slow: n.slow });
-    if (dp < 7 || talking) n.h.lookAtPoint(pH.headPos, 1); else if (n.lookSky && isNight()) n.h.lookAtPoint(n.h.headPos.add(V3(Math.sin(n.yaw) * 3, 4, Math.cos(n.yaw) * 3)), 0.8); else n.h.lookAtPoint(null);
+    if (n.mode === 'sitting') { const want = speaking ? 'sitTalk' : 'sit'; if (n.h.currentName !== want) n.h.play(want, 0.4); }
+    else if (n.mode === 'settle' && n.settle.then === 'sitting') { if (n.h.currentName === 'sitDown' && n.h.done()) n.h.play('sit', 0.4); }
+    else if (n.mode === 'lying' || n.mode === 'settle' || n.mode === 'rising') { }
+    else { const idle = n.finale ? (n.finaleIdle || 'idle') : (isNight() && n.nightIdle) ? n.nightIdle : (dp > 6 && n.work && hour > 7 && hour < 17) ? n.work : n.idle; n.h.locomote(speed, { idle: talking ? 'talk' : idle, talk: speaking, slow: n.slow }); }
+    if (n.mode === 'lying') n.h.lookAtPoint(null);
+    else if (dp < 7 || talking) n.h.lookAtPoint(pH.headPos, 1); else if (n.lookSky && isNight()) n.h.lookAtPoint(n.h.headPos.add(V3(Math.sin(n.yaw) * 3, 4, Math.cos(n.yaw) * 3)), 0.8); else n.h.lookAtPoint(null);
     n.h.update(dt);
   }
 }
-
 // =====================================================================
 // diálogos
 // =====================================================================
-const Nd = (line, opts) => ({ line, opts }), O = (t, go, act) => ({ t, go, act });
+// Nd(fala, opções, ação ao mostrar) · O(texto, próximo nó, ação ao escolher)
+const Nd = (line, opts, act) => ({ line, opts, act }), O = (t, go, act) => ({ t, go, act });
 const lumesN = () => PLACES.filter(p => S.lumes[p.id]).length;
 const BYE = [O('Até mais.', null)];
 // conversa casual: percorre as falas em ordem, uma por visita
 function chat(id, list, opts = BYE) { const i = S.chat[id] || 0; S.chat[id] = (i + 1) % list.length; return Nd(list[i], opts); }
+// ---------- amizades e coisas levadas de uma vila para a outra ----------
+const frLevel = (id) => { const p = S.fr[id] || 0; return p >= 8 ? 3 : p >= 4 ? 2 : p >= 1 ? 1 : 0; };
+const hearts = (id) => '♥'.repeat(frLevel(id)) + '♡'.repeat(3 - frLevel(id));
+function friend(id, k) { const before = frLevel(id); S.fr[id] = Math.min(12, (S.fr[id] || 0) + k); if (frLevel(id) > before && before > 0) toast('Amizade · ' + CAST[id].name, hearts(id)); save(); }
+function chatDaily(id) { if (!S.met[id]) return; if (S.frDay[id] !== S.day) { S.frDay[id] = S.day; friend(id, 1); } }
+const has = (k) => !!S.inv[k];
+function give(k) { S.inv[k] = 1; toast('Recebido', ITEMS[k].split(' (')[0]); Sound.page(); save(); }
+function take(k) { delete S.inv[k]; S.fav[k] = 1; save(); }
+const metOnce = (id, k = 1) => () => { if (!S.met[id]) { S.met[id] = 1; friend(id, k); } save(); };
 function talkOdessa() {
   if (!S.met.odessa) return Nd('od_first', [
     O('Você é a maga Odessa?', () => Nd('od_quem', [O('Que tipo de mapa você quer?', mapaOd)])),
     O('Que tipo de mapa você quer?', mapaOd)]);
+  if (has('carta')) return Nd('od_carta', BYE, () => { take('carta'); friend('odessa', 2); friend('davi', 2); });
   const n = lumesN();
+  const alva = O('Que sombra é aquela que passa no céu?', () => Nd('od_alva', BYE), () => { S.flags.alva = 1; save(); });
   if (n >= 8 && !S.told) return Nd('od_todos', [O('Eu volto quando escurecer.', null, () => { S.told = 1; refreshQuest(); save(); })]);
   if (S.told && !S.final) { if (isNight()) return Nd('fim1', [O('Olhar para cima com ela', null, () => { pendingAfterDialog = startFinale; })]); return Nd('od_noite', BYE); }
-  if (S.final) return chat('odessa_pos', ['od_pos1', 'od_pos2', 'od_cha']);
-  return Nd(['od_n1', 'od_n1', 'od_n2', 'od_n2', 'od_n3', 'od_n3', 'od_n4', 'od_n4'][Math.min(n, 7)] || 'od_cha', [O('Ainda tem chá?', () => Nd('od_cha', BYE)), O('Vou continuar procurando.', null)]);
+  if (S.final) { const c = chat('odessa_pos', ['od_pos1', 'od_pos2', 'od_cha']); c.opts = [alva, ...BYE]; return c; }
+  return Nd(['od_n1', 'od_n1', 'od_n2', 'od_n2', 'od_n3', 'od_n3', 'od_n4', 'od_n4'][Math.min(n, 7)] || 'od_cha', [O('Ainda tem chá?', () => Nd('od_cha', BYE)), alva, O('Vou continuar procurando.', null)]);
 }
-const mapaOd = () => Nd('od_mapa', [O('Como eu encontro esses lugares?', () => Nd('od_como', [O('E depois?', () => Nd('od_depois', [O('Combinado.', null, () => { S.met.odessa = 1; toast('O mapa do que importa', 'Contemple os oito lugares dos Veladores'); refreshQuest(); save(); })]))]))]);
+const mapaOd = () => Nd('od_mapa', [O('Como eu encontro esses lugares?', () => Nd('od_como', [O('E depois?', () => Nd('od_depois', [O('Combinado.', null, () => { S.met.odessa = 1; friend('odessa', 1); toast('O mapa do que importa', 'Contemple os oito lugares dos Veladores'); refreshQuest(); save(); })]))]))]);
 function talkAnselmo() {
   if (isNight()) return Nd('an_noite', BYE);
-  if (!S.met.anselmo) return Nd('an_first', [O('O senhor conhece os gigantes?', () => Nd('an_gigantes', [O('E os Veladores?', () => Nd('an_veladores', BYE, met('anselmo')))])), O('O que acha que aconteceu com os Veladores?', () => Nd('an_veladores', BYE, met('anselmo')))]);
-  return chat('anselmo', ['an_c1', 'an_c2', 'an_c3']);
+  if (!S.met.anselmo) return Nd('an_first', [O('O senhor conhece os gigantes?', () => Nd('an_gigantes', [O('E os Veladores?', () => Nd('an_veladores', BYE, metOnce('anselmo')))])), O('O que acha que aconteceu com os Veladores?', () => Nd('an_veladores', BYE, metOnce('anselmo')))]);
+  return chat('anselmo', ['an_c1', 'an_c2', 'an_c3', ...(S.found.mare ? ['an_c4', 'an_c5'] : [])]);
 }
 function talkCeleste() {
   if (isNight()) return Nd('ce_noite', BYE);
-  if (!S.met.celeste) return Nd('ce_first', [O('A Odessa vem sempre aqui?', () => Nd('ce_odessa', [O('E as ruínas? O que você acha?', () => Nd('ce_ruinas', BYE))]), met('celeste')), O('O que você acha das ruínas?', () => Nd('ce_ruinas', BYE), met('celeste'))]);
-  return chat('celeste', ['ce_c1', 'ce_c3', 'ce_c2']);
+  if (!S.met.celeste) return Nd('ce_first', [O('A Odessa vem sempre aqui?', () => Nd('ce_odessa', [O('E as ruínas? O que você acha?', () => Nd('ce_ruinas', BYE))]), metOnce('celeste')), O('O que você acha das ruínas?', () => Nd('ce_ruinas', BYE), metOnce('celeste'))]);
+  if (has('peixe')) return Nd('ce_peixe', BYE, () => { take('peixe'); friend('celeste', 2); });
+  if (S.sailed && !S.flags.ceBarco) return Nd('ce_barco', BYE, () => { S.flags.ceBarco = 1; friend('celeste', 1); });
+  if (!S.fav.pao && !has('pao') && !has('peixe') && (S.found.mare || S.met.marta || (S.chat.celeste || 0) >= 2)) return Nd('ce_cesta', [O('Levo, sim.', null, () => { give('pao'); toast('Favor', 'Levar o pão para a Dona Marta, na Vila da Maré'); }), O('Agora não, desculpa.', null)]);
+  return chat('celeste', ['ce_c1', 'ce_c3', 'ce_c2', ...(S.fav.peixe ? ['ce_c4'] : [])]);
 }
 function talkTome() {
+  if (has('concha')) return Nd('to_concha', BYE, () => { take('concha'); friend('tome', 2); });
   if (S.final) return Nd('to_pos', BYE);
-  if (!S.met.tome) return Nd('to_first', [O('Eu ainda não sei.', () => Nd('to_naosei', BYE), met('tome')), O('Por que você quer saber?', () => Nd('to_porque', BYE), met('tome'))]);
-  return chat('tome', ['to_c1', 'to_c2', 'to_c3']);
+  if (!S.met.tome) return Nd('to_first', [O('Eu ainda não sei.', () => Nd('to_naosei', BYE), metOnce('tome')), O('Por que você quer saber?', () => Nd('to_porque', BYE), metOnce('tome'))]);
+  if (!S.fav.desenho && !has('desenho') && !has('concha') && (S.found.mare || S.met.nina || (S.chat.tome || 0) >= 2)) return Nd('to_nina', [O('Entrego, sim.', null, () => { give('desenho'); toast('Favor', 'Levar o desenho do Tomé para a Nina, na Vila da Maré'); }), O('Hoje não, Tomé.', null)]);
+  return chat('tome', ['to_c1', 'to_c2', 'to_c3', ...(S.fav.concha ? ['to_c4'] : [])]);
 }
 function talkIrene() {
-  if (!S.met.irene) return Nd('ir_first', [O('Então por que você continua?', () => Nd('ir_porque', [O('Posso ver?', () => Nd('ir_ver', BYE))]), met('irene')), O('Posso ver?', () => Nd('ir_ver', BYE), met('irene'))]);
-  return chat('irene', ['ir_c1', 'ir_c2', 'ir_c3']);
+  if (!S.met.irene) return Nd('ir_first', [O('Então por que você continua?', () => Nd('ir_porque', [O('Posso ver?', () => Nd('ir_ver', BYE))]), metOnce('irene')), O('Posso ver?', () => Nd('ir_ver', BYE), metOnce('irene'))]);
+  return chat('irene', ['ir_c1', 'ir_c2', 'ir_c3', ...(S.found.mare ? ['ir_c4'] : [])]);
 }
 function talkBastiao() {
-  if (!S.met.bastiao) return Nd('ba_first', [O('Só vim conhecer.', () => Nd('ba_conhecer', [O('O que você está fazendo?', () => Nd('ba_ponte', BYE))]), met('bastiao')), O('O que você está fazendo?', () => Nd('ba_ponte', BYE), met('bastiao'))]);
-  return chat('bastiao', ['ba_c1', 'ba_c2', 'ba_c3']);
+  if (!S.met.bastiao) return Nd('ba_first', [O('Só vim conhecer.', () => Nd('ba_conhecer', [O('O que você está fazendo?', () => Nd('ba_ponte', BYE))]), metOnce('bastiao')), O('O que você está fazendo?', () => Nd('ba_ponte', BYE), metOnce('bastiao'))]);
+  return chat('bastiao', ['ba_c1', 'ba_c2', 'ba_c3', 'ba_c4', ...(S.found.mare ? ['ba_c5'] : [])]);
+}
+// ---------- Vila da Maré ----------
+function talkMarta() {
+  if (has('pao')) { const n = Nd('ma_pao', BYE, () => { take('pao'); friend('marta', 2); give('peixe'); toast('Favor', 'Levar o peixe defumado para a Celeste'); }); if (!S.met.marta) { S.met.marta = 1; friend('marta', 1); } return n; }
+  if (isNight()) return Nd('ma_noite', BYE);
+  if (!S.met.marta) return Nd('ma_first', [O('A senhora conhece a Odessa?', () => Nd('ma_odessa', BYE), metOnce('marta')), O('Que lugar bonito.', () => Nd('ma_lugar', BYE), metOnce('marta'))]);
+  if (frLevel('marta') >= 2 && !S.flags.martaAmiga) return Nd('ma_amiga', BYE, () => { S.flags.martaAmiga = 1; });
+  return chat('marta', ['ma_c1', 'ma_c2', 'ma_c3']);
+}
+function talkJoca() {
+  const barco = O('Aquele barco no fim do píer é seu?', () => Nd('jo_barco', BYE), () => { if (!S.boat) { S.boat = 1; toast('O barco do mestre Elias', 'Agora você pode velejar. Ele fica no fim do píer.'); } S.met.joca = S.met.joca || 1; save(); });
+  if (!S.met.joca) return Nd('jo_first', [O('O que você está construindo?', () => Nd('jo_casco', [barco, ...BYE]), metOnce('joca')), barco]);
+  if (!S.boat) return Nd('jo_c1', [barco, ...BYE]);
+  if (S.sailed && !S.flags.jocaDepois) return Nd('jo_depois', BYE, () => { S.flags.jocaDepois = 1; friend('joca', 1); });
+  return chat('joca', ['jo_c1', 'jo_c2', 'jo_c3']);
+}
+function talkTiao() {
+  if (!S.met.tiao) return Nd('ti_first', [O('Está pescando o quê?', () => Nd('ti_pesca', BYE), metOnce('tiao')), O('A Nina é sua filha?', () => Nd('ti_nina', BYE), metOnce('tiao'))]);
+  return chat('tiao', ['ti_c1', 'ti_c2', 'ti_c3']);
+}
+function talkNina() {
+  if (has('desenho')) { const n = Nd('ni_desenho', BYE, () => { take('desenho'); friend('nina', 2); give('concha'); toast('Favor', 'Levar a concha da Nina para o Tomé'); }); if (!S.met.nina) { S.met.nina = 1; friend('nina', 1); } return n; }
+  if (isNight()) return Nd('ni_noite', BYE);
+  if (!S.met.nina) return Nd('ni_first', [O('Pode ser que tenha.', () => Nd('ni_dragao', BYE), metOnce('nina')), O('Baleia canta?', () => Nd('ni_baleia', BYE), metOnce('nina'))]);
+  return chat('nina', ['ni_c1', 'ni_c2', 'ni_c3']);
+}
+function talkDavi() {
+  if (!S.met.davi) return Nd('da_first', [O('Faz tempo que o senhor está aqui?', () => Nd('da_tempo', BYE), metOnce('davi')), O('O que o senhor vê lá de cima?', () => Nd('da_ve', BYE), metOnce('davi'))]);
+  if (!S.fav.carta && !has('carta') && frLevel('davi') >= 1 && (S.chat.davi || 0) >= 1) return Nd('da_carta', [O('Levo, sim.', null, () => { give('carta'); toast('Favor', 'Levar a carta do Seu Davi para a Odessa'); }), O('Outra hora.', null)]);
+  if (isNight()) return Nd('da_noite', BYE);
+  return chat('davi', ['da_c1', 'da_c2', 'da_c3']);
 }
 const met = (id) => () => { S.met[id] = 1; save(); };
 let dlgNPC = null, dlgNode = null, pendingAfterDialog = null;
-function openDialog(n) { if (n.finale) return; document.body.classList.add('cine'); dlgNPC = n; state = 'dialog'; post.bokeh.enabled = perf.level < 2; const node = n.talk(); Voice.prefetch([node.line]); showNode(node); }
+function openDialog(n) { if (n.finale) return; document.body.classList.add('cine'); dlgNPC = n; state = 'dialog'; post.bokeh.enabled = perf.level < 2; chatDaily(n.id); const node = n.talk(); Voice.prefetch([node.line]); showNode(node); }
 function showNode(node) {
-  if (!node) { closeDialog(); return; } dlgNode = node; $('dialog').hidden = false; $('prompt').hidden = true;
+  if (!node) { closeDialog(); return; } dlgNode = node; $('dialog').hidden = false; $('prompt').hidden = true; if (node.act) { const a = node.act; node.act = null; a(); }
   const sp = LINES[node.line] ? LINES[node.line][0] : null; const who = CAST[sp] || { name: dlgNPC.name || '', role: '' };
-  $('dlgName').textContent = who.name; $('dlgRole').textContent = who.role || ''; $('dlgText').textContent = lineText(node.line); $('dlgText').classList.remove('in'); void $('dlgText').offsetWidth; $('dlgText').classList.add('in');
+  $('dlgName').textContent = who.name; $('dlgRole').textContent = (who.role || '') + (S.met[sp] && FRIENDS[sp] ? '  ·  ' + hearts(sp) : ''); $('dlgText').textContent = lineText(node.line); $('dlgText').classList.remove('in'); void $('dlgText').offsetWidth; $('dlgText').classList.add('in');
   Voice.say(node.line, {});
   if (dlgNPC && dlgNPC.h) dlgNPC.h.nod = 1;
   const box = $('dlgOpts'); box.innerHTML = ''; node.opts.forEach((o, i) => { const b = document.createElement('button'); b.innerHTML = `<b>${i + 1}</b>`; b.appendChild(document.createTextNode(o.t)); b.onclick = (e) => { e.stopPropagation(); choose(i); }; box.appendChild(b); });
@@ -392,7 +664,7 @@ function finishLume(place) {
   captureSketch(place.id); Sound.page();
   const n = lumesN(); toast('Desenhado no caderno', `${place.name} · ${n}/8`); refreshQuest(); save();
   if (n === 8) setTimeout(() => think('li_mapa_cheio'), 2500);
-  Music.silence = rr(40, 90);
+  Music.silence = rr(12, 30);
 }
 function placeDone(place, quiet) { const g = giants.find(g => g.id === place.id); if (g) g.target = 0.35; const sp = SPOTS[place.place]; if (sp) addSiteSpirits(V3(sp.x, groundH(sp.x, sp.z), sp.z), quiet ? 6 : 9, 9, 3); }
 function captureSketch(id) {
@@ -414,6 +686,8 @@ function openJournal() {
   for (const pl of [...PLACES].sort((a, b) => (S.lumes[b.id] ? 1 : 0) - (S.lumes[a.id] ? 1 : 0))) { const b = document.createElement('article'); const done = S.lumes[pl.id];
     b.innerHTML = done ? `${sketches[pl.id] ? `<img alt="" src="${sketches[pl.id]}">` : ''}<h3>${pl.name}</h3><p class="cap">${pl.sketch}</p><p>${lineText(pl.reflect)}</p>` : `<h3 class="unk">Um lugar ainda não visto</h3><p class="cap">${pl.hint}</p>`; list.appendChild(b); }
   const notes = Object.keys(S.notes); if (notes.length) { const h = document.createElement('h2'); h.textContent = 'Anotações'; list.appendChild(h); for (const k of notes) { const b = document.createElement('article'); b.innerHTML = `<h3>${NOTES[k].title}</h3><p>${lineText(NOTES[k].line)}</p>`; list.appendChild(b); } }
+  const inv = Object.keys(S.inv); if (inv.length) { const h = document.createElement('h2'); h.textContent = 'Comigo'; list.appendChild(h); for (const k of inv) { const b = document.createElement('article'); b.innerHTML = `<h3>${ITEMS[k].split(' (')[0]}</h3><p class="cap">${ITEMS[k].split(' (')[1]?.replace(')', '') || ''}</p>`; list.appendChild(b); } }
+  const fr = Object.keys(FRIENDS).filter(k => S.met[k]); if (fr.length) { const h = document.createElement('h2'); h.textContent = 'Amizades'; list.appendChild(h); for (const k of fr) { const b = document.createElement('article'); b.innerHTML = `<h3>${CAST[k].name} <span class="hearts">${hearts(k)}</span></h3><p class="cap">${CAST[k].role}</p><p>${FRIENDS[k]}</p>`; list.appendChild(b); } }
   $('journal').hidden = false; if (state === 'play') state = 'journal';
 }
 function closeJournal() { $('journal').hidden = true; if (state === 'journal') state = 'play'; }
@@ -449,11 +723,17 @@ function hideSub() { $('memory').classList.remove('show'); $('memory').hidden = 
 let curInter = null;
 function interactables() {
   const out = [];
-  for (const n of npcs) if (n.h.root.visible && !n.finale) out.push({ x: n.x, z: n.z, r: 2.6, label: 'Conversar com ' + CAST[n.id].name, act: () => openDialog(n) });
+  for (const n of npcs) { if (!n.h.root.visible || n.finale || Math.abs(n.y - player.y) > 1.6) continue; if (n.mode === 'lying' || (n.mode === 'settle' && n.settle.then === 'lying')) out.push({ x: n.x, z: n.z, r: 2.6, label: CAST[n.id].name + ' está dormindo', act: () => think('li_dormindo') }); else out.push({ x: n.x, z: n.z, r: 2.6, label: 'Conversar com ' + CAST[n.id].name, act: () => openDialog(n) }); }
   if (S.met.odessa) for (const pl of PLACES) { const sp = SPOTS[pl.place]; if (!sp) continue; out.push({ x: sp.x, z: sp.z, r: 3.2, label: S.lumes[pl.id] ? 'Sentar e olhar um pouco' : 'Sentar e contemplar', act: () => S.lumes[pl.id] ? sitAt(spAt(sp), sitThought) : contemplate(pl) }); }
   else for (const pl of PLACES) { const sp = SPOTS[pl.place]; if (sp) out.push({ x: sp.x, z: sp.z, r: 3.2, label: 'Sentar um pouco', act: () => sitAt(spAt(sp), sitThought) }); }
   for (const k in NOTES) { const sp = storySpots[k]; if (sp) out.push({ x: sp.x, z: sp.z, r: 2.4, label: S.notes[k] ? 'Olhar de novo' : 'Observar', act: () => readNote(k) }); }
-  for (const b of [storySpots.banco, storySpots.fogueira, storySpots.obsBench1]) if (b) out.push({ x: b.x, z: b.z, r: 1.8, label: 'Sentar no banco', act: () => sitAt({ x: b.x, z: b.z, yaw: Math.atan2(b.x - camera.position.x, b.z - camera.position.z) }, sitThought) });
+  // a Alva
+  if (alva && (alva.mode === 'rest' || alva.mode === 'ground')) { const d = Math.hypot(alva.x - player.x, alva.z - player.z); if (d < 16) { if (!S.alva) out.push({ x: alva.x, z: alva.z, r: 14, label: 'Aproximar-se devagar da dragoa', act: () => { if (player.speed > 2.2 || alva.alert > 0.5) { think('li_alva_corre'); return; } alva.bow = 1; think('li_alva1', () => { think('li_alva2'); S.alva = 1; alva.trust = 1; save(); setTimeout(() => { if (alva) alva.bow = 0; }, 8000); }); } }); else out.push({ x: alva.x, z: alva.z, r: 14, label: 'Montar na Vésper e voar', act: mountDragon }); } }
+  // o barco
+  if (boat && !boat.sailing) { const at = boatAtDock() ? storySpots.barco : { x: boat.x, z: boat.z }; if (Math.abs(at.x - player.x) < 6 && Math.abs(at.z - player.z) < 6) out.push({ x: at.x, z: at.z, r: boatAtDock() ? 2.4 : 4.5, label: S.boat ? 'Velejar no barco do mestre Elias' : 'Olhar o barco', act: () => S.boat ? startSailing() : think('li_barco0') }); }
+  // cadeiras, bancos e camas (dentro e fora das casas)
+  for (const st of seats) { if (st.npcOnly || Math.abs(st.x - player.x) > 2 || Math.abs(st.z - player.z) > 2 || Math.abs(st.y - SIT_H - player.y) > 0.8 || taken.get(st)) continue; out.push({ x: st.x, z: st.z, r: 1.25, label: st.kind === 'chair' ? 'Sentar na cadeira' : st.outdoor ? 'Sentar no banco' : 'Sentar à mesa', act: () => sitAt({ x: st.x, z: st.z, y: st.y, yaw: st.yaw, seat: st }, st.outdoor ? sitThought : () => { $('lapseHint').hidden = false; }) }); }
+  for (const b of beds) { if (Math.abs(b.x - player.x) > 2.6 || Math.abs(b.z - player.z) > 2.6 || Math.abs(b.y - 0.5 - player.y) > 0.9 || taken.get(b)) continue; out.push({ x: b.side.x, z: b.side.z, r: 1.6, label: 'Deitar na cama', act: () => lieAt(b) }); }
   return out;
 }
 const sitThought = () => { const ids = ['li_sentar1', 'li_sentar2', 'li_sentar3']; think(ids[S.sat++ % 3]); $('lapseHint').hidden = false; save(); };
@@ -548,7 +828,7 @@ function updateLamps() {
 }
 let hearthLights = [], candleLight = null, roomLight = null;
 function updateDoors(dt) {
-  for (const d of doors) { let near = Math.hypot(player.x - d.p.x, player.z - d.p.z) < 2.4; for (const n of npcs) if (!n.inside && Math.hypot(n.x - d.p.x, n.z - d.p.z) < 1.8) near = true;
+  for (const d of doors) { let near = Math.hypot(player.x - d.p.x, player.z - d.p.z) < 2.4; for (const n of npcs) if (n.mode !== 'lying' && n.mode !== 'sitting' && Math.abs(n.y - d.p.y) < 2.5 && Math.hypot(n.x - d.p.x, n.z - d.p.z) < 1.8) near = true;
     d.target = near ? 1 : 0; if (near !== d.was) { d.was = near; if (Math.hypot(camera.position.x - d.p.x, camera.position.z - d.p.z) < 25) Sound.door(near, d.p.x, d.p.z); }
     d.open = lerp(d.open, d.target, 1 - Math.exp(-dt * 3)); d.pivot.rotation.y = d.rot - d.open * 1.75; }
 }
@@ -604,36 +884,55 @@ let hintShown = false; function showLookHint() { if (hintShown) return; hintShow
 document.addEventListener('pointerlockchange', () => { const was = locked; locked = document.pointerLockElement === canvas; if (was && !locked && state === 'play') pauseGame(); });
 document.addEventListener('pointerlockerror', () => { lockFailed = true; showLookHint(); });
 let prevState = 'play';
-function pauseGame() { if (!['play', 'dialog'].includes(state)) return; prevState = state; state = 'paused'; $('pause').hidden = false; $('pauseInfo').textContent = `São ${$('clock').textContent} no vale. ${lumesN()} de 8 lugares no caderno. O progresso fica salvo neste navegador.`; }
-function resume() { $('pause').hidden = true; state = prevState === 'dialog' && dlgNode ? 'dialog' : 'play'; if (state === 'play') { $('dialog').hidden = true; post.bokeh.enabled = false; } requestLock(); }
+function pauseGame() { if (!['play', 'dialog', 'sail', 'fly'].includes(state)) return; prevState = state; state = 'paused'; $('pause').hidden = false; $('pauseInfo').textContent = `São ${$('clock').textContent} no vale. ${lumesN()} de 8 lugares no caderno. O progresso fica salvo neste navegador.`; }
+function resume() { $('pause').hidden = true; state = prevState === 'dialog' && dlgNode ? 'dialog' : (prevState === 'sail' || prevState === 'fly') ? prevState : 'play'; if (state === 'play') { $('dialog').hidden = true; post.bokeh.enabled = false; } requestLock(); }
 let drag = null;
 canvas.addEventListener('mousedown', (e) => { window.focus(); if (state !== 'play') return; if (!locked && !lockFailed && !isTouch) requestLock(); if (!locked) drag = { x: e.clientX, y: e.clientY }; });
 addEventListener('mouseup', () => { drag = null; });
-addEventListener('mousemove', (e) => { if (state !== 'play') return; let mx = 0, my = 0; if (locked) { mx = e.movementX; my = e.movementY; } else if (drag) { mx = e.clientX - drag.x; my = e.clientY - drag.y; drag.x = e.clientX; drag.y = e.clientY; } else return; mx = clamp(mx, -200, 200); my = clamp(my, -200, 200); const s = 0.0019 * (locked ? 1 : 1.6) * settings.sens; cam.yaw -= mx * s; cam.pitch = clamp(cam.pitch - my * s, -1.1, 0.9); if (cam.mode === 'sit') cam.sitK = Math.max(0, (cam.sitK || 0) - 0.02); });
+addEventListener('mousemove', (e) => { if (state !== 'play' && state !== 'sail' && state !== 'fly') return; let mx = 0, my = 0; if (locked) { mx = e.movementX; my = e.movementY; } else if (drag) { mx = e.clientX - drag.x; my = e.clientY - drag.y; drag.x = e.clientX; drag.y = e.clientY; } else return; mx = clamp(mx, -200, 200); my = clamp(my, -200, 200); const s = 0.0019 * (locked ? 1 : 1.6) * settings.sens; cam.yaw -= mx * s; cam.pitch = clamp(cam.pitch - my * s, -1.1, 0.9); cam.boatT = 0; cam.flyT = 0; if (cam.mode === 'sit') cam.sitK = Math.max(0, (cam.sitK || 0) - 0.02); });
 canvas.addEventListener('contextmenu', (e) => e.preventDefault());
 addEventListener('keydown', (e) => {
   keys[e.code] = true;
   if ((state === 'lume' || state === 'finale') && (e.code === 'Space' || e.code === 'Enter') && !e.repeat) { if (lume) lume.skip(); else Voice.stop(); return; }
   if (state === 'intro' && (e.code === 'Space' || e.code === 'Enter') && !e.repeat) { Voice.stop(); return; }
+  if (state === 'paused' && e.code === 'KeyP' && !e.repeat) { resume(); return; }
+  if (e.code === 'KeyF' && !e.repeat && !['dialog'].includes(state)) { toggleFullscreen(); return; }
   if (e.code === 'KeyJ' && !e.repeat) { if (state === 'journal') closeJournal(); else if (state === 'play') openJournal(); return; }
   if (state === 'journal' && e.code === 'Escape') { closeJournal(); return; }
-  if (/^Arrow|Space/.test(e.code) && state === 'play') e.preventDefault(); if (e.repeat) return;
+  if (/^Arrow|Space/.test(e.code) && (state === 'play' || state === 'sail' || state === 'fly')) e.preventDefault(); if (e.repeat) return;
   if (state === 'dialog') { const m = e.code.match(/^(Digit|Numpad)([1-9])$/); if (m) choose(+m[2] - 1); else if (e.code === 'KeyE' || e.code === 'Enter' || e.code === 'Space') { if (Voice.playing) Voice.stop(); else if (dlgNode && dlgNode.opts.length === 1) choose(0); } else if (e.code === 'Escape') closeDialog(); return; }
+  if (state === 'fly') { if (e.code === 'KeyE') { if (!alva.requestLand()) toast('Aqui não dá para pousar', 'Procure um chão firme e plano, longe da água'); } if (e.code === 'KeyM') $('mapView').hidden = !$('mapView').hidden; if ((e.code === 'Escape' && lockFailed) || e.code === 'KeyP') pauseGame(); return; }
+  if (state === 'sail') { if (e.code === 'KeyE') stopSailing(); if (e.code === 'KeyM') $('mapView').hidden = !$('mapView').hidden; if ((e.code === 'Escape' && lockFailed) || e.code === 'KeyP') pauseGame(); return; }
   if (state !== 'play') return;
   if (e.code === 'KeyL') toggleLantern();
   if (e.code === 'KeyE') interact();
-  if (e.code === 'KeyT' && player.sit) { timeLapse = timeLapse ? 0 : 1; $('lapseHint').classList.toggle('on', !!timeLapse); }
+  if (e.code === 'KeyT' && player.sit) { if (player.sit.lie && isNight()) sleepUntilMorning(); else { timeLapse = timeLapse ? 0 : 1; $('lapseHint').classList.toggle('on', !!timeLapse); } }
   if (e.code === 'KeyM') $('mapView').hidden = !$('mapView').hidden;
-  if (e.code === 'Escape' && lockFailed) pauseGame();
+  if ((e.code === 'Escape' && lockFailed) || e.code === 'KeyP') pauseGame();
 });
-addEventListener('keyup', (e) => { keys[e.code] = false; });
+// Shift não fica 'preso' (ex.: soltou o Shift com a janela sem foco): qualquer tecla solta sem Shift o libera
+addEventListener('keyup', (e) => { keys[e.code] = false; if (!e.shiftKey) keys.ShiftLeft = keys.ShiftRight = false; });
 addEventListener('blur', () => { for (const k in keys) keys[k] = false; });
+document.addEventListener('visibilitychange', () => { for (const k in keys) keys[k] = false; });
 addEventListener('resize', () => { renderer.setSize(innerWidth, innerHeight); camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); post && post.setSize(innerWidth, innerHeight); });
 $('resumeBtn').onclick = (e) => { e.stopPropagation(); resume(); };
+// ---------- tela cheia e menu dentro do jogo ----------
+function toggleFullscreen() {
+  const d = document; if (!d.fullscreenElement) { const r = d.documentElement.requestFullscreen ? d.documentElement.requestFullscreen({ navigationUI: 'hide' }) : null; if (r && r.then) r.then(() => { if (state === 'play' || state === 'sail' || state === 'fly') requestLock(); }).catch(() => toast('Tela cheia', 'O navegador não permitiu. Tente F11.')); }
+  else d.exitFullscreen && d.exitFullscreen();
+}
+document.addEventListener('fullscreenchange', () => { const on = !!document.fullscreenElement; for (const id of ['fsBtn', 'fsBtn0']) { const b = $(id); if (b) b.textContent = on ? 'Sair da tela cheia (F)' : 'Tela cheia (F)'; } });
+for (const id of ['fsBtn', 'fsBtn0']) { const b = $(id); if (b) b.onclick = (e) => { e.stopPropagation(); toggleFullscreen(); }; }
+const VOL = JSON.parse(store.get('aldren-vol') || '{"mus":55,"amb":90,"vox":100,"sens":100}');
+function applyVol() { Sound.vol.music = VOL.mus / 100; Sound.vol.amb = VOL.amb / 100; Sound.vol.voice = VOL.vox / 100; if (Sound.mus) Sound.mus.gain.value = Sound.vol.music; if (Sound.vox) Sound.vox.gain.value = Sound.vol.voice; if (Sound.sfx) Sound.sfx.gain.value = 0.85 * VOL.amb / 90; settings.sens = VOL.sens / 100; store.set('aldren-vol', JSON.stringify(VOL)); }
+for (const [id, k] of [['volMus', 'mus'], ['volAmb', 'amb'], ['volVox', 'vox'], ['sens', 'sens']]) { const el = $(id); el.value = VOL[k]; el.addEventListener('input', () => { VOL[k] = +el.value; applyVol(); }); el.addEventListener('click', (e) => e.stopPropagation()); }
+applyVol();
+$('pauseKeys').innerHTML = $('keysList').innerHTML;
+$('reloadQ2').onclick = () => location.reload();
 let resetArm = false; $('resetBtn').onclick = (e) => { e.stopPropagation(); if (!resetArm) { resetArm = true; $('resetConfirm').hidden = false; return; } store.del(SAVE_KEY); for (const pl of PLACES) store.del('aldren-sketch-' + pl.id); location.reload(); };
 $('mapView').addEventListener('click', () => { $('mapView').hidden = true; });
 $('journal').addEventListener('click', (e) => { if (e.target.id === 'journal') closeJournal(); });
-document.querySelectorAll('.quality button[data-q]').forEach(b => { b.setAttribute('aria-pressed', b.dataset.q === settings.quality); b.addEventListener('click', (e) => { e.stopPropagation(); settings.quality = b.dataset.q; store.set('aldren2-q', settings.quality); $('qualNote').hidden = false; document.querySelectorAll('.quality button[data-q]').forEach(x => x.setAttribute('aria-pressed', x.dataset.q === settings.quality)); }); });
+document.querySelectorAll('.quality button[data-q]').forEach(b => { b.setAttribute('aria-pressed', b.dataset.q === settings.quality); b.addEventListener('click', (e) => { e.stopPropagation(); settings.quality = b.dataset.q; store.set('aldren2-q', settings.quality); $('qualNote').hidden = false; $('pauseQualNote').hidden = false; document.querySelectorAll('.quality button[data-q]').forEach(x => x.setAttribute('aria-pressed', x.dataset.q === settings.quality)); }); });
 $('reloadQ').onclick = () => location.reload();
 $('voiceToggle').onclick = (e) => { e.stopPropagation(); Voice.enabled = !Voice.enabled; $('voiceToggle').textContent = Voice.enabled ? 'Vozes: ligadas' : 'Vozes: desligadas'; store.set('aldren-vox', Voice.enabled ? '1' : '0'); };
 if (store.get('aldren-vox') === '0') { Voice.enabled = false; $('voiceToggle').textContent = 'Vozes: desligadas'; }
@@ -644,7 +943,7 @@ function setupTouch() {
   addEventListener('touchmove', (e) => { for (const t of e.changedTouches) { if (t.identifier === joyId) { let dx = t.clientX - jx, dy = t.clientY - jy; const d = Math.hypot(dx, dy); if (d > 50) { dx *= 50 / d; dy *= 50 / d; } knob.style.transform = `translate(${dx}px,${dy}px)`; touch.mx = dx / 50; touch.my = -dy / 50; } else if (t.identifier === lookId && state === 'play') { cam.yaw -= (t.clientX - lx) * 0.005; cam.pitch = clamp(cam.pitch - (t.clientY - ly) * 0.005, -1.1, 0.9); lx = t.clientX; ly = t.clientY; } } }, { passive: true });
   const end = (e) => { for (const t of e.changedTouches) { if (t.identifier === joyId) { joyId = null; touch.mx = touch.my = 0; knob.style.transform = ''; } if (t.identifier === lookId) lookId = null; } }; addEventListener('touchend', end); addEventListener('touchcancel', end);
   const tb = (id, fn) => { const b = $(id); b.addEventListener('touchstart', (e) => { e.preventDefault(); e.stopPropagation(); fn(); }, { passive: false }); };
-  tb('tbUse', () => { if (state === 'dialog') { if (dlgNode && dlgNode.opts.length === 1) choose(0); } else if (state === 'lume' && lume) lume.skip(); else interact(); }); tb('tbJump', () => { touch.jump = true; }); tb('tbMap', () => { $('mapView').hidden = !$('mapView').hidden; }); tb('tbRun', () => { touch.run = !touch.run; $('tbRun').classList.toggle('on', touch.run); }); tb('tbLamp', toggleLantern); tb('tbBook', () => { if (state === 'journal') closeJournal(); else openJournal(); }); tb('tbTime', () => { if (player.sit) { timeLapse = timeLapse ? 0 : 1; $('lapseHint').classList.toggle('on', !!timeLapse); } });
+  tb('tbUse', () => { if (state === 'dialog') { if (dlgNode && dlgNode.opts.length === 1) choose(0); } else if (state === 'lume' && lume) lume.skip(); else interact(); }); tb('tbJump', () => { touch.jump = true; }); tb('tbMap', () => { $('mapView').hidden = !$('mapView').hidden; }); tb('tbRun', () => { touch.run = !touch.run; $('tbRun').classList.toggle('on', touch.run); }); tb('tbLamp', toggleLantern); tb('tbBook', () => { if (state === 'journal') closeJournal(); else openJournal(); }); tb('tbTime', () => { if (player.sit) { if (player.sit.lie && isNight()) sleepUntilMorning(); else { timeLapse = timeLapse ? 0 : 1; $('lapseHint').classList.toggle('on', !!timeLapse); } } });
 }
 
 // =====================================================================
@@ -676,6 +975,7 @@ function applyLevel() {
   trees.nearCenter.set(1e9, 0, 1e9);
 }
 function adaptQuality(dt) {
+  return; // a qualidade escolhida fica fixa o tempo todo (antes caía sozinha quando o fps baixava)
   if (MANUAL || ['loading', 'paused', 'menu'].includes(state) || document.hidden) return;
   perf.acc += dt; perf.n++; perf.cool -= dt;
   if (perf.acc >= 2) { const fps = perf.n / perf.acc; perf.acc = 0; perf.n = 0; window.__fps = fps;
@@ -698,6 +998,10 @@ function frame(fixedDt) {
     if (state === 'lume') { if (player.sit) updateSitting(dt); else { pH.locomote(0); pH.update(dt); } } else if (state === 'finale') { finale.update(dt); } else { pH.locomote(0); pH.update(dt); }
     updateNPCs(dt); if (lume) lume.update(dt, camera.position);
     updateCamera(dt); post.grade.uniforms.letterbox.value = lerp(post.grade.uniforms.letterbox.value, state === 'journal' ? 0 : 1, 1 - Math.exp(-dt * 2));
+  } else if (state === 'fly') {
+    updateFlying(dt); updateNPCs(dt); updateCamera(dt); post.grade.uniforms.letterbox.value = lerp(post.grade.uniforms.letterbox.value, 0, 1 - Math.exp(-dt * 2)); checkDiscover();
+  } else if (state === 'sail') {
+    updateSailing(dt); updateNPCs(dt); updateCamera(dt); post.grade.uniforms.letterbox.value = lerp(post.grade.uniforms.letterbox.value, 0, 1 - Math.exp(-dt * 2)); saveT += dt; if (saveT > 12) { saveT = 0; S.boatPos = { x: boat.x, z: boat.z, yaw: boat.yaw }; save(); }
   } else if (state === 'play' || state === 'dialog') {
     updatePlayer(dt); updateNPCs(dt); checkInteract(); if (state === 'play') checkDiscover();
     cam.cine = clamp(cam.cine + (state === 'dialog' && dlgNPC && dlgNPC.h ? dt * 2 : -dt * 3), 0, 1);
@@ -712,9 +1016,10 @@ function frame(fixedDt) {
   U.player.value.set(player.x, player.y, player.z);
   sky.update({ x: player.x, y: player.y, z: player.z, camPos: camera.position }, dt);
   const inK = cam.inK || 0; scene.environmentIntensity *= lerp(1, 0.62, inK); renderer.toneMappingExposure *= lerp(1, 1.3, inK);
-  updateAnimals(dt, player, sky.nightF);
+  updateCuriosities(dt, elapsed, (o) => dust.emit(o)); updateAnimals(dt, player, sky.nightF); updateFauna(dt, elapsed, player, sky.dayF, (x, z, s) => { ripple(x, z, s); for (let i = 0; i < 10; i++) dust.emit({ x: x + rr(-0.15, 0.15), y: WATER + 0.05, z: z + rr(-0.15, 0.15), vx: rr(-0.8, 0.8), vy: rr(1, 2.4), vz: rr(-0.8, 0.8), g: 9, drag: 0.4, life: rr(0.4, 0.7), s0: 0.05, s1: 0.12, c: [0.9, 0.94, 0.95], a0: 0.55, wind: 0 }); });
   updateDoors(dt); updateInteriorLights(dt); updateLantern(dt); updateRipples(dt); updateLamps();
-  updateGiants(dt, elapsed); const obj = state !== 'menu' ? objectives()[0] : null; updateSpirits(dt, elapsed, player, obj ? obj.tgt : null, sky.nightF, player.speed > 0.3); if (motes) motes.update(elapsed, camera.position.x, camera.position.z, sky.dayF, sky.nightF, U.wind.value);
+  if (alva && state !== 'fly') { alva.update(dt, null, player); if (alva.alert > 0.9 && state === 'play' && !S.alva && (!alva.spookT || elapsed - alva.spookT > 40)) { alva.spookT = elapsed; think('li_alva_corre'); } }
+  updateOcean(); updateHarbor(dt, elapsed, scene); if (boat && state !== 'sail') boat.update(dt, null, elapsed); updateGiants(dt, elapsed); const obj = state !== 'menu' ? objectives()[0] : null; updateSpirits(dt, elapsed, player, obj ? obj.tgt : null, sky.nightF, player.speed > 0.3); if (motes) motes.update(elapsed, camera.position.x, camera.position.z, sky.dayF, sky.nightF, U.wind.value);
   post.updateLook(U.sunDir.value, sky.dayF, sky.nightF, sky.dusk || 0, U.sunColor.value);
   const focus = state === 'menu' ? camera.position : V3(player.x, 0, player.z);
   grass.update(focus.x, focus.z, 2); updateProps(camera.position.x, camera.position.z);
@@ -726,8 +1031,8 @@ function frame(fixedDt) {
   let fireNear = 0; for (const f of fires) if (!f.dead && !f.forge) fireNear = Math.max(fireNear, clamp(1 - Math.hypot(f.p.x - player.x, f.p.z - player.z) / 12, 0, 1));
   const ih = insideHouse(player.x, player.z); if (ih) fireNear = Math.max(fireNear, 0.5);
   const lakeD = Math.hypot(player.x - POI.lake.x, player.z - POI.lake.z); const gw = groundH(player.x, player.z);
-  const ruins = ['tower', 'stones', 'garden', 'stairs', 'head', 'peaks', 'shrine', 'bridge'].some(k => Math.hypot(player.x - POI[k].x, player.z - POI[k].z) < 45);
-  Sound.update(dt, { x: camera.position.x, z: camera.position.z, y: player.y, yaw: cam.yaw, windStr: U.windStrength.value, fire: fireNear, trees: clamp(forestDensity(player.x, player.z) * 3 + 0.3, 0, 1), day: sky.dayF, night: sky.nightF, inside: inK > 0.5, lake: clamp(1 - lakeD / 140, 0, 1), shore: clamp(1 - Math.abs(gw - 0.3) / 2.5, 0, 1) * (gw < 3 ? 1 : 0), village: clamp(1 - Math.hypot(player.x, player.z) / 70, 0, 1), hour, ruins, cinematic: ['lume', 'finale', 'intro', 'menu'].includes(state) });
+  const ruins = state !== 'sail' && state !== 'fly' && ['tower', 'stones', 'garden', 'stairs', 'head', 'peaks', 'shrine', 'bridge'].some(k => Math.hypot(player.x - POI[k].x, player.z - POI[k].z) < 45);
+  Sound.update(dt, { x: camera.position.x, z: camera.position.z, y: player.y, yaw: cam.yaw, windStr: U.windStrength.value, fire: fireNear, trees: clamp(forestDensity(player.x, player.z) * 3 + 0.3, 0, 1), day: sky.dayF, night: sky.nightF, inside: inK > 0.5, lake: clamp(1 - lakeD / 140, 0, 1), sea: surfNear(camera.position.x, camera.position.z), shore: state === 'sail' ? 0.35 + clamp(boat.speed / 4, 0, 0.5) : clamp(1 - Math.abs(gw - 0.3) / 2.5, 0, 1) * (gw < 3 ? 1 : 0) * (1 - surfNear(player.x, player.z)), village: clamp(1 - Math.hypot(player.x, player.z) / 70, 0, 1), hour, flying: state === 'fly' ? clamp(alva.speed / 25, 0.2, 1) : 0, ruins, cinematic: ['lume', 'finale', 'intro', 'menu'].includes(state) });
   if (!MANUAL || window.__renderNow) post.render(dt, elapsed);
   if (fpsAcc > 1) { window.__fps = fpsN / fpsAcc; fpsAcc = 0; fpsN = 0; }
 }
@@ -740,7 +1045,7 @@ $('startBtn').addEventListener('click', () => {
   const go = () => { if (!S.letter && !MANUAL) startIntro(); else { state = 'play'; requestLock(); Music.silence = 6; } };
   if (Sound.ctx) { const w = setInterval(() => { if (Sound.ready) { clearInterval(w); go(); } }, 100); setTimeout(() => { clearInterval(w); if (state === 'menu') go(); }, 6000); } else go();
 });
-window.__game = { sky: () => sky, post: () => post, camera, scene, player, S, npcs, cam, renderer, trees, grass, SPOTS, PLACES, get state() { return state; }, set state(v) { state = v; }, setHour: (h) => { hour = h; }, get hour() { return hour; }, tick: (dt, n = 1) => { for (let i = 0; i < n; i++) frame(dt); }, startLume: (i) => startLume(PLACES[i]), startFinale: () => startFinale(), openJournal, openDialog, choose, get pH() { return pH; }, toggleLantern, sitAt, interiors, think, Voice, Music };
+window.__game = { keys, get alva() { return alva; }, mountDragon, FAUNA, get boat() { return boat; }, startSailing, stopSailing, harbor, storySpots, groundH, probe, get nav() { return nav; }, npcPlan, planRoute, sky: () => sky, post: () => post, camera, scene, player, S, npcs, cam, renderer, trees, grass, SPOTS, PLACES, get state() { return state; }, set state(v) { state = v; }, setHour: (h) => { hour = h; }, get hour() { return hour; }, tick: (dt, n = 1) => { for (let i = 0; i < n; i++) frame(dt); }, startLume: (i) => startLume(PLACES[i]), lieAt, seats, beds, Human, startFinale: () => startFinale(), openJournal, openDialog, choose, get pH() { return pH; }, toggleLantern, sitAt, interiors, think, Voice, Music };
 renderer.domElement.addEventListener('webglcontextlost', (e) => { e.preventDefault(); store.set('aldren2-q', settings.quality === 'alta' ? 'media' : 'baixa'); $('loading').textContent = 'A placa de vídeo reiniciou. Recarregando com gráficos mais leves…'; $('menu').hidden = false; $('loadBar').parentElement.hidden = true; setTimeout(() => location.reload(), 1500); });
 document.addEventListener('visibilitychange', () => { if (Sound.ctx) { if (document.hidden) Sound.ctx.suspend(); else Sound.ctx.resume(); } if (document.hidden && state === 'play') pauseGame(); });
 boot().catch((e) => { console.error(e); $('loading').textContent = 'Falha ao carregar: ' + e.message; });

@@ -15,7 +15,7 @@ export const CLIP = {
   interact: 'Interact', pickup: 'PickUp_Table', kneel: 'Fixing_Kneeling', crouch: 'Crouch_Idle_Loop',
   spellIn: 'Spell_Simple_Enter', spell: 'Spell_Simple_Idle_Loop', spellOut: 'Spell_Simple_Exit',
   yes: 'Yes', no: 'Idle_No_Loop', harvest: 'Farm_Harvest', plant: 'Farm_PlantSeed', water: 'Farm_Watering', chop: 'TreeChopping_Loop',
-  lie: 'LayToIdle', eat: 'Consume', throw: 'OverhandThrow', swim: 'Swim_Idle_Loop', swimFwd: 'Swim_Fwd_Loop', dance: 'Dance_Loop',
+  lie: 'LayToIdle', drive: 'Driving_Loop', eat: 'Consume', throw: 'OverhandThrow', swim: 'Swim_Idle_Loop', swimFwd: 'Swim_Fwd_Loop', dance: 'Dance_Loop',
 };
 const ONESHOT = new Set(['jumpStart', 'land', 'sitDown', 'standUp', 'interact', 'pickup', 'spellIn', 'spellOut', 'yes', 'throw', 'eat', 'lie', 'plant', 'harvest']);
 
@@ -32,6 +32,12 @@ export const CHARS = {
   eco_m: { sex: 'm', outfit: 'm_wizard', hair: ['Hair_Ponytail', 'Hair_Moustache'], hairCol: [0.3, 0.25, 0.2], skin: [1.3, 1.1, 0.95], height: 1.0 },
   eco_f: { sex: 'f', outfit: 'f_peasant', hair: 'Hair_Long', hairCol: [0.25, 0.18, 0.12], skin: [1.4, 1.2, 1.05], height: 0.98 },
   eco_old: { sex: 'm', outfit: 'm_wizard', hair: ['Hair_Balding', 'Hair_Beard'], hairCol: [0.85, 0.85, 0.85], skin: [1.3, 1.1, 0.95], height: 0.97, old: true, wizTex: 'Wizard_2' },
+  // Vila da Maré
+  marta: { sex: 'f', outfit: 'f_peasant', hair: 'Hair_Buns', hairCol: [0.62, 0.58, 0.54], skin: [1.45, 1.2, 1.02], tint: { T_Peasant: [0.72, 0.85, 1.05] }, height: 0.95, old: true },
+  joca: { sex: 'm', outfit: 'm_peasant', hair: ['Hair_Buzzed'], hairCol: [0.22, 0.14, 0.08], skin: [1.2, 0.98, 0.82], tint: { T_Peasant: [1.05, 0.95, 0.8] }, height: 1.02 },
+  tiao: { sex: 'm', outfit: 'm_ranger', hide: /Hood|Pauldron/, hair: ['Hair_SimpleParted', 'Hair_Moustache'], hairCol: [0.16, 0.12, 0.09], skin: [1.0, 0.82, 0.68], tint: { T_Ranger: [0.7, 0.85, 1.0] }, height: 1.0 },
+  nina: { sex: 'f', outfit: 'f_peasant', hair: 'Hair_Bob', hairCol: [0.62, 0.4, 0.2], skin: [1.15, 0.94, 0.78], tint: { T_Peasant: [1.05, 0.8, 0.75] }, height: 0.6, child: true },
+  davi: { sex: 'm', outfit: 'm_noble', hair: ['Hair_Balding', 'Hair_Beard'], hairCol: [0.9, 0.9, 0.9], skin: [1.35, 1.1, 0.92], height: 0.98, old: true, nobleTex: 'Noble_3' },
   aldeao1: { sex: 'm', outfit: 'm_noble', hair: ['Hair_SlickBack'], hairCol: [0.12, 0.1, 0.08], skin: [1.25, 1.05, 0.9], height: 1.0, nobleTex: 'Noble_3' },
 };
 
@@ -39,7 +45,8 @@ let meshoptReady = null;
 export async function loadHumanLibrary() {
   const { MeshoptDecoder } = await import('three/addons/libs/meshopt_decoder.module.js');
   const { gltfLoader } = await import('../core.js'); gltfLoader.setMeshoptDecoder(MeshoptDecoder);
-  const [anims, ...parts] = await Promise.all([loadGLTF('a/chars/anims.glb.wasm'), ...FILES.map(f => loadGLTF(`a/chars/${f}.glb.wasm`))]);
+  const [anims, extra, ...parts] = await Promise.all([loadGLTF('a/chars/anims.glb.wasm'), loadGLTF('a/chars/anims_extra.glb.wasm').catch(() => null), ...FILES.map(f => loadGLTF(`a/chars/${f}.glb.wasm`))]);
+  if (extra) anims.animations.push(...extra.animations);
   FILES.forEach((f, i) => { const g = parts[i]; if (g.scenes.length > 1) { const all = new THREE.Group(); for (const sc of g.scenes) all.add(...sc.children.slice()); g.scene = all; } LIB.gltf[f] = g; });
   const tl = new THREE.TextureLoader();
   for (const n of ['Wizard_2', 'Noble_3']) LIB.tex[n] = tl.loadAsync(`a/chars/tex/${n}.webp`).then(t => { t.colorSpace = THREE.SRGBColorSpace; t.flipY = false; return t; }).catch(() => null);
@@ -86,6 +93,8 @@ const _v1 = new THREE.Vector3(), _v2 = new THREE.Vector3(), _q1 = new THREE.Quat
 function setBoneWorldQuat(bone, q) { bone.parent.getWorldQuaternion(_q3); bone.quaternion.copy(_q3.invert().multiply(q)); bone.updateMatrixWorld(true); }
 
 export class Human {
+  // deitada na cama: deslocamento da raiz em relação ao centro do colchão (no referencial da cama, cabeceira em -z)
+  static LIE = { dx: 0, dz: 0, dy: 0, yaw: 0 };
   constructor(key, opts = {}) {
     const def = CHARS[key] || CHARS.aldeao1; this.def = def; this.key = key; this.sex = def.sex;
     this.root = new THREE.Group(); this.meshes = [];
@@ -146,6 +155,9 @@ export class Human {
     a.reset().setEffectiveWeight(1).play(); if (this.current && fade > 0) a.crossFadeFrom(this.current, fade, true); else if (this.current) this.current.stop();
     this.current = a; this.currentName = name; return true;
   }
+  // pose parada num quadro de um clipe (ex.: deitada = primeiro quadro de LayToIdle)
+  pose(name, t = 0, fade = 0.4) { this.play(name, fade); const a = this.current; if (a && this.currentName === name) { a.time = t; a.timeScale = 0; } }
+  unpose(speed = 1) { const a = this.current; if (!a) return; a.paused = false; a.enabled = true; a.timeScale = speed; a.play(); }
   done() { return !this.current || (this.current.loop === THREE.LoopOnce && this.current.time >= this.current.getClip().duration - 0.02); }
   // velocidade em m/s → clipe e ritmo para não "patinar"
   locomote(speed, opts = {}) {

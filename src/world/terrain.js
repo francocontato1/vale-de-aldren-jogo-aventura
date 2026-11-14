@@ -23,16 +23,47 @@ export const PATHS = [
   [[8, -90], [36, -104], [58, -112]],
   [[60, 30], [110, 8], [150, -14], [170, -30]],
 ];
+// trilha da montanha: da torre partida até o mirante da gigante (traçada por A* sobre o relevo, rampa ≤ ~30%)
+export const MIRANTE = { x: -46, z: -503 };
+export const TRAIL = [[68, -256], [84, -284], [76, -306], [80, -322], [100, -334], [116, -358], [106, -368], [96, -390], [90, -412], [80, -421], [76, -438], [84, -462], [76, -482], [70, -496], [48, -502], [28, -510], [4, -506], [-20, -510], [-38, -505], [MIRANTE.x, MIRANTE.z]];
+PATHS.push(TRAIL);
 // leito de um riacho que secou há séculos (atravessado pela ponte partida dos Veladores)
 export const CREEK = [[118, -10], [132, 30], [146, 70], [154, 96], [168, 130], [196, 168], [214, 200]];
 export function creekDist(x, z) { let best = 1e9; for (let i = 0; i < CREEK.length - 1; i++) { const [x1, z1] = CREEK[i], [x2, z2] = CREEK[i + 1]; const dx = x2 - x1, dz = z2 - z1; const t = clamp(((x - x1) * dx + (z - z1) * dz) / (dx * dx + dz * dz), 0, 1); const d = Math.hypot(x1 + dx * t - x, z1 + dz * t - z); if (d < best) best = d; } return best; }
-const SEGS = []; for (const p of PATHS) for (let i = 0; i < p.length - 1; i++) SEGS.push([p[i][0], p[i][1], p[i + 1][0], p[i + 1][1]]);
 export function pathDist(x, z) {
   let best = 1e9;
   for (const s of SEGS) { const dx = s[2] - s[0], dz = s[3] - s[1]; const t = clamp(((x - s[0]) * dx + (z - s[1]) * dz) / (dx * dx + dz * dz), 0, 1); const px = s[0] + dx * t - x, pz = s[1] + dz * t - z; const d = px * px + pz * pz; if (d < best) best = d; }
   return Math.sqrt(best) + fbm(x * 0.08, z * 0.08, 2) * 0.9;
 }
 export const WATER = 0;
+let TRAIL_H = null; // alturas-alvo dos nós da trilha (relevo suavizado)
+function trailInfo(x, z) {
+  let best = 1e9, bh = 0; for (let i = 0; i < TRAIL.length - 1; i++) { const [x1, z1] = TRAIL[i], [x2, z2] = TRAIL[i + 1]; const dx = x2 - x1, dz = z2 - z1; const t = clamp(((x - x1) * dx + (z - z1) * dz) / (dx * dx + dz * dz), 0, 1); const d = Math.hypot(x1 + dx * t - x, z1 + dz * t - z); if (d < best) { best = d; bh = TRAIL_H[i] + (TRAIL_H[i + 1] - TRAIL_H[i]) * t; } }
+  return [best, bh];
+}
+// ---------------- litoral: uma enseada aberta para o mar a sudeste ----------------
+export const SEA_DIR = { x: 0.6, z: 0.8 };
+// coordenadas da enseada: u = em direção ao mar, v = ao longo da praia
+export const fromUV = (u, v) => [u * SEA_DIR.x + v * SEA_DIR.z, u * SEA_DIR.z - v * SEA_DIR.x];
+export const HARBOR = { u: 360, v: -100 }; // Vila da Maré
+export const SEA_ROT = Math.atan2(SEA_DIR.x, SEA_DIR.z); // casas com a frente para o mar
+// estrada do jardim até a Vila da Maré
+PATHS.push([[120, 70], [118, 150], [fromUV(HARBOR.u - 30, HARBOR.v + 4)[0], fromUV(HARBOR.u - 30, HARBOR.v + 4)[1]], fromUV(HARBOR.u + 8, HARBOR.v + 2)]);
+const SEGS = []; for (const p of PATHS) for (let i = 0; i < p.length - 1; i++) SEGS.push([p[i][0], p[i][1], p[i + 1][0], p[i + 1][1]]);
+// distância (com sinal) até a linha da praia: >0 terra, <0 mar; bay = quanto este ponto pertence à enseada
+export function coastInfo(x, z) {
+  const u = x * SEA_DIR.x + z * SEA_DIR.z, v = x * SEA_DIR.z - z * SEA_DIR.x;
+  const uc = 405 + v * v / 950 + fbm(v * 0.011 + 3.3, 0.7, 3) * 22;
+  const bay = 1 - smooth(270, 390, Math.abs(v));
+  return { s: uc - u, bay, u, v };
+}
+function coastProfile(s, v, x, z) {
+  // praia de areia com cordão de dunas; mar com fundo arenoso que desce até ~26 m
+  let h = 0.35 + s * 0.042;
+  if (s > 0) h += 1.3 * smooth(16, 32, s) * (1 - smooth(44, 72, s)) * (0.6 + 0.5 * fbm(x * 0.04, z * 0.04, 2));
+  else h -= smooth(-12, -130, s) * 24 + fbm(x * 0.02, z * 0.02, 2) * 1.2 * smooth(-8, -40, s);
+  return h;
+}
 function baseHeight(x, z) {
   const d = Math.hypot(x, z);
   let h = fbm(x * 0.0022 + 3.1, z * 0.0022 - 7.3, 5) * 26 + 10;
@@ -44,6 +75,8 @@ function baseHeight(x, z) {
   h += smooth(380, 700, d) * (40 + 150 * mtn) + smooth(380, 700, d) * r * 30;
   const ld = Math.hypot(x - POI.lake.x, (z - POI.lake.z) * 1.3);
   h = lerp(h, -8, 1 - smooth(28, 108, ld));
+  // enseada: substitui as montanhas pela praia e pelo mar dentro do setor da baía
+  const c = coastInfo(x, z); if (c.bay > 0 && c.s < 240) { const w = c.bay * (c.s < 0 ? 1 : 1 - smooth(70, 230, c.s)); if (w > 0) h = lerp(h, coastProfile(c.s, c.v, x, z), w); }
   return h;
 }
 const FLAT = [
@@ -55,12 +88,26 @@ const FLAT = [
   { x: POI.stairs.x, z: POI.stairs.z, r0: 9, r1: 22 },
   { x: POI.shrine.x, z: POI.shrine.z, r0: 5, r1: 12 },
 ];
+{ const [hx, hz] = fromUV(HARBOR.u, HARBOR.v); FLAT.push({ x: hx, z: hz, r0: 21, r1: 40 }); }
+// platô atrás do mirante (a gigante senta nele); o mirante fica na borda, olhando o vale lá embaixo
+{ const l = Math.hypot(MIRANTE.x, MIRANTE.z); FLAT.push({ x: MIRANTE.x + MIRANTE.x / l * 7, z: MIRANTE.z + MIRANTE.z / l * 7, r0: 9.5, r1: 19 }); }
 for (const f of FLAT) if (f.t === undefined) f.t = Math.max(baseHeight(f.x, f.z), 4);
+// ninho da Alva: uma plataforma na mesma altura do mirante, a oeste dele
+export const NINHO = (() => { const l = Math.hypot(MIRANTE.x, MIRANTE.z); const px = MIRANTE.z / l, pz = -MIRANTE.x / l; const m = FLAT[FLAT.length - 1]; return { x: MIRANTE.x + MIRANTE.x / l * 10 + px * 34, z: MIRANTE.z + MIRANTE.z / l * 10 + pz * 34, t: m.t }; })();
+FLAT.push({ x: NINHO.x, z: NINHO.z, r0: 14, r1: 30, t: NINHO.t });
+{ // alturas da trilha: relevo amostrado, suavizado, e rampa limitada a 28% entre nós
+  let h = TRAIL.map(([x, z]) => baseHeight(x, z)); for (let it = 0; it < 3; it++) h = h.map((v, i) => i === 0 || i === h.length - 1 ? v : (h[i - 1] + 2 * v + h[i + 1]) / 4);
+  h[0] = FLAT[1].t; h[h.length - 1] = FLAT[FLAT.length - 1].t;
+  for (let pass = 0; pass < 4; pass++) for (let i = 1; i < h.length; i++) { const L = Math.hypot(TRAIL[i][0] - TRAIL[i - 1][0], TRAIL[i][1] - TRAIL[i - 1][1]); const mx = L * 0.28; if (h[i] - h[i - 1] > mx) h[i] = h[i - 1] + mx; if (h[i - 1] - h[i] > mx) h[i - 1] = h[i] + mx; }
+  TRAIL_H = h;
+}
 export function heightFn(x, z) {
   let h = baseHeight(x, z);
   for (const f of FLAT) { const d = Math.hypot(x - f.x, z - f.z); if (d < f.r1) h = lerp(h, f.t, 1 - smooth(f.r0, f.r1, d)); }
   // gentle undulation inside the village so it isn't a table
   const dv = Math.hypot(x, z); if (dv < 100) h += fbm(x * 0.03 + 4, z * 0.03, 2) * 1.1 * (1 - smooth(60, 100, dv)) + 0.0;
+  // trilha da montanha: corta/aterra a encosta numa faixa caminhável
+  if (z < -240 && x > -80 && x < 140) { const [td, th] = trailInfo(x, z); if (td < 11) h = lerp(h, th, 1 - smooth(2.6, 11, td)); }
   const pd = pathDist(x, z); if (pd < 3) h -= 0.14 * (1 - pd / 3);
   // riacho seco: um vale estreito com fundo de cascalho
   const cd = creekDist(x, z) + fbm(x * 0.05, z * 0.05, 2) * 1.5; if (cd < 13) h -= 4.2 * (1 - smooth(2.0, 13, cd));
@@ -69,7 +116,9 @@ export function heightFn(x, z) {
 export const forestDensity = (x, z) => fbm(x * 0.006 + 50, z * 0.006 - 20, 3);
 
 export const WSIZE = 1600, N = 400, CELL = WSIZE / N, HALF = WSIZE / 2, NV = N + 1;
-export const HGT = new Float32Array(NV * NV), NRM = new Float32Array(NV * NV * 3), SPLAT = new Float32Array(NV * NV * 4);
+export const HGT = new Float32Array(NV * NV), NRM = new Float32Array(NV * NV * 3), SPLAT = new Float32Array(NV * NV * 4), SAND = new Float32Array(NV * NV);
+export function sandAt(x, z) { const i = clamp(Math.round((x + HALF) / CELL), 0, N), j = clamp(Math.round((z + HALF) / CELL), 0, N); return SAND[j * NV + i]; }
+export function seaAt(x, z) { const c = coastInfo(x, z); return c.bay > 0.5 && c.s < 0; }
 export function groundH(x, z) {
   let gx = (x + HALF) / CELL, gz = (z + HALF) / CELL; gx = clamp(gx, 0, N - 1e-4); gz = clamp(gz, 0, N - 1e-4);
   const i = gx | 0, j = gz | 0, fx = gx - i, fz = gz - j;
@@ -95,11 +144,33 @@ export function computeTerrainData(extraDirt) {
     const rock = clamp(smooth(0.22, 0.4, slope + n2 * 0.05) + smooth(58, 88, h + n1 * 14) * 0.85, 0, 1);
     const snow = smooth(100, 130, h + n1 * 16) * (1 - smooth(0.42, 0.6, slope));
     const shore = Math.max(1 - smooth(0.3, 1.8, h + n2 * 0.4), 1 - smooth(2.5, 5.5, creekDist(x, z) + n2 * 1.2));
-    SPLAT[k * 4] = clamp(dirt, 0, 1); SPLAT[k * 4 + 1] = rock; SPLAT[k * 4 + 2] = snow; SPLAT[k * 4 + 3] = clamp(shore, 0, 1);
+    const cc = coastInfo(x, z); const sand = cc.bay > 0 ? clamp(cc.bay * 1.4 - 0.2, 0, 1) * (1 - smooth(48 + n1 * 14, 78 + n1 * 14, cc.s)) * (1 - smooth(0.32, 0.5, slope)) : 0;
+    SAND[k] = sand;
+    SPLAT[k * 4] = clamp(dirt, 0, 1) * (1 - sand); SPLAT[k * 4 + 1] = rock * (1 - sand * 0.85); SPLAT[k * 4 + 2] = snow; SPLAT[k * 4 + 3] = clamp(shore, 0, 1) * (1 - sand);
   }
 }
 
+// areia procedural (sem emendas): grãos finos, conchinhas e ondulações deixadas pelo vento
+function sandTextures() {
+  const S = 512; const H = new Float32Array(S * S); const col = new Uint8ClampedArray(S * S * 4);
+  const per = (x, y, f, ph) => Math.sin((x / S) * Math.PI * 2 * f + ph) * Math.cos((y / S) * Math.PI * 2 * Math.round(f * 0.7) + ph * 1.3);
+  let seed = 7; const R = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+  for (let y = 0; y < S; y++) for (let x = 0; x < S; x++) {
+    const warp = per(x, y, 3, 0.4) * 0.6 + per(y, x, 5, 1.1) * 0.3;
+    const ripple = Math.sin((x / S) * Math.PI * 2 * 14 + (y / S) * Math.PI * 2 * 4 + warp * 3.4) * (0.55 + 0.45 * per(x, y, 2, 2.2));
+    const grain = R() - 0.5; const k = y * S + x;
+    H[k] = ripple * 0.32 + grain * 0.45 + per(x, y, 9, 2.0) * 0.2;
+    const tone = 0.93 + per(x, y, 4, 0.7) * 0.05 + grain * 0.12 + ripple * 0.012;
+    col[k * 4] = 196 * tone; col[k * 4 + 1] = 174 * tone; col[k * 4 + 2] = 136 * tone; col[k * 4 + 3] = 255;
+  }
+  for (let i = 0; i < 900; i++) { const x = (R() * S) | 0, y = (R() * S) | 0, k = y * S + x; const w = R() < 0.6 ? [245, 238, 226] : [120, 104, 88]; for (const d of [0, 1, S, S + 1]) { const q = (k + d) % (S * S); col[q * 4] = w[0]; col[q * 4 + 1] = w[1]; col[q * 4 + 2] = w[2]; } }
+  const nrm = new Uint8ClampedArray(S * S * 4);
+  for (let y = 0; y < S; y++) for (let x = 0; x < S; x++) { const k = y * S + x; const hx = H[y * S + ((x + 1) % S)] - H[y * S + ((x - 1 + S) % S)], hy = H[((y + 1) % S) * S + x] - H[((y - 1 + S) % S) * S + x]; const nx = -hx * 1.4, ny = -hy * 1.4, nz = 1, l = Math.hypot(nx, ny, nz); nrm[k * 4] = (nx / l * 0.5 + 0.5) * 255; nrm[k * 4 + 1] = (ny / l * 0.5 + 0.5) * 255; nrm[k * 4 + 2] = (nz / l * 0.5 + 0.5) * 255; nrm[k * 4 + 3] = 255; }
+  const mk = (d, srgb) => { const t = new THREE.DataTexture(d, S, S); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.magFilter = THREE.LinearFilter; t.minFilter = THREE.LinearMipmapLinearFilter; t.generateMipmaps = true; t.anisotropy = 8; if (srgb) t.colorSpace = THREE.SRGBColorSpace; t.needsUpdate = true; return t; };
+  return [mk(col, true), mk(nrm, false)];
+}
 export async function buildTerrain(scene, rockMaps) {
+  const [sandC, sandN] = sandTextures();
   const [grassC, grassN, dirtC, gravelC, gravelN] = await Promise.all([
     loadTex('a/tex/grass_c.jpg'), loadTex('a/tex/grass_n.jpg', { srgb: false }), loadTex('a/tex/dirt_c.jpg'), loadTex('a/tex/gravel_c.jpg'), loadTex('a/tex/gravel_n.jpg', { srgb: false }),
   ]);
@@ -111,15 +182,16 @@ export async function buildTerrain(scene, rockMaps) {
   g.setAttribute('position', new THREE.BufferAttribute(pos, 3));
   g.setAttribute('normal', new THREE.BufferAttribute(NRM, 3));
   g.setAttribute('splat', new THREE.BufferAttribute(SPLAT, 4));
+  g.setAttribute('sandw', new THREE.BufferAttribute(SAND, 1));
   g.setIndex(new THREE.BufferAttribute(idx, 1));
   g.computeBoundingSphere();
   const mat = new THREE.MeshStandardMaterial({ roughness: 1, metalness: 0 });
   mat.onBeforeCompile = (s) => {
-    Object.assign(s.uniforms, { tGrass: { value: grassC }, tGrassN: { value: grassN }, tDirt: { value: dirtC }, tGravel: { value: gravelC }, tGravelN: { value: gravelN }, tRock: { value: rockMaps.map }, tRockN: { value: rockMaps.normalMap }, tMacro: U.macro });
-    s.vertexShader = s.vertexShader.replace('#include <common>', '#include <common>\nattribute vec4 splat; varying vec4 vSplat; varying vec3 vWPos; varying vec3 vWNrm;')
-      .replace('#include <begin_vertex>', '#include <begin_vertex>\n vSplat = splat; vWPos = (modelMatrix*vec4(position,1.)).xyz; vWNrm = normal;');
+    Object.assign(s.uniforms, { tGrass: { value: grassC }, tGrassN: { value: grassN }, tDirt: { value: dirtC }, tGravel: { value: gravelC }, tGravelN: { value: gravelN }, tRock: { value: rockMaps.map }, tRockN: { value: rockMaps.normalMap }, tMacro: U.macro, tSand: { value: sandC }, tSandN: { value: sandN } });
+    s.vertexShader = s.vertexShader.replace('#include <common>', '#include <common>\nattribute vec4 splat; attribute float sandw; varying vec4 vSplat; varying float vSand; varying vec3 vWPos; varying vec3 vWNrm;')
+      .replace('#include <begin_vertex>', '#include <begin_vertex>\n vSplat = splat; vSand = sandw; vWPos = (modelMatrix*vec4(position,1.)).xyz; vWNrm = normal;');
     s.fragmentShader = s.fragmentShader.replace('#include <common>', `#include <common>
-uniform sampler2D tGrass,tGrassN,tDirt,tGravel,tGravelN,tRock,tRockN,tMacro; varying vec4 vSplat; varying vec3 vWPos; varying vec3 vWNrm;
+uniform sampler2D tGrass,tGrassN,tDirt,tGravel,tGravelN,tRock,tRockN,tMacro,tSand,tSandN; varying vec4 vSplat; varying float vSand; varying vec3 vWPos; varying vec3 vWNrm;
 vec3 terrNW; float terrRough;
 vec4 tri(sampler2D t, vec3 p, vec3 w, float s){ return texture2D(t,p.zy*s)*w.x + texture2D(t,p.xz*s)*w.y + texture2D(t,p.xy*s)*w.z; }
 `)
@@ -142,17 +214,21 @@ vec4 tri(sampler2D t, vec3 p, vec3 w, float s){ return texture2D(t,p.zy*s)*w.x +
  float lumD = dot(dirt, vec3(.33)); dirtW = smoothstep(0.0, 1.0, clamp(dirtW*1.6 - 0.35 + (lumD-0.35)*0.8, 0., 1.));
  vec3 col = mix(grass, dirt, dirtW);
  col = mix(col, grav*vec3(0.95,0.9,0.82), shoreW);
+ // areia da praia (seca e úmida), com variação em duas escalas
+ vec3 sandC = mix(texture2D(tSand, uv*0.28).rgb, texture2D(tSand, uv*0.061+0.3).rgb, 0.4) * mix(vec3(1.02,0.98,0.92), vec3(0.94,0.92,0.9), mac.g);
+ float sandW = smoothstep(0.0, 1.0, clamp(vSand*1.35 - 0.15 + (mac2.r-0.5)*0.4, 0., 1.));
+ col = mix(col, sandC, sandW);
  float rk = smoothstep(0.0,1.0, clamp(rockW*1.5 - 0.25 + (dot(rock,vec3(.33))-0.4), 0., 1.));
  col = mix(col, rock, rk);
  vec3 snowC = vec3(0.86,0.9,0.95) * (0.9 + 0.1*texture2D(tGravel, uv*0.11).r);
  col = mix(col, snowC, snowW);
- float wetness = smoothstep(0.6, -0.4, vWPos.y); col *= mix(1.0, 0.55, wetness);
+ float wetness = max(smoothstep(0.6, -0.4, vWPos.y), sandW * smoothstep(0.9, 0.15, vWPos.y)); col *= mix(1.0, mix(0.55, 0.62, sandW), wetness);
  diffuseColor.rgb *= col;
- terrRough = mix(0.92, 0.98, dirtW); terrRough = mix(terrRough, 0.82, rk); terrRough = mix(terrRough, 0.55, snowW); terrRough = mix(terrRough, 0.35, wetness);
+ terrRough = mix(0.92, 0.98, dirtW); terrRough = mix(terrRough, 0.95, sandW); terrRough = mix(terrRough, 0.82, rk); terrRough = mix(terrRough, 0.55, snowW); terrRough = mix(terrRough, 0.35, wetness);
  // detail normals (world space, up-facing approximation + triplanar for rock)
  vec3 nG = texture2D(tGrassN, uv*0.6).xyz*2.-1.; vec3 nV = texture2D(tGravelN, uv*0.22).xyz*2.-1.;
  vec3 nR = (tri(tRockN, vWPos, bw, 0.09).xyz*2.-1.);
- vec3 dn = mix(nG*vec3(0.6,0.6,1.), nV, max(dirtW*0.8, shoreW)); dn = mix(dn, nR*vec3(1.4,1.4,1.), rk); dn = mix(dn, vec3(0.,0.,1.), snowW*0.7);
+ vec3 dn = mix(nG*vec3(0.6,0.6,1.), nV, max(dirtW*0.8, shoreW)); dn = mix(dn, (texture2D(tSandN, uv*0.28).xyz*2.-1.)*vec3(0.9,0.9,1.) * vec3(vec2(mix(1.0, 0.25, smoothstep(1.2, 0.3, vWPos.y))), 1.), sandW); dn = mix(dn, nR*vec3(1.4,1.4,1.), rk); dn = mix(dn, vec3(0.,0.,1.), snowW*0.7);
  dn.xy *= 1.0 - smoothstep(60., 220., camD)*0.7;
  vec3 T = normalize(cross(wn, vec3(0.,0.,1.))); vec3 B = normalize(cross(T, wn));
  terrNW = normalize(T*dn.x + B*dn.y + wn*dn.z);

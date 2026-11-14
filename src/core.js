@@ -39,8 +39,9 @@ export const store = {
 
 export const isTouch = matchMedia('(pointer:coarse)').matches || ('ontouchstart' in window && navigator.maxTouchPoints > 0);
 export const QUAL = {
-  alta: { pr: Math.min(devicePixelRatio, 1.25), shadow: 2048, shadowR: 60, grassR: 42, grassDen: 62, msaa: 0, ao: false, bloom: true, treeNear: 120, view: 1100, fur: 16 },
-  media: { pr: Math.min(devicePixelRatio, 1.0), shadow: 2048, shadowR: 50, grassR: 34, grassDen: 45, msaa: 0, ao: false, bloom: true, treeNear: 85, view: 850, fur: 12 },
+  ultra: { pr: Math.min(devicePixelRatio, 2), shadow: 4096, shadowR: 75, grassR: 52, grassDen: 72, msaa: 0, ao: false, bloom: true, treeNear: 170, view: 1400, fur: 16, sharpen: 0.32 },
+  alta: { pr: Math.min(devicePixelRatio, 1.5), shadow: 4096, shadowR: 62, grassR: 44, grassDen: 64, msaa: 0, ao: false, bloom: true, treeNear: 130, view: 1150, fur: 16, sharpen: 0.28 },
+  media: { sharpen: 0.2, pr: Math.min(devicePixelRatio, 1.0), shadow: 2048, shadowR: 50, grassR: 34, grassDen: 45, msaa: 0, ao: false, bloom: true, treeNear: 85, view: 850, fur: 12 },
   baixa: { pr: 0.75, shadow: 1024, shadowR: 38, grassR: 22, grassDen: 22, msaa: 0, ao: false, bloom: false, treeNear: 55, view: 600, fur: 6 },
 };
 export const settings = { quality: store.get('aldren2-q') || (isTouch ? 'baixa' : 'media'), grassK: 1, treeK: 1, sens: 1 };
