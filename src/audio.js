@@ -79,6 +79,8 @@ export const Sound = {
     const base = kind === 'wood' ? 0.13 : kind === 'grass' ? 0.11 : 0.12;
     this.play(k, { x, z, vol: base * vol * rr(0.75, 1.0), rate: rr(0.9, 1.06), lp: kind === 'grass' ? 2600 : 3800 });
   },
+  // batida de asa da dragoa: sopro grave de ar empurrado
+  flap(x, z, vol = 1) { if (!this.ctx || !this.white) return; const c = this.ctx, t = c.currentTime; const src = c.createBufferSource(); src.buffer = this.white; const f = c.createBiquadFilter(); f.type = 'lowpass'; f.frequency.setValueAtTime(900, t); f.frequency.exponentialRampToValueAtTime(140, t + 0.6); const g = c.createGain(); g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.9 * vol, t + 0.12); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.75); src.connect(f).connect(g); this.out(g, x, z, 0.3); src.start(t, Math.random()); src.stop(t + 0.8); },
   door(open, x, z) { this.play(open ? 'doorOpen' : 'doorClose', { x, z, vol: 0.35 }); },
   clang(x, z) { this.play('anvil', { x, z, vol: 0.25, verb: 0.3 }); },
   rustle(x, z) { this.play('cloth', { x, z, vol: 0.18, rate: rr(0.9, 1.1) }); },

@@ -92,6 +92,9 @@ const FLAT = [
 // platô atrás do mirante (a gigante senta nele); o mirante fica na borda, olhando o vale lá embaixo
 { const l = Math.hypot(MIRANTE.x, MIRANTE.z); FLAT.push({ x: MIRANTE.x + MIRANTE.x / l * 7, z: MIRANTE.z + MIRANTE.z / l * 7, r0: 9.5, r1: 19 }); }
 for (const f of FLAT) if (f.t === undefined) f.t = Math.max(baseHeight(f.x, f.z), 4);
+// ninho da Alva: uma plataforma na mesma altura do mirante, a oeste dele
+export const NINHO = (() => { const l = Math.hypot(MIRANTE.x, MIRANTE.z); const px = MIRANTE.z / l, pz = -MIRANTE.x / l; const m = FLAT[FLAT.length - 1]; return { x: MIRANTE.x + MIRANTE.x / l * 10 + px * 34, z: MIRANTE.z + MIRANTE.z / l * 10 + pz * 34, t: m.t }; })();
+FLAT.push({ x: NINHO.x, z: NINHO.z, r0: 14, r1: 30, t: NINHO.t });
 { // alturas da trilha: relevo amostrado, suavizado, e rampa limitada a 28% entre nós
   let h = TRAIL.map(([x, z]) => baseHeight(x, z)); for (let it = 0; it < 3; it++) h = h.map((v, i) => i === 0 || i === h.length - 1 ? v : (h[i - 1] + 2 * v + h[i + 1]) / 4);
   h[0] = FLAT[1].t; h[h.length - 1] = FLAT[FLAT.length - 1].t;

@@ -1,5 +1,5 @@
 import { loadTex, THREE, renderer, scene, camera, U, Q, settings, store, clamp, lerp, smooth, rand, rr, angDiff, lerpAng, makeMacroTexture, loadGLTF, progress, isTouch, trackP } from './core.js';
-import { computeTerrainData, buildTerrain, groundH, normalY, splatAt, sandAt, fromUV, HARBOR, SEA_ROT, POI, PATHS, MIRANTE, TRAIL, forestDensity, WATER, HGT, NRM, SPLAT, NV, CELL, HALF, creekDist } from './world/terrain.js';
+import { computeTerrainData, buildTerrain, groundH, normalY, splatAt, sandAt, fromUV, HARBOR, SEA_ROT, POI, PATHS, MIRANTE, TRAIL, NINHO, forestDensity, WATER, HGT, NRM, SPLAT, NV, CELL, HALF, creekDist } from './world/terrain.js';
 import { buildWater, setWaterQuality } from './world/water.js';
 import { buildOcean, updateOcean, seaSurface, depthAt, surfNear } from './world/ocean.js';
 import { SkySystem } from './world/sky.js';
@@ -17,6 +17,7 @@ import { buildProps, updateProps, setPropRadius } from './world/props.js';
 import { loadHumanLibrary, Human } from './actors/human.js';
 import { loadAnimals, spawnAnimals, updateAnimals } from './actors/animals.js';
 import { spawnFauna, updateFauna, F as FAUNA } from './actors/fauna.js';
+import { loadDragon, Dragon } from './actors/dragon.js';
 import { Post } from './post.js';
 import { Sound, Music, Voice, Speech, preloadSounds } from './audio.js';
 
@@ -124,7 +125,7 @@ async function boot() {
   await step('Espalhando pedras e flores…', 0.48, () => buildProps(scene, { avoid: (x, z, r) => vEx(x, z) || pathDistOK(x, z, r), addCircle: addCirc, villageExclude: vEx, zones: FLOWER_ZONES() }));
   await step('Plantando a floresta…', 0.56, () => trees.scatter({ avoid: (x, z, r) => vEx(x, z) || pathDistOK(x, z, r + 1) || aqueductNear(x, z), forestDensity, groundH, normalY, onTree: (it) => { if (it.v.sp.type !== 'bush') addCirc(it.x, it.z, (it.v.sp.type === 'pine' ? 0.28 : 0.36) * it.s); }, extra: [[-12, -32, 'oakA', 1], [34, -12, 'oakB', 0.9], [-38, 22, 'ashA', 1], [10, 44, 'oakA', 1.1], [-52, -16, 'pineA', 1], [storySpots.treeRoot.x, storySpots.treeRoot.z, 'oakB', 1.45], [POI.shrine.x - 4, POI.shrine.z - 5, 'oakB', 1.5]] }));
   grass = new Grass(scene, { exclude: (x, z) => sandAt(x, z) > 0.45 || inFootprint(x, z, 0.1) || insideBox(x, z, 0.4) || treeHit(x, z) || Math.hypot(x - POI.observatory.x, z - POI.observatory.z) < 9.3 });
-  await step('Chamando os moradores…', 0.66, () => Promise.all([loadHumanLibrary(), loadAnimals()]));
+  await step('Chamando os moradores…', 0.66, () => Promise.all([loadHumanLibrary(), loadAnimals(), loadDragon()]));
   initSpirits(); motes = new Motes(260);
   const sTex = smokeTex(), dTex = softTex();
   smoke = new Particles(700, sTex, false); fireP = new Particles(400, dTex, true); dust = new Particles(300, sTex, false);
@@ -134,7 +135,7 @@ async function boot() {
   roomLight = new THREE.PointLight(0xfff0dc, 0, 9, 1.4); scene.add(roomLight);
   buildLamps(); buildLantern(); buildRipples();
   const had = !!store.get(SAVE_KEY);
-  await step('Últimos detalhes…', 0.9, () => { initNav(); buildPlayer(); buildBoat(); buildNPCs(); spawnAnimals(); spawnFauna(FLOWER_ZONES()); buildMapBase(); });
+  await step('Últimos detalhes…', 0.9, () => { initNav(); buildPlayer(); buildBoat(); buildNPCs(); spawnAnimals(); spawnFauna(FLOWER_ZONES()); buildDragon(); buildMapBase(); });
   post = new Post(); post.setSize(innerWidth, innerHeight);
   player.y = groundH(player.x, player.z);
   for (let i = 0; i < 30; i++) grass.update(player.x, player.z, 100);
@@ -296,6 +297,37 @@ function updateSailing(dt) {
 }
 
 // =====================================================================
+// voar com a Vésper (no código: alva)
+// =====================================================================
+let alva = null; const seatTmp = {};
+function buildDragon() { alva = new Dragon(); POI.ninho = { x: NINHO.x, z: NINHO.z, name: 'O Ninho da Vésper' }; alva.onFlap = (sp) => Sound.flap(alva.x, alva.z, state === 'fly' ? 1 : 0.6); }
+function mountDragon() {
+  if (!alva || alva.mode !== 'rest' && alva.mode !== 'ground') return; state = 'fly'; $('prompt').hidden = true; curInter = null; player.sit = null; alva.rider = true; alva.takeoff(); pH.play('drive', 0.3); cam.yaw = alva.yaw + Math.PI; cam.pitch = -0.2; cam.flyT = 0; timeLapse = 0;
+  const hint = $('lapseHint'); hint.hidden = false; hint.classList.remove('on'); hint.textContent = isTouch ? 'joystick · voar   ·   Pular · subir   ·   Usar · pousar' : 'W · bater asas   S · frear   A D · curvas   Espaço · subir   Shift · descer   mouse · olhar   E · pousar';
+  if (!S.flags.voou) { S.flags.voou = 1; setTimeout(() => think('li_voo'), 6000); } Music.stop(2); setTimeout(() => Music.play('title', { fade: 4, vol: 0.9 }), 2500); save();
+}
+function updateFlying(dt) {
+  const k = keys; const steerKey = (k.KeyD ? 1 : 0) - (k.KeyA ? 1 : 0) + touch.mx;
+  // mouse: se a jogadora olhou para um lado, a Vésper vira para lá
+  let turn = steerKey; if (Math.abs(steerKey) < 0.1 && cam.flyT < 1.5) { const camHead = cam.yaw + Math.PI; turn = clamp(-angDiff(camHead, alva.yaw) * 1.4, -1, 1); }
+  const climb = clamp((k.Space || touch.jump ? 1 : 0) - (k.ShiftLeft || k.ShiftRight || k.KeyC ? 1 : 0) + (cam.flyT < 1.5 ? clamp(-(cam.pitch + 0.2) * 1.2, -0.6, 0.6) : 0), -1, 1);
+  const inp = { turn, climb, thrust: (k.KeyW ? 1 : 0) + Math.max(0, touch.my), brake: (k.KeyS ? 1 : 0) + Math.max(0, -touch.my) };
+  alva.update(dt, inp, null); cam.flyT = (cam.flyT || 0) + dt;
+  // Lia sentada na base do pescoço
+  alva.seatMatrix(seatTmp); player.x = seatTmp.p.x; player.z = seatTmp.p.z; player.y = seatTmp.p.y - SIT_H; player.speed = 0;
+  pH.root.position.set(seatTmp.p.x, seatTmp.p.y - SIT_H, seatTmp.p.z); pH.root.quaternion.copy(seatTmp.q); if (pH.currentName !== 'drive') pH.play('drive', 0.3);
+  pH.lookAtPoint(V3(alva.x + Math.sin(alva.yaw) * 30, seatTmp.p.y + 2, alva.z + Math.cos(alva.yaw) * 30), 0.7); pH.update(dt);
+  if (alva.mode === 'ground') dismountDragon();
+}
+function dismountDragon() {
+  state = 'play'; alva.rider = false; const sx = Math.cos(alva.yaw), sz = -Math.sin(alva.yaw); let px = alva.x + sx * 6, pz = alva.z + sz * 6; if (groundH(px, pz) < WATER + 0.2) { px = alva.x - sx * 6; pz = alva.z - sz * 6; }
+  player.x = px; player.z = pz; player.y = groundH(px, pz); player.vy = 0; player.onGround = true; player.h = Math.atan2(alva.x - px, alva.z - pz); cam.yaw = player.h + Math.PI; pH.play('idle', 0.3); pH.root.quaternion.identity();
+  $('lapseHint').hidden = true; $('lapseHint').textContent = lapseText; think(S.flags.pousou ? 'li_sentar2' : 'li_voo_fim'); S.flags.pousou = 1; save();
+  // longe do ninho, ela espera um pouco e volta voando sozinha
+  if (Math.hypot(alva.x - NINHO.x, alva.z - NINHO.z) > 40) setTimeout(() => { if (state !== 'fly' && alva.mode === 'rest') alva.takeoff(); }, 9000);
+}
+
+// =====================================================================
 // câmera
 // =====================================================================
 function updateCamera(dt) {
@@ -305,6 +337,14 @@ function updateCamera(dt) {
   // lume: órbita lenta em volta da lembrança
   if (state === 'lume' && lume) { const c = lume.center; cam.orbit += dt * 0.045; const a = (cam.lumeA ?? Math.atan2(player.x - c.x, player.z - c.z)) + cam.orbit; cam.lumeA = cam.lumeA ?? a; const want = V3(c.x + Math.sin(a) * 6.8, c.y + 2.2, c.z + Math.cos(a) * 6.8); want.y = Math.max(want.y, groundH(want.x, want.z) + 1.2); cam.cur.lerp(want, 1 - Math.exp(-dt * 1.5)); camera.position.copy(cam.cur); camera.lookAt(c.x, c.y + 1.2, c.z); camera.fov = lerp(camera.fov, 42, 1 - Math.exp(-dt * 2)); camera.updateProjectionMatrix(); return; }
   cam.lumeA = undefined;
+  if (state === 'fly' && alva) {
+    const b = alva.bodyPos(); const cy2 = cam.yaw, cp2 = cam.pitch; const fwd2 = V3(-Math.sin(cy2) * Math.cos(cp2), Math.sin(cp2), -Math.cos(cy2) * Math.cos(cp2)); const pivot = b.clone().add(V3(0, 3, 0));
+    const dist = 24 + alva.speed * 0.25; let want = pivot.clone().addScaledVector(fwd2, -dist).add(V3(0, 3.5, 0)); want.y = Math.max(want.y, Math.max(groundH(want.x, want.z), WATER) + 2);
+    if (cam.flyT > 2.5) { cam.yaw = lerpAng(cam.yaw, alva.yaw + Math.PI, dt * 0.9); cam.pitch = lerp(cam.pitch, -0.18 - alva.pitch * 0.4, dt * 0.8); }
+    cam.cur.lerp(want, 1 - Math.exp(-dt * 3.2)); if (cam.cur.distanceTo(want) > 60) cam.cur.copy(want); camera.position.copy(cam.cur);
+    camera.lookAt(pivot.x + Math.sin(alva.yaw) * 10, pivot.y, pivot.z + Math.cos(alva.yaw) * 10); camera.rotateZ(alva.bank * 0.15);
+    camera.fov = lerp(camera.fov, 55 + clamp(alva.speed - 10, 0, 25) * 0.6, 1 - Math.exp(-dt * 2)); camera.updateProjectionMatrix(); if (pH) pH.root.visible = true; return;
+  }
   if (state === 'sail' && boat) {
     const b = boat; const cy2 = cam.yaw, cp2 = cam.pitch; const fwd2 = V3(-Math.sin(cy2) * Math.cos(cp2), Math.sin(cp2), -Math.cos(cy2) * Math.cos(cp2)); const pivot = V3(b.x, b.y + 1.6, b.z);
     let want = pivot.clone().addScaledVector(fwd2, -9.5).add(V3(0, 1.2, 0)); want.y = Math.max(want.y, Math.max(groundH(want.x, want.z), WATER) + 0.8);
@@ -682,6 +722,8 @@ function interactables() {
   if (S.met.odessa) for (const pl of PLACES) { const sp = SPOTS[pl.place]; if (!sp) continue; out.push({ x: sp.x, z: sp.z, r: 3.2, label: S.lumes[pl.id] ? 'Sentar e olhar um pouco' : 'Sentar e contemplar', act: () => S.lumes[pl.id] ? sitAt(spAt(sp), sitThought) : contemplate(pl) }); }
   else for (const pl of PLACES) { const sp = SPOTS[pl.place]; if (sp) out.push({ x: sp.x, z: sp.z, r: 3.2, label: 'Sentar um pouco', act: () => sitAt(spAt(sp), sitThought) }); }
   for (const k in NOTES) { const sp = storySpots[k]; if (sp) out.push({ x: sp.x, z: sp.z, r: 2.4, label: S.notes[k] ? 'Olhar de novo' : 'Observar', act: () => readNote(k) }); }
+  // a Alva
+  if (alva && (alva.mode === 'rest' || alva.mode === 'ground')) { const d = Math.hypot(alva.x - player.x, alva.z - player.z); if (d < 16) { if (!S.alva) out.push({ x: alva.x, z: alva.z, r: 14, label: 'Aproximar-se devagar da dragoa', act: () => { if (player.speed > 2.2 || alva.alert > 0.5) { think('li_alva_corre'); return; } alva.bow = 1; think('li_alva1', () => { think('li_alva2'); S.alva = 1; alva.trust = 1; save(); setTimeout(() => { if (alva) alva.bow = 0; }, 8000); }); } }); else out.push({ x: alva.x, z: alva.z, r: 14, label: 'Montar na Vésper e voar', act: mountDragon }); } }
   // o barco
   if (boat && !boat.sailing) { const at = boatAtDock() ? storySpots.barco : { x: boat.x, z: boat.z }; if (Math.abs(at.x - player.x) < 6 && Math.abs(at.z - player.z) < 6) out.push({ x: at.x, z: at.z, r: boatAtDock() ? 2.4 : 4.5, label: S.boat ? 'Velejar no barco do mestre Elias' : 'Olhar o barco', act: () => S.boat ? startSailing() : think('li_barco0') }); }
   // cadeiras, bancos e camas (dentro e fora das casas)
@@ -842,7 +884,7 @@ function resume() { $('pause').hidden = true; state = prevState === 'dialog' && 
 let drag = null;
 canvas.addEventListener('mousedown', (e) => { window.focus(); if (state !== 'play') return; if (!locked && !lockFailed && !isTouch) requestLock(); if (!locked) drag = { x: e.clientX, y: e.clientY }; });
 addEventListener('mouseup', () => { drag = null; });
-addEventListener('mousemove', (e) => { if (state !== 'play' && state !== 'sail' && state !== 'fly') return; let mx = 0, my = 0; if (locked) { mx = e.movementX; my = e.movementY; } else if (drag) { mx = e.clientX - drag.x; my = e.clientY - drag.y; drag.x = e.clientX; drag.y = e.clientY; } else return; mx = clamp(mx, -200, 200); my = clamp(my, -200, 200); const s = 0.0019 * (locked ? 1 : 1.6) * settings.sens; cam.yaw -= mx * s; cam.pitch = clamp(cam.pitch - my * s, -1.1, 0.9); cam.boatT = 0; if (cam.mode === 'sit') cam.sitK = Math.max(0, (cam.sitK || 0) - 0.02); });
+addEventListener('mousemove', (e) => { if (state !== 'play' && state !== 'sail' && state !== 'fly') return; let mx = 0, my = 0; if (locked) { mx = e.movementX; my = e.movementY; } else if (drag) { mx = e.clientX - drag.x; my = e.clientY - drag.y; drag.x = e.clientX; drag.y = e.clientY; } else return; mx = clamp(mx, -200, 200); my = clamp(my, -200, 200); const s = 0.0019 * (locked ? 1 : 1.6) * settings.sens; cam.yaw -= mx * s; cam.pitch = clamp(cam.pitch - my * s, -1.1, 0.9); cam.boatT = 0; cam.flyT = 0; if (cam.mode === 'sit') cam.sitK = Math.max(0, (cam.sitK || 0) - 0.02); });
 canvas.addEventListener('contextmenu', (e) => e.preventDefault());
 addEventListener('keydown', (e) => {
   keys[e.code] = true;
@@ -852,6 +894,7 @@ addEventListener('keydown', (e) => {
   if (state === 'journal' && e.code === 'Escape') { closeJournal(); return; }
   if (/^Arrow|Space/.test(e.code) && (state === 'play' || state === 'sail' || state === 'fly')) e.preventDefault(); if (e.repeat) return;
   if (state === 'dialog') { const m = e.code.match(/^(Digit|Numpad)([1-9])$/); if (m) choose(+m[2] - 1); else if (e.code === 'KeyE' || e.code === 'Enter' || e.code === 'Space') { if (Voice.playing) Voice.stop(); else if (dlgNode && dlgNode.opts.length === 1) choose(0); } else if (e.code === 'Escape') closeDialog(); return; }
+  if (state === 'fly') { if (e.code === 'KeyE') { if (!alva.requestLand()) toast('Aqui não dá para pousar', 'Procure um chão firme e plano, longe da água'); } if (e.code === 'KeyM') $('mapView').hidden = !$('mapView').hidden; if (e.code === 'Escape' && lockFailed) pauseGame(); return; }
   if (state === 'sail') { if (e.code === 'KeyE') stopSailing(); if (e.code === 'KeyM') $('mapView').hidden = !$('mapView').hidden; if (e.code === 'Escape' && lockFailed) pauseGame(); return; }
   if (state !== 'play') return;
   if (e.code === 'KeyL') toggleLantern();
@@ -932,6 +975,8 @@ function frame(fixedDt) {
     if (state === 'lume') { if (player.sit) updateSitting(dt); else { pH.locomote(0); pH.update(dt); } } else if (state === 'finale') { finale.update(dt); } else { pH.locomote(0); pH.update(dt); }
     updateNPCs(dt); if (lume) lume.update(dt, camera.position);
     updateCamera(dt); post.grade.uniforms.letterbox.value = lerp(post.grade.uniforms.letterbox.value, state === 'journal' ? 0 : 1, 1 - Math.exp(-dt * 2));
+  } else if (state === 'fly') {
+    updateFlying(dt); updateNPCs(dt); updateCamera(dt); post.grade.uniforms.letterbox.value = lerp(post.grade.uniforms.letterbox.value, 0, 1 - Math.exp(-dt * 2)); checkDiscover();
   } else if (state === 'sail') {
     updateSailing(dt); updateNPCs(dt); updateCamera(dt); post.grade.uniforms.letterbox.value = lerp(post.grade.uniforms.letterbox.value, 0, 1 - Math.exp(-dt * 2)); saveT += dt; if (saveT > 12) { saveT = 0; S.boatPos = { x: boat.x, z: boat.z, yaw: boat.yaw }; save(); }
   } else if (state === 'play' || state === 'dialog') {
@@ -950,6 +995,7 @@ function frame(fixedDt) {
   const inK = cam.inK || 0; scene.environmentIntensity *= lerp(1, 0.62, inK); renderer.toneMappingExposure *= lerp(1, 1.3, inK);
   updateAnimals(dt, player, sky.nightF); updateFauna(dt, elapsed, player, sky.dayF, (x, z, s) => { ripple(x, z, s); for (let i = 0; i < 10; i++) dust.emit({ x: x + rr(-0.15, 0.15), y: WATER + 0.05, z: z + rr(-0.15, 0.15), vx: rr(-0.8, 0.8), vy: rr(1, 2.4), vz: rr(-0.8, 0.8), g: 9, drag: 0.4, life: rr(0.4, 0.7), s0: 0.05, s1: 0.12, c: [0.9, 0.94, 0.95], a0: 0.55, wind: 0 }); });
   updateDoors(dt); updateInteriorLights(dt); updateLantern(dt); updateRipples(dt); updateLamps();
+  if (alva && state !== 'fly') { alva.update(dt, null, player); if (alva.alert > 0.9 && state === 'play' && !S.alva && (!alva.spookT || elapsed - alva.spookT > 40)) { alva.spookT = elapsed; think('li_alva_corre'); } }
   updateOcean(); updateHarbor(dt, elapsed, scene); if (boat && state !== 'sail') boat.update(dt, null, elapsed); updateGiants(dt, elapsed); const obj = state !== 'menu' ? objectives()[0] : null; updateSpirits(dt, elapsed, player, obj ? obj.tgt : null, sky.nightF, player.speed > 0.3); if (motes) motes.update(elapsed, camera.position.x, camera.position.z, sky.dayF, sky.nightF, U.wind.value);
   post.updateLook(U.sunDir.value, sky.dayF, sky.nightF, sky.dusk || 0, U.sunColor.value);
   const focus = state === 'menu' ? camera.position : V3(player.x, 0, player.z);
@@ -962,8 +1008,8 @@ function frame(fixedDt) {
   let fireNear = 0; for (const f of fires) if (!f.dead && !f.forge) fireNear = Math.max(fireNear, clamp(1 - Math.hypot(f.p.x - player.x, f.p.z - player.z) / 12, 0, 1));
   const ih = insideHouse(player.x, player.z); if (ih) fireNear = Math.max(fireNear, 0.5);
   const lakeD = Math.hypot(player.x - POI.lake.x, player.z - POI.lake.z); const gw = groundH(player.x, player.z);
-  const ruins = state !== 'sail' && ['tower', 'stones', 'garden', 'stairs', 'head', 'peaks', 'shrine', 'bridge'].some(k => Math.hypot(player.x - POI[k].x, player.z - POI[k].z) < 45);
-  Sound.update(dt, { x: camera.position.x, z: camera.position.z, y: player.y, yaw: cam.yaw, windStr: U.windStrength.value, fire: fireNear, trees: clamp(forestDensity(player.x, player.z) * 3 + 0.3, 0, 1), day: sky.dayF, night: sky.nightF, inside: inK > 0.5, lake: clamp(1 - lakeD / 140, 0, 1), sea: surfNear(camera.position.x, camera.position.z), shore: state === 'sail' ? 0.35 + clamp(boat.speed / 4, 0, 0.5) : clamp(1 - Math.abs(gw - 0.3) / 2.5, 0, 1) * (gw < 3 ? 1 : 0) * (1 - surfNear(player.x, player.z)), village: clamp(1 - Math.hypot(player.x, player.z) / 70, 0, 1), hour, ruins, cinematic: ['lume', 'finale', 'intro', 'menu'].includes(state) });
+  const ruins = state !== 'sail' && state !== 'fly' && ['tower', 'stones', 'garden', 'stairs', 'head', 'peaks', 'shrine', 'bridge'].some(k => Math.hypot(player.x - POI[k].x, player.z - POI[k].z) < 45);
+  Sound.update(dt, { x: camera.position.x, z: camera.position.z, y: player.y, yaw: cam.yaw, windStr: U.windStrength.value, fire: fireNear, trees: clamp(forestDensity(player.x, player.z) * 3 + 0.3, 0, 1), day: sky.dayF, night: sky.nightF, inside: inK > 0.5, lake: clamp(1 - lakeD / 140, 0, 1), sea: surfNear(camera.position.x, camera.position.z), shore: state === 'sail' ? 0.35 + clamp(boat.speed / 4, 0, 0.5) : clamp(1 - Math.abs(gw - 0.3) / 2.5, 0, 1) * (gw < 3 ? 1 : 0) * (1 - surfNear(player.x, player.z)), village: clamp(1 - Math.hypot(player.x, player.z) / 70, 0, 1), hour, flying: state === 'fly' ? clamp(alva.speed / 25, 0.2, 1) : 0, ruins, cinematic: ['lume', 'finale', 'intro', 'menu'].includes(state) });
   if (!MANUAL || window.__renderNow) post.render(dt, elapsed);
   if (fpsAcc > 1) { window.__fps = fpsN / fpsAcc; fpsAcc = 0; fpsN = 0; }
 }
@@ -976,7 +1022,7 @@ $('startBtn').addEventListener('click', () => {
   const go = () => { if (!S.letter && !MANUAL) startIntro(); else { state = 'play'; requestLock(); Music.silence = 6; } };
   if (Sound.ctx) { const w = setInterval(() => { if (Sound.ready) { clearInterval(w); go(); } }, 100); setTimeout(() => { clearInterval(w); if (state === 'menu') go(); }, 6000); } else go();
 });
-window.__game = { FAUNA, get boat() { return boat; }, startSailing, stopSailing, harbor, storySpots, groundH, probe, get nav() { return nav; }, npcPlan, planRoute, sky: () => sky, post: () => post, camera, scene, player, S, npcs, cam, renderer, trees, grass, SPOTS, PLACES, get state() { return state; }, set state(v) { state = v; }, setHour: (h) => { hour = h; }, get hour() { return hour; }, tick: (dt, n = 1) => { for (let i = 0; i < n; i++) frame(dt); }, startLume: (i) => startLume(PLACES[i]), lieAt, seats, beds, Human, startFinale: () => startFinale(), openJournal, openDialog, choose, get pH() { return pH; }, toggleLantern, sitAt, interiors, think, Voice, Music };
+window.__game = { get alva() { return alva; }, mountDragon, FAUNA, get boat() { return boat; }, startSailing, stopSailing, harbor, storySpots, groundH, probe, get nav() { return nav; }, npcPlan, planRoute, sky: () => sky, post: () => post, camera, scene, player, S, npcs, cam, renderer, trees, grass, SPOTS, PLACES, get state() { return state; }, set state(v) { state = v; }, setHour: (h) => { hour = h; }, get hour() { return hour; }, tick: (dt, n = 1) => { for (let i = 0; i < n; i++) frame(dt); }, startLume: (i) => startLume(PLACES[i]), lieAt, seats, beds, Human, startFinale: () => startFinale(), openJournal, openDialog, choose, get pH() { return pH; }, toggleLantern, sitAt, interiors, think, Voice, Music };
 renderer.domElement.addEventListener('webglcontextlost', (e) => { e.preventDefault(); store.set('aldren2-q', settings.quality === 'alta' ? 'media' : 'baixa'); $('loading').textContent = 'A placa de vídeo reiniciou. Recarregando com gráficos mais leves…'; $('menu').hidden = false; $('loadBar').parentElement.hidden = true; setTimeout(() => location.reload(), 1500); });
 document.addEventListener('visibilitychange', () => { if (Sound.ctx) { if (document.hidden) Sound.ctx.suspend(); else Sound.ctx.resume(); } if (document.hidden && state === 'play') pauseGame(); });
 boot().catch((e) => { console.error(e); $('loading').textContent = 'Falha ao carregar: ' + e.message; });

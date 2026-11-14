@@ -25,7 +25,7 @@ export const CAST = {
   tiao: { name: 'Tião', role: 'Pescador' },
   nina: { name: 'Nina', role: 'Menina da praia' },
   davi: { name: 'Seu Davi', role: 'Faroleiro' },
-  alva: { name: 'Alva', role: 'Dragoa dos Veladores' },
+  alva: { name: 'Vésper', role: 'Dragoa dos Veladores' },
   eco_m: { name: 'Um Velador', role: 'Lembrança' },
   eco_f: { name: 'Uma Veladora', role: 'Lembrança' },
   narrador: { name: '', role: '' },
@@ -226,19 +226,19 @@ export const LINES = {
   to_concha: ['tome', 'Dá para ouvir o mar mesmo! Ou é o meu ouvido? Tanto faz. Vou guardar debaixo do travesseiro.', 'excited'],
   to_c4: ['tome', 'A Nina viu uma baleia. Eu vi um gigante. Empate.', 'happy'],
   od_carta: ['odessa', 'Do Davi? Ele ainda escreve à mão. Bom. Diga a ele que... não, eu mesma digo. Vou responder ainda neste século.', 'tender'],
-  od_alva: ['odessa', 'A sombra no céu? É a Alva. A última dragoa dos Veladores. Mora lá no alto, perto da gigante do monte. Se você chegar devagar, ela deixa você chegar perto. Se chegar correndo, ela vai embora e só volta daqui a um ano.', 'tender'],
+  od_alva: ['odessa', 'A sombra no céu? É a Vésper. A última dragoa dos Veladores. Tem o nome da estrela da tarde. Mora lá no alto, perto da gigante do monte. Se você chegar devagar, ela deixa você chegar perto. Se chegar correndo, ela vai embora e só volta daqui a um ano.', 'tender'],
   an_c4: ['anselmo', 'Você foi até a Maré? A Marta fala por três, mas o peixe dela vale por quatro.', 'happy'],
   an_c5: ['anselmo', 'Quando eu era moço, desci até o mar com as ovelhas. Elas olharam a água um tempão e voltaram. Ovelha é bicho sábio.', 'tender'],
   ir_c4: ['irene', 'Tentei pintar o mar uma vez. Usei todo o azul que eu tinha e ainda faltou.', 'happy'],
   ba_c4: ['bastiao', 'Montei o cimbre embaixo da ponte. Agora falta pedra, tempo e coragem. Pedra tem.', 'neutral'],
   ba_c5: ['bastiao', 'O Joca, da Maré, me pediu tábua de carvalho. Barco e ponte são parentes. Os dois levam a gente para o outro lado.', 'tender'],
 
-  // ---------------- Alva, a dragoa ----------------
+  // ---------------- Vésper, a dragoa ----------------
   li_alva_corre: ['lia', 'Ela levantou a cabeça. Acho que eu cheguei rápido demais. Devagar, Lia.', 'surprised'],
   li_alva1: ['lia', 'Ela é enorme. E está me olhando como quem decide se eu sou uma pergunta ou uma resposta.', 'tender'],
   li_alva2: ['lia', 'Ela abaixou a cabeça até o chão. Acho que é um convite.', 'tender'],
   li_voo: ['lia', 'O vale inteiro cabe debaixo das asas dela.', 'excited'],
-  li_voo_fim: ['lia', 'Obrigada, Alva. Eu nunca mais vou olhar para um mapa do mesmo jeito.', 'tender'],
+  li_voo_fim: ['lia', 'Obrigada, Vésper. Eu nunca mais vou olhar para um mapa do mesmo jeito.', 'tender'],
 
   // ---------------- curiosidades e pequenos momentos ----------------
   li_mar: ['lia', 'O mar. Daqui de cima, o vale parecia um mundo inteiro. Ele termina aqui, na areia, e começa outra coisa.', 'tender'],
