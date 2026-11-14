@@ -1,6 +1,7 @@
 import { THREE, loadTex, rand, rr, clamp, U } from '../core.js';
-import { groundH, POI } from './terrain.js';
+import { groundH, POI, fromUV, HARBOR, SEA_ROT } from './terrain.js';
 import { buildLandmarks } from './landmarks.js';
+import { buildHarbor } from './harbor.js';
 
 // ---------------- materiais ----------------
 export const M = {};
@@ -17,7 +18,7 @@ export async function loadVillageMaterials(barkMat) {
   M.ruin = S({ map: blockC, normalMap: blockN, roughness: 0.95, color: 0xc9c4b6 });
   M.ruinMoss = S({ map: blockC, normalMap: blockN, roughness: 0.98, color: 0x8f9c78 });
   const plaster = (c) => S({ map: plasterC, normalMap: plasterN, roughness: 0.95, color: c });
-  M.plaster = plaster(0xf1e7d6); M.plasterOchre = plaster(0xf3d7a4); M.plasterBlue = plaster(0xc9d9e6); M.plasterRose = plaster(0xf0cfc2); M.plasterSage = plaster(0xd3dcc0);
+  M.plaster = plaster(0xf1e7d6); M.plasterOchre = plaster(0xf3d7a4); M.plasterBlue = plaster(0xc9d9e6); M.plasterRose = plaster(0xf0cfc2); M.plasterSage = plaster(0xd3dcc0); M.plasterWhite = plaster(0xffffff); M.plasterWhite.color.setRGB(1.3, 1.27, 1.2); M.plasterSand = plaster(0xeadcc0);
   M.roof = S({ map: roofC, normalMap: roofN, roughness: 0.82, color: 0xd09a7e, normalScale: new THREE.Vector2(1.4, 1.4) });
   M.roofDark = S({ map: roofC, normalMap: roofN, roughness: 0.85, color: 0x7d8288, normalScale: new THREE.Vector2(1.4, 1.4) });
   M.roofMoss = S({ map: roofC, normalMap: roofN, roughness: 0.9, color: 0x8e9a72, normalScale: new THREE.Vector2(1.4, 1.4) });
@@ -48,6 +49,9 @@ export async function loadVillageMaterials(barkMat) {
   M.paint = { green: S({ map: planksC, roughness: 0.7, color: 0x4f7a55 }), blue: S({ map: planksC, roughness: 0.7, color: 0x4a6f96 }), red: S({ map: planksC, roughness: 0.7, color: 0x9a4436 }), ochre: S({ map: planksC, roughness: 0.7, color: 0xc89a48 }), wood: M.planks };
   M.flowers = [0xe8574a, 0xf2c94c, 0xf0f0f0, 0x9a6ad6, 0xf08fb0].map(c => S({ color: c, roughness: 0.7 }));
   M.leaf = S({ color: 0x4a6e2e, roughness: 0.85 });
+  M.boatHull = S({ map: planksC, vertexColors: true, roughness: 0.75, side: THREE.DoubleSide });
+  M.fishSkin = S({ color: 0x8d9ba3, roughness: 0.32, metalness: 0.55 });
+  M.net = S({ color: 0x6b5a42, roughness: 1, transparent: true, opacity: 0.85, side: THREE.DoubleSide, alphaTest: 0.3 });
   M.ceramic = S({ color: 0xe6ddcb, roughness: 0.32, envMapIntensity: 0.9 });
   M.ceramicBlue = S({ color: 0x40618a, roughness: 0.3, envMapIntensity: 0.9 });
   M.pewter = S({ color: 0x8c8b86, roughness: 0.42, metalness: 0.8 });
@@ -123,6 +127,13 @@ export const HOUSES = [
   [40, -42, -0.9, { role: 'familia2', w: 6.8, d: 5.4, floors: 1, lower: 'plasterRose', frame: true, roof: 'roof', door: 'blue', shutters: 'wood', flowers: true }],
   [-6, -24, 0.1, { role: 'livros', w: 7.2, d: 5.6, floors: 2, lower: 'block', upper: 'plaster', roof: 'roof', door: 'green', shutters: 'green' }],
   [36, 27, -1.2, { role: 'anselmo', w: 6, d: 5, floors: 1, lower: 'stone', roof: 'thatch', door: 'wood', shutters: 'wood' }],
+  // Vila da Maré: casas caiadas de pescadores, com a frente para o mar
+  ...[[0, 0, { role: 'taberna', w: 9, d: 6.4, floors: 2, lower: 'plasterWhite', upper: 'plasterWhite', roof: 'roof', door: 'blue', shutters: 'blue', sign: 'peixe', flowers: true }],
+    [-3, 17, { role: 'tiao', w: 7, d: 5.4, floors: 2, lower: 'stone', upper: 'plasterWhite', roof: 'roofDark', door: 'green', shutters: 'blue', kidBed: true }],
+    [2, -17, { role: 'barqueiro', w: 6.6, d: 5.2, floors: 1, lower: 'plasterSand', roof: 'thatch', door: 'blue', shutters: 'wood' }],
+    [-14, -6, { role: 'pescador', w: 6.2, d: 5, floors: 1, lower: 'plasterWhite', frame: true, roof: 'roof', door: 'blue', shutters: 'green', flowers: true }],
+    [-12, 30, { role: 'pescador2', w: 6, d: 5, floors: 1, lower: 'plasterBlue', roof: 'thatch', door: 'ochre', shutters: 'blue' }],
+  ].map(([du, dv, o]) => { const [x, z] = fromUV(HARBOR.u + du, HARBOR.v + dv); return [x, z, SEA_ROT + (du % 3) * 0.02, o]; }),
 ];
 export function villageDirt(x, z) {
   let d = 0; const r0 = Math.hypot(x - 0, z - 2); d = Math.max(d, 1 - Math.min(1, Math.max(0, (r0 - 9) / 8)));
@@ -147,7 +158,7 @@ function wallO(len, H, T, mat, tile, openings, Mx, colRot, collide = true, cy0 =
   piece(cur, len / 2, 0, H);
 }
 const FH = 2.8, SLAB = 0.2;
-function house(x, z, rot, o) {
+export function house(x, z, rot, o) {
   const w = o.w, d = o.d, floors = o.floors || 1, T = 0.3;
   let y0 = -1e9; for (const a of [-0.5, 0, 0.5]) for (const b of [-0.5, 0, 0.5]) { const c = Math.cos(rot), s2 = Math.sin(rot); const lx = a * w, lz = b * d; y0 = Math.max(y0, groundH(x + lx * c + lz * s2, z - lx * s2 + lz * c)); } y0 -= 0.35;
   const B = mtx(x, y0, z, 0, rot, 0); const L = (lx, ly, lz) => new THREE.Vector3(lx, ly, lz).applyMatrix4(B);
@@ -286,6 +297,22 @@ function house(x, z, rot, o) {
   } else if (o.role === 'livros') {
     table(0.6, d * 0.05, 0); shelf(iw / 2 - 0.2, id / 2 - 0.85, Math.PI / 2, fl0, 'books'); shelf(-iw / 2 + 0.2, 0.8, -Math.PI / 2, fl0, 'books'); rug(0.6, d * 0.05 + 1.2, fl0, M.cloth.blue);
     candle = L(0.8, fl0 + 0.95, d * 0.05);
+  } else if (o.role === 'taberna') {
+    // balcão com peixe fresco, barris e duas mesas para quem chega do mar
+    { const Ct = mtx(-iw / 2 + 0.9, fl0, id / 2 - 1.5, 0, Math.PI / 2, 0, B); box(2.2, 1.0, 0.7, M.oldWood, 1, mtx(0, 0.5, 0, 0, 0, 0, Ct)); box(2.3, 0.06, 0.8, M.timber, 1, mtx(0, 1.03, 0, 0, 0, 0, Ct)); for (let i = 0; i < 5; i++) put(fishGeo(rr(0.32, 0.45)), M.fishSkin, mtx(-0.8 + i * 0.38, 1.1, rr(-0.15, 0.15), 0, rr(-0.3, 0.3), Math.PI / 2, Ct), false); col(-iw / 2 + 0.9, id / 2 - 1.5, 0.4, 1.1); }
+    table(-1.3, 0.8, 0); table(1.5, 0.3, 0); for (const [bx, bz] of [[-iw / 2 + 0.45, -0.4], [-iw / 2 + 0.45, 0.35]]) { const g = new THREE.CylinderGeometry(0.33, 0.33, 0.9, 14); put(boxUV(g, 1), M.planks, mtx(bx, fl0 + 0.45, bz, 0, 0, 0, B)); col(bx, bz, 0.35, 0.35); }
+    candle = L(-iw / 2 + 0.9, fl0 + 1.2, id / 2 - 1.5);
+  } else if (o.role === 'barqueiro') {
+    candle = table(-w * 0.12, d * 0.1, 0); bed(-iw / 2 + 0.55, -id / 2 + 1.15, 0, fl0, M.cloth.blue);
+    // bancada com plaina e serrote, remo na parede, rolo de corda
+    { const Wb = mtx(iw / 2 - 0.5, fl0, id / 2 - 1.4, 0, -Math.PI / 2, 0, B); box(1.6, 0.08, 0.6, M.oldWood, 1, mtx(0, 0.85, 0, 0, 0, 0, Wb)); for (const a of [-1, 1]) for (const b2 of [-1, 1]) box(0.08, 0.85, 0.08, M.oldWood, 1, mtx(a * 0.7, 0.42, b2 * 0.24, 0, 0, 0, Wb)); box(0.28, 0.08, 0.07, M.oldWood, 1, mtx(-0.3, 0.93, 0, 0, 0.3, 0, Wb), false); box(0.55, 0.12, 0.01, M.iron, 1, mtx(0.35, 0.95, 0.05, 0, 0.1, 0, Wb), false); col(iw / 2 - 0.5, id / 2 - 1.4, 0.3, 0.8); }
+    box(0.06, 0.06, 2.4, M.oldWood, 1, mtx(-iw / 2 + 0.05, fl0 + 1.7, 0.6, 0, 0, 0.1, B), false); box(0.02, 0.5, 0.18, M.oldWood, 1, mtx(-iw / 2 + 0.06, fl0 + 1.65, 1.85, 0, 0, 0, B), false);
+    { const g = new THREE.TorusGeometry(0.22, 0.05, 6, 16); put(g, M.hay, mtx(-0.6, fl0 + 0.05, id / 2 - 0.6, Math.PI / 2, 0, 0, B), false); }
+  } else if (o.role === 'faroleiro') {
+    candle = table(-w * 0.1, d * 0.08, 0); bed(-iw / 2 + 0.55, -id / 2 + 1.15, 0, fl0, M.cloth.blue); shelf(iw / 2 - 0.2, id / 2 - 0.85, Math.PI / 2, fl0, 'books');
+    // carta náutica na parede e um barquinho dentro de uma garrafa
+    box(1.1, 0.75, 0.01, M.paintings[3], 1, mtx(0.4, fl0 + 1.6, -id / 2 + 0.02, 0, 0, 0, B), false);
+    { const T2 = mtx(-w * 0.1, fl0, d * 0.08, 0, 0, 0, B); cyl(0.05, 0.05, 0.24, 10, M.glass, 1, mtx(0.45, 0.85, -0.15, 0, 0, Math.PI / 2, T2), false); box(0.12, 0.04, 0.03, M.planks, 1, mtx(0.45, 0.84, -0.15, 0, 0, 0, T2), false); }
   } else if (o.role === 'vazia') {
     // uma casa vazia, mas não abandonada: alguém ainda varre o chão
     shelf(iw / 2 - 0.2, id / 2 - 0.85, Math.PI / 2, fl0); chest(-iw / 2 + 0.6, -id / 2 + 0.5, fl0); box(0.05, 1.3, 0.05, M.oldWood, 1, mtx(-iw / 2 + 0.35, fl0 + 0.65, id / 2 - 0.4, 0.15, 0, 0.1, B), false); box(0.3, 0.25, 0.08, M.hay, 1, mtx(-iw / 2 + 0.35, fl0 + 0.12, id / 2 - 0.45, 0.15, 0, 0.1, B), false);
@@ -299,9 +326,10 @@ function house(x, z, rot, o) {
   for (const u of outs) {
     const fy = u.fl; rug(0.6, 0.3, fy, u.f === 1 ? M.cloth.ochre : M.cloth.blue, [1.8, 1.2]);
     bed(iw / 2 - 0.62, -id / 2 + 1.65, 0, fy, u.f === 1 ? M.canvasRed : M.cloth.blue);
+    if (o.kidBed) bed(-iw / 2 + 0.6, id / 2 - 1.25, 0, fy, M.cloth.green);
     chest(0.4, id / 2 - 0.45, fy, 0);
     if (o.role === 'livros' || o.role === 'torre') shelf(-iw / 2 + 0.2, id / 2 - 1.2, -Math.PI / 2, fy, 'books');
-    else { box(0.6, 0.6, 0.4, M.oldWood, 1, mtx(-iw / 2 + 0.45, fy + 0.3, id / 2 - 0.5, 0, 0, 0, B)); col(-iw / 2 + 0.45, id / 2 - 0.5, 0.3, 0.2, 0, fy); cyl(0.03, 0.035, 0.12, 8, M.candle, 1, mtx(-iw / 2 + 0.45, fy + 0.66, id / 2 - 0.5, 0, 0, 0, B), false); }
+    else if (!o.kidBed) { box(0.6, 0.6, 0.4, M.oldWood, 1, mtx(-iw / 2 + 0.45, fy + 0.3, id / 2 - 0.5, 0, 0, 0, B)); col(-iw / 2 + 0.45, id / 2 - 0.5, 0.3, 0.2, 0, fy); cyl(0.03, 0.035, 0.12, 8, M.candle, 1, mtx(-iw / 2 + 0.45, fy + 0.66, id / 2 - 0.5, 0, 0, 0, B), false); }
   }
   // ---- janelas (moldura, vidro, peitoril, venezianas e floreiras) ----
   const shutterMat = o.shutters ? M.paint[o.shutters] : null;
@@ -332,7 +360,7 @@ function house(x, z, rot, o) {
   // lampião ao lado da porta (acende à noite)
   { const lp = L(dx + DW / 2 + 0.45, base + DH + 0.05, dz + 0.22); box(0.06, 0.06, 0.32, M.iron, 1, mtx(dx + DW / 2 + 0.45, base + DH + 0.25, dz + 0.12, 0, 0, 0, B), false); lamps.push(lp); }
   // placa
-  if (o.sign) { const S2 = mtx(dx + DW / 2 + 0.9, base + DH + 0.55, dz + 0.55, 0, 0, 0, B); box(0.06, 0.06, 0.7, M.iron, 1, mtx(0, 0.25, -0.2, 0, 0, 0, S2), false); box(0.7, 0.5, 0.05, M.oldWood, 1, mtx(0, 0, 0.12, 0, Math.PI / 2, 0, S2)); const sp = new THREE.SphereGeometry(0.16, 12, 6); sp.scale(1.6, 0.6, 0.5); put(boxUV(sp, 0.4), M.bread, mtx(0.04, 0, 0.12, 0, Math.PI / 2, 0, S2), false); }
+  if (o.sign) { const S2 = mtx(dx + DW / 2 + 0.9, base + DH + 0.55, dz + 0.55, 0, 0, 0, B); box(0.06, 0.06, 0.7, M.iron, 1, mtx(0, 0.25, -0.2, 0, 0, 0, S2), false); box(0.7, 0.5, 0.05, M.oldWood, 1, mtx(0, 0, 0.12, 0, Math.PI / 2, 0, S2)); if (o.sign === 'peixe') put(fishGeo(0.6), M.fishSkin, mtx(0.05, 0, 0.12, 0, 0, 0, S2), false); else { const sp = new THREE.SphereGeometry(0.16, 12, 6); sp.scale(1.6, 0.6, 0.5); put(boxUV(sp, 0.4), M.bread, mtx(0.04, 0, 0.12, 0, Math.PI / 2, 0, S2), false); } }
   // hera
   if (o.ivy) for (let i = 0; i < 40; i++) { const sp = new THREE.IcosahedronGeometry(rr(0.12, 0.26), 0); put(sp, M.leaf, mtx(-w / 2 + rr(0, 1.6), rr(0.2, 3.2), d / 2 + 0.12, rr(0, 3), rr(0, 3), 0, B), false); }
   // cadeira junto à lareira (todas as casas)
@@ -354,6 +382,14 @@ export function fenceLine(pts, opts = {}) {
       for (const hh of [0.5, 0.95]) cyl(0.05, 0.055, Lh + 0.15, 6, M.bark, 1, mtx(mx, my + hh, mz, 0, ang, Math.PI / 2 + tilt), true); }
   }
 }
+// peixe simples (corpo fusiforme achatado + cauda), comprimento len ao longo de +x
+export function fishGeo(len = 0.4) {
+  const pts = []; for (let i = 0; i <= 12; i++) { const t = i / 12; pts.push(new THREE.Vector2(Math.sin(Math.PI * Math.pow(t, 0.85)) * 0.12 * (1 - t * 0.35), (t - 0.5))); }
+  const body = new THREE.LatheGeometry(pts, 10); body.scale(len, len, len * 0.55); body.rotateZ(-Math.PI / 2);
+  const tail = new THREE.BufferGeometry(); const tl = len * 0.5; tail.setAttribute('position', new THREE.Float32BufferAttribute([-tl * 0.9, 0, 0, -tl * 1.35, len * 0.16, 0, -tl * 1.35, -len * 0.16, 0], 3)); tail.computeVertexNormals();
+  const g = mergeGeos([body.toNonIndexed(), tail]); g.computeVertexNormals(); return boxUV(g, 0.3);
+}
+function mergeGeos(list) { let n = 0; for (const g of list) n += g.attributes.position.count; const pos = new Float32Array(n * 3); let o = 0; for (const g of list) { pos.set(g.attributes.position.array, o * 3); o += g.attributes.position.count; } const out = new THREE.BufferGeometry(); out.setAttribute('position', new THREE.BufferAttribute(pos, 3)); return out; }
 // quadros pintados (paisagens diferentes em cada casa)
 function paintingTex(seed) {
   const c = document.createElement('canvas'); c.width = 256; c.height = 192; const g = c.getContext('2d'); let r = seed * 9301 + 49297; const R = () => ((r = (r * 9301 + 49297) % 233280) / 233280);
@@ -402,14 +438,14 @@ function decor(o, B, I) {
   // ganchos com capa
   { const g = new THREE.PlaneGeometry(0.42, 0.95, 3, 6); const pp = g.attributes.position; for (let k = 0; k < pp.count; k++) { const yy = pp.getY(k); pp.setZ(k, Math.sin(pp.getX(k) * 12) * 0.03 + (0.47 - yy) * 0.04); } g.computeVertexNormals(); put(g, M.cloth.green, mtx(-0.95, fl0 + 1.25, d / 2 - T - 0.06, 0, Math.PI, 0, B), false); box(0.5, 0.06, 0.05, M.oldWood, 1, mtx(-0.95, fl0 + 1.75, d / 2 - T - 0.03, 0, 0, 0, B), false); }
   // quarto de cima: lavatório com bacia e jarro, cortinas
-  if (floors > 1) { const fy = base + FH + SLAB; const W = mtx(-iw / 2 + 0.35, fy, 0.35, 0, Math.PI / 2, 0, B); box(0.7, 0.75, 0.42, M.oldWood, 1, mtx(0, 0.375, 0, 0, 0, 0, W)); cyl(0.17, 0.11, 0.08, 16, M.ceramic, 1, mtx(-0.1, 0.79, 0, 0, 0, 0, W), false); cyl(0.05, 0.08, 0.24, 12, M.ceramic, 1, mtx(0.2, 0.87, 0.05, 0, 0, 0, W), false); const c = new THREE.Vector3(-iw / 2 + 0.35, 0, 0.35).applyMatrix4(B); addBox(c.x, c.z, 0.22, 0.36, rot0(B) + Math.PI / 2, new THREE.Vector3().setFromMatrixPosition(B).y + fy - 0.3, new THREE.Vector3().setFromMatrixPosition(B).y + fy + 1.7); }
+  if (floors > 1 && !o.kidBed) { const fy = base + FH + SLAB; const W = mtx(-iw / 2 + 0.35, fy, 0.35, 0, Math.PI / 2, 0, B); box(0.7, 0.75, 0.42, M.oldWood, 1, mtx(0, 0.375, 0, 0, 0, 0, W)); cyl(0.17, 0.11, 0.08, 16, M.ceramic, 1, mtx(-0.1, 0.79, 0, 0, 0, 0, W), false); cyl(0.05, 0.08, 0.24, 12, M.ceramic, 1, mtx(0.2, 0.87, 0.05, 0, 0, 0, W), false); const c = new THREE.Vector3(-iw / 2 + 0.35, 0, 0.35).applyMatrix4(B); addBox(c.x, c.z, 0.22, 0.36, rot0(B) + Math.PI / 2, new THREE.Vector3().setFromMatrixPosition(B).y + fy - 0.3, new THREE.Vector3().setFromMatrixPosition(B).y + fy + 1.7); }
 }
 function rot0(B) { return new THREE.Euler().setFromRotationMatrix(B, 'YXZ').y; }
-function woodpile(x, z, rot) { const B = mtx(x, groundH(x, z), z, 0, rot, 0); for (let r = 0; r < 4; r++) for (let i = 0; i < 6 - r; i++) cyl(0.16, 0.16, 1.4, 8, M.bark, 1, mtx(-1.1 + i * 0.36 + r * 0.18, 0.17 + r * 0.29, 0, Math.PI / 2, 0, 0, B)); addBox(x, z, 1.2, 0.8, rot); }
+export function woodpile(x, z, rot) { const B = mtx(x, groundH(x, z), z, 0, rot, 0); for (let r = 0; r < 4; r++) for (let i = 0; i < 6 - r; i++) cyl(0.16, 0.16, 1.4, 8, M.bark, 1, mtx(-1.1 + i * 0.36 + r * 0.18, 0.17 + r * 0.29, 0, Math.PI / 2, 0, 0, B)); addBox(x, z, 1.2, 0.8, rot); }
 export function barrel(x, z) { const y = groundH(x, z); const g = new THREE.CylinderGeometry(0.36, 0.36, 0.95, 16, 6); const p = g.attributes.position; for (let i = 0; i < p.count; i++) { const yy = p.getY(i); const k = 1 + 0.12 * (1 - Math.pow(yy / 0.475, 2)); p.setX(i, p.getX(i) * k); p.setZ(i, p.getZ(i) * k); } g.computeVertexNormals(); const nI = g.toNonIndexed(); const pp = nI.attributes.position; const uv = new Float32Array(pp.count * 2); for (let i = 0; i < pp.count; i++) { uv[i * 2] = Math.atan2(pp.getZ(i), pp.getX(i)) / 6.283 * 2; uv[i * 2 + 1] = pp.getY(i) / 1.2; } nI.setAttribute('uv', new THREE.BufferAttribute(uv, 2)); put(nI, M.planks, mtx(x, y + 0.48, z, 0, rand() * 6, 0)); for (const hy of [-0.32, 0.32]) cyl(0.39, 0.39, 0.05, 16, M.iron, 1, mtx(x, y + 0.48 + hy, z)); addCircle(x, z, 0.42); }
 export function crate(x, z, s = 0.85) { const y = groundH(x, z); box(s, s, s, M.planks, 0.9, mtx(x, y + s / 2, z, 0, rand() * 6, 0)); addCircle(x, z, s * 0.6); }
-function hay(x, z) { const y = groundH(x, z); cyl(0.7, 0.7, 1.2, 18, M.hay, 1.5, mtx(x, y + 0.7, z, Math.PI / 2, rand() * 6, 0)); addCircle(x, z, 0.75); }
-function cart(x, z, rot) { const y = groundH(x, z); const B = mtx(x, y, z, 0, rot, 0); box(2.6, 0.1, 1.3, M.planks, 1.2, mtx(0, 0.85, 0, 0, 0, 0, B)); for (const s of [-1, 1]) box(2.6, 0.45, 0.07, M.planks, 1.2, mtx(0, 1.1, s * 0.62, 0, 0, 0, B)); for (const s of [-1, 1]) { cyl(0.55, 0.55, 0.08, 18, M.oldWood, 1, mtx(0.3, 0.55, s * 0.75, Math.PI / 2, 0, 0, B)); cyl(0.57, 0.57, 0.05, 18, M.iron, 1, mtx(0.3, 0.55, s * 0.78, Math.PI / 2, 0, 0, B)); } for (const s of [-1, 1]) cyl(0.04, 0.05, 2.2, 6, M.oldWood, 1, mtx(-2.2, 0.55, s * 0.4, 0, 0, Math.PI / 2 - 0.25, B)); addBox(x, z, 1.5, 0.9, rot); }
+export function hay(x, z) { const y = groundH(x, z); cyl(0.7, 0.7, 1.2, 18, M.hay, 1.5, mtx(x, y + 0.7, z, Math.PI / 2, rand() * 6, 0)); addCircle(x, z, 0.75); }
+export function cart(x, z, rot) { const y = groundH(x, z); const B = mtx(x, y, z, 0, rot, 0); box(2.6, 0.1, 1.3, M.planks, 1.2, mtx(0, 0.85, 0, 0, 0, 0, B)); for (const s of [-1, 1]) box(2.6, 0.45, 0.07, M.planks, 1.2, mtx(0, 1.1, s * 0.62, 0, 0, 0, B)); for (const s of [-1, 1]) { cyl(0.55, 0.55, 0.08, 18, M.oldWood, 1, mtx(0.3, 0.55, s * 0.75, Math.PI / 2, 0, 0, B)); cyl(0.57, 0.57, 0.05, 18, M.iron, 1, mtx(0.3, 0.55, s * 0.78, Math.PI / 2, 0, 0, B)); } for (const s of [-1, 1]) cyl(0.04, 0.05, 2.2, 6, M.oldWood, 1, mtx(-2.2, 0.55, s * 0.4, 0, 0, Math.PI / 2 - 0.25, B)); addBox(x, z, 1.5, 0.9, rot); }
 export function bench(x, z, ry) { const y = groundH(x, z); const B = mtx(x, y, z, 0, ry, 0); for (const a of [-0.45, 0.45]) { const p = new THREE.Vector3(a, 0.5, 0.02).applyMatrix4(B); seats.push({ x: p.x, y: p.y, z: p.z, yaw: ry, kind: 'bench', outdoor: true, exit: 0.55 }); } box(1.8, 0.1, 0.42, M.oldWood, 1, mtx(0, 0.45, 0, 0, 0, 0, B)); box(1.8, 0.35, 0.06, M.oldWood, 1, mtx(0, 0.75, -0.2, -0.15, 0, 0, B)); for (const s2 of [-1, 1]) box(0.12, 0.45, 0.38, M.oldWood, 1, mtx(s2 * 0.75, 0.22, 0, 0, 0, 0, B)); addBox(x, z, 0.9, 0.25, ry); return new THREE.Vector3(x, y, z); }
 
 // --------------- moinho de vento ---------------
@@ -468,7 +504,7 @@ export function buildVillage(scene) {
   // varal com roupas coloridas
   { const a = [12, -30], b = [17, -31.5]; for (const p of [a, b]) cyl(0.05, 0.06, 2.2, 6, M.oldWood, 1, mtx(p[0], groundH(p[0], p[1]) + 1.1, p[1])); const n = 6; for (let i = 0; i < n; i++) { const t = (i + 0.5) / n; const px = a[0] + (b[0] - a[0]) * t, pz = a[1] + (b[1] - a[1]) * t; const cm = [M.cloth.blue, M.cloth.white, M.cloth.ochre, M.cloth.green][i % 4]; const g = new THREE.PlaneGeometry(0.5, 0.65, 2, 3); put(boxUV(g, 1), cm, mtx(px, groundH(px, pz) + 1.7, pz, 0, -Math.atan2(b[1] - a[1], b[0] - a[0]), 0), false); } }
   windmill(-74, -34, 0.9);
-  buildTower(); buildStones(); buildStoryProps(); buildLandmarks();
+  buildTower(); buildStones(); buildStoryProps(); buildLandmarks(); buildHarbor();
   return bake(scene);
 }
 
@@ -513,9 +549,9 @@ function bake(scene) {
     for (const geo of g.geos) { geo.computeBoundingBox(); const c = geo.boundingBox.getCenter(new THREE.Vector3()); const k = Math.floor(c.x / 150) + ',' + Math.floor(c.z / 150); if (!cells.has(k)) cells.set(k, []); cells.get(k).push(geo); }
     for (const list of cells.values()) {
       let n = 0; for (const x of list) n += x.attributes.position.count;
-      const pos = new Float32Array(n * 3), nor = new Float32Array(n * 3), uv = new Float32Array(n * 2); let o = 0;
-      for (const x of list) { pos.set(x.attributes.position.array, o * 3); nor.set(x.attributes.normal.array, o * 3); uv.set(x.attributes.uv.array, o * 2); o += x.attributes.position.count; }
-      const bg = new THREE.BufferGeometry(); bg.setAttribute('position', new THREE.BufferAttribute(pos, 3)); bg.setAttribute('normal', new THREE.BufferAttribute(nor, 3)); bg.setAttribute('uv', new THREE.BufferAttribute(uv, 2)); bg.computeBoundingSphere();
+      const pos = new Float32Array(n * 3), nor = new Float32Array(n * 3), uv = new Float32Array(n * 2), vc = g.mat.vertexColors ? new Float32Array(n * 3).fill(1) : null; let o = 0;
+      for (const x of list) { if (!x.attributes.normal) x.computeVertexNormals(); pos.set(x.attributes.position.array, o * 3); nor.set(x.attributes.normal.array, o * 3); uv.set(x.attributes.uv.array, o * 2); if (vc && x.attributes.color) vc.set(x.attributes.color.array, o * 3); o += x.attributes.position.count; }
+      const bg = new THREE.BufferGeometry(); bg.setAttribute('position', new THREE.BufferAttribute(pos, 3)); bg.setAttribute('normal', new THREE.BufferAttribute(nor, 3)); bg.setAttribute('uv', new THREE.BufferAttribute(uv, 2)); if (vc) bg.setAttribute('color', new THREE.BufferAttribute(vc, 3)); bg.computeBoundingSphere();
       const mesh = new THREE.Mesh(bg, g.mat); mesh.castShadow = g.cast; mesh.receiveShadow = true; scene.add(mesh); meshes.push(mesh);
     }
   }

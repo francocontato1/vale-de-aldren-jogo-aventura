@@ -2,7 +2,7 @@
 // e transparência rasa na margem.
 import { THREE, U, loadTex, camera, renderer, Q } from '../core.js';
 import { Reflector } from 'three/addons/objects/Reflector.js';
-import { WSIZE, groundH, WATER } from './terrain.js';
+import { WSIZE, groundH, WATER, coastInfo } from './terrain.js';
 
 export const waterSky = { color: new THREE.Color(0.4, 0.55, 0.7), night: { value: 0 } };
 const WaterShader = {
@@ -58,7 +58,9 @@ export async function buildWater(scene) {
   for (let i = 0; i < p.count; i++) dep[i] = WATER - groundH(p.getX(i), -p.getY(i));
   g.setAttribute('depth', new THREE.BufferAttribute(dep, 1));
   const idx = g.index.array; const keep = [];
-  for (let i = 0; i < idx.length; i += 3) { const a = idx[i], b = idx[i + 1], c = idx[i + 2]; if (Math.max(dep[a], dep[b], dep[c]) > -1.5) keep.push(a, b, c); }
+  // o mar da enseada tem a sua própria água (ocean.js); aqui ficam só lagos e lagoas
+  const isSea = (i) => { const c = coastInfo(p.getX(i), -p.getY(i)); return c.bay > 0.15 && c.s < 60; };
+  for (let i = 0; i < idx.length; i += 3) { const a = idx[i], b = idx[i + 1], c = idx[i + 2]; if (Math.max(dep[a], dep[b], dep[c]) > -1.5 && !(isSea(a) && isSea(b) && isSea(c))) keep.push(a, b, c); }
   g.setIndex(keep); g.computeBoundingSphere();
   const q = Q(); const res = q.shadow >= 2048 ? 0.5 : 0.33;
   mesh = new Reflector(g, { shader: WaterShader, textureWidth: Math.round(innerWidth * res), textureHeight: Math.round(innerHeight * res), clipBias: 0.02, multisample: 0 });

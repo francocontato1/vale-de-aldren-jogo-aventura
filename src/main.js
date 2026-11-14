@@ -1,18 +1,22 @@
-import { THREE, renderer, scene, camera, U, Q, settings, store, clamp, lerp, smooth, rand, rr, angDiff, lerpAng, makeMacroTexture, loadGLTF, progress, isTouch, trackP } from './core.js';
-import { computeTerrainData, buildTerrain, groundH, normalY, splatAt, POI, PATHS, MIRANTE, TRAIL, forestDensity, WATER, HGT, NRM, SPLAT, NV, CELL, HALF, creekDist } from './world/terrain.js';
+import { loadTex, THREE, renderer, scene, camera, U, Q, settings, store, clamp, lerp, smooth, rand, rr, angDiff, lerpAng, makeMacroTexture, loadGLTF, progress, isTouch, trackP } from './core.js';
+import { computeTerrainData, buildTerrain, groundH, normalY, splatAt, sandAt, fromUV, HARBOR, SEA_ROT, POI, PATHS, MIRANTE, TRAIL, forestDensity, WATER, HGT, NRM, SPLAT, NV, CELL, HALF, creekDist } from './world/terrain.js';
 import { buildWater, setWaterQuality } from './world/water.js';
+import { buildOcean, updateOcean, seaSurface, depthAt, surfNear } from './world/ocean.js';
 import { SkySystem } from './world/sky.js';
 import { Grass } from './world/grass.js';
 import { Trees } from './world/trees.js';
 import { loadVillageMaterials, buildVillage, colliders, villageDirt, smokes, fires, M, interiors, doors, insideHouse, inFootprint, storySpots, probe, lamps, windmills, seats, beds, inSolid } from './world/village.js';
 import { Nav } from './actors/nav.js';
+import { SailBoat, boatMaterials } from './actors/boat.js';
+import { harbor, updateHarbor } from './world/harbor.js';
 import { FLOWER_ZONES } from './world/landmarks.js';
-import { LINES, CAST, PLACES, NOTES, FINALE, text as lineText } from './story.js';
+import { LINES, CAST, PLACES, NOTES, FINALE, FRIENDS, ITEMS, text as lineText } from './story.js';
 import { buildGiant, buildHeadFragment, updateGiants, giants } from './world/giants.js';
 import { Lume, initSpirits, addSiteSpirits, updateSpirits, Motes, LumeRain, GLOW } from './magic.js';
 import { buildProps, updateProps, setPropRadius } from './world/props.js';
 import { loadHumanLibrary, Human } from './actors/human.js';
 import { loadAnimals, spawnAnimals, updateAnimals } from './actors/animals.js';
+import { spawnFauna, updateFauna, F as FAUNA } from './actors/fauna.js';
 import { Post } from './post.js';
 import { Sound, Music, Voice, Speech, preloadSounds } from './audio.js';
 
@@ -77,7 +81,7 @@ class Particles {
 // =====================================================================
 // estado
 // =====================================================================
-const S = { met: {}, lumes: {}, notes: {}, final: 0, letter: 0, told: 0, chat: {}, day: 0, found: {}, sat: 0 };
+const S = { met: {}, lumes: {}, notes: {}, final: 0, letter: 0, told: 0, chat: {}, day: 0, found: {}, sat: 0, fr: {}, frDay: {}, inv: {}, fav: {}, boat: 0, sailed: 0, flags: {} };
 let state = 'loading', hour = 16.4, elapsed = 0, timeLapse = 0;
 const player = { x: 2, z: 44, y: 0, vy: 0, h: Math.PI, onGround: true, stepAcc: 0, speed: 0, sit: null, standT: 0 };
 const cam = { yaw: 0, pitch: -0.1, dist: 3.4, cur: V3(), look: V3(), cine: 0, intro: 0, mode: 'follow', orbit: 0 };
@@ -105,19 +109,21 @@ async function boot() {
   const rock = await loadGLTF('a/rock1.glb.wasm'); let rockMat; rock.scene.traverse(o => { if (o.isMesh) rockMat = o.material; });
   await step('Pintando o terreno…', 0.12, () => buildTerrain(scene, rockMat));
   water = await buildWater(scene);
+  buildOcean(scene, await loadTex('a/tex/water_n.jpg', { srgb: false }));
   sky = new SkySystem(scene);
   trees = new Trees(scene);
   await step('Crescendo as árvores…', 0.2, () => trees.build());
-  await loadVillageMaterials(trees.variants[0].bark);
+  await loadVillageMaterials(trees.variants[0].bark); boatMaterials(M.planks.map);
   await step('Erguendo a vila…', 0.35, () => buildVillage(scene));
   for (const c of colliders.circles) addCirc(c[0], c[1], c[2]);
   load();
   await step('Os gigantes descansam…', 0.42, () => placeGiants(rockMat));
   const zones = [[POI.garden.x, POI.garden.z, 18], [POI.observatory.x, POI.observatory.z, 26], [POI.stairs.x, POI.stairs.z, 16], [POI.shrine.x, POI.shrine.z, 6], [POI.tower.x, POI.tower.z, 14], [POI.stones.x, POI.stones.z, 14], [POI.bridge.x, POI.bridge.z, 12], [-74, -34, 6]];
-  const vEx = (x, z) => Math.hypot(x, z) < 62 || zones.some(zn => Math.hypot(x - zn[0], z - zn[1]) < zn[2]) || giants.some(g => Math.hypot(x - g.x, z - g.z) < 18) || creekDist(x, z) < 2.5;
+  const [hbx, hbz] = fromUV(HARBOR.u, HARBOR.v);
+  const vEx = (x, z) => Math.hypot(x, z) < 62 || Math.hypot(x - hbx, z - hbz) < 58 || sandAt(x, z) > 0.3 || zones.some(zn => Math.hypot(x - zn[0], z - zn[1]) < zn[2]) || giants.some(g => Math.hypot(x - g.x, z - g.z) < 18) || creekDist(x, z) < 2.5;
   await step('Espalhando pedras e flores…', 0.48, () => buildProps(scene, { avoid: (x, z, r) => vEx(x, z) || pathDistOK(x, z, r), addCircle: addCirc, villageExclude: vEx, zones: FLOWER_ZONES() }));
   await step('Plantando a floresta…', 0.56, () => trees.scatter({ avoid: (x, z, r) => vEx(x, z) || pathDistOK(x, z, r + 1) || aqueductNear(x, z), forestDensity, groundH, normalY, onTree: (it) => { if (it.v.sp.type !== 'bush') addCirc(it.x, it.z, (it.v.sp.type === 'pine' ? 0.28 : 0.36) * it.s); }, extra: [[-12, -32, 'oakA', 1], [34, -12, 'oakB', 0.9], [-38, 22, 'ashA', 1], [10, 44, 'oakA', 1.1], [-52, -16, 'pineA', 1], [storySpots.treeRoot.x, storySpots.treeRoot.z, 'oakB', 1.45], [POI.shrine.x - 4, POI.shrine.z - 5, 'oakB', 1.5]] }));
-  grass = new Grass(scene, { exclude: (x, z) => inFootprint(x, z, 0.1) || insideBox(x, z, 0.4) || treeHit(x, z) || Math.hypot(x - POI.observatory.x, z - POI.observatory.z) < 9.3 });
+  grass = new Grass(scene, { exclude: (x, z) => sandAt(x, z) > 0.45 || inFootprint(x, z, 0.1) || insideBox(x, z, 0.4) || treeHit(x, z) || Math.hypot(x - POI.observatory.x, z - POI.observatory.z) < 9.3 });
   await step('Chamando os moradores…', 0.66, () => Promise.all([loadHumanLibrary(), loadAnimals()]));
   initSpirits(); motes = new Motes(260);
   const sTex = smokeTex(), dTex = softTex();
@@ -128,7 +134,7 @@ async function boot() {
   roomLight = new THREE.PointLight(0xfff0dc, 0, 9, 1.4); scene.add(roomLight);
   buildLamps(); buildLantern(); buildRipples();
   const had = !!store.get(SAVE_KEY);
-  await step('Últimos detalhes…', 0.9, () => { initNav(); buildPlayer(); buildNPCs(); spawnAnimals(); buildMapBase(); });
+  await step('Últimos detalhes…', 0.9, () => { initNav(); buildPlayer(); buildBoat(); buildNPCs(); spawnAnimals(); spawnFauna(FLOWER_ZONES()); buildMapBase(); });
   post = new Post(); post.setSize(innerWidth, innerHeight);
   player.y = groundH(player.x, player.z);
   for (let i = 0; i < 30; i++) grass.update(player.x, player.z, 100);
@@ -247,6 +253,49 @@ function sleepUntilMorning() {
 }
 
 // =====================================================================
+// velejar: o barco do mestre Elias
+// =====================================================================
+let boat = null;
+function buildBoat() {
+  const d = harbor.sailDock; if (!d) return; boat = new SailBoat(scene, d.x, d.z, d.yaw);
+  if (S.boatPos && depthAt(S.boatPos.x, S.boatPos.z) > 0.8) { boat.x = S.boatPos.x; boat.z = S.boatPos.z; boat.yaw = S.boatPos.yaw; }
+  const [hx, hz] = fromUV(HARBOR.u, HARBOR.v); POI.mare = { x: hx, z: hz, name: 'Vila da Maré' }; if (storySpots.farol) POI.farol = { x: storySpots.farol.x, z: storySpots.farol.z, name: 'O Farol' };
+}
+const boatAtDock = () => boat && Math.hypot(boat.x - harbor.sailDock.x, boat.z - harbor.sailDock.z) < 3;
+function startSailing() {
+  if (!boat) return; state = 'sail'; $('prompt').hidden = true; curInter = null; boat.sailing = true; boat.grounded = false; player.sit = null; player.speed = 0; timeLapse = 0;
+  pH.play('drive', 0.4); Sound.rustle(player.x, player.z); cam.yaw = boat.yaw + Math.PI; cam.pitch = -0.18; cam.boatT = 0;
+  const hint = $('lapseHint'); hint.hidden = false; hint.classList.remove('on'); hint.textContent = isTouch ? 'joystick · leme e vela   ·   Usar · desembarcar perto do píer ou da praia' : 'A D · leme   ·   W S · caçar e folgar a vela   ·   E · desembarcar (perto do píer ou da praia)';
+  if (!S.sailed) { S.sailed = 1; setTimeout(() => think('li_barco'), 2500); } save(); Music.silence = Math.min(Music.silence, 5);
+}
+function landingSpot() {
+  // procura terra firme em volta do barco (o píer conta)
+  if (Math.hypot(boat.x - harbor.sailDock.x, boat.z - harbor.sailDock.z) < 8) { const p = storySpots.barco; return { x: p.x, z: p.z, y: p.y, dock: true }; }
+  if (depthAt(boat.x, boat.z) > 1.8) return null;
+  for (let r = 2; r < 14; r += 0.5) for (let a = 0; a < 16; a++) { const t = a / 16 * Math.PI * 2; const x = boat.x + Math.cos(t) * r, z = boat.z + Math.sin(t) * r; if (groundH(x, z) > WATER + 0.25 && normalY(x, z) > 0.8) return { x, z, y: groundH(x, z) }; }
+  return null;
+}
+function stopSailing() {
+  const L = landingSpot(); if (!L) { toast('Longe da terra', 'Chegue perto do píer ou de uma praia rasa para desembarcar'); return; }
+  boat.sailing = false; state = 'play'; player.x = L.x; player.z = L.z; player.y = L.y; player.h = boat.yaw; player.vy = 0; player.onGround = true; cam.yaw = player.h + Math.PI; pH.play('idle', 0.3);
+  if (L.dock) { const d = harbor.sailDock; boat.x = d.x; boat.z = d.z; boat.yaw = d.yaw; boat.speed = 0; }
+  S.boatPos = { x: boat.x, z: boat.z, yaw: boat.yaw }; $('lapseHint').hidden = true; $('lapseHint').textContent = lapseText; save();
+}
+function updateSailing(dt) {
+  const k = keys; const steer = clamp((k.KeyD || k.ArrowRight ? 1 : 0) - (k.KeyA || k.ArrowLeft ? 1 : 0) + touch.mx, -1, 1), thr = clamp((k.KeyW ? 1 : 0) - (k.KeyS ? 1 : 0) + touch.my, -1, 1);
+  boat.update(dt, { steer, throttle: thr }, elapsed);
+  // Lia sentada na popa, segurando a cana do leme
+  const r = boat.b.root; const seat = new THREE.Vector3(-boat.b.L / 2 + 0.85, boat.b.top(0.15) - 0.32 - SIT_H, 0.3).applyMatrix4(r.matrixWorld);
+  player.x = seat.x; player.z = seat.z; player.y = seat.y; player.h = boat.yaw;
+  pH.root.position.copy(seat); pH.root.quaternion.copy(r.quaternion).multiply(new THREE.Quaternion().setFromAxisAngle(V3(0, 1, 0), Math.PI / 2 + 0.25));
+  if (pH.currentName !== 'drive') pH.play('drive', 0.4); pH.lookAtPoint(V3(boat.x + Math.sin(boat.yaw) * 20, seat.y + 1.5, boat.z + Math.cos(boat.yaw) * 20), 0.6); pH.update(dt);
+  // esteira e respingos na proa
+  const sp = boat.speed; if (sp > 0.6) { const fx = Math.sin(boat.yaw), fz = Math.cos(boat.yaw);
+    if (rand() < dt * sp * 6) { const s2 = rand() < 0.5 ? -1 : 1; dust.emit({ x: boat.x + fx * 2.4 + fz * 0.5 * s2, y: WATER + 0.15, z: boat.z + fz * 2.4 - fx * 0.5 * s2, vx: fz * s2 * rr(0.5, 1.4) + fx * sp * 0.3, vy: rr(0.6, 1.6) * Math.min(1, sp / 3), vz: -fx * s2 * rr(0.5, 1.4) + fz * sp * 0.3, g: 9, drag: 0.6, life: rr(0.5, 0.9), s0: 0.08, s1: 0.18, c: [0.92, 0.95, 0.96], a0: 0.6, wind: 0.2 }); }
+    boat.wakeT += dt; if (boat.wakeT > 0.35) { boat.wakeT = 0; ripple(boat.x - fx * 2.6 + rr(-0.3, 0.3), boat.z - fz * 2.6 + rr(-0.3, 0.3), 1.2 + sp * 0.25); } }
+}
+
+// =====================================================================
 // câmera
 // =====================================================================
 function updateCamera(dt) {
@@ -256,6 +305,13 @@ function updateCamera(dt) {
   // lume: órbita lenta em volta da lembrança
   if (state === 'lume' && lume) { const c = lume.center; cam.orbit += dt * 0.045; const a = (cam.lumeA ?? Math.atan2(player.x - c.x, player.z - c.z)) + cam.orbit; cam.lumeA = cam.lumeA ?? a; const want = V3(c.x + Math.sin(a) * 6.8, c.y + 2.2, c.z + Math.cos(a) * 6.8); want.y = Math.max(want.y, groundH(want.x, want.z) + 1.2); cam.cur.lerp(want, 1 - Math.exp(-dt * 1.5)); camera.position.copy(cam.cur); camera.lookAt(c.x, c.y + 1.2, c.z); camera.fov = lerp(camera.fov, 42, 1 - Math.exp(-dt * 2)); camera.updateProjectionMatrix(); return; }
   cam.lumeA = undefined;
+  if (state === 'sail' && boat) {
+    const b = boat; const cy2 = cam.yaw, cp2 = cam.pitch; const fwd2 = V3(-Math.sin(cy2) * Math.cos(cp2), Math.sin(cp2), -Math.cos(cy2) * Math.cos(cp2)); const pivot = V3(b.x, b.y + 1.6, b.z);
+    let want = pivot.clone().addScaledVector(fwd2, -9.5).add(V3(0, 1.2, 0)); want.y = Math.max(want.y, Math.max(groundH(want.x, want.z), WATER) + 0.8);
+    // a câmera tende a voltar para trás do barco quando não se mexe o mouse
+    cam.boatT = (cam.boatT || 0) + dt; if (cam.boatT > 2.5) cam.yaw = lerpAng(cam.yaw, b.yaw + Math.PI, dt * 0.6);
+    cam.cur.lerp(want, 1 - Math.exp(-dt * 4)); if (cam.cur.distanceTo(want) > 20) cam.cur.copy(want); camera.position.copy(cam.cur); camera.lookAt(pivot.x + Math.sin(b.yaw) * 3, pivot.y, pivot.z + Math.cos(b.yaw) * 3); camera.fov = lerp(camera.fov, 55, 1 - Math.exp(-dt * 3)); camera.updateProjectionMatrix(); if (pH) pH.root.visible = true; return;
+  }
   if (state === 'finale' && finale) { finale.camera(dt); return; }
   cam.inK = lerp(cam.inK || 0, insideHouse(player.x, player.z) ? 1 : 0, 1 - Math.exp(-dt * 4));
   if (cam.mode === 'lie' && player.sit && player.sit.lie) {
@@ -303,6 +359,13 @@ function buildNPCs() {
   let ix = -128, iz = 92; { const dx = -ix, dz = -iz, dl = Math.hypot(dx, dz); for (let i = 0; i < 120 && groundH(ix, iz) < 0.9; i++) { ix += dx / dl; iz += dz / dl; } ix += dx / dl * 2; iz += dz / dl * 2; }
   irene = addNPC({ id: 'irene', key: 'irene', day: [ix, iz, Math.atan2(-170 - ix, 120 - iz)], talk: talkIrene, idle: 'idle', home: houseOf('irene') });
   const bs = storySpots.bastiao; bastiao = addNPC({ id: 'bastiao', key: 'bastiao', day: [bs.x, bs.z, storySpots.bastiaoYaw + Math.PI], talk: talkBastiao, idle: 'kneel', home: houseOf('casagrande') });
+  // Vila da Maré
+  { const s2 = storySpots.marta; marta = addNPC({ id: 'marta', key: 'marta', day: [s2.x, s2.z, storySpots.martaYaw], talk: talkMarta, idle: 'idle', home: houseOf('taberna'), slow: true }); }
+  { const s2 = storySpots.joca; joca = addNPC({ id: 'joca', key: 'joca', day: [s2.x, s2.z, storySpots.jocaYaw], talk: talkJoca, idle: 'idle', work: 'kneel', home: houseOf('barqueiro') }); }
+  { const s2 = storySpots.tiao; tiao = addNPC({ id: 'tiao', key: 'tiao', day: [s2.x, s2.z, storySpots.tiaoYaw], talk: talkTiao, idle: 'idle', home: houseOf('tiao'), daySeat: harbor.tiaoSeat }); }
+  { const [a, b] = [fromUV(HARBOR.u + 34, HARBOR.v - 8), fromUV(HARBOR.u + 40, HARBOR.v + 18)], c = fromUV(HARBOR.u + 30, HARBOR.v + 30), d2 = fromUV(HARBOR.u + 12, HARBOR.v + 6);
+    nina = addNPC({ id: 'nina', key: 'nina', day: [d2[0], d2[1], SEA_ROT], talk: talkNina, idle: 'idle', wander: [d2, a, b, c], home: houseOf('tiao') }); }
+  if (storySpots.davi) { const s2 = storySpots.davi; davi = addNPC({ id: 'davi', key: 'davi', day: [s2.x, s2.z, storySpots.daviYaw], talk: talkDavi, idle: 'fold', always: true, nightIdle: 'lantern', lookSky: true, slow: true }); }
   // cavalete de pintura da Irene
   { const ia = Math.atan2(-170 - ix, 120 - iz); const ex = ix + Math.sin(ia) * 1.1 + Math.cos(ia) * 0.6, ez = iz + Math.cos(ia) * 1.1 - Math.sin(ia) * 0.6, ey = groundH(ex, ez); const g = new THREE.Group(); for (const a of [-1, 1]) { const l = new THREE.Mesh(new THREE.BoxGeometry(0.05, 1.6, 0.05), M.oldWood); l.position.set(a * 0.35, 0.8, 0); l.rotation.set(0.12, 0, a * -0.08); g.add(l); } const cv = new THREE.Mesh(new THREE.PlaneGeometry(0.8, 0.6), paintingMat()); cv.position.set(0, 1.15, 0.08); cv.rotation.x = 0.12; g.add(cv); g.position.set(ex, ey, ez); g.rotation.y = ia + Math.PI; scene.add(g); addCirc(ex, ez, 0.4); }
 }
@@ -336,6 +399,7 @@ function npcPlan(n) {
     if (isBedtime()) { const b = homeBed(n); if (b) return { key: 'bed', x: b.side.x, z: b.side.z, act: 'sleep', spot: b }; }
     if (isNight()) { const st = homeSeat(n); if (st) { const e = seatExit(st); return { key: 'seat', x: e.x, z: e.z, act: 'sit', spot: st }; } }
   }
+  if (n.daySeat && hour > 6.5 && hour < 19.5) { const st = claim(n, n.daySeat); if (st) { const e = seatExit(st); return { key: 'dseat', x: e.x, z: e.z, act: 'sit', spot: st }; } }
   if (n.wander) { const t = n.wander[n.wi]; return { key: 'w' + n.wi, x: t[0], z: t[1], act: 'wander' }; }
   return { key: 'day', x: n.day[0], z: n.day[1], act: 'day', yaw: n.day[2] };
 }
@@ -353,7 +417,7 @@ function planRoute(n, plan) {
   return pts;
 }
 function addNPC(o) { const h = new Human(o.key); scene.add(h.root); const n = Object.assign({ h, wi: 0, wait: rr(1, 4), speed: 0, talkT: 0, x: o.day[0], z: o.day[1], y: groundH(o.day[0], o.day[1]), yaw: o.day[2] || 0, route: null, pose: null, fails: 0, stuckT: 0 }, o); h.root.position.set(n.x, n.y, n.z); npcs.push(n); return n; }
-let odessa, anselmo, celeste, tome, irene, bastiao;
+let odessa, anselmo, celeste, tome, irene, bastiao, marta, joca, tiao, nina, davi;
 function houseOf(role) { return interiors.find(h => h.role === role); }
 function teleportNPC(n, x, z, y) { n.x = x; n.z = z; n.y = y ?? probe(x, z, groundH(x, z) + 0.3).h; n.floorUp = null; }
 function npcVisible(n) { const dx = n.x - camera.position.x, dz = n.z - camera.position.z, d = Math.hypot(dx, dz); if (d < 6) return true; if (d > 95) return false; const f = camFwd; return (dx * f.x + dz * f.z) / d > 0.35; }
@@ -427,52 +491,100 @@ function updateNPCs(dt) {
 // =====================================================================
 // diálogos
 // =====================================================================
-const Nd = (line, opts) => ({ line, opts }), O = (t, go, act) => ({ t, go, act });
+// Nd(fala, opções, ação ao mostrar) · O(texto, próximo nó, ação ao escolher)
+const Nd = (line, opts, act) => ({ line, opts, act }), O = (t, go, act) => ({ t, go, act });
 const lumesN = () => PLACES.filter(p => S.lumes[p.id]).length;
 const BYE = [O('Até mais.', null)];
 // conversa casual: percorre as falas em ordem, uma por visita
 function chat(id, list, opts = BYE) { const i = S.chat[id] || 0; S.chat[id] = (i + 1) % list.length; return Nd(list[i], opts); }
+// ---------- amizades e coisas levadas de uma vila para a outra ----------
+const frLevel = (id) => { const p = S.fr[id] || 0; return p >= 8 ? 3 : p >= 4 ? 2 : p >= 1 ? 1 : 0; };
+const hearts = (id) => '♥'.repeat(frLevel(id)) + '♡'.repeat(3 - frLevel(id));
+function friend(id, k) { const before = frLevel(id); S.fr[id] = Math.min(12, (S.fr[id] || 0) + k); if (frLevel(id) > before && before > 0) toast('Amizade · ' + CAST[id].name, hearts(id)); save(); }
+function chatDaily(id) { if (!S.met[id]) return; if (S.frDay[id] !== S.day) { S.frDay[id] = S.day; friend(id, 1); } }
+const has = (k) => !!S.inv[k];
+function give(k) { S.inv[k] = 1; toast('Recebido', ITEMS[k].split(' (')[0]); Sound.page(); save(); }
+function take(k) { delete S.inv[k]; S.fav[k] = 1; save(); }
+const metOnce = (id, k = 1) => () => { if (!S.met[id]) { S.met[id] = 1; friend(id, k); } save(); };
 function talkOdessa() {
   if (!S.met.odessa) return Nd('od_first', [
     O('Você é a maga Odessa?', () => Nd('od_quem', [O('Que tipo de mapa você quer?', mapaOd)])),
     O('Que tipo de mapa você quer?', mapaOd)]);
+  if (has('carta')) return Nd('od_carta', BYE, () => { take('carta'); friend('odessa', 2); friend('davi', 2); });
   const n = lumesN();
+  const alva = O('Que sombra é aquela que passa no céu?', () => Nd('od_alva', BYE), () => { S.flags.alva = 1; save(); });
   if (n >= 8 && !S.told) return Nd('od_todos', [O('Eu volto quando escurecer.', null, () => { S.told = 1; refreshQuest(); save(); })]);
   if (S.told && !S.final) { if (isNight()) return Nd('fim1', [O('Olhar para cima com ela', null, () => { pendingAfterDialog = startFinale; })]); return Nd('od_noite', BYE); }
-  if (S.final) return chat('odessa_pos', ['od_pos1', 'od_pos2', 'od_cha']);
-  return Nd(['od_n1', 'od_n1', 'od_n2', 'od_n2', 'od_n3', 'od_n3', 'od_n4', 'od_n4'][Math.min(n, 7)] || 'od_cha', [O('Ainda tem chá?', () => Nd('od_cha', BYE)), O('Vou continuar procurando.', null)]);
+  if (S.final) { const c = chat('odessa_pos', ['od_pos1', 'od_pos2', 'od_cha']); c.opts = [alva, ...BYE]; return c; }
+  return Nd(['od_n1', 'od_n1', 'od_n2', 'od_n2', 'od_n3', 'od_n3', 'od_n4', 'od_n4'][Math.min(n, 7)] || 'od_cha', [O('Ainda tem chá?', () => Nd('od_cha', BYE)), alva, O('Vou continuar procurando.', null)]);
 }
-const mapaOd = () => Nd('od_mapa', [O('Como eu encontro esses lugares?', () => Nd('od_como', [O('E depois?', () => Nd('od_depois', [O('Combinado.', null, () => { S.met.odessa = 1; toast('O mapa do que importa', 'Contemple os oito lugares dos Veladores'); refreshQuest(); save(); })]))]))]);
+const mapaOd = () => Nd('od_mapa', [O('Como eu encontro esses lugares?', () => Nd('od_como', [O('E depois?', () => Nd('od_depois', [O('Combinado.', null, () => { S.met.odessa = 1; friend('odessa', 1); toast('O mapa do que importa', 'Contemple os oito lugares dos Veladores'); refreshQuest(); save(); })]))]))]);
 function talkAnselmo() {
   if (isNight()) return Nd('an_noite', BYE);
-  if (!S.met.anselmo) return Nd('an_first', [O('O senhor conhece os gigantes?', () => Nd('an_gigantes', [O('E os Veladores?', () => Nd('an_veladores', BYE, met('anselmo')))])), O('O que acha que aconteceu com os Veladores?', () => Nd('an_veladores', BYE, met('anselmo')))]);
-  return chat('anselmo', ['an_c1', 'an_c2', 'an_c3']);
+  if (!S.met.anselmo) return Nd('an_first', [O('O senhor conhece os gigantes?', () => Nd('an_gigantes', [O('E os Veladores?', () => Nd('an_veladores', BYE, metOnce('anselmo')))])), O('O que acha que aconteceu com os Veladores?', () => Nd('an_veladores', BYE, metOnce('anselmo')))]);
+  return chat('anselmo', ['an_c1', 'an_c2', 'an_c3', ...(S.found.mare ? ['an_c4', 'an_c5'] : [])]);
 }
 function talkCeleste() {
   if (isNight()) return Nd('ce_noite', BYE);
-  if (!S.met.celeste) return Nd('ce_first', [O('A Odessa vem sempre aqui?', () => Nd('ce_odessa', [O('E as ruínas? O que você acha?', () => Nd('ce_ruinas', BYE))]), met('celeste')), O('O que você acha das ruínas?', () => Nd('ce_ruinas', BYE), met('celeste'))]);
-  return chat('celeste', ['ce_c1', 'ce_c3', 'ce_c2']);
+  if (!S.met.celeste) return Nd('ce_first', [O('A Odessa vem sempre aqui?', () => Nd('ce_odessa', [O('E as ruínas? O que você acha?', () => Nd('ce_ruinas', BYE))]), metOnce('celeste')), O('O que você acha das ruínas?', () => Nd('ce_ruinas', BYE), metOnce('celeste'))]);
+  if (has('peixe')) return Nd('ce_peixe', BYE, () => { take('peixe'); friend('celeste', 2); });
+  if (S.sailed && !S.flags.ceBarco) return Nd('ce_barco', BYE, () => { S.flags.ceBarco = 1; friend('celeste', 1); });
+  if (!S.fav.pao && !has('pao') && !has('peixe') && (S.found.mare || S.met.marta || (S.chat.celeste || 0) >= 2)) return Nd('ce_cesta', [O('Levo, sim.', null, () => { give('pao'); toast('Favor', 'Levar o pão para a Dona Marta, na Vila da Maré'); }), O('Agora não, desculpa.', null)]);
+  return chat('celeste', ['ce_c1', 'ce_c3', 'ce_c2', ...(S.fav.peixe ? ['ce_c4'] : [])]);
 }
 function talkTome() {
+  if (has('concha')) return Nd('to_concha', BYE, () => { take('concha'); friend('tome', 2); });
   if (S.final) return Nd('to_pos', BYE);
-  if (!S.met.tome) return Nd('to_first', [O('Eu ainda não sei.', () => Nd('to_naosei', BYE), met('tome')), O('Por que você quer saber?', () => Nd('to_porque', BYE), met('tome'))]);
-  return chat('tome', ['to_c1', 'to_c2', 'to_c3']);
+  if (!S.met.tome) return Nd('to_first', [O('Eu ainda não sei.', () => Nd('to_naosei', BYE), metOnce('tome')), O('Por que você quer saber?', () => Nd('to_porque', BYE), metOnce('tome'))]);
+  if (!S.fav.desenho && !has('desenho') && !has('concha') && (S.found.mare || S.met.nina || (S.chat.tome || 0) >= 2)) return Nd('to_nina', [O('Entrego, sim.', null, () => { give('desenho'); toast('Favor', 'Levar o desenho do Tomé para a Nina, na Vila da Maré'); }), O('Hoje não, Tomé.', null)]);
+  return chat('tome', ['to_c1', 'to_c2', 'to_c3', ...(S.fav.concha ? ['to_c4'] : [])]);
 }
 function talkIrene() {
-  if (!S.met.irene) return Nd('ir_first', [O('Então por que você continua?', () => Nd('ir_porque', [O('Posso ver?', () => Nd('ir_ver', BYE))]), met('irene')), O('Posso ver?', () => Nd('ir_ver', BYE), met('irene'))]);
-  return chat('irene', ['ir_c1', 'ir_c2', 'ir_c3']);
+  if (!S.met.irene) return Nd('ir_first', [O('Então por que você continua?', () => Nd('ir_porque', [O('Posso ver?', () => Nd('ir_ver', BYE))]), metOnce('irene')), O('Posso ver?', () => Nd('ir_ver', BYE), metOnce('irene'))]);
+  return chat('irene', ['ir_c1', 'ir_c2', 'ir_c3', ...(S.found.mare ? ['ir_c4'] : [])]);
 }
 function talkBastiao() {
-  if (!S.met.bastiao) return Nd('ba_first', [O('Só vim conhecer.', () => Nd('ba_conhecer', [O('O que você está fazendo?', () => Nd('ba_ponte', BYE))]), met('bastiao')), O('O que você está fazendo?', () => Nd('ba_ponte', BYE), met('bastiao'))]);
-  return chat('bastiao', ['ba_c1', 'ba_c2', 'ba_c3']);
+  if (!S.met.bastiao) return Nd('ba_first', [O('Só vim conhecer.', () => Nd('ba_conhecer', [O('O que você está fazendo?', () => Nd('ba_ponte', BYE))]), metOnce('bastiao')), O('O que você está fazendo?', () => Nd('ba_ponte', BYE), metOnce('bastiao'))]);
+  return chat('bastiao', ['ba_c1', 'ba_c2', 'ba_c3', 'ba_c4', ...(S.found.mare ? ['ba_c5'] : [])]);
+}
+// ---------- Vila da Maré ----------
+function talkMarta() {
+  if (has('pao')) { const n = Nd('ma_pao', BYE, () => { take('pao'); friend('marta', 2); give('peixe'); toast('Favor', 'Levar o peixe defumado para a Celeste'); }); if (!S.met.marta) { S.met.marta = 1; friend('marta', 1); } return n; }
+  if (isNight()) return Nd('ma_noite', BYE);
+  if (!S.met.marta) return Nd('ma_first', [O('A senhora conhece a Odessa?', () => Nd('ma_odessa', BYE), metOnce('marta')), O('Que lugar bonito.', () => Nd('ma_lugar', BYE), metOnce('marta'))]);
+  if (frLevel('marta') >= 2 && !S.flags.martaAmiga) return Nd('ma_amiga', BYE, () => { S.flags.martaAmiga = 1; });
+  return chat('marta', ['ma_c1', 'ma_c2', 'ma_c3']);
+}
+function talkJoca() {
+  const barco = O('Aquele barco no fim do píer é seu?', () => Nd('jo_barco', BYE), () => { if (!S.boat) { S.boat = 1; toast('O barco do mestre Elias', 'Agora você pode velejar. Ele fica no fim do píer.'); } S.met.joca = S.met.joca || 1; save(); });
+  if (!S.met.joca) return Nd('jo_first', [O('O que você está construindo?', () => Nd('jo_casco', [barco, ...BYE]), metOnce('joca')), barco]);
+  if (!S.boat) return Nd('jo_c1', [barco, ...BYE]);
+  if (S.sailed && !S.flags.jocaDepois) return Nd('jo_depois', BYE, () => { S.flags.jocaDepois = 1; friend('joca', 1); });
+  return chat('joca', ['jo_c1', 'jo_c2', 'jo_c3']);
+}
+function talkTiao() {
+  if (!S.met.tiao) return Nd('ti_first', [O('Está pescando o quê?', () => Nd('ti_pesca', BYE), metOnce('tiao')), O('A Nina é sua filha?', () => Nd('ti_nina', BYE), metOnce('tiao'))]);
+  return chat('tiao', ['ti_c1', 'ti_c2', 'ti_c3']);
+}
+function talkNina() {
+  if (has('desenho')) { const n = Nd('ni_desenho', BYE, () => { take('desenho'); friend('nina', 2); give('concha'); toast('Favor', 'Levar a concha da Nina para o Tomé'); }); if (!S.met.nina) { S.met.nina = 1; friend('nina', 1); } return n; }
+  if (isNight()) return Nd('ni_noite', BYE);
+  if (!S.met.nina) return Nd('ni_first', [O('Pode ser que tenha.', () => Nd('ni_dragao', BYE), metOnce('nina')), O('Baleia canta?', () => Nd('ni_baleia', BYE), metOnce('nina'))]);
+  return chat('nina', ['ni_c1', 'ni_c2', 'ni_c3']);
+}
+function talkDavi() {
+  if (!S.met.davi) return Nd('da_first', [O('Faz tempo que o senhor está aqui?', () => Nd('da_tempo', BYE), metOnce('davi')), O('O que o senhor vê lá de cima?', () => Nd('da_ve', BYE), metOnce('davi'))]);
+  if (!S.fav.carta && !has('carta') && frLevel('davi') >= 1 && (S.chat.davi || 0) >= 1) return Nd('da_carta', [O('Levo, sim.', null, () => { give('carta'); toast('Favor', 'Levar a carta do Seu Davi para a Odessa'); }), O('Outra hora.', null)]);
+  if (isNight()) return Nd('da_noite', BYE);
+  return chat('davi', ['da_c1', 'da_c2', 'da_c3']);
 }
 const met = (id) => () => { S.met[id] = 1; save(); };
 let dlgNPC = null, dlgNode = null, pendingAfterDialog = null;
-function openDialog(n) { if (n.finale) return; document.body.classList.add('cine'); dlgNPC = n; state = 'dialog'; post.bokeh.enabled = perf.level < 2; const node = n.talk(); Voice.prefetch([node.line]); showNode(node); }
+function openDialog(n) { if (n.finale) return; document.body.classList.add('cine'); dlgNPC = n; state = 'dialog'; post.bokeh.enabled = perf.level < 2; chatDaily(n.id); const node = n.talk(); Voice.prefetch([node.line]); showNode(node); }
 function showNode(node) {
-  if (!node) { closeDialog(); return; } dlgNode = node; $('dialog').hidden = false; $('prompt').hidden = true;
+  if (!node) { closeDialog(); return; } dlgNode = node; $('dialog').hidden = false; $('prompt').hidden = true; if (node.act) { const a = node.act; node.act = null; a(); }
   const sp = LINES[node.line] ? LINES[node.line][0] : null; const who = CAST[sp] || { name: dlgNPC.name || '', role: '' };
-  $('dlgName').textContent = who.name; $('dlgRole').textContent = who.role || ''; $('dlgText').textContent = lineText(node.line); $('dlgText').classList.remove('in'); void $('dlgText').offsetWidth; $('dlgText').classList.add('in');
+  $('dlgName').textContent = who.name; $('dlgRole').textContent = (who.role || '') + (S.met[sp] && FRIENDS[sp] ? '  ·  ' + hearts(sp) : ''); $('dlgText').textContent = lineText(node.line); $('dlgText').classList.remove('in'); void $('dlgText').offsetWidth; $('dlgText').classList.add('in');
   Voice.say(node.line, {});
   if (dlgNPC && dlgNPC.h) dlgNPC.h.nod = 1;
   const box = $('dlgOpts'); box.innerHTML = ''; node.opts.forEach((o, i) => { const b = document.createElement('button'); b.innerHTML = `<b>${i + 1}</b>`; b.appendChild(document.createTextNode(o.t)); b.onclick = (e) => { e.stopPropagation(); choose(i); }; box.appendChild(b); });
@@ -529,6 +641,8 @@ function openJournal() {
   for (const pl of [...PLACES].sort((a, b) => (S.lumes[b.id] ? 1 : 0) - (S.lumes[a.id] ? 1 : 0))) { const b = document.createElement('article'); const done = S.lumes[pl.id];
     b.innerHTML = done ? `${sketches[pl.id] ? `<img alt="" src="${sketches[pl.id]}">` : ''}<h3>${pl.name}</h3><p class="cap">${pl.sketch}</p><p>${lineText(pl.reflect)}</p>` : `<h3 class="unk">Um lugar ainda não visto</h3><p class="cap">${pl.hint}</p>`; list.appendChild(b); }
   const notes = Object.keys(S.notes); if (notes.length) { const h = document.createElement('h2'); h.textContent = 'Anotações'; list.appendChild(h); for (const k of notes) { const b = document.createElement('article'); b.innerHTML = `<h3>${NOTES[k].title}</h3><p>${lineText(NOTES[k].line)}</p>`; list.appendChild(b); } }
+  const inv = Object.keys(S.inv); if (inv.length) { const h = document.createElement('h2'); h.textContent = 'Comigo'; list.appendChild(h); for (const k of inv) { const b = document.createElement('article'); b.innerHTML = `<h3>${ITEMS[k].split(' (')[0]}</h3><p class="cap">${ITEMS[k].split(' (')[1]?.replace(')', '') || ''}</p>`; list.appendChild(b); } }
+  const fr = Object.keys(FRIENDS).filter(k => S.met[k]); if (fr.length) { const h = document.createElement('h2'); h.textContent = 'Amizades'; list.appendChild(h); for (const k of fr) { const b = document.createElement('article'); b.innerHTML = `<h3>${CAST[k].name} <span class="hearts">${hearts(k)}</span></h3><p class="cap">${CAST[k].role}</p><p>${FRIENDS[k]}</p>`; list.appendChild(b); } }
   $('journal').hidden = false; if (state === 'play') state = 'journal';
 }
 function closeJournal() { $('journal').hidden = true; if (state === 'journal') state = 'play'; }
@@ -568,8 +682,10 @@ function interactables() {
   if (S.met.odessa) for (const pl of PLACES) { const sp = SPOTS[pl.place]; if (!sp) continue; out.push({ x: sp.x, z: sp.z, r: 3.2, label: S.lumes[pl.id] ? 'Sentar e olhar um pouco' : 'Sentar e contemplar', act: () => S.lumes[pl.id] ? sitAt(spAt(sp), sitThought) : contemplate(pl) }); }
   else for (const pl of PLACES) { const sp = SPOTS[pl.place]; if (sp) out.push({ x: sp.x, z: sp.z, r: 3.2, label: 'Sentar um pouco', act: () => sitAt(spAt(sp), sitThought) }); }
   for (const k in NOTES) { const sp = storySpots[k]; if (sp) out.push({ x: sp.x, z: sp.z, r: 2.4, label: S.notes[k] ? 'Olhar de novo' : 'Observar', act: () => readNote(k) }); }
+  // o barco
+  if (boat && !boat.sailing) { const at = boatAtDock() ? storySpots.barco : { x: boat.x, z: boat.z }; if (Math.abs(at.x - player.x) < 6 && Math.abs(at.z - player.z) < 6) out.push({ x: at.x, z: at.z, r: boatAtDock() ? 2.4 : 4.5, label: S.boat ? 'Velejar no barco do mestre Elias' : 'Olhar o barco', act: () => S.boat ? startSailing() : think('li_barco0') }); }
   // cadeiras, bancos e camas (dentro e fora das casas)
-  for (const st of seats) { if (Math.abs(st.x - player.x) > 2 || Math.abs(st.z - player.z) > 2 || Math.abs(st.y - SIT_H - player.y) > 0.8 || taken.get(st)) continue; out.push({ x: st.x, z: st.z, r: 1.25, label: st.kind === 'chair' ? 'Sentar na cadeira' : st.outdoor ? 'Sentar no banco' : 'Sentar à mesa', act: () => sitAt({ x: st.x, z: st.z, y: st.y, yaw: st.yaw, seat: st }, st.outdoor ? sitThought : () => { $('lapseHint').hidden = false; }) }); }
+  for (const st of seats) { if (st.npcOnly || Math.abs(st.x - player.x) > 2 || Math.abs(st.z - player.z) > 2 || Math.abs(st.y - SIT_H - player.y) > 0.8 || taken.get(st)) continue; out.push({ x: st.x, z: st.z, r: 1.25, label: st.kind === 'chair' ? 'Sentar na cadeira' : st.outdoor ? 'Sentar no banco' : 'Sentar à mesa', act: () => sitAt({ x: st.x, z: st.z, y: st.y, yaw: st.yaw, seat: st }, st.outdoor ? sitThought : () => { $('lapseHint').hidden = false; }) }); }
   for (const b of beds) { if (Math.abs(b.x - player.x) > 2.6 || Math.abs(b.z - player.z) > 2.6 || Math.abs(b.y - 0.5 - player.y) > 0.9 || taken.get(b)) continue; out.push({ x: b.side.x, z: b.side.z, r: 1.6, label: 'Deitar na cama', act: () => lieAt(b) }); }
   return out;
 }
@@ -721,12 +837,12 @@ let hintShown = false; function showLookHint() { if (hintShown) return; hintShow
 document.addEventListener('pointerlockchange', () => { const was = locked; locked = document.pointerLockElement === canvas; if (was && !locked && state === 'play') pauseGame(); });
 document.addEventListener('pointerlockerror', () => { lockFailed = true; showLookHint(); });
 let prevState = 'play';
-function pauseGame() { if (!['play', 'dialog'].includes(state)) return; prevState = state; state = 'paused'; $('pause').hidden = false; $('pauseInfo').textContent = `São ${$('clock').textContent} no vale. ${lumesN()} de 8 lugares no caderno. O progresso fica salvo neste navegador.`; }
-function resume() { $('pause').hidden = true; state = prevState === 'dialog' && dlgNode ? 'dialog' : 'play'; if (state === 'play') { $('dialog').hidden = true; post.bokeh.enabled = false; } requestLock(); }
+function pauseGame() { if (!['play', 'dialog', 'sail', 'fly'].includes(state)) return; prevState = state; state = 'paused'; $('pause').hidden = false; $('pauseInfo').textContent = `São ${$('clock').textContent} no vale. ${lumesN()} de 8 lugares no caderno. O progresso fica salvo neste navegador.`; }
+function resume() { $('pause').hidden = true; state = prevState === 'dialog' && dlgNode ? 'dialog' : (prevState === 'sail' || prevState === 'fly') ? prevState : 'play'; if (state === 'play') { $('dialog').hidden = true; post.bokeh.enabled = false; } requestLock(); }
 let drag = null;
 canvas.addEventListener('mousedown', (e) => { window.focus(); if (state !== 'play') return; if (!locked && !lockFailed && !isTouch) requestLock(); if (!locked) drag = { x: e.clientX, y: e.clientY }; });
 addEventListener('mouseup', () => { drag = null; });
-addEventListener('mousemove', (e) => { if (state !== 'play') return; let mx = 0, my = 0; if (locked) { mx = e.movementX; my = e.movementY; } else if (drag) { mx = e.clientX - drag.x; my = e.clientY - drag.y; drag.x = e.clientX; drag.y = e.clientY; } else return; mx = clamp(mx, -200, 200); my = clamp(my, -200, 200); const s = 0.0019 * (locked ? 1 : 1.6) * settings.sens; cam.yaw -= mx * s; cam.pitch = clamp(cam.pitch - my * s, -1.1, 0.9); if (cam.mode === 'sit') cam.sitK = Math.max(0, (cam.sitK || 0) - 0.02); });
+addEventListener('mousemove', (e) => { if (state !== 'play' && state !== 'sail' && state !== 'fly') return; let mx = 0, my = 0; if (locked) { mx = e.movementX; my = e.movementY; } else if (drag) { mx = e.clientX - drag.x; my = e.clientY - drag.y; drag.x = e.clientX; drag.y = e.clientY; } else return; mx = clamp(mx, -200, 200); my = clamp(my, -200, 200); const s = 0.0019 * (locked ? 1 : 1.6) * settings.sens; cam.yaw -= mx * s; cam.pitch = clamp(cam.pitch - my * s, -1.1, 0.9); cam.boatT = 0; if (cam.mode === 'sit') cam.sitK = Math.max(0, (cam.sitK || 0) - 0.02); });
 canvas.addEventListener('contextmenu', (e) => e.preventDefault());
 addEventListener('keydown', (e) => {
   keys[e.code] = true;
@@ -734,8 +850,9 @@ addEventListener('keydown', (e) => {
   if (state === 'intro' && (e.code === 'Space' || e.code === 'Enter') && !e.repeat) { Voice.stop(); return; }
   if (e.code === 'KeyJ' && !e.repeat) { if (state === 'journal') closeJournal(); else if (state === 'play') openJournal(); return; }
   if (state === 'journal' && e.code === 'Escape') { closeJournal(); return; }
-  if (/^Arrow|Space/.test(e.code) && state === 'play') e.preventDefault(); if (e.repeat) return;
+  if (/^Arrow|Space/.test(e.code) && (state === 'play' || state === 'sail' || state === 'fly')) e.preventDefault(); if (e.repeat) return;
   if (state === 'dialog') { const m = e.code.match(/^(Digit|Numpad)([1-9])$/); if (m) choose(+m[2] - 1); else if (e.code === 'KeyE' || e.code === 'Enter' || e.code === 'Space') { if (Voice.playing) Voice.stop(); else if (dlgNode && dlgNode.opts.length === 1) choose(0); } else if (e.code === 'Escape') closeDialog(); return; }
+  if (state === 'sail') { if (e.code === 'KeyE') stopSailing(); if (e.code === 'KeyM') $('mapView').hidden = !$('mapView').hidden; if (e.code === 'Escape' && lockFailed) pauseGame(); return; }
   if (state !== 'play') return;
   if (e.code === 'KeyL') toggleLantern();
   if (e.code === 'KeyE') interact();
@@ -815,6 +932,8 @@ function frame(fixedDt) {
     if (state === 'lume') { if (player.sit) updateSitting(dt); else { pH.locomote(0); pH.update(dt); } } else if (state === 'finale') { finale.update(dt); } else { pH.locomote(0); pH.update(dt); }
     updateNPCs(dt); if (lume) lume.update(dt, camera.position);
     updateCamera(dt); post.grade.uniforms.letterbox.value = lerp(post.grade.uniforms.letterbox.value, state === 'journal' ? 0 : 1, 1 - Math.exp(-dt * 2));
+  } else if (state === 'sail') {
+    updateSailing(dt); updateNPCs(dt); updateCamera(dt); post.grade.uniforms.letterbox.value = lerp(post.grade.uniforms.letterbox.value, 0, 1 - Math.exp(-dt * 2)); saveT += dt; if (saveT > 12) { saveT = 0; S.boatPos = { x: boat.x, z: boat.z, yaw: boat.yaw }; save(); }
   } else if (state === 'play' || state === 'dialog') {
     updatePlayer(dt); updateNPCs(dt); checkInteract(); if (state === 'play') checkDiscover();
     cam.cine = clamp(cam.cine + (state === 'dialog' && dlgNPC && dlgNPC.h ? dt * 2 : -dt * 3), 0, 1);
@@ -829,9 +948,9 @@ function frame(fixedDt) {
   U.player.value.set(player.x, player.y, player.z);
   sky.update({ x: player.x, y: player.y, z: player.z, camPos: camera.position }, dt);
   const inK = cam.inK || 0; scene.environmentIntensity *= lerp(1, 0.62, inK); renderer.toneMappingExposure *= lerp(1, 1.3, inK);
-  updateAnimals(dt, player, sky.nightF);
+  updateAnimals(dt, player, sky.nightF); updateFauna(dt, elapsed, player, sky.dayF, (x, z, s) => { ripple(x, z, s); for (let i = 0; i < 10; i++) dust.emit({ x: x + rr(-0.15, 0.15), y: WATER + 0.05, z: z + rr(-0.15, 0.15), vx: rr(-0.8, 0.8), vy: rr(1, 2.4), vz: rr(-0.8, 0.8), g: 9, drag: 0.4, life: rr(0.4, 0.7), s0: 0.05, s1: 0.12, c: [0.9, 0.94, 0.95], a0: 0.55, wind: 0 }); });
   updateDoors(dt); updateInteriorLights(dt); updateLantern(dt); updateRipples(dt); updateLamps();
-  updateGiants(dt, elapsed); const obj = state !== 'menu' ? objectives()[0] : null; updateSpirits(dt, elapsed, player, obj ? obj.tgt : null, sky.nightF, player.speed > 0.3); if (motes) motes.update(elapsed, camera.position.x, camera.position.z, sky.dayF, sky.nightF, U.wind.value);
+  updateOcean(); updateHarbor(dt, elapsed, scene); if (boat && state !== 'sail') boat.update(dt, null, elapsed); updateGiants(dt, elapsed); const obj = state !== 'menu' ? objectives()[0] : null; updateSpirits(dt, elapsed, player, obj ? obj.tgt : null, sky.nightF, player.speed > 0.3); if (motes) motes.update(elapsed, camera.position.x, camera.position.z, sky.dayF, sky.nightF, U.wind.value);
   post.updateLook(U.sunDir.value, sky.dayF, sky.nightF, sky.dusk || 0, U.sunColor.value);
   const focus = state === 'menu' ? camera.position : V3(player.x, 0, player.z);
   grass.update(focus.x, focus.z, 2); updateProps(camera.position.x, camera.position.z);
@@ -843,8 +962,8 @@ function frame(fixedDt) {
   let fireNear = 0; for (const f of fires) if (!f.dead && !f.forge) fireNear = Math.max(fireNear, clamp(1 - Math.hypot(f.p.x - player.x, f.p.z - player.z) / 12, 0, 1));
   const ih = insideHouse(player.x, player.z); if (ih) fireNear = Math.max(fireNear, 0.5);
   const lakeD = Math.hypot(player.x - POI.lake.x, player.z - POI.lake.z); const gw = groundH(player.x, player.z);
-  const ruins = ['tower', 'stones', 'garden', 'stairs', 'head', 'peaks', 'shrine', 'bridge'].some(k => Math.hypot(player.x - POI[k].x, player.z - POI[k].z) < 45);
-  Sound.update(dt, { x: camera.position.x, z: camera.position.z, y: player.y, yaw: cam.yaw, windStr: U.windStrength.value, fire: fireNear, trees: clamp(forestDensity(player.x, player.z) * 3 + 0.3, 0, 1), day: sky.dayF, night: sky.nightF, inside: inK > 0.5, lake: clamp(1 - lakeD / 140, 0, 1), shore: clamp(1 - Math.abs(gw - 0.3) / 2.5, 0, 1) * (gw < 3 ? 1 : 0), village: clamp(1 - Math.hypot(player.x, player.z) / 70, 0, 1), hour, ruins, cinematic: ['lume', 'finale', 'intro', 'menu'].includes(state) });
+  const ruins = state !== 'sail' && ['tower', 'stones', 'garden', 'stairs', 'head', 'peaks', 'shrine', 'bridge'].some(k => Math.hypot(player.x - POI[k].x, player.z - POI[k].z) < 45);
+  Sound.update(dt, { x: camera.position.x, z: camera.position.z, y: player.y, yaw: cam.yaw, windStr: U.windStrength.value, fire: fireNear, trees: clamp(forestDensity(player.x, player.z) * 3 + 0.3, 0, 1), day: sky.dayF, night: sky.nightF, inside: inK > 0.5, lake: clamp(1 - lakeD / 140, 0, 1), sea: surfNear(camera.position.x, camera.position.z), shore: state === 'sail' ? 0.35 + clamp(boat.speed / 4, 0, 0.5) : clamp(1 - Math.abs(gw - 0.3) / 2.5, 0, 1) * (gw < 3 ? 1 : 0) * (1 - surfNear(player.x, player.z)), village: clamp(1 - Math.hypot(player.x, player.z) / 70, 0, 1), hour, ruins, cinematic: ['lume', 'finale', 'intro', 'menu'].includes(state) });
   if (!MANUAL || window.__renderNow) post.render(dt, elapsed);
   if (fpsAcc > 1) { window.__fps = fpsN / fpsAcc; fpsAcc = 0; fpsN = 0; }
 }
@@ -857,7 +976,7 @@ $('startBtn').addEventListener('click', () => {
   const go = () => { if (!S.letter && !MANUAL) startIntro(); else { state = 'play'; requestLock(); Music.silence = 6; } };
   if (Sound.ctx) { const w = setInterval(() => { if (Sound.ready) { clearInterval(w); go(); } }, 100); setTimeout(() => { clearInterval(w); if (state === 'menu') go(); }, 6000); } else go();
 });
-window.__game = { storySpots, groundH, probe, get nav() { return nav; }, npcPlan, planRoute, sky: () => sky, post: () => post, camera, scene, player, S, npcs, cam, renderer, trees, grass, SPOTS, PLACES, get state() { return state; }, set state(v) { state = v; }, setHour: (h) => { hour = h; }, get hour() { return hour; }, tick: (dt, n = 1) => { for (let i = 0; i < n; i++) frame(dt); }, startLume: (i) => startLume(PLACES[i]), lieAt, seats, beds, Human, startFinale: () => startFinale(), openJournal, openDialog, choose, get pH() { return pH; }, toggleLantern, sitAt, interiors, think, Voice, Music };
+window.__game = { FAUNA, get boat() { return boat; }, startSailing, stopSailing, harbor, storySpots, groundH, probe, get nav() { return nav; }, npcPlan, planRoute, sky: () => sky, post: () => post, camera, scene, player, S, npcs, cam, renderer, trees, grass, SPOTS, PLACES, get state() { return state; }, set state(v) { state = v; }, setHour: (h) => { hour = h; }, get hour() { return hour; }, tick: (dt, n = 1) => { for (let i = 0; i < n; i++) frame(dt); }, startLume: (i) => startLume(PLACES[i]), lieAt, seats, beds, Human, startFinale: () => startFinale(), openJournal, openDialog, choose, get pH() { return pH; }, toggleLantern, sitAt, interiors, think, Voice, Music };
 renderer.domElement.addEventListener('webglcontextlost', (e) => { e.preventDefault(); store.set('aldren2-q', settings.quality === 'alta' ? 'media' : 'baixa'); $('loading').textContent = 'A placa de vídeo reiniciou. Recarregando com gráficos mais leves…'; $('menu').hidden = false; $('loadBar').parentElement.hidden = true; setTimeout(() => location.reload(), 1500); });
 document.addEventListener('visibilitychange', () => { if (Sound.ctx) { if (document.hidden) Sound.ctx.suspend(); else Sound.ctx.resume(); } if (document.hidden && state === 'play') pauseGame(); });
 boot().catch((e) => { console.error(e); $('loading').textContent = 'Falha ao carregar: ' + e.message; });
