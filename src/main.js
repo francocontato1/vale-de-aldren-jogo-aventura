@@ -17,6 +17,7 @@ import { buildProps, updateProps, setPropRadius } from './world/props.js';
 import { loadHumanLibrary, Human } from './actors/human.js';
 import { loadAnimals, spawnAnimals, updateAnimals } from './actors/animals.js';
 import { spawnFauna, updateFauna, F as FAUNA } from './actors/fauna.js';
+import { updateCuriosities, CURIO } from './world/curiosities.js';
 import { loadDragon, Dragon } from './actors/dragon.js';
 import { Post } from './post.js';
 import { Sound, Music, Voice, Speech, preloadSounds } from './audio.js';
@@ -123,7 +124,7 @@ async function boot() {
   const [hbx, hbz] = fromUV(HARBOR.u, HARBOR.v);
   const vEx = (x, z) => Math.hypot(x, z) < 62 || Math.hypot(x - hbx, z - hbz) < 58 || sandAt(x, z) > 0.3 || zones.some(zn => Math.hypot(x - zn[0], z - zn[1]) < zn[2]) || giants.some(g => Math.hypot(x - g.x, z - g.z) < 18) || creekDist(x, z) < 2.5;
   await step('Espalhando pedras e flores…', 0.48, () => buildProps(scene, { avoid: (x, z, r) => vEx(x, z) || pathDistOK(x, z, r), addCircle: addCirc, villageExclude: vEx, zones: FLOWER_ZONES() }));
-  await step('Plantando a floresta…', 0.56, () => trees.scatter({ avoid: (x, z, r) => vEx(x, z) || pathDistOK(x, z, r + 1) || aqueductNear(x, z), forestDensity, groundH, normalY, onTree: (it) => { if (it.v.sp.type !== 'bush') addCirc(it.x, it.z, (it.v.sp.type === 'pine' ? 0.28 : 0.36) * it.s); }, extra: [[-12, -32, 'oakA', 1], [34, -12, 'oakB', 0.9], [-38, 22, 'ashA', 1], [10, 44, 'oakA', 1.1], [-52, -16, 'pineA', 1], [storySpots.treeRoot.x, storySpots.treeRoot.z, 'oakB', 1.45], [POI.shrine.x - 4, POI.shrine.z - 5, 'oakB', 1.5]] }));
+  await step('Plantando a floresta…', 0.56, () => trees.scatter({ avoid: (x, z, r) => vEx(x, z) || pathDistOK(x, z, r + 1) || aqueductNear(x, z) || curioNear(x, z), forestDensity, groundH, normalY, onTree: (it) => { if (it.v.sp.type !== 'bush') addCirc(it.x, it.z, (it.v.sp.type === 'pine' ? 0.28 : 0.36) * it.s); }, extra: [[-12, -32, 'oakA', 1], [34, -12, 'oakB', 0.9], [-38, 22, 'ashA', 1], [10, 44, 'oakA', 1.1], [-52, -16, 'pineA', 1], [storySpots.treeRoot.x, storySpots.treeRoot.z, 'oakB', 1.45], [POI.shrine.x - 4, POI.shrine.z - 5, 'oakB', 1.5]] }));
   grass = new Grass(scene, { exclude: (x, z) => sandAt(x, z) > 0.45 || inFootprint(x, z, 0.1) || insideBox(x, z, 0.4) || treeHit(x, z) || Math.hypot(x - POI.observatory.x, z - POI.observatory.z) < 9.3 });
   await step('Chamando os moradores…', 0.66, () => Promise.all([loadHumanLibrary(), loadAnimals(), loadDragon()]));
   initSpirits(); motes = new Motes(260);
@@ -146,6 +147,8 @@ async function boot() {
   clock.start(); if (!MANUAL) requestAnimationFrame(rafFrame); else frame(0.016);
 }
 function pathDistOK(x, z, r) { for (const p of PATHS) for (let i = 0; i < p.length - 1; i++) { const [x1, z1] = p[i], [x2, z2] = p[i + 1]; const dx = x2 - x1, dz = z2 - z1; const t = clamp(((x - x1) * dx + (z - z1) * dz) / (dx * dx + dz * dz), 0, 1); if (Math.hypot(x1 + dx * t - x, z1 + dz * t - z) < 3 + r) return true; } return false; }
+const CURIO_KEYS = ['cogumelos', 'tronco', 'colmeia', 'ninhoAve', 'amoras', 'estrela', 'fonte', 'cabana', 'arvoreNomes'];
+function curioNear(x, z) { for (const k of CURIO_KEYS) { const p = storySpots[k]; if (p && Math.hypot(p.x - x, p.z - z) < 7) return true; } return false; }
 function aqueductNear(x, z) { const A = [-104, 18], B = [-44, 112]; const dx = B[0] - A[0], dz = B[1] - A[1]; const t = clamp(((x - A[0]) * dx + (z - A[1]) * dz) / (dx * dx + dz * dz), 0, 1); return Math.hypot(A[0] + dx * t - x, A[1] + dz * t - z) < 5; }
 
 // os quatro gigantes e o rosto entre as flores
@@ -993,7 +996,7 @@ function frame(fixedDt) {
   U.player.value.set(player.x, player.y, player.z);
   sky.update({ x: player.x, y: player.y, z: player.z, camPos: camera.position }, dt);
   const inK = cam.inK || 0; scene.environmentIntensity *= lerp(1, 0.62, inK); renderer.toneMappingExposure *= lerp(1, 1.3, inK);
-  updateAnimals(dt, player, sky.nightF); updateFauna(dt, elapsed, player, sky.dayF, (x, z, s) => { ripple(x, z, s); for (let i = 0; i < 10; i++) dust.emit({ x: x + rr(-0.15, 0.15), y: WATER + 0.05, z: z + rr(-0.15, 0.15), vx: rr(-0.8, 0.8), vy: rr(1, 2.4), vz: rr(-0.8, 0.8), g: 9, drag: 0.4, life: rr(0.4, 0.7), s0: 0.05, s1: 0.12, c: [0.9, 0.94, 0.95], a0: 0.55, wind: 0 }); });
+  updateCuriosities(dt, elapsed, (o) => dust.emit(o)); updateAnimals(dt, player, sky.nightF); updateFauna(dt, elapsed, player, sky.dayF, (x, z, s) => { ripple(x, z, s); for (let i = 0; i < 10; i++) dust.emit({ x: x + rr(-0.15, 0.15), y: WATER + 0.05, z: z + rr(-0.15, 0.15), vx: rr(-0.8, 0.8), vy: rr(1, 2.4), vz: rr(-0.8, 0.8), g: 9, drag: 0.4, life: rr(0.4, 0.7), s0: 0.05, s1: 0.12, c: [0.9, 0.94, 0.95], a0: 0.55, wind: 0 }); });
   updateDoors(dt); updateInteriorLights(dt); updateLantern(dt); updateRipples(dt); updateLamps();
   if (alva && state !== 'fly') { alva.update(dt, null, player); if (alva.alert > 0.9 && state === 'play' && !S.alva && (!alva.spookT || elapsed - alva.spookT > 40)) { alva.spookT = elapsed; think('li_alva_corre'); } }
   updateOcean(); updateHarbor(dt, elapsed, scene); if (boat && state !== 'sail') boat.update(dt, null, elapsed); updateGiants(dt, elapsed); const obj = state !== 'menu' ? objectives()[0] : null; updateSpirits(dt, elapsed, player, obj ? obj.tgt : null, sky.nightF, player.speed > 0.3); if (motes) motes.update(elapsed, camera.position.x, camera.position.z, sky.dayF, sky.nightF, U.wind.value);

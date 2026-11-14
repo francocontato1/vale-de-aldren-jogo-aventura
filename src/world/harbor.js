@@ -86,7 +86,7 @@ export function buildHarbor() {
     { const dome = new THREE.SphereGeometry(1.35, 18, 8, 0, Math.PI * 2, 0, Math.PI / 2); put(dome, M.canvasRed, mtx(0, 3.15 + H, 0, 0, 0, 0, R)); cyl(0.05, 0.12, 0.6, 6, M.iron, 1, mtx(0, 4.7 + H, 0, 0, 0, 0, R)); }
     box(1.0, 2.1, 0.3, M.paint.blue, 1, mtx(0, 1.95, 2.05, 0, 0, 0, R)); addCircle(x, z, 2.4);
     const top = new THREE.Vector3(0, 2.3 + H, 0).applyMatrix4(R); harbor.light = { top, x, z, h: y + H };
-    storySpots.farol = new THREE.Vector3(0, 0, 3.6).applyMatrix4(R); storySpots.farol.y = groundH(storySpots.farol.x, storySpots.farol.z); storySpots.davi = storySpots.farol.clone(); storySpots.daviYaw = SEA_ROT;
+    storySpots.farol = new THREE.Vector3(0, 0, 3.6).applyMatrix4(R); storySpots.farol.y = groundH(storySpots.farol.x, storySpots.farol.z); storySpots.davi = new THREE.Vector3(2.8, 0, 3.0).applyMatrix4(R); storySpots.davi.y = groundH(storySpots.davi.x, storySpots.davi.z); storySpots.daviYaw = SEA_ROT;
     // casa do faroleiro ao lado
     const [hx, hz] = fromUV(best.u - 9, best.v + 8); house(hx, hz, SEA_ROT + 0.3, { role: 'faroleiro', w: 6.2, d: 5, floors: 1, lower: 'plasterWhite', roof: 'roofDark', door: 'blue', shutters: 'blue' });
   }

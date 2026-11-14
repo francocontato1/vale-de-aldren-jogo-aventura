@@ -18,9 +18,18 @@ const GodRaysShader = {
     illum /= 40.0; float fall = exp(-dist * 1.6);
     gl_FragColor = vec4(base.rgb + tint * illum * strength * fall, base.a); }`,
 };
+// nitidez adaptativa ao contraste (devolve o detalhe que o FXAA suaviza, sem halos fortes)
+const SharpenShader = {
+  uniforms: { tDiffuse: { value: null }, texel: { value: new THREE.Vector2() }, amount: { value: 0.3 } },
+  vertexShader: 'varying vec2 vUv;void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',
+  fragmentShader: `uniform sampler2D tDiffuse; uniform vec2 texel; uniform float amount; varying vec2 vUv;
+  void main(){ vec3 c = texture2D(tDiffuse, vUv).rgb; vec3 n = texture2D(tDiffuse, vUv + vec2(0., texel.y)).rgb, s = texture2D(tDiffuse, vUv - vec2(0., texel.y)).rgb, e = texture2D(tDiffuse, vUv + vec2(texel.x, 0.)).rgb, w = texture2D(tDiffuse, vUv - vec2(texel.x, 0.)).rgb;
+    vec3 mn = min(c, min(min(n, s), min(e, w))), mx = max(c, max(max(n, s), max(e, w))); vec3 amp = sqrt(clamp(min(mn, 2.0 - mx) / max(mx, 1e-4), 0., 1.));
+    vec3 wgt = -amp * amount * 0.25; vec3 o = (c + (n + s + e + w) * wgt) / (1.0 + 4.0 * wgt); gl_FragColor = vec4(clamp(o, 0., 1.), 1.); }`,
+};
 // film grade: applied after tone mapping (display space)
 const GradeShader = {
-  uniforms: { tDiffuse: { value: null }, time: { value: 0 }, vignette: { value: 0.34 }, grain: { value: 0.03 }, letterbox: { value: 0 }, sat: { value: 1.06 }, hurt: { value: 0 }, aspect: { value: 1.7 }, lift: { value: new THREE.Color(0.0, 0.0, 0.0) }, gain: { value: new THREE.Color(1, 1, 1) }, contrast: { value: 0.18 }, fade: { value: 0 } },
+  uniforms: { tDiffuse: { value: null }, time: { value: 0 }, vignette: { value: 0.34 }, grain: { value: 0.016 }, letterbox: { value: 0 }, sat: { value: 1.06 }, hurt: { value: 0 }, aspect: { value: 1.7 }, lift: { value: new THREE.Color(0.0, 0.0, 0.0) }, gain: { value: new THREE.Color(1, 1, 1) }, contrast: { value: 0.18 }, fade: { value: 0 } },
   vertexShader: 'varying vec2 vUv;void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',
   fragmentShader: `uniform sampler2D tDiffuse;uniform float time,vignette,grain,letterbox,sat,hurt,aspect,contrast,fade;uniform vec3 lift,gain;varying vec2 vUv;
   float h(vec2 p){return fract(sin(dot(p,vec2(12.9898,78.233)))*43758.5453);}
@@ -57,11 +66,13 @@ export class Post {
     this.composer.addPass(new OutputPass());
     this.grade = new ShaderPass(GradeShader); this.composer.addPass(this.grade);
     if (!q.msaa) { this.fxaa = new ShaderPass(FXAAShader); this.fxaa.uniforms.resolution.value.set(1 / size.x, 1 / size.y); this.composer.addPass(this.fxaa); } else this.fxaa = null;
+    this.sharpen = null; if (q.sharpen) { this.sharpen = new ShaderPass(SharpenShader); this.sharpen.uniforms.texel.value.set(1 / size.x, 1 / size.y); this.sharpen.uniforms.amount.value = q.sharpen; this.composer.addPass(this.sharpen); }
   }
   setSize(w, h) {
     this.composer.setSize(w, h);
     const s = renderer.getDrawingBufferSize(new THREE.Vector2());
     if (this.fxaa) this.fxaa.uniforms.resolution.value.set(1 / s.x, 1 / s.y);
+    if (this.sharpen) this.sharpen.uniforms.texel.value.set(1 / s.x, 1 / s.y);
     this.grade.uniforms.aspect.value = w / h; this.rays.uniforms.aspect.value = w / h;
   }
   // per-frame look: sun shafts + time-of-day grading

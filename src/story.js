@@ -244,6 +244,16 @@ export const LINES = {
   li_mar: ['lia', 'O mar. Daqui de cima, o vale parecia um mundo inteiro. Ele termina aqui, na areia, e começa outra coisa.', 'tender'],
   li_barco0: ['lia', 'Um barco bonito, bem cuidado. Melhor perguntar de quem é antes de sair com ele.', 'neutral'],
   li_barco: ['lia', 'O barco do mestre Elias. Puxa um pouco para a esquerda, mesmo. Deve ser saudade.', 'tender'],
+  li_cogumelos: ['lia', 'Um círculo perfeito de cogumelos. A Nina diria que é uma porta. O Anselmo diria que choveu. Os dois devem ter razão.', 'tender'],
+  li_tronco: ['lia', 'Um tronco oco, cheio de folhas secas. Alguma raposa dorme aqui, dá para sentir o cheiro. Melhor não incomodar.', 'neutral'],
+  li_colmeia: ['lia', 'Uma colmeia num toco velho. As abelhas nem ligam para mim. Estão ocupadas demais sendo abelhas.', 'happy'],
+  li_ninho: ['lia', 'Três ovos azulados. A mãe deve estar por perto, me olhando de algum galho. Já estou indo, já estou indo.', 'tender'],
+  li_amoras: ['lia', 'Amoras maduras. Doces, quentes de sol. Agora as minhas mãos estão roxas, mas valeu a pena.', 'happy'],
+  li_estrela_pedra: ['lia', 'Uma estrela gravada na pedra, quase apagada pelo musgo. Igual à do Tomé. Os Veladores marcavam os caminhos que davam para o céu.', 'surprised'],
+  li_fonte: ['lia', 'Água brotando da pedra, gelada. Alguém colocou um cano de ferro aqui há muito tempo, para quem passasse com sede. Obrigada, quem quer que tenha sido.', 'tender'],
+  li_cabana: ['lia', 'Uma cabana de caçador. A lanterna está apagada há anos, mas a lenha está empilhada, pronta. Como se alguém fosse voltar.', 'neutral'],
+  li_arvore_nomes: ['lia', 'Nomes gravados na casca, uns por cima dos outros. Os mais antigos a árvore já engoliu. Ela guarda todo mundo, crescendo devagar por cima.', 'tender'],
+  li_farol: ['lia', 'O farol do Seu Davi. Quarenta e dois anos acendendo uma luz para ninguém. Ou para todo mundo, depende de como se olha.', 'tender'],
   li_dormindo: ['lia', 'Está dormindo. Melhor não acordar. Amanhã a gente conversa.', 'tender'],
 };
 
@@ -286,6 +296,16 @@ export const NOTES = {
   santuario: { title: 'O santuário da floresta', line: 'li_santuario' },
   banco: { title: 'O banco do poente', line: 'li_banco' },
   poco: { title: 'O poço', line: 'li_poco' },
+  cogumelos: { title: 'O círculo de cogumelos', line: 'li_cogumelos' },
+  tronco: { title: 'O tronco oco', line: 'li_tronco' },
+  colmeia: { title: 'A colmeia', line: 'li_colmeia' },
+  ninhoAve: { title: 'O ninho', line: 'li_ninho' },
+  amoras: { title: 'A amoreira', line: 'li_amoras' },
+  estrela: { title: 'A pedra da estrela', line: 'li_estrela_pedra' },
+  fonte: { title: 'A fonte na pedra', line: 'li_fonte' },
+  cabana: { title: 'A cabana do caçador', line: 'li_cabana' },
+  arvoreNomes: { title: 'A árvore dos nomes', line: 'li_arvore_nomes' },
+  farol: { title: 'O farol', line: 'li_farol' },
 };
 
 // amizades: o que a Lia anota no caderno sobre cada um

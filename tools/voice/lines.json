@@ -682,5 +682,431 @@
   "speaker": "lia",
   "text": "Uma estrela cadente. Esqueci de fazer um pedido. Tudo bem. Ver já foi bom.",
   "emotion": "happy"
+ },
+ {
+  "id": "ma_first",
+  "speaker": "marta",
+  "text": "Olha só, gente nova na Maré! Senta, senta. Você é a moça do mapa? A Odessa mandou avisar que você viria. Quer dizer, mandou avisar há três anos. Mas veio, né?",
+  "emotion": "excited"
+ },
+ {
+  "id": "ma_odessa",
+  "speaker": "marta",
+  "text": "Todo mundo conhece. Ela desce aqui uma vez por década, compra sal e pergunta se o mar continua no mesmo lugar. Continua, eu digo. Ela sempre parece aliviada.",
+  "emotion": "happy"
+ },
+ {
+  "id": "ma_lugar",
+  "speaker": "marta",
+  "text": "É, né? A gente reclama do vento, do sal, do frio. Mas ninguém vai embora.",
+  "emotion": "tender"
+ },
+ {
+  "id": "ma_c1",
+  "speaker": "marta",
+  "text": "Peixe bom a gente reconhece pelo olho. Gente também.",
+  "emotion": "neutral"
+ },
+ {
+  "id": "ma_c2",
+  "speaker": "marta",
+  "text": "O Tião pesca, a Nina canta, o Joca martela. E eu conto tudo para todo mundo. Cada um com o seu talento.",
+  "emotion": "happy"
+ },
+ {
+  "id": "ma_c3",
+  "speaker": "marta",
+  "text": "Quando o farol acende, eu fecho a taberna. É o Davi dizendo boa noite para a vila inteira.",
+  "emotion": "tender"
+ },
+ {
+  "id": "ma_noite",
+  "speaker": "marta",
+  "text": "A taberna já fechou, querida. Mas a porta fica sempre só encostada.",
+  "emotion": "tired"
+ },
+ {
+  "id": "ma_pao",
+  "speaker": "marta",
+  "text": "Pão da Celeste! Ainda morno, como ela consegue? Toma, leva este peixe defumado para ela. E diz que o sal é por minha conta, como sempre.",
+  "emotion": "excited"
+ },
+ {
+  "id": "ma_amiga",
+  "speaker": "marta",
+  "text": "Você já é de casa, sabia? Aqui a gente não pergunta de onde a pessoa veio. Pergunta se ela já comeu.",
+  "emotion": "tender"
+ },
+ {
+  "id": "jo_first",
+  "speaker": "joca",
+  "text": "Opa. Cuidado com a serragem. Você é a cartógrafa? Então desenha aí no mapa: aqui mora o melhor construtor de barcos do vale. Que também é o único.",
+  "emotion": "happy"
+ },
+ {
+  "id": "jo_casco",
+  "speaker": "joca",
+  "text": "Um barco para o Tião. O dele já é mais remendo do que barco. Este aqui fica pronto na primavera. Ou na outra.",
+  "emotion": "neutral"
+ },
+ {
+  "id": "jo_barco",
+  "speaker": "joca",
+  "text": "Aquele, no fim do píer? Era do mestre Elias, marido da Celeste. Ele dizia que barco parado apodrece por dentro. Se quiser, leva para passear. Só traz de volta inteiro.",
+  "emotion": "tender"
+ },
+ {
+  "id": "jo_c1",
+  "speaker": "joca",
+  "text": "Tábua de barco a gente curva devagar, com vapor e paciência. Igual gente teimosa.",
+  "emotion": "happy"
+ },
+ {
+  "id": "jo_c2",
+  "speaker": "joca",
+  "text": "Aprendi tudo com o mestre Elias. Ele conversava com os barcos. Eu achava doideira. Hoje eu converso também.",
+  "emotion": "tender"
+ },
+ {
+  "id": "jo_c3",
+  "speaker": "joca",
+  "text": "Vento pelo lado é o melhor. Vento de frente, nem tente: o barco para e a vela fica batendo. Aí é virar um pouco e ir em zigue-zague.",
+  "emotion": "neutral"
+ },
+ {
+  "id": "jo_depois",
+  "speaker": "joca",
+  "text": "E aí, velejou? Ela puxa um pouco para a esquerda, né? O mestre dizia que era saudade.",
+  "emotion": "happy"
+ },
+ {
+  "id": "ti_first",
+  "speaker": "tiao",
+  "text": "Psiu. Fala baixinho que os peixes escutam. Brincadeira, peixe não escuta nada. Mas eu gosto do silêncio.",
+  "emotion": "happy"
+ },
+ {
+  "id": "ti_pesca",
+  "speaker": "tiao",
+  "text": "Hoje? Paciência. O peixe é só a desculpa.",
+  "emotion": "tender"
+ },
+ {
+  "id": "ti_nina",
+  "speaker": "tiao",
+  "text": "É sim. Ela coleciona conchas, histórias e perguntas. As perguntas eu não sei responder. As conchas eu ajudo a achar.",
+  "emotion": "tender"
+ },
+ {
+  "id": "ti_c1",
+  "speaker": "tiao",
+  "text": "Tem dia que o peixe não vem. Aí eu fico olhando a água. Não é tempo perdido. É tempo de pescador.",
+  "emotion": "tender"
+ },
+ {
+  "id": "ti_c2",
+  "speaker": "tiao",
+  "text": "Quando o mar fica liso assim, feito espelho, minha avó dizia que era o céu se olhando.",
+  "emotion": "tender"
+ },
+ {
+  "id": "ti_c3",
+  "speaker": "tiao",
+  "text": "Se for velejar, volte antes do farol acender. Não é perigo, não. É que a Marta fica preocupada e fala o dobro.",
+  "emotion": "happy"
+ },
+ {
+  "id": "ni_first",
+  "speaker": "nina",
+  "text": "Oi! Você veio das montanhas? Lá tem dragão? A Marta diz que não tem. Mas ela também diz que baleia não canta, e canta sim!",
+  "emotion": "excited"
+ },
+ {
+  "id": "ni_dragao",
+  "speaker": "nina",
+  "text": "Eu sabia! Quando eu crescer vou subir lá e pedir carona. Se ela deixar.",
+  "emotion": "excited"
+ },
+ {
+  "id": "ni_baleia",
+  "speaker": "nina",
+  "text": "Canta! Uma vez eu ouvi, de noite, deitada no píer. Era um som comprido, assim: uuuuuu. O papai disse que era o vento. Não era.",
+  "emotion": "excited"
+ },
+ {
+  "id": "ni_c1",
+  "speaker": "nina",
+  "text": "Sabia que areia é pedra que ficou muito tempo no mar? Daqui a mil anos o gigante do lago vira praia.",
+  "emotion": "happy"
+ },
+ {
+  "id": "ni_c2",
+  "speaker": "nina",
+  "text": "Eu tenho quarenta e sete conchas. Cada uma tem um nome. A favorita se chama Dona Concha.",
+  "emotion": "happy"
+ },
+ {
+  "id": "ni_c3",
+  "speaker": "nina",
+  "text": "Se você deitar na areia de olho fechado, dá para sentir a terra respirando. É a onda. Mas parece respiração.",
+  "emotion": "tender"
+ },
+ {
+  "id": "ni_desenho",
+  "speaker": "nina",
+  "text": "Um gigante! Ele desenha bem, né? Diz para ele que baleia existe sim. Leva esta concha para ele. Encostando no ouvido, dá para ouvir o mar.",
+  "emotion": "excited"
+ },
+ {
+  "id": "ni_noite",
+  "speaker": "nina",
+  "text": "Eu devia estar dormindo. Mas a lua está tão grande hoje. Não conta para o papai.",
+  "emotion": "tender"
+ },
+ {
+  "id": "da_first",
+  "speaker": "davi",
+  "text": "Boa tarde. Ou boa noite, daqui a pouco. Sou o Davi, cuido do farol. Quer dizer, o farol se cuida sozinho. Eu só subo para fazer companhia.",
+  "emotion": "tender"
+ },
+ {
+  "id": "da_tempo",
+  "speaker": "davi",
+  "text": "Quarenta e dois anos. Nunca vi um navio passar. Mas acendo toda noite. Vai que um dia alguém se perde.",
+  "emotion": "tender"
+ },
+ {
+  "id": "da_ve",
+  "speaker": "davi",
+  "text": "O mar inteiro, o vale inteiro. E às vezes uma sombra enorme passando na frente da lua. A Odessa diz que é nuvem. Ela mente muito mal.",
+  "emotion": "happy"
+ },
+ {
+  "id": "da_c1",
+  "speaker": "davi",
+  "text": "Farol é igual vela de aniversário. Ninguém repara, até a hora em que precisa.",
+  "emotion": "neutral"
+ },
+ {
+  "id": "da_c2",
+  "speaker": "davi",
+  "text": "Daqui de noite dá para ver o observatório, sabia? Uma luzinha lá no alto. Eu pisco o farol para ela. Ela nunca pisca de volta.",
+  "emotion": "tender"
+ },
+ {
+  "id": "da_c3",
+  "speaker": "davi",
+  "text": "O mar ensina uma coisa: tudo volta. A maré, os barcos, as pessoas. Só demora.",
+  "emotion": "tender"
+ },
+ {
+  "id": "da_carta",
+  "speaker": "davi",
+  "text": "Você conhece a Odessa? Velha amiga. Faz quarenta anos que a gente se escreve, e ela leva uns dez para responder. Leva esta carta? Quem sabe ela responde em cinco.",
+  "emotion": "happy"
+ },
+ {
+  "id": "da_noite",
+  "speaker": "davi",
+  "text": "Boa noite, cartógrafa. Fica aí embaixo e olha para cima. Daqui a pouco eu pisco para você.",
+  "emotion": "tender"
+ },
+ {
+  "id": "ce_cesta",
+  "speaker": "celeste",
+  "text": "Você vai para os lados do mar? Então leva este pão para a Marta, da taberna da Maré. A gente troca pão por peixe desde antes de você nascer.",
+  "emotion": "happy"
+ },
+ {
+  "id": "ce_peixe",
+  "speaker": "celeste",
+  "text": "Peixe da Marta! Ela sempre manda o melhor. Sabia que foi ela que me ensinou a fazer pão de sal? Obrigada, querida. Volta amanhã que eu guardo um para você.",
+  "emotion": "excited"
+ },
+ {
+  "id": "ce_barco",
+  "speaker": "celeste",
+  "text": "Você velejou o barco do Elias? ... Que bom. Ele ia gostar de saber que alguém ainda leva ele para ver o mar.",
+  "emotion": "sad"
+ },
+ {
+  "id": "ce_c4",
+  "speaker": "celeste",
+  "text": "A Marta e eu trocamos pão por peixe há trinta anos. Nunca escrevemos nada. Amizade boa não precisa de recibo.",
+  "emotion": "tender"
+ },
+ {
+  "id": "to_nina",
+  "speaker": "tome",
+  "text": "Você vai para o mar? Lá mora a Nina. Ela diz que já viu uma baleia. Eu acho que é mentira. Entrega este desenho para ela? É um gigante. Para ela ver que aqui também tem coisa grande.",
+  "emotion": "excited"
+ },
+ {
+  "id": "to_concha",
+  "speaker": "tome",
+  "text": "Dá para ouvir o mar mesmo! Ou é o meu ouvido? Tanto faz. Vou guardar debaixo do travesseiro.",
+  "emotion": "excited"
+ },
+ {
+  "id": "to_c4",
+  "speaker": "tome",
+  "text": "A Nina viu uma baleia. Eu vi um gigante. Empate.",
+  "emotion": "happy"
+ },
+ {
+  "id": "od_carta",
+  "speaker": "odessa",
+  "text": "Do Davi? Ele ainda escreve à mão. Bom. Diga a ele que... não, eu mesma digo. Vou responder ainda neste século.",
+  "emotion": "tender"
+ },
+ {
+  "id": "od_alva",
+  "speaker": "odessa",
+  "text": "A sombra no céu? É a Vésper. A última dragoa dos Veladores. Tem o nome da estrela da tarde. Mora lá no alto, perto da gigante do monte. Se você chegar devagar, ela deixa você chegar perto. Se chegar correndo, ela vai embora e só volta daqui a um ano.",
+  "emotion": "tender"
+ },
+ {
+  "id": "an_c4",
+  "speaker": "anselmo",
+  "text": "Você foi até a Maré? A Marta fala por três, mas o peixe dela vale por quatro.",
+  "emotion": "happy"
+ },
+ {
+  "id": "an_c5",
+  "speaker": "anselmo",
+  "text": "Quando eu era moço, desci até o mar com as ovelhas. Elas olharam a água um tempão e voltaram. Ovelha é bicho sábio.",
+  "emotion": "tender"
+ },
+ {
+  "id": "ir_c4",
+  "speaker": "irene",
+  "text": "Tentei pintar o mar uma vez. Usei todo o azul que eu tinha e ainda faltou.",
+  "emotion": "happy"
+ },
+ {
+  "id": "ba_c4",
+  "speaker": "bastiao",
+  "text": "Montei o cimbre embaixo da ponte. Agora falta pedra, tempo e coragem. Pedra tem.",
+  "emotion": "neutral"
+ },
+ {
+  "id": "ba_c5",
+  "speaker": "bastiao",
+  "text": "O Joca, da Maré, me pediu tábua de carvalho. Barco e ponte são parentes. Os dois levam a gente para o outro lado.",
+  "emotion": "tender"
+ },
+ {
+  "id": "li_alva_corre",
+  "speaker": "lia",
+  "text": "Ela levantou a cabeça. Acho que eu cheguei rápido demais. Devagar, Lia.",
+  "emotion": "surprised"
+ },
+ {
+  "id": "li_alva1",
+  "speaker": "lia",
+  "text": "Ela é enorme. E está me olhando como quem decide se eu sou uma pergunta ou uma resposta.",
+  "emotion": "tender"
+ },
+ {
+  "id": "li_alva2",
+  "speaker": "lia",
+  "text": "Ela abaixou a cabeça até o chão. Acho que é um convite.",
+  "emotion": "tender"
+ },
+ {
+  "id": "li_voo",
+  "speaker": "lia",
+  "text": "O vale inteiro cabe debaixo das asas dela.",
+  "emotion": "excited"
+ },
+ {
+  "id": "li_voo_fim",
+  "speaker": "lia",
+  "text": "Obrigada, Vésper. Eu nunca mais vou olhar para um mapa do mesmo jeito.",
+  "emotion": "tender"
+ },
+ {
+  "id": "li_mar",
+  "speaker": "lia",
+  "text": "O mar. Daqui de cima, o vale parecia um mundo inteiro. Ele termina aqui, na areia, e começa outra coisa.",
+  "emotion": "tender"
+ },
+ {
+  "id": "li_barco0",
+  "speaker": "lia",
+  "text": "Um barco bonito, bem cuidado. Melhor perguntar de quem é antes de sair com ele.",
+  "emotion": "neutral"
+ },
+ {
+  "id": "li_barco",
+  "speaker": "lia",
+  "text": "O barco do mestre Elias. Puxa um pouco para a esquerda, mesmo. Deve ser saudade.",
+  "emotion": "tender"
+ },
+ {
+  "id": "li_cogumelos",
+  "speaker": "lia",
+  "text": "Um círculo perfeito de cogumelos. A Nina diria que é uma porta. O Anselmo diria que choveu. Os dois devem ter razão.",
+  "emotion": "tender"
+ },
+ {
+  "id": "li_tronco",
+  "speaker": "lia",
+  "text": "Um tronco oco, cheio de folhas secas. Alguma raposa dorme aqui, dá para sentir o cheiro. Melhor não incomodar.",
+  "emotion": "neutral"
+ },
+ {
+  "id": "li_colmeia",
+  "speaker": "lia",
+  "text": "Uma colmeia num toco velho. As abelhas nem ligam para mim. Estão ocupadas demais sendo abelhas.",
+  "emotion": "happy"
+ },
+ {
+  "id": "li_ninho",
+  "speaker": "lia",
+  "text": "Três ovos azulados. A mãe deve estar por perto, me olhando de algum galho. Já estou indo, já estou indo.",
+  "emotion": "tender"
+ },
+ {
+  "id": "li_amoras",
+  "speaker": "lia",
+  "text": "Amoras maduras. Doces, quentes de sol. Agora as minhas mãos estão roxas, mas valeu a pena.",
+  "emotion": "happy"
+ },
+ {
+  "id": "li_estrela_pedra",
+  "speaker": "lia",
+  "text": "Uma estrela gravada na pedra, quase apagada pelo musgo. Igual à do Tomé. Os Veladores marcavam os caminhos que davam para o céu.",
+  "emotion": "surprised"
+ },
+ {
+  "id": "li_fonte",
+  "speaker": "lia",
+  "text": "Água brotando da pedra, gelada. Alguém colocou um cano de ferro aqui há muito tempo, para quem passasse com sede. Obrigada, quem quer que tenha sido.",
+  "emotion": "tender"
+ },
+ {
+  "id": "li_cabana",
+  "speaker": "lia",
+  "text": "Uma cabana de caçador. A lanterna está apagada há anos, mas a lenha está empilhada, pronta. Como se alguém fosse voltar.",
+  "emotion": "neutral"
+ },
+ {
+  "id": "li_arvore_nomes",
+  "speaker": "lia",
+  "text": "Nomes gravados na casca, uns por cima dos outros. Os mais antigos a árvore já engoliu. Ela guarda todo mundo, crescendo devagar por cima.",
+  "emotion": "tender"
+ },
+ {
+  "id": "li_farol",
+  "speaker": "lia",
+  "text": "O farol do Seu Davi. Quarenta e dois anos acendendo uma luz para ninguém. Ou para todo mundo, depende de como se olha.",
+  "emotion": "tender"
+ },
+ {
+  "id": "li_dormindo",
+  "speaker": "lia",
+  "text": "Está dormindo. Melhor não acordar. Amanhã a gente conversa.",
+  "emotion": "tender"
  }
 ]

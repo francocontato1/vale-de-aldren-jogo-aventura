@@ -2,6 +2,7 @@ import { THREE, loadTex, rand, rr, clamp, U } from '../core.js';
 import { groundH, POI, fromUV, HARBOR, SEA_ROT } from './terrain.js';
 import { buildLandmarks } from './landmarks.js';
 import { buildHarbor } from './harbor.js';
+import { buildCuriosities, buildForestFloor } from './curiosities.js';
 
 // ---------------- materiais ----------------
 export const M = {};
@@ -418,7 +419,7 @@ function armchair(A) {
 }
 // detalhes de casa habitada: panelas na lareira, quadro, cortinas, cesto de maçãs, vassoura, lavatório no quarto
 function decor(o, B, I) {
-  const { iw, id, fl0, F, base, w, d, T, floors } = I; if (o.role === 'vazia') return; if (location.search.includes('nodecor')) return;
+  const { iw, id, fl0, F, base, w, d, T, floors } = I; if (o.role === 'vazia') return;
   // panela pendurada e chaleira na lareira
   const P = F.clone().multiply(mtx(0, fl0, 0)); cyl(0.004, 0.004, 0.5, 4, M.iron, 1, mtx(0, 0.75, 0, 0, 0, 0, P), false);
   { const pot = new THREE.SphereGeometry(0.16, 14, 10, 0, Math.PI * 2, Math.PI * 0.32, Math.PI * 0.68); pot.scale(1, 0.85, 1); put(pot, M.iron, mtx(0, 0.42, 0, 0, 0, 0, P), false); cyl(0.165, 0.165, 0.02, 14, M.iron, 1, mtx(0, 0.52, 0, 0, 0, 0, P), false); }
@@ -505,6 +506,7 @@ export function buildVillage(scene) {
   { const a = [12, -30], b = [17, -31.5]; for (const p of [a, b]) cyl(0.05, 0.06, 2.2, 6, M.oldWood, 1, mtx(p[0], groundH(p[0], p[1]) + 1.1, p[1])); const n = 6; for (let i = 0; i < n; i++) { const t = (i + 0.5) / n; const px = a[0] + (b[0] - a[0]) * t, pz = a[1] + (b[1] - a[1]) * t; const cm = [M.cloth.blue, M.cloth.white, M.cloth.ochre, M.cloth.green][i % 4]; const g = new THREE.PlaneGeometry(0.5, 0.65, 2, 3); put(boxUV(g, 1), cm, mtx(px, groundH(px, pz) + 1.7, pz, 0, -Math.atan2(b[1] - a[1], b[0] - a[0]), 0), false); } }
   windmill(-74, -34, 0.9);
   buildTower(); buildStones(); buildStoryProps(); buildLandmarks(); buildHarbor();
+  { const [hx, hz] = fromUV(HARBOR.u, HARBOR.v); const av = (x, z, r = 2) => inFootprint(x, z, r) || Math.hypot(x - hx, z - hz) < 60 || Math.hypot(x - POI.observatory.x, z - POI.observatory.z) < 25; buildCuriosities(av); buildForestFloor(av); }
   return bake(scene);
 }
 
