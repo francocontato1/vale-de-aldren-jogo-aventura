@@ -40,7 +40,7 @@ export async function buildProps(scene, { avoid, addCircle, villageExclude, zone
     const its = items.map(it => { q.setFromAxisAngle(new THREE.Vector3(0, 1, 0), it[4]); return { p: { x: it[0], z: it[2] }, m: new THREE.Matrix4().compose(new THREE.Vector3(it[0], it[1], it[2]), q, new THREE.Vector3(it[3], it[3], it[3])) }; });
     for (const mesh of meshes) { const geo = mesh.geometry.clone(); geo.applyMatrix4(mesh.matrixWorld); geo.translate(0, -box.min.y, 0); geo.scale(base, base, base); const ns = new NearSet(scene, geo, plantMat(mesh.material), its, 48, false); ns.baseR = 48; }
   };
-  scatterPlant(fw, 700, 0.42, (x, z) => forestDensity(x, z) < 0.1, 0.3);
+  scatterPlant(fw, 380, 0.42, (x, z) => forestDensity(x, z) < 0.1, 0.3);
   scatterPlant(fy, 600, 0.38, (x, z) => forestDensity(x, z) < 0.05, 0.4);
   scatterPlant(fb, 400, 0.4, (x, z) => forestDensity(x, z) < 0.15, 0.3);
   // tall grass cards: tint the bw texture green-gold

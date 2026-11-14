@@ -161,7 +161,9 @@ export const Speech = {
     if (!this.ok || !enabled) { onStart && onStart(); onEnd && setTimeout(onEnd, Math.min(9000, 900 + text.length * 55)); return; }
     const u = new SpeechSynthesisUtterance(text.replace(/\.\.\./g, ','));
     const v = FEM.has(who) ? this.vf : this.vm; const p = PROFILE[who] || [1, 1]; if (v) { u.voice = v; u.lang = v.lang; } else u.lang = 'pt-BR'; u.pitch = p[0]; u.rate = p[1];
-    let ended = false; const done = () => { if (ended) return; ended = true; onEnd && onEnd(); };
+    // tempo mínimo de leitura, mesmo que a voz do navegador falhe ou termine cedo
+    const minEnd = performance.now() + 900 + text.length * 50; let ended = false;
+    const done = () => { if (ended) return; ended = true; const wait = Math.max(0, minEnd - performance.now()); setTimeout(() => onEnd && onEnd(), wait); };
     u.onstart = () => onStart && onStart(); u.onend = done; u.onerror = done; speechSynthesis.speak(u); setTimeout(done, 1500 + text.length * 90);
   },
   stop() { if (this.ok) { try { speechSynthesis.cancel(); } catch (e) { } } },

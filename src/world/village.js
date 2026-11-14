@@ -360,8 +360,8 @@ export function buildVillage(scene) {
     addBox(fx, fz, 2.4, 2.9, 0); }
   // pasto do Seu Anselmo
   fenceLine([[32, 38], [56, 38], [58, 58], [36, 60], [32, 46]]);
-  woodpile(-20, -10.5, 0.35); woodpile(-38, 5, 1.57);
-  [[31, 10], [32, 9.0], [-19, -11.5], [12, 25], [-40, -4]].forEach(([x, z]) => barrel(x, z));
+  woodpile(-31, -7.5, 0.35); woodpile(-38, 5, 1.57);
+  [[31, 10], [32, 9.0], [-17.5, -13.5], [12, 25], [-40, -4]].forEach(([x, z]) => barrel(x, z));
   [[-27, -11.5], [19, -17], [-38, -34]].forEach(([x, z]) => crate(x, z));
   hay(48, 52); hay(50, 48); hay(44, 55);
   cart(8, 18, 0.6);

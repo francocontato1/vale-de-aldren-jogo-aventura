@@ -75,7 +75,7 @@ export class SkySystem {
         float hz = exp(-max(d.y,0.)*9.0); col += vec3(0.05,0.075,0.06)*hz*0.55 + vec3(0.03,0.03,0.06)*exp(-max(d.y,0.)*3.)*0.4;
         // lua com fase (iluminada pelo sol)
         float ms = dot(d, moonDir); if (ms > 0.9985) { vec3 mx = normalize(cross(moonDir, vec3(0,1,0))); vec3 my = cross(mx, moonDir); vec2 mp = vec2(dot(d,mx), dot(d,my)) / 0.0172; float r2 = dot(mp,mp); if (r2 < 1.0) { vec3 nrm = normalize(mx*mp.x + my*mp.y + moonDir*sqrt(1.0-r2)); float lit = smoothstep(-0.08, 0.12, dot(nrm, sunDir)); float maria = 0.72 + 0.28*smoothstep(0.45,0.6,fbm3(nrm*3.0+5.)) ; float crat = 0.9 + 0.1*vn3(nrm*40.); col = mix(col, vec3(0.98,0.96,0.9)*maria*crat*(0.05 + 2.6*lit), smoothstep(1.0, 0.92, r2)); } }
-        col += vec3(0.25,0.28,0.36)*pow(max(ms,0.),400.)*0.8 + vec3(0.06,0.07,0.1)*pow(max(ms,0.),12.);
+        col += vec3(0.25,0.28,0.36)*pow(max(ms,0.),900.)*0.5 + vec3(0.05,0.06,0.09)*pow(max(ms,0.),16.)*0.7;
         // estrelas cadentes
         for (int i=0;i<6;i++){ vec4 a = metA[i]; vec4 b = metB[i]; if (a.w < 0.0) continue; float len = b.w; vec3 dirm = b.xyz; float t = dot(d - a.xyz, dirm); float tc = clamp(t, 0.0, len*a.w); vec3 cp = a.xyz + dirm*tc; float dist = length(d - cp); float tail = smoothstep(0.0, len*a.w, tc); float k = exp(-dist*dist/(0.000012)) * tail * smoothstep(1.0, 0.75, a.w); col += vec3(1.0,0.95,0.85)*k*2.5; }
         gl_FragColor=vec4(col*night*smoothstep(-0.05,0.1,d.y),1.);

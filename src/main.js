@@ -11,6 +11,7 @@ import { buildGiant, buildHeadFragment, updateGiants, giants } from './world/gia
 import { Lume, initSpirits, addSiteSpirits, updateSpirits, Motes, LumeRain, GLOW } from './magic.js';
 import { buildProps, updateProps, setPropRadius } from './world/props.js';
 import { loadHumanLibrary, Human } from './actors/human.js';
+import { loadAnimals, spawnAnimals, updateAnimals } from './actors/animals.js';
 import { Post } from './post.js';
 import { Sound, Music, Voice, Speech, preloadSounds } from './audio.js';
 
@@ -116,7 +117,7 @@ async function boot() {
   await step('Espalhando pedras e flores…', 0.48, () => buildProps(scene, { avoid: (x, z, r) => vEx(x, z) || pathDistOK(x, z, r), addCircle: addCirc, villageExclude: vEx, zones: FLOWER_ZONES() }));
   await step('Plantando a floresta…', 0.56, () => trees.scatter({ avoid: (x, z, r) => vEx(x, z) || pathDistOK(x, z, r + 1) || aqueductNear(x, z), forestDensity, groundH, normalY, onTree: (it) => { if (it.v.sp.type !== 'bush') addCirc(it.x, it.z, (it.v.sp.type === 'pine' ? 0.28 : 0.36) * it.s); }, extra: [[-12, -32, 'oakA', 1], [34, -12, 'oakB', 0.9], [-38, 22, 'ashA', 1], [10, 44, 'oakA', 1.1], [-52, -16, 'pineA', 1], [storySpots.treeRoot.x, storySpots.treeRoot.z, 'oakB', 1.45], [POI.shrine.x - 4, POI.shrine.z - 5, 'oakB', 1.5]] }));
   grass = new Grass(scene, { exclude: (x, z) => inFootprint(x, z, 0.1) || insideBox(x, z, 0.4) || treeHit(x, z) || Math.hypot(x - POI.observatory.x, z - POI.observatory.z) < 9.3 });
-  await step('Chamando os moradores…', 0.66, () => loadHumanLibrary());
+  await step('Chamando os moradores…', 0.66, () => Promise.all([loadHumanLibrary(), loadAnimals()]));
   initSpirits(); motes = new Motes(260);
   const sTex = smokeTex(), dTex = softTex();
   smoke = new Particles(700, sTex, false); fireP = new Particles(400, dTex, true); dust = new Particles(300, sTex, false);
@@ -126,7 +127,7 @@ async function boot() {
   roomLight = new THREE.PointLight(0xfff0dc, 0, 9, 1.4); scene.add(roomLight);
   buildLamps(); buildLantern(); buildRipples();
   const had = !!store.get(SAVE_KEY);
-  await step('Últimos detalhes…', 0.9, () => { buildPlayer(); buildNPCs(); buildMapBase(); });
+  await step('Últimos detalhes…', 0.9, () => { buildPlayer(); buildNPCs(); spawnAnimals(); buildMapBase(); });
   post = new Post(); post.setSize(innerWidth, innerHeight);
   player.y = groundH(player.x, player.z);
   for (let i = 0; i < 30; i++) grass.update(player.x, player.z, 100);
@@ -271,12 +272,14 @@ function houseOf(role) { return interiors.find(h => h.role === role); }
 function buildNPCs() {
   const od = storySpots.odessa; odessa = addNPC({ id: 'odessa', key: 'odessa', day: [od.x, od.z, Math.atan2(-POI.observatory.x, -POI.observatory.z)], talk: talkOdessa, idle: 'fold', always: true, nightIdle: 'idle', lookSky: true });
   anselmo = addNPC({ id: 'anselmo', key: 'anselmo', day: [44, 47, 0.4], talk: talkAnselmo, idle: 'idle', wander: [[44, 47], [52, 44], [50, 55], [40, 52]], home: houseOf('anselmo'), slow: true });
-  celeste = addNPC({ id: 'celeste', key: 'celeste', day: [-20.5, -9.2, 2.6], talk: talkCeleste, idle: 'idle', home: houseOf('padaria'), work: 'kneel' });
+  celeste = addNPC({ id: 'celeste', key: 'celeste', day: [-21.9, -11.4, 0.35], talk: talkCeleste, idle: 'idle', home: houseOf('padaria'), work: 'kneel' });
   tome = addNPC({ id: 'tome', key: 'tome', day: [-3, 6, 0], talk: talkTome, idle: 'idle', wander: [[-3, 6], [-38, 25], [-12, 20], [6, 12], [0, -6]], home: houseOf('familia'), fast: true });
-  irene = addNPC({ id: 'irene', key: 'irene', day: [-128, 92, -2.2], talk: talkIrene, idle: 'idle', home: houseOf('irene') });
+  // a Irene pinta na margem do lago: procura terra firme indo do lago em direção à vila
+  let ix = -128, iz = 92; { const dx = -ix, dz = -iz, dl = Math.hypot(dx, dz); for (let i = 0; i < 120 && groundH(ix, iz) < 0.9; i++) { ix += dx / dl; iz += dz / dl; } ix += dx / dl * 2; iz += dz / dl * 2; }
+  irene = addNPC({ id: 'irene', key: 'irene', day: [ix, iz, Math.atan2(-170 - ix, 120 - iz)], talk: talkIrene, idle: 'idle', home: houseOf('irene') });
   const bs = storySpots.bastiao; bastiao = addNPC({ id: 'bastiao', key: 'bastiao', day: [bs.x, bs.z, storySpots.bastiaoYaw + Math.PI], talk: talkBastiao, idle: 'kneel', home: houseOf('casagrande') });
   // cavalete de pintura da Irene
-  { const ex = -129.2, ez = 90.8, ey = groundH(ex, ez); const g = new THREE.Group(); for (const a of [-1, 1]) { const l = new THREE.Mesh(new THREE.BoxGeometry(0.05, 1.6, 0.05), M.oldWood); l.position.set(a * 0.35, 0.8, 0); l.rotation.set(0.12, 0, a * -0.08); g.add(l); } const cv = new THREE.Mesh(new THREE.PlaneGeometry(0.8, 0.6), paintingMat()); cv.position.set(0, 1.15, 0.08); cv.rotation.x = 0.12; g.add(cv); g.position.set(ex, ey, ez); g.rotation.y = -2.2 + Math.PI; scene.add(g); addCirc(ex, ez, 0.4); }
+  { const ia = Math.atan2(-170 - ix, 120 - iz); const ex = ix + Math.sin(ia) * 1.1 + Math.cos(ia) * 0.6, ez = iz + Math.cos(ia) * 1.1 - Math.sin(ia) * 0.6, ey = groundH(ex, ez); const g = new THREE.Group(); for (const a of [-1, 1]) { const l = new THREE.Mesh(new THREE.BoxGeometry(0.05, 1.6, 0.05), M.oldWood); l.position.set(a * 0.35, 0.8, 0); l.rotation.set(0.12, 0, a * -0.08); g.add(l); } const cv = new THREE.Mesh(new THREE.PlaneGeometry(0.8, 0.6), paintingMat()); cv.position.set(0, 1.15, 0.08); cv.rotation.x = 0.12; g.add(cv); g.position.set(ex, ey, ez); g.rotation.y = ia + Math.PI; scene.add(g); addCirc(ex, ez, 0.4); }
 }
 function paintingMat() { const c = document.createElement('canvas'); c.width = 256; c.height = 192; const g = c.getContext('2d'); const gr = g.createLinearGradient(0, 0, 0, 192); gr.addColorStop(0, '#f2c78a'); gr.addColorStop(0.45, '#e9a06a'); gr.addColorStop(0.55, '#5a7c86'); gr.addColorStop(1, '#2f4f5a'); g.fillStyle = gr; g.fillRect(0, 0, 256, 192); g.fillStyle = 'rgba(255,240,200,0.8)'; for (let i = 0; i < 40; i++) g.fillRect(90 + Math.random() * 80, 110 + Math.random() * 60, 18 + Math.random() * 20, 2); g.fillStyle = '#2b3a2a'; g.beginPath(); g.moveTo(0, 105); g.quadraticCurveTo(60, 70, 120, 100); g.lineTo(256, 95); g.lineTo(256, 108); g.lineTo(0, 110); g.fill(); const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return new THREE.MeshStandardMaterial({ map: t, roughness: 0.9 }); }
 const isNight = () => hour >= 20.2 || hour < 6.3;
@@ -424,7 +427,7 @@ function startFinale() {
   for (const [n, a, b] of ring) { n.finale = true; n.inside = false; n.x = c.x + rgt.x * a + fwd.x * b; n.z = c.z + rgt.z * a + fwd.z * b; n.yaw = Math.atan2(fwd.x, fwd.z); n.finaleIdle = n === odessa ? 'idle' : n === anselmo ? 'fold' : 'idle'; n.h.root.visible = true; }
   player.x = c.x - rgt.x * 0.4; player.z = c.z - rgt.z * 0.4; player.h = Math.atan2(fwd.x, fwd.z); player.y = probe(player.x, player.z, groundH(player.x, player.z) + 0.5).h; player.speed = 0;
   const lines = FINALE.slice(); let i = -1; let t = 0, waiting = false;
-  finale = { speaker: null, t: 0, rain: null, camera: (dt) => { finale.t += dt; const a = finale.t * 0.03; const center = V3(c.x, groundH(c.x, c.z), c.z); const up = smooth(10, 26, finale.t); const want = center.clone().add(V3(Math.sin(odessa.yaw + Math.PI + a) * lerp(7, 9, up), lerp(1.8, 1.2, up), Math.cos(odessa.yaw + Math.PI + a) * lerp(7, 9, up))); cam.cur.lerp(want, 1 - Math.exp(-dt * 1.2)); camera.position.copy(cam.cur); const look = center.clone().add(V3(fwd.x * 6, lerp(1.4, 18, up), fwd.z * 6)); camera.lookAt(look); camera.fov = lerp(camera.fov, 50, dt); camera.updateProjectionMatrix(); },
+  finale = { speaker: null, t: 0, rain: null, camera: (dt) => { finale.t += dt; const a = finale.t * 0.03; const center = V3(c.x, groundH(c.x, c.z), c.z); const up = smooth(10, 26, finale.t); const want = center.clone().add(V3(Math.sin(odessa.yaw + Math.PI + a) * lerp(7, 9, up), lerp(1.8, 1.2, up), Math.cos(odessa.yaw + Math.PI + a) * lerp(7, 9, up))); cam.cur.lerp(want, 1 - Math.exp(-dt * 1.2)); camera.position.copy(cam.cur); const look = center.clone().add(V3(fwd.x * 6, lerp(1.4, 7.5, up), fwd.z * 6)); camera.lookAt(look); camera.fov = lerp(camera.fov, 50, dt); camera.updateProjectionMatrix(); },
     update: (dt) => { t += dt; if (finale.rain) finale.rain.update(dt); pH.root.position.set(player.x, player.y, player.z); pH.root.rotation.y = player.h; pH.locomote(0); pH.lookAtPoint(V3(player.x + fwd.x * 6, player.y + 8, player.z + fwd.z * 6), 0.9); pH.update(dt);
       if (!waiting && t > 2.5) { i++; const id = lines[i]; if (!id) { finale.end(); return; } const [sp] = LINES[id]; finale.speaker = sp; showSub(id); waiting = true;
         if (id === 'fim5') { odessa.finaleIdle = 'spellIn'; setTimeout(() => { odessa.finaleIdle = 'spell'; }, 1500); }
@@ -706,6 +709,7 @@ function frame(fixedDt) {
   U.player.value.set(player.x, player.y, player.z);
   sky.update({ x: player.x, y: player.y, z: player.z, camPos: camera.position }, dt);
   const inK = cam.inK || 0; scene.environmentIntensity *= lerp(1, 0.62, inK); renderer.toneMappingExposure *= lerp(1, 1.3, inK);
+  updateAnimals(dt, player, sky.nightF);
   updateDoors(dt); updateInteriorLights(dt); updateLantern(dt); updateRipples(dt); updateLamps();
   updateGiants(dt, elapsed); const obj = state !== 'menu' ? objectives()[0] : null; updateSpirits(dt, elapsed, player, obj ? obj.tgt : null, sky.nightF, player.speed > 0.3); if (motes) motes.update(elapsed, camera.position.x, camera.position.z, sky.dayF, sky.nightF, U.wind.value);
   post.updateLook(U.sunDir.value, sky.dayF, sky.nightF, sky.dusk || 0, U.sunColor.value);
