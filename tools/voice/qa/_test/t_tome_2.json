@@ -1,0 +1,25 @@
+{
+ "id": "t_tome_2",
+ "speaker": "tome",
+ "emotion": "happy",
+ "text": "Minha mãe disse que eu não posso ir até o lago. Mas você pode, né? Me conta tudo depois!",
+ "dur": 4.95,
+ "cps": 17.8,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Minha mãe disse que eu não posso ir até o lago, mas você pode, né? Me conta tudo depois.",
+ "attempt": 0,
+ "gen_s": 60.7,
+ "rtf": 12.26,
+ "max_pause": 0.13,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.8,
+  "cfg_weight": 0.45,
+  "temperature": 0.85
+ },
+ "seed": 2038755212,
+ "lufs_in": -26.1,
+ "tp_limited": true,
+ "final_problems": []
+}

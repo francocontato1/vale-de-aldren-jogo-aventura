@@ -1,0 +1,31 @@
+{
+ "id": "escada1",
+ "speaker": "eco_m",
+ "emotion": "neutral",
+ "text": "Você sabe que ela não leva a lugar nenhum.",
+ "dur": 2.29,
+ "cps": 18.3,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Você sabe que ela não leva a lugar nenhum?",
+ "attempt": 0,
+ "gen_s": 20.7,
+ "rtf": 9.05,
+ "max_pause": 0.04,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.5,
+  "cfg_weight": 0.5,
+  "temperature": 0.8
+ },
+ "seed": 2564930019,
+ "lufs_in": -24.1,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 8.6,
+  "flow": 11.3,
+  "hift": 0.7
+ },
+ "tokens": 74,
+ "final_problems": []
+}

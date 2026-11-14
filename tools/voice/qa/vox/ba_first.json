@@ -1,0 +1,31 @@
+{
+ "id": "ba_first",
+ "speaker": "bastiao",
+ "emotion": "neutral",
+ "text": "Hum. Visita. Se veio pedir conserto, entra na fila. A fila é o vale inteiro.",
+ "dur": 4.78,
+ "cps": 15.9,
+ "cer": 0.085,
+ "wer": 0.333,
+ "asr": "1. Visita. Se veio pedir com certo, entra na fila. A fila é o valenteiro.",
+ "attempt": 0,
+ "gen_s": 33.0,
+ "rtf": 6.9,
+ "max_pause": 0.34,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.45,
+  "cfg_weight": 0.5,
+  "temperature": 0.75
+ },
+ "seed": 1287501144,
+ "lufs_in": -23.5,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 17.9,
+  "flow": 13.3,
+  "hift": 1.0
+ },
+ "tokens": 150,
+ "final_problems": []
+}

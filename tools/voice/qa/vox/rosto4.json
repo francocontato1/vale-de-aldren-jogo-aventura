@@ -1,0 +1,31 @@
+{
+ "id": "rosto4",
+ "speaker": "eco_m",
+ "emotion": "tender",
+ "text": "Então vai ser só um rosto sorrindo no meio das flores. Também não é um jeito ruim de ser lembrado.",
+ "dur": 6.78,
+ "cps": 14.5,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Então vai ser só um rosto sorrindo no meio das flores. Também não é um jeito ruim de ser lembrado.",
+ "attempt": 0,
+ "gen_s": 38.2,
+ "rtf": 5.63,
+ "max_pause": 0.51,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.45,
+  "cfg_weight": 0.4,
+  "temperature": 0.75
+ },
+ "seed": 51748012,
+ "lufs_in": -23.0,
+ "tp_limited": false,
+ "stage_s": {
+  "t3": 21.3,
+  "flow": 15.9,
+  "hift": 0.9
+ },
+ "tokens": 172,
+ "final_problems": []
+}

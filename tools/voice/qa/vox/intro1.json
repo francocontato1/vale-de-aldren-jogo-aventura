@@ -1,0 +1,31 @@
+{
+ "id": "intro1",
+ "speaker": "narrador",
+ "emotion": "tender",
+ "text": "Dizem que no vale de Aldren nada se perde. Só muda de lugar.",
+ "dur": 4.19,
+ "cps": 14.3,
+ "cer": 0.017,
+ "wer": 0.077,
+ "asr": "Dizem que no Vale de Aldrem nada se perde, só muda de lugar.",
+ "attempt": 0,
+ "gen_s": 70.5,
+ "rtf": 16.84,
+ "max_pause": 0.22,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.35,
+  "cfg_weight": 0.35,
+  "temperature": 0.65
+ },
+ "seed": 3661025342,
+ "lufs_in": -22.2,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 25.6,
+  "flow": 40.3,
+  "hift": 2.1
+ },
+ "tokens": 117,
+ "final_problems": []
+}

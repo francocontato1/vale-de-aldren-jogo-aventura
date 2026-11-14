@@ -1,0 +1,21 @@
+id	speaker	emotion	dur	cps	cer	wer	tries	rtf	problems	asr
+t_lia_1	lia	neutral	4.93	13.6	0.0	0.0	1	25.09		Que lugar é esse? Eu juro que já ouvi esse vento antes. Mas onde?
+t_lia_2	lia	sad	7.33	12.3	0.083	0.111	1	12.61		Ela me deixou o caderno à pove e nem se despediu. Tudo bem, eu vou terminar o que ela começou.
+t_odessa_1	odessa	tired	8.23	10.4	0.0	0.0	1	17.09		Mil anos, menina, e ainda não aprendi a acordar cedo. Sente-se, o chá não vai fugir.
+t_odessa_2	odessa	tender	6.51	10.9	0.0	0.0	1	18.25		Magia não é fazer as coisas aparecerem, é lembrar que elas existiam.
+t_anselmo_1	anselmo	tender	7.37	13.0	0.0	0.0	1	21.04		- Ah, minha filha, as ovelhas conhecem o caminho melhor do que eu, eu só vou atrás devagarinho.
+t_anselmo_2	anselmo	neutral	7.31	12.3	0.0	0.0	1	14.58		Você viu a pedra grande lá no alto do morro? Dizem que ela dorme. Eu acho que ela escuta.
+t_celeste_1	celeste	happy	6.95	13.8	0.054	0.143	2	4.6		Ah, ah, ah, chegou na hora certa. O pão acabou de sair do forno. Pega um antes que o Tomás coma tudo.
+t_celeste_2	celeste	neutral	6.97	11.9	0.026	0.067	1	4.68		A, farinha, água, sal e paciência. O resto é conversa. Quer aprender ou só quer comer?
+t_tome_1	tome	excited	4.78	13.0	0.036	0.167	1	13.16		Ia, Ia, você viu? A pedra mexeu, eu juro ela mexeu sozinha.
+t_tome_2	tome	happy	4.95	17.8	0.0	0.0	1	12.26		Minha mãe disse que eu não posso ir até o lago, mas você pode, né? Me conta tudo depois.
+t_irene_1	irene	tender	6.94	12.5	0.012	0.062	1	12.05		Olha essa luz no fim da tarde. Parece que o Vale inteiro está aprendendo a respiração.
+t_irene_2	irene	happy	7.06	10.1	0.0	0.0	1	14.33		Essa folha aqui acalma o coração, essa outra. Essa só é bonita mesmo.
+t_bastiao_1	bastiao	neutral	3.71	11.1	0.0	0.0	1	8.93		Madeira boa, seca, não racha, pode levar.
+t_bastiao_2	bastiao	sad	5.32	14.3	0.0	0.0	1	13.61		Meu pai fez essa ponte, eu só troco as tábuas, ainda sinto a mão dele nelas.
+t_eco_m_1	eco_m	neutral	5.11	17.8	0.023	0.118	1	8.17		Se eu não voltar, jogue em minha espada no lago. Ela pesa demais para ficar parada num canto.
+t_eco_m_2	eco_m	tender	5.48	14.4	0.2	0.286	1	7.26	cer=0.20	Daqui eu via a Vila Enteira, 83 Chaminés, contei todas duas vezes.
+t_eco_f_1	eco_f	happy	4.02	14.9	0.053	0.273	1	11.1		Você sempre volta, tem o dor, é a coisa mais irritante em você.
+t_eco_f_2	eco_f	sad	3.95	15.7	0.0	0.0	1	15.54		Lembrem desta noite. Eu vou lembrar por vocês, se for preciso.
+t_narrador_1	narrador	neutral	5.95	14.8	0.0	0.0	1	14.16		80 anos atrás, quatro amigos e quatro gigantes de pedra atravessaram a longa noite.
+t_narrador_2	narrador	sad	4.65	16.3	0.0	0.0	1	14.35		Os gigantes adormeceram e com o tempo até os seus nomes foram esquecidos.

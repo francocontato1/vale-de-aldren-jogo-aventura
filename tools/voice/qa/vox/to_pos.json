@@ -1,0 +1,31 @@
+{
+ "id": "to_pos",
+ "speaker": "tome",
+ "emotion": "excited",
+ "text": "Você viu? Os lumes subiram! Eu falei que os gigantes estavam acordados por dentro!",
+ "dur": 5.2,
+ "cps": 15.8,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Você viu? Os lumes subiram. Eu falei que os gigantes estavam acordados por dentro.",
+ "attempt": 0,
+ "gen_s": 28.4,
+ "rtf": 5.47,
+ "max_pause": 0.2,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.95,
+  "cfg_weight": 0.45,
+  "temperature": 0.85
+ },
+ "seed": 3646250936,
+ "lufs_in": -25.3,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 16.4,
+  "flow": 10.7,
+  "hift": 1.1
+ },
+ "tokens": 133,
+ "final_problems": []
+}

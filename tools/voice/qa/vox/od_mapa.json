@@ -1,0 +1,31 @@
+{
+ "id": "od_mapa",
+ "speaker": "odessa",
+ "emotion": "tender",
+ "text": "Um mapa dos lugares onde alguém foi feliz. Os Veladores deixaram oito. Eu sinto eles, mas já não consigo ver. Meus olhos ficaram cansados de tanto olhar a mesma coisa.",
+ "dur": 14.36,
+ "cps": 11.6,
+ "cer": 0.037,
+ "wer": 0.1,
+ "asr": "A sé em mapa dos lugares onde alguém foi feliz. Os veladores deixaram oito. Eu sinto eles, mas já não consigo ver. Meus olhos ficaram cansados de tanto olhar a mesma coisa.",
+ "attempt": 0,
+ "gen_s": 84.4,
+ "rtf": 5.88,
+ "max_pause": 0.65,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.35,
+  "cfg_weight": 0.2,
+  "temperature": 0.65
+ },
+ "seed": 628576864,
+ "lufs_in": -21.0,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 54.2,
+  "flow": 26.8,
+  "hift": 3.2
+ },
+ "tokens": 387,
+ "final_problems": []
+}

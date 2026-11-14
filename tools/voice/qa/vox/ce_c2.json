@@ -1,0 +1,31 @@
+{
+ "id": "ce_c2",
+ "speaker": "celeste",
+ "emotion": "sad",
+ "text": "Meu marido construía barcos. Faz seis invernos que ele se foi. Eu ainda faço pão para dois. O que sobra eu dou para os passarinhos. Eles agradecem do jeito deles.",
+ "dur": 9.78,
+ "cps": 16.6,
+ "cer": 0.013,
+ "wer": 0.033,
+ "asr": "Meu marido construía barcos. Faz seis invernos que ele se foi. Eu ainda faço pão para dois. O que sobe, eu dou para os passarinhos. Eles agradecem do jeito deles.",
+ "attempt": 0,
+ "gen_s": 43.3,
+ "rtf": 4.43,
+ "max_pause": 0.37,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.55,
+  "cfg_weight": 0.4,
+  "temperature": 0.75
+ },
+ "seed": 4286830208,
+ "lufs_in": -19.9,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 27.6,
+  "flow": 13.9,
+  "hift": 1.6
+ },
+ "tokens": 246,
+ "final_problems": []
+}

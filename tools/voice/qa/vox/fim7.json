@@ -1,0 +1,31 @@
+{
+ "id": "fim7",
+ "speaker": "anselmo",
+ "emotion": "happy",
+ "text": "Faz oitenta anos que eu não fico acordado até tão tarde.",
+ "dur": 4.38,
+ "cps": 12.8,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Faz 80 anos que eu não fico acordado até tão tarde.",
+ "attempt": 0,
+ "gen_s": 36.2,
+ "rtf": 8.27,
+ "max_pause": 0.09,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.6,
+  "cfg_weight": 0.25,
+  "temperature": 0.75
+ },
+ "seed": 2157892884,
+ "lufs_in": -23.6,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 18.5,
+  "flow": 15.5,
+  "hift": 1.2
+ },
+ "tokens": 150,
+ "final_problems": []
+}

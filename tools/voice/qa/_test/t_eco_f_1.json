@@ -1,0 +1,25 @@
+{
+ "id": "t_eco_f_1",
+ "speaker": "eco_f",
+ "emotion": "happy",
+ "text": "Você sempre volta, Teodor. É a coisa mais irritante em você.",
+ "dur": 4.02,
+ "cps": 14.9,
+ "cer": 0.053,
+ "wer": 0.273,
+ "asr": "Você sempre volta, tem o dor, é a coisa mais irritante em você.",
+ "attempt": 0,
+ "gen_s": 44.6,
+ "rtf": 11.1,
+ "max_pause": 0.42,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.65,
+  "cfg_weight": 0.45,
+  "temperature": 0.85
+ },
+ "seed": 2151299688,
+ "lufs_in": -19.4,
+ "tp_limited": true,
+ "final_problems": []
+}

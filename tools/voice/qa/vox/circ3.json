@@ -1,0 +1,31 @@
+{
+ "id": "circ3",
+ "speaker": "eco_f",
+ "emotion": "tender",
+ "text": "Ou tão bonito. Depende de quanto tempo ele olhar.",
+ "dur": 3.27,
+ "cps": 15.0,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "ou tão bonito. Depende de quanto tempo ele olhar.",
+ "attempt": 0,
+ "gen_s": 22.7,
+ "rtf": 6.93,
+ "max_pause": 0.4,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.45,
+  "cfg_weight": 0.4,
+  "temperature": 0.75
+ },
+ "seed": 982172646,
+ "lufs_in": -20.4,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 10.8,
+  "flow": 11.1,
+  "hift": 0.7
+ },
+ "tokens": 85,
+ "final_problems": []
+}

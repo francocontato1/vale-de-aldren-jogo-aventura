@@ -1,0 +1,25 @@
+{
+ "id": "t_odessa_1",
+ "speaker": "odessa",
+ "emotion": "tired",
+ "text": "Mil anos, menina... e ainda não aprendi a acordar cedo. Sente-se. O chá não vai fugir.",
+ "dur": 8.23,
+ "cps": 10.4,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Mil anos, menina, e ainda não aprendi a acordar cedo. Sente-se, o chá não vai fugir.",
+ "attempt": 0,
+ "gen_s": 140.7,
+ "rtf": 17.09,
+ "max_pause": 0.5,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.25,
+  "cfg_weight": 0.2,
+  "temperature": 0.65
+ },
+ "seed": 1107624678,
+ "lufs_in": -21.5,
+ "tp_limited": true,
+ "final_problems": []
+}

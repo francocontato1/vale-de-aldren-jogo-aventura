@@ -1,0 +1,31 @@
+{
+ "id": "fim3",
+ "speaker": "lia",
+ "emotion": "tender",
+ "text": "Você acha que eles ainda existem? Em algum lugar?",
+ "dur": 3.24,
+ "cps": 15.1,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Você acha que eles ainda existem em algum lugar?",
+ "attempt": 0,
+ "gen_s": 23.8,
+ "rtf": 7.34,
+ "max_pause": 0.35,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.45,
+  "cfg_weight": 0.35,
+  "temperature": 0.7
+ },
+ "seed": 2303635598,
+ "lufs_in": -20.6,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 10.2,
+  "flow": 12.8,
+  "hift": 0.7
+ },
+ "tokens": 84,
+ "final_problems": []
+}

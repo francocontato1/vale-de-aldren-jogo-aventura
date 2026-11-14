@@ -1,0 +1,31 @@
+{
+ "id": "rel1",
+ "speaker": "eco_m",
+ "emotion": "neutral",
+ "text": "Cada relógio deste jardim marca uma hora diferente. As pessoas acham que estão quebrados.",
+ "dur": 6.26,
+ "cps": 14.2,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Cada relógio deste jardim marca uma hora diferente. As pessoas acham que estão quebrados.",
+ "attempt": 0,
+ "gen_s": 35.8,
+ "rtf": 5.72,
+ "max_pause": 0.55,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.5,
+  "cfg_weight": 0.5,
+  "temperature": 0.8
+ },
+ "seed": 138016523,
+ "lufs_in": -24.0,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 19.8,
+  "flow": 14.3,
+  "hift": 1.5
+ },
+ "tokens": 159,
+ "final_problems": []
+}

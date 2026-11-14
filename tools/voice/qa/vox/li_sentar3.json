@@ -1,0 +1,31 @@
+{
+ "id": "li_sentar3",
+ "speaker": "lia",
+ "emotion": "tender",
+ "text": "As nuvens andam tão devagar. Ou sou eu que finalmente parei.",
+ "dur": 7.02,
+ "cps": 8.5,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "As nuvens andam tão devagar. Ou sou eu que finalmente parei.",
+ "attempt": 0,
+ "gen_s": 38.9,
+ "rtf": 5.55,
+ "max_pause": 0.52,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.45,
+  "cfg_weight": 0.35,
+  "temperature": 0.7
+ },
+ "seed": 3255398094,
+ "lufs_in": -19.5,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 22.0,
+  "flow": 15.6,
+  "hift": 1.2
+ },
+ "tokens": 178,
+ "final_problems": []
+}

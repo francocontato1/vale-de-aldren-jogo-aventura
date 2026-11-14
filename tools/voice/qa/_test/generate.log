@@ -1,0 +1,109 @@
+2026-11-14 01:39:30,928 rendering 20/20 lines -> ../../a/vox/_test (shard 0/1)
+2026-11-14 01:39:43,855 input frame rate=25
+2026-11-14 01:39:47,325 Initializing the model ...
+2026-11-14 01:40:30,651 Transcribing ...
+2026-11-14 01:40:35,264 Inference time: 4.613 s
+2026-11-14 01:40:35,303 [1/20] t_lia_1 lia      try0 4.9s audio in 43s (rtf 8.7) cps 13.6 cer 0.0 ok
+2026-11-14 01:45:06,884 Transcribing ...
+2026-11-14 01:45:46,782 Inference time: 39.898 s
+2026-11-14 01:45:46,785 [2/20] t_lia_2 lia      try0 7.3s audio in 271s (rtf 37.0) cps 12.3 cer 0.083 ok
+2026-11-14 01:48:24,586 Transcribing ...
+2026-11-14 01:48:29,542 Inference time: 4.956 s
+2026-11-14 01:48:29,543 [3/20] t_odessa_1 odessa   try0 8.2s audio in 158s (rtf 19.2) cps 10.4 cer 0.0 ok
+2026-11-14 02:00:52,956 rendering 20/20 lines -> ../../a/vox/_test (shard 0/1)
+2026-11-14 02:01:07,431 input frame rate=25
+2026-11-14 02:01:11,055 Initializing the model ...
+2026-11-14 02:03:15,481 Transcribing ...
+2026-11-14 02:03:26,192 Inference time: 10.711 s
+2026-11-14 02:03:26,219 [1/20] t_lia_1 lia      try0 4.9s audio in 124s (rtf 25.1) cps 13.6 cer 0.0 ok
+2026-11-14 02:04:58,752 Transcribing ...
+2026-11-14 02:05:08,561 Inference time: 9.809 s
+2026-11-14 02:05:08,562 [2/20] t_lia_2 lia      try0 7.3s audio in 92s (rtf 12.6) cps 12.3 cer 0.083 ok
+2026-11-14 02:07:29,319 Transcribing ...
+2026-11-14 02:07:39,272 Inference time: 9.953 s
+2026-11-14 02:07:39,274 [3/20] t_odessa_1 odessa   try0 8.2s audio in 141s (rtf 17.1) cps 10.4 cer 0.0 ok
+2026-11-14 02:09:38,167 Transcribing ...
+2026-11-14 02:09:45,200 Inference time: 7.033 s
+2026-11-14 02:09:45,201 [4/20] t_odessa_2 odessa   try0 6.5s audio in 119s (rtf 18.2) cps 10.9 cer 0.0 ok
+2026-11-14 02:12:20,335 Transcribing ...
+2026-11-14 02:12:32,988 Inference time: 12.653 s
+2026-11-14 02:12:32,990 [5/20] t_anselmo_1 anselmo  try0 7.4s audio in 155s (rtf 21.0) cps 13.0 cer 0.0 ok
+2026-11-14 02:14:19,699 Transcribing ...
+2026-11-14 02:14:29,679 Inference time: 9.980 s
+2026-11-14 02:14:29,684 [6/20] t_anselmo_2 anselmo  try0 7.3s audio in 107s (rtf 14.6) cps 12.3 cer 0.0 ok
+2026-11-14 02:16:03,635 Transcribing ...
+2026-11-14 02:16:15,770 Inference time: 12.135 s
+2026-11-14 02:16:15,774 [7/20] t_celeste_1 celeste  try0 6.2s audio in 94s (rtf 15.3) cps 15.6 cer 0.065 ok
+2026-11-14 02:17:38,120 Transcribing ...
+2026-11-14 02:17:49,145 Inference time: 11.025 s
+2026-11-14 02:17:49,147 [8/20] t_celeste_2 celeste  try0 5.1s audio in 82s (rtf 16.0) cps 16.2 cer 0.0 ok
+2026-11-14 02:17:50,183 Reference mel length is not equal to 2 * reference token length.
+
+2026-11-14 02:18:52,135 Transcribing ...
+2026-11-14 02:19:01,695 Inference time: 9.559 s
+2026-11-14 02:19:01,698 [9/20] t_tome_1 tome     try0 4.8s audio in 63s (rtf 13.2) cps 13.0 cer 0.036 ok
+2026-11-14 02:20:02,504 Transcribing ...
+2026-11-14 02:20:11,989 Inference time: 9.485 s
+2026-11-14 02:20:11,999 [10/20] t_tome_2 tome     try0 5.0s audio in 61s (rtf 12.3) cps 17.8 cer 0.0 ok
+2026-11-14 02:21:35,824 Transcribing ...
+2026-11-14 02:21:43,813 Inference time: 7.989 s
+2026-11-14 02:21:43,815 [11/20] t_irene_1 irene    try0 6.9s audio in 84s (rtf 12.1) cps 12.5 cer 0.012 ok
+2026-11-14 02:23:25,130 Transcribing ...
+2026-11-14 02:23:32,627 Inference time: 7.497 s
+2026-11-14 02:23:32,629 [12/20] t_irene_2 irene    try0 7.1s audio in 101s (rtf 14.3) cps 10.1 cer 0.0 ok
+2026-11-14 02:23:33,796 Reference mel length is not equal to 2 * reference token length.
+
+2026-11-14 02:24:05,843 Transcribing ...
+2026-11-14 02:24:10,216 Inference time: 4.373 s
+2026-11-14 02:24:10,217 [13/20] t_bastiao_1 bastiao  try0 3.7s audio in 33s (rtf 8.9) cps 11.1 cer 0.0 ok
+2026-11-14 02:25:22,726 Transcribing ...
+2026-11-14 02:25:33,667 Inference time: 10.940 s
+2026-11-14 02:25:33,671 [14/20] t_bastiao_2 bastiao  try0 5.3s audio in 72s (rtf 13.6) cps 14.3 cer 0.0 ok
+2026-11-14 02:26:15,548 Transcribing ...
+2026-11-14 02:26:20,540 Inference time: 4.992 s
+2026-11-14 02:26:20,541 [15/20] t_eco_m_1 eco_m    try0 5.1s audio in 42s (rtf 8.2) cps 17.8 cer 0.023 ok
+2026-11-14 02:27:00,410 Transcribing ...
+2026-11-14 02:27:08,131 Inference time: 7.721 s
+2026-11-14 02:27:08,132 [16/20] t_eco_m_2 eco_m    try0 5.5s audio in 40s (rtf 7.3) cps 14.4 cer 0.2 cer=0.20
+2026-11-14 02:28:33,031 Transcribing ...
+2026-11-14 02:28:44,161 Inference time: 11.130 s
+2026-11-14 02:28:44,162 [16/20] t_eco_m_2 eco_m    try1 5.5s audio in 85s (rtf 15.6) cps 14.5 cer 0.213 cer=0.21
+2026-11-14 02:30:14,380 Transcribing ...
+2026-11-14 02:30:19,455 Inference time: 5.075 s
+2026-11-14 02:30:19,456 [16/20] t_eco_m_2 eco_m    try2 5.3s audio in 90s (rtf 16.9) cps 14.8 cer 0.24 cer=0.24
+2026-11-14 02:30:20,223 Reference mel length is not equal to 2 * reference token length.
+
+2026-11-14 02:31:04,169 Transcribing ...
+2026-11-14 02:31:13,855 Inference time: 9.685 s
+2026-11-14 02:31:13,856 [17/20] t_eco_f_1 eco_f    try0 4.0s audio in 45s (rtf 11.1) cps 14.9 cer 0.053 ok
+2026-11-14 02:32:15,319 Transcribing ...
+2026-11-14 02:32:25,270 Inference time: 9.951 s
+2026-11-14 02:32:25,270 [18/20] t_eco_f_2 eco_f    try0 4.0s audio in 61s (rtf 15.5) cps 15.7 cer 0.0 ok
+2026-11-14 02:55:58,886 manifest updated (2 todo)
+2026-11-14 04:50:53,603 rendering 2/20 lines -> ../../a/vox/_test (shard 0/1)
+2026-11-14 04:51:06,418 input frame rate=25
+2026-11-14 04:51:09,471 Initializing the model ...
+2026-11-14 04:52:34,112 Transcribing ...
+2026-11-14 04:52:44,210 Inference time: 10.097 s
+2026-11-14 04:52:44,241 [1/2] t_narrador_1 narrador try0 6.0s audio in 84s (rtf 14.2; t3 33s/164 tok, flow 47s) cps 14.8 cer 0.0 ok
+2026-11-14 04:53:51,399 Transcribing ...
+2026-11-14 04:53:55,784 Inference time: 4.385 s
+2026-11-14 04:53:55,785 [2/2] t_narrador_2 narrador try0 4.7s audio in 67s (rtf 14.4; t3 29s/131 tok, flow 37s) cps 16.3 cer 0.0 ok
+2026-11-14 04:53:56,137 done: 2 lines, 166s CPU wall for 11s audio rendered (rtf 15.69 incl. ASR/retries)
+2026-11-14 04:54:59,503 manifest updated (0 todo)
+2026-11-14 05:12:40,391 rendering 2/20 lines -> ../../a/vox/_test (shard 0/1)
+2026-11-14 05:12:52,904 input frame rate=25
+2026-11-14 05:12:56,010 Initializing the model ...
+2026-11-14 05:12:57,463 Reference mel length is not equal to 2 * reference token length.
+
+2026-11-14 05:13:29,801 Transcribing ...
+2026-11-14 05:13:34,606 Inference time: 4.806 s
+2026-11-14 05:13:34,635 [1/2] t_celeste_1 celeste  try0 6.8s audio in 33s (rtf 4.9; t3 19s/174 tok, flow 11s) cps 14.0 cer 0.13 cer=0.13
+2026-11-14 05:14:06,584 Transcribing ...
+2026-11-14 05:14:11,365 Inference time: 4.781 s
+2026-11-14 05:14:11,366 [1/2] t_celeste_1 celeste  try1 7.0s audio in 32s (rtf 4.6; t3 19s/176 tok, flow 12s) cps 13.8 cer 0.054 ok
+2026-11-14 05:14:44,349 Transcribing ...
+2026-11-14 05:14:49,070 Inference time: 4.722 s
+2026-11-14 05:14:49,071 [2/2] t_celeste_2 celeste  try0 7.0s audio in 33s (rtf 4.7; t3 19s/177 tok, flow 12s) cps 11.9 cer 0.026 ok
+2026-11-14 05:14:49,419 done: 2 lines, 113s CPU wall for 21s audio rendered (rtf 5.44 incl. ASR/retries)
+2026-11-14 05:14:58,652 manifest updated (0 todo)

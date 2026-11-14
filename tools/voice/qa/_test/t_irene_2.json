@@ -1,0 +1,25 @@
+{
+ "id": "t_irene_2",
+ "speaker": "irene",
+ "emotion": "happy",
+ "text": "Essa folha aqui acalma o coração. Essa outra... essa só é bonita mesmo.",
+ "dur": 7.06,
+ "cps": 10.1,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Essa folha aqui acalma o coração, essa outra. Essa só é bonita mesmo.",
+ "attempt": 0,
+ "gen_s": 101.2,
+ "rtf": 14.33,
+ "max_pause": 0.54,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.6,
+  "cfg_weight": 0.35,
+  "temperature": 0.8
+ },
+ "seed": 602063493,
+ "lufs_in": -23.7,
+ "tp_limited": true,
+ "final_problems": []
+}

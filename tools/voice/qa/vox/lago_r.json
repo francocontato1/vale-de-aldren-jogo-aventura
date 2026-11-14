@@ -1,0 +1,31 @@
+{
+ "id": "lago_r",
+ "speaker": "lia",
+ "emotion": "tender",
+ "text": "Talvez seja isso que o gigante segura com a mão erguida. Não o céu. Uma pedra que ainda não afundou.",
+ "dur": 7.31,
+ "cps": 13.7,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Talvez seja isso que o gigante segura com a mão erguida, não o céu, uma pedra que ainda não afundou.",
+ "attempt": 0,
+ "gen_s": 41.7,
+ "rtf": 5.7,
+ "max_pause": 0.47,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.45,
+  "cfg_weight": 0.35,
+  "temperature": 0.7
+ },
+ "seed": 189371645,
+ "lufs_in": -20.8,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 23.7,
+  "flow": 16.3,
+  "hift": 1.6
+ },
+ "tokens": 185,
+ "final_problems": []
+}

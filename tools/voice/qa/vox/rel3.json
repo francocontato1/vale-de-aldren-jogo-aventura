@@ -1,0 +1,31 @@
+{
+ "id": "rel3",
+ "speaker": "eco_m",
+ "emotion": "tender",
+ "text": "Foi quando ela riu pela primeira vez, ali perto do poço.",
+ "dur": 3.26,
+ "cps": 17.2,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Foi quando ela riu pela primeira vez ali perto do poço.",
+ "attempt": 0,
+ "gen_s": 31.3,
+ "rtf": 9.6,
+ "max_pause": 0.25,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.45,
+  "cfg_weight": 0.4,
+  "temperature": 0.75
+ },
+ "seed": 2560437314,
+ "lufs_in": -24.2,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 15.8,
+  "flow": 14.4,
+  "hift": 1.0
+ },
+ "tokens": 129,
+ "final_problems": []
+}

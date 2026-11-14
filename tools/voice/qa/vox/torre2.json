@@ -1,0 +1,31 @@
+{
+ "id": "torre2",
+ "speaker": "eco_m",
+ "emotion": "tired",
+ "text": "Eu sei.",
+ "dur": 0.46,
+ "cps": 15.2,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Eu sei.",
+ "attempt": 0,
+ "gen_s": 13.8,
+ "rtf": 29.94,
+ "max_pause": 0.03,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.35,
+  "cfg_weight": 0.4,
+  "temperature": 0.75
+ },
+ "seed": 2623596127,
+ "lufs_in": -29.0,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 3.3,
+  "flow": 10.1,
+  "hift": 0.3
+ },
+ "tokens": 24,
+ "final_problems": []
+}

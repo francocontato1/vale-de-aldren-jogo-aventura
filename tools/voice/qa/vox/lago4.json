@@ -1,0 +1,31 @@
+{
+ "id": "lago4",
+ "speaker": "eco_f",
+ "emotion": "tender",
+ "text": "Joga outra. Eu quero ver ela voar de novo.",
+ "dur": 4.86,
+ "cps": 8.6,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Joga outra. Eu quero ver ela voar de novo.",
+ "attempt": 0,
+ "gen_s": 31.9,
+ "rtf": 6.57,
+ "max_pause": 0.47,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.45,
+  "cfg_weight": 0.4,
+  "temperature": 0.75
+ },
+ "seed": 90150845,
+ "lufs_in": -19.4,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 15.9,
+  "flow": 14.8,
+  "hift": 1.1
+ },
+ "tokens": 129,
+ "final_problems": []
+}

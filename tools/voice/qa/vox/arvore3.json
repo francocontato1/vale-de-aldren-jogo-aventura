@@ -1,0 +1,31 @@
+{
+ "id": "arvore3",
+ "speaker": "eco_m",
+ "emotion": "tender",
+ "text": "Então eu conto o meu. Pedi que a gente lembre deste dia.",
+ "dur": 3.44,
+ "cps": 16.3,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Então eu conto o meu. Pedi que a gente lembre deste dia.",
+ "attempt": 0,
+ "gen_s": 26.3,
+ "rtf": 7.64,
+ "max_pause": 0.55,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.45,
+  "cfg_weight": 0.4,
+  "temperature": 0.75
+ },
+ "seed": 2628307418,
+ "lufs_in": -23.4,
+ "tp_limited": false,
+ "stage_s": {
+  "t3": 12.1,
+  "flow": 13.3,
+  "hift": 0.8
+ },
+ "tokens": 102,
+ "final_problems": []
+}

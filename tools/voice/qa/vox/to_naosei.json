@@ -1,0 +1,31 @@
+{
+ "id": "to_naosei",
+ "speaker": "tome",
+ "emotion": "happy",
+ "text": "Ah. Tudo bem. Eu acho que é na barriga. Por isso eles ficam sentados.",
+ "dur": 4.41,
+ "cps": 15.6,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Ah, tudo bem. Eu acho que é na barriga, por isso eles ficam sentados.",
+ "attempt": 0,
+ "gen_s": 27.2,
+ "rtf": 6.16,
+ "max_pause": 0.2,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.8,
+  "cfg_weight": 0.45,
+  "temperature": 0.85
+ },
+ "seed": 3860403100,
+ "lufs_in": -25.0,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 15.2,
+  "flow": 10.7,
+  "hift": 1.0
+ },
+ "tokens": 125,
+ "final_problems": []
+}

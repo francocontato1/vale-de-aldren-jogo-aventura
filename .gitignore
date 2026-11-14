@@ -1,3 +1,9 @@
 node_modules/
 game.js
 .DS_Store
+_dev.js
+_dev.html
+tools/voice/__pycache__/
+tools/music/__pycache__/
+__pycache__/
+a/vox/_test/

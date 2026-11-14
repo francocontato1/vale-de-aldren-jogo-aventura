@@ -1,0 +1,31 @@
+{
+ "id": "an_c1",
+ "speaker": "anselmo",
+ "emotion": "tender",
+ "text": "Sabe por que eu gosto de pastorear? Ovelha não tem pressa. Com elas a gente aprende o tamanho certo do dia.",
+ "dur": 8.03,
+ "cps": 13.3,
+ "cer": 0.087,
+ "wer": 0.286,
+ "asr": "Sabe porque o gosto de pastoriares ou velhas não tem pressa? Com elas a gente aprende o tamanho certo do dia.",
+ "attempt": 0,
+ "gen_s": 44.4,
+ "rtf": 5.53,
+ "max_pause": 0.55,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.4,
+  "cfg_weight": 0.2,
+  "temperature": 0.65
+ },
+ "seed": 486883057,
+ "lufs_in": -23.3,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 25.8,
+  "flow": 16.7,
+  "hift": 1.8
+ },
+ "tokens": 206,
+ "final_problems": []
+}

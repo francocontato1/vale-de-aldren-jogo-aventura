@@ -1,0 +1,31 @@
+{
+ "id": "li_estrela",
+ "speaker": "lia",
+ "emotion": "happy",
+ "text": "Uma estrela cadente. Esqueci de fazer um pedido. Tudo bem. Ver já foi bom.",
+ "dur": 4.93,
+ "cps": 15.0,
+ "cer": 0.029,
+ "wer": 0.143,
+ "asr": "Uma estrela cadente. Esqueci de fazer um pedido. Tudo bem? Veja, foi bom!",
+ "attempt": 0,
+ "gen_s": 34.1,
+ "rtf": 6.91,
+ "max_pause": 0.38,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.65,
+  "cfg_weight": 0.4,
+  "temperature": 0.8
+ },
+ "seed": 698897624,
+ "lufs_in": -21.8,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 19.0,
+  "flow": 13.9,
+  "hift": 1.1
+ },
+ "tokens": 147,
+ "final_problems": []
+}

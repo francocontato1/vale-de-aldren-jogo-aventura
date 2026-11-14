@@ -1,0 +1,31 @@
+{
+ "id": "li_aqueduto",
+ "speaker": "lia",
+ "emotion": "tender",
+ "text": "Um aqueduto que não leva mais água a lugar nenhum. As ovelhas dormem na sombra dos arcos. Ele ainda serve. Só que de outro jeito.",
+ "dur": 8.22,
+ "cps": 15.7,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Um aqueduto que não leva mais água a lugar nenhum. As ovelhas dormem na sombra dos arcos. Ele ainda serve, só que de outro jeito.",
+ "attempt": 0,
+ "gen_s": 80.6,
+ "rtf": 9.8,
+ "max_pause": 0.47,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.45,
+  "cfg_weight": 0.35,
+  "temperature": 0.7
+ },
+ "seed": 1982039910,
+ "lufs_in": -19.6,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 46.6,
+  "flow": 30.7,
+  "hift": 1.8
+ },
+ "tokens": 221,
+ "final_problems": []
+}

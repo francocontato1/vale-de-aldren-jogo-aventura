@@ -1,0 +1,31 @@
+{
+ "id": "lago2",
+ "speaker": "eco_f",
+ "emotion": "happy",
+ "text": "Vi. A pedra afundou do mesmo jeito.",
+ "dur": 2.65,
+ "cps": 13.2,
+ "cer": 0.03,
+ "wer": 0.143,
+ "asr": "Vi. A pedra fundou do mesmo jeito.",
+ "attempt": 1,
+ "gen_s": 48.8,
+ "rtf": 18.42,
+ "max_pause": 0.27,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.65,
+  "cfg_weight": 0.5,
+  "temperature": 0.78
+ },
+ "seed": 2549984072,
+ "lufs_in": -20.3,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 16.9,
+  "flow": 30.7,
+  "hift": 1.1
+ },
+ "tokens": 81,
+ "final_problems": []
+}

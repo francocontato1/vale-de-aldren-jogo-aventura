@@ -1,0 +1,72 @@
+{
+  "title": {
+    "file": "a/music/title.mp3",
+    "dur": 99.15,
+    "loop": false,
+    "mood": "nostalgic, hopeful; solo piano then flute over harp and strings",
+    "use": "Main menu / title screen. Introduces the main motif. Play once, then silence."
+  },
+  "morning": {
+    "file": "a/music/morning.mp3",
+    "dur": 150.34,
+    "loop": false,
+    "mood": "light, airy, dawn in tall grass; flowing piano and flute (G major, lydian colour)",
+    "use": "Exploration at dawn / early morning. Play once, then minutes of silence."
+  },
+  "afternoon": {
+    "file": "a/music/afternoon.mp3",
+    "dur": 149.6,
+    "loop": false,
+    "mood": "warm village waltz (3/4); nylon guitar & harp, violin and flute",
+    "use": "Afternoon in or near the village. Play once, then silence."
+  },
+  "dusk": {
+    "file": "a/music/dusk.mp3",
+    "dur": 152.77,
+    "loop": false,
+    "mood": "golden hour, bittersweet; swelling strings and piano (F major, borrowed bVI/iv)",
+    "use": "Sunset / golden hour by the lake. Play once, then silence."
+  },
+  "night": {
+    "file": "a/music/night.mp3",
+    "dur": 174.01,
+    "loop": false,
+    "mood": "starry night; sparse slow piano, soft pad, celesta stars (E lydian)",
+    "use": "Night exploration under the stars. Very sparse; play once, then silence."
+  },
+  "ruins": {
+    "file": "a/music/ruins.mp3",
+    "dur": 127.87,
+    "loop": false,
+    "mood": "mystery and wonder; solo cello, low piano, distant horn (D dorian), lots of space",
+    "use": "Approaching the ancient ruins / stone giants. Play once, then silence."
+  },
+  "memory": {
+    "file": "a/music/memory.mp3",
+    "dur": 39.33,
+    "loop": false,
+    "mood": "magical memory / vision; shimmering harp, celesta motif, airy pad (Eb lydian)",
+    "use": "Stinger for visions / memories of the vanished people. Ends softly."
+  },
+  "discover": {
+    "file": "a/music/discover.mp3",
+    "dur": 12.97,
+    "loop": false,
+    "mood": "short discovery stinger; harp glissando, soft chord, motif head on celesta",
+    "use": "Finding a relic / point of interest / journal entry."
+  },
+  "finale": {
+    "file": "a/music/finale.mp3",
+    "dur": 171.82,
+    "loop": false,
+    "mood": "meteor-shower ending; the main motif in full, strings+piano+flute+horn, warm climax, quiet resolution",
+    "use": "Ending / meteor shower sequence and credits. Play once."
+  },
+  "village_night": {
+    "file": "a/music/village_night.mp3",
+    "dur": 110.77,
+    "loop": true,
+    "mood": "lullaby by the village fire; music box and nylon guitar (G major)",
+    "use": "Near the village campfire at night. Seamless loop (tail folded into the start); fade in/out in game."
+  }
+}

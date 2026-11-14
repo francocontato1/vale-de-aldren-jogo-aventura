@@ -63,10 +63,10 @@ export class Grass {
       s.fragmentShader = s.fragmentShader.replace('#include <common>', `#include <common>
 uniform vec3 uSunDir; uniform vec3 uSunCol; uniform float uSunI; varying float vT; varying float vSeed; varying vec3 vMacro; varying vec3 vGW;`)
         .replace('vec4 diffuseColor = vec4( diffuse, opacity );', `
- vec3 base = vec3(0.05,0.085,0.025);
- vec3 tip = mix(vec3(0.17,0.26,0.065), vec3(0.27,0.30,0.10), vSeed);
+ vec3 base = vec3(0.06,0.085,0.025);
+ vec3 tip = mix(vec3(0.21,0.27,0.07), vec3(0.33,0.33,0.11), vSeed);
  tip *= mix(vec3(1.04,0.98,0.78), vec3(0.82,0.95,0.86), vMacro.r);
- tip = mix(tip, vec3(0.40,0.36,0.17), smoothstep(0.55,0.85,vMacro.b)*0.55 + step(0.93, vSeed)*0.35);
+ tip = mix(tip, vec3(0.46,0.40,0.18), smoothstep(0.5,0.85,vMacro.b)*0.65 + step(0.92, vSeed)*0.35);
  vec3 gcol = mix(base, tip, smoothstep(0.0, 0.95, vT));
  gcol *= mix(0.55, 1.0, smoothstep(0.0, 0.5, vT));
  vec4 diffuseColor = vec4(gcol, 1.0);`)
@@ -112,7 +112,7 @@ uniform vec3 uSunDir; uniform vec3 uSunCol; uniform float uSunI; varying float v
     const cy = groundH(x0 + TILE / 2, z0 + TILE / 2);
     g.boundingSphere = new THREE.Sphere(new THREE.Vector3(x0 + TILE / 2, cy, z0 + TILE / 2), TILE * 0.75 + 3);
     g.boundingBox = new THREE.Box3(new THREE.Vector3(x0, cy - 20, z0), new THREE.Vector3(x0 + TILE, cy + 20, z0 + TILE));
-    const m = new THREE.Mesh(g, this.mat); m.frustumCulled = true; m.receiveShadow = true; m.castShadow = false;
+    const m = new THREE.Mesh(g, this.mat); m.frustumCulled = true; m.receiveShadow = true; m.castShadow = false; m.layers.set(1);
     m.userData.cx = x0 + TILE / 2; m.userData.cz = z0 + TILE / 2;
     this.scene.add(m); return m;
   }

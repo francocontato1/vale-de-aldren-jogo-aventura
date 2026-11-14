@@ -1,0 +1,35 @@
+{
+ "id": "fim6",
+ "speaker": "odessa",
+ "emotion": "tender",
+ "text": "Pronto. Agora o vale inteiro sabe que foi olhado.",
+ "dur": 6.13,
+ "cps": 8.0,
+ "cer": 0.043,
+ "wer": 0.222,
+ "asr": "Pronto! Agora o valenteiro sabe que foi olhado.",
+ "attempt": 1,
+ "gen_s": 80.2,
+ "rtf": 13.09,
+ "max_pause": 0.43,
+ "problems": [
+  "cps=8.0"
+ ],
+ "params": {
+  "exaggeration": 0.35,
+  "cfg_weight": 0.25,
+  "temperature": 0.58
+ },
+ "seed": 2706467466,
+ "lufs_in": -20.8,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 30.3,
+  "flow": 47.7,
+  "hift": 2.1
+ },
+ "tokens": 156,
+ "final_problems": [
+  "cps=8.0"
+ ]
+}

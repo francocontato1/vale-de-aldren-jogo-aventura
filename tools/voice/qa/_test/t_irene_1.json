@@ -1,0 +1,25 @@
+{
+ "id": "t_irene_1",
+ "speaker": "irene",
+ "emotion": "tender",
+ "text": "Olha essa luz no fim da tarde... parece que o vale inteiro está prendendo a respiração.",
+ "dur": 6.94,
+ "cps": 12.5,
+ "cer": 0.012,
+ "wer": 0.062,
+ "asr": "Olha essa luz no fim da tarde. Parece que o Vale inteiro está aprendendo a respiração.",
+ "attempt": 0,
+ "gen_s": 83.7,
+ "rtf": 12.05,
+ "max_pause": 0.58,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.4,
+  "cfg_weight": 0.3,
+  "temperature": 0.7
+ },
+ "seed": 2689375272,
+ "lufs_in": -23.1,
+ "tp_limited": true,
+ "final_problems": []
+}

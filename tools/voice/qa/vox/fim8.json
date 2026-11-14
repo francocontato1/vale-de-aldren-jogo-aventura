@@ -1,0 +1,31 @@
+{
+ "id": "fim8",
+ "speaker": "celeste",
+ "emotion": "happy",
+ "text": "Trouxe pão para todo mundo! Até para você, Odessa. Não adianta fazer essa cara.",
+ "dur": 5.29,
+ "cps": 14.9,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Trouxe pão para todo mundo, até para você, Odessa. Não adianta fazer essa cara.",
+ "attempt": 0,
+ "gen_s": 30.0,
+ "rtf": 5.67,
+ "max_pause": 0.33,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.75,
+  "cfg_weight": 0.45,
+  "temperature": 0.85
+ },
+ "seed": 97904113,
+ "lufs_in": -19.4,
+ "tp_limited": false,
+ "stage_s": {
+  "t3": 17.2,
+  "flow": 11.5,
+  "hift": 1.2
+ },
+ "tokens": 170,
+ "final_problems": []
+}

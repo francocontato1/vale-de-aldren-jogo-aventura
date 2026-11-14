@@ -74,9 +74,9 @@ export class Post {
     this.rays.uniforms.tint.value.copy(sunCol);
     const hz = new THREE.Vector3(fwd.x, 0, fwd.z).normalize().multiplyScalar(1000).add(camera.position).project(camera); this.rays.uniforms.horizon.value = hz.y * 0.5 + 0.5;
     const g = this.grade.uniforms;
-    g.lift.value.setRGB(0.012 + 0.0 * dusk, 0.016, 0.03 + nightF * 0.03);
-    g.gain.value.setRGB(1.0 + dusk * 0.06, 1.0 - nightF * 0.05, 1.0 - dusk * 0.06 + nightF * 0.06);
-    g.sat.value = 1.08 + dusk * 0.12 - nightF * 0.35;
+    g.lift.value.setRGB(0.014 + 0.01 * dusk, 0.014, 0.024 + nightF * 0.03);
+    g.gain.value.setRGB(1.03 + dusk * 0.07, 1.0 - nightF * 0.05, 0.96 - dusk * 0.06 + nightF * 0.08);
+    g.sat.value = 1.04 + dusk * 0.14 - nightF * 0.3;
     g.contrast.value = 0.2 + dusk * 0.06;
   }
   render(dt, t) { this.grade.uniforms.time.value = t; this.composer.render(dt); }

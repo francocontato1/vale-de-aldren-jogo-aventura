@@ -1,0 +1,31 @@
+{
+ "id": "li_noite",
+ "speaker": "lia",
+ "emotion": "neutral",
+ "text": "Já escureceu. Melhor acender a lanterna.",
+ "dur": 2.55,
+ "cps": 15.7,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Já escureceu, melhor acender a lanterna.",
+ "attempt": 0,
+ "gen_s": 21.9,
+ "rtf": 8.57,
+ "max_pause": 0.13,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.5,
+  "cfg_weight": 0.45,
+  "temperature": 0.75
+ },
+ "seed": 2102102153,
+ "lufs_in": -21.9,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 9.4,
+  "flow": 11.7,
+  "hift": 0.7
+ },
+ "tokens": 79,
+ "final_problems": []
+}

@@ -1,0 +1,31 @@
+{
+ "id": "escada2",
+ "speaker": "eco_f",
+ "emotion": "happy",
+ "text": "Leva até o último degrau.",
+ "dur": 1.78,
+ "cps": 14.0,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Leva até o último degrau.",
+ "attempt": 1,
+ "gen_s": 18.5,
+ "rtf": 10.38,
+ "max_pause": 0.1,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.65,
+  "cfg_weight": 0.5,
+  "temperature": 0.78
+ },
+ "seed": 3169861410,
+ "lufs_in": -20.7,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 7.2,
+  "flow": 10.7,
+  "hift": 0.5
+ },
+ "tokens": 60,
+ "final_problems": []
+}

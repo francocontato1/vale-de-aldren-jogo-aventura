@@ -1,0 +1,31 @@
+{
+ "id": "od_como",
+ "speaker": "odessa",
+ "emotion": "neutral",
+ "text": "Vá até eles e fique. Sente, espere, olhe. Quando um lugar percebe que está sendo olhado com calma, ele lembra. Nós chamamos isso de lume. Desenhe no seu caderno o que você vir.",
+ "dur": 12.84,
+ "cps": 13.7,
+ "cer": 0.012,
+ "wer": 0.03,
+ "asr": "\"Va até eles e fique. Sente, espere, olhe.\" Quando o lugar percebe que está sendo olhado com calma, ele lembra. Nós chamamos isso de lume. Desenhe no seu caderno o que você vir.",
+ "attempt": 0,
+ "gen_s": 73.3,
+ "rtf": 5.71,
+ "max_pause": 0.38,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.4,
+  "cfg_weight": 0.3,
+  "temperature": 0.7
+ },
+ "seed": 3586849977,
+ "lufs_in": -20.7,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 46.2,
+  "flow": 24.5,
+  "hift": 2.5
+ },
+ "tokens": 343,
+ "final_problems": []
+}

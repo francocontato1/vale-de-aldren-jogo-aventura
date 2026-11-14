@@ -1,0 +1,31 @@
+{
+ "id": "t_narrador_1",
+ "speaker": "narrador",
+ "emotion": "neutral",
+ "text": "Oitenta anos atrás, quatro amigos e quatro gigantes de pedra atravessaram a Longa Noite.",
+ "dur": 5.95,
+ "cps": 14.8,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "80 anos atrás, quatro amigos e quatro gigantes de pedra atravessaram a longa noite.",
+ "attempt": 0,
+ "gen_s": 84.2,
+ "rtf": 14.16,
+ "max_pause": 0.27,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.4,
+  "cfg_weight": 0.45,
+  "temperature": 0.7
+ },
+ "seed": 3959731567,
+ "lufs_in": -22.9,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 32.6,
+  "flow": 46.8,
+  "hift": 2.7
+ },
+ "tokens": 164,
+ "final_problems": []
+}

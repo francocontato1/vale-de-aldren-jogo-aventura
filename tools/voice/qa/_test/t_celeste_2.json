@@ -1,0 +1,31 @@
+{
+ "id": "t_celeste_2",
+ "speaker": "celeste",
+ "emotion": "neutral",
+ "text": "Farinha, água, sal e paciência. O resto é conversa. Quer aprender ou só quer comer?",
+ "dur": 6.97,
+ "cps": 11.9,
+ "cer": 0.026,
+ "wer": 0.067,
+ "asr": "A, farinha, água, sal e paciência. O resto é conversa. Quer aprender ou só quer comer?",
+ "attempt": 0,
+ "gen_s": 32.6,
+ "rtf": 4.68,
+ "max_pause": 0.43,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.6,
+  "cfg_weight": 0.5,
+  "temperature": 0.8
+ },
+ "seed": 1854774872,
+ "lufs_in": -19.9,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 18.8,
+  "flow": 12.5,
+  "hift": 1.1
+ },
+ "tokens": 177,
+ "final_problems": []
+}

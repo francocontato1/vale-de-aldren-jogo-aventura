@@ -1,0 +1,31 @@
+{
+ "id": "od_cha",
+ "speaker": "odessa",
+ "emotion": "happy",
+ "text": "Quer chá? Está morno. Está sempre morno. Esse é o feitiço.",
+ "dur": 6.41,
+ "cps": 9.0,
+ "cer": 0.111,
+ "wer": 0.273,
+ "asr": "Queixa, está morno, está sempre morno, esse é o fiteiço.",
+ "attempt": 0,
+ "gen_s": 39.0,
+ "rtf": 6.08,
+ "max_pause": 0.34,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.55,
+  "cfg_weight": 0.25,
+  "temperature": 0.75
+ },
+ "seed": 3888060429,
+ "lufs_in": -21.8,
+ "tp_limited": false,
+ "stage_s": {
+  "t3": 21.4,
+  "flow": 16.1,
+  "hift": 1.5
+ },
+ "tokens": 163,
+ "final_problems": []
+}

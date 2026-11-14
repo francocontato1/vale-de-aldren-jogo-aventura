@@ -1,0 +1,31 @@
+{
+ "id": "fim10",
+ "speaker": "odessa",
+ "emotion": "tender",
+ "text": "Obrigada, cartógrafa. Seu mapa está pronto. Mas o vale, não. O vale nunca fica pronto.",
+ "dur": 8.23,
+ "cps": 10.4,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Obrigada, cartógrafa. Seu mapa está pronto. Mas o vale, não. O vale nunca fica pronto.",
+ "attempt": 0,
+ "gen_s": 50.2,
+ "rtf": 6.1,
+ "max_pause": 0.52,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.35,
+  "cfg_weight": 0.2,
+  "temperature": 0.65
+ },
+ "seed": 3000110368,
+ "lufs_in": -21.0,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 29.3,
+  "flow": 18.9,
+  "hift": 1.8
+ },
+ "tokens": 228,
+ "final_problems": []
+}

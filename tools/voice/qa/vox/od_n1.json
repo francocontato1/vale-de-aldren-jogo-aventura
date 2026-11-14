@@ -1,0 +1,31 @@
+{
+ "id": "od_n1",
+ "speaker": "odessa",
+ "emotion": "tender",
+ "text": "Um lume, então. Fazia tempo que ninguém via um. Eu dei nomes aos gigantes, sabia? Os Veladores nunca disseram como chamavam eles. Talvez nome seja coisa de quem tem medo de esquecer.",
+ "dur": 14.17,
+ "cps": 12.8,
+ "cer": 0.023,
+ "wer": 0.062,
+ "asr": "Um lume, então, fazia tempo que ninguém via um. Eu dei nomes aos gigantes, sabia? Os veladores nunca disseram como chamavam eles, talvez o nome seja a coisa de quem tem medo de esquecer.",
+ "attempt": 0,
+ "gen_s": 79.1,
+ "rtf": 5.58,
+ "max_pause": 0.72,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.35,
+  "cfg_weight": 0.2,
+  "temperature": 0.65
+ },
+ "seed": 3480233210,
+ "lufs_in": -20.4,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 49.3,
+  "flow": 27.2,
+  "hift": 2.5
+ },
+ "tokens": 358,
+ "final_problems": []
+}

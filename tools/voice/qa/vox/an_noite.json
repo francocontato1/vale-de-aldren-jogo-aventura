@@ -1,0 +1,31 @@
+{
+ "id": "an_noite",
+ "speaker": "anselmo",
+ "emotion": "tired",
+ "text": "Já é noite? Hum. Nessa idade a gente conta estrela para dormir. Eu nunca passo das trinta.",
+ "dur": 8.02,
+ "cps": 11.2,
+ "cer": 0.023,
+ "wer": 0.118,
+ "asr": "Já em noite, um, nessa idade, a gente conta estrela para dormir. Eu nunca passo das trinta.",
+ "attempt": 0,
+ "gen_s": 46.4,
+ "rtf": 5.79,
+ "max_pause": 0.68,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.3,
+  "cfg_weight": 0.2,
+  "temperature": 0.65
+ },
+ "seed": 4097470764,
+ "lufs_in": -23.2,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 26.8,
+  "flow": 17.6,
+  "hift": 1.8
+ },
+ "tokens": 213,
+ "final_problems": []
+}

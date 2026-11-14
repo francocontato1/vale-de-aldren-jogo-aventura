@@ -126,7 +126,9 @@ export class Trees {
       const b = new THREE.InstancedMesh(v.bg, v.bark, n); const l = new THREE.InstancedMesh(v.lg, v.leaf, n);
       b.castShadow = l.castShadow = true; b.receiveShadow = l.receiveShadow = true; l.customDepthMaterial = v.depthLeaf;
       b.frustumCulled = l.frustumCulled = false; b.count = l.count = 0;
-      this.scene.add(b, l); v.near = { b, l };
+      // faixa do meio: geometria completa, mas sem projetar sombra (bem mais leve)
+      const mb = new THREE.InstancedMesh(v.bg, v.bark, n), ml = new THREE.InstancedMesh(v.lg, v.leaf, n); mb.castShadow = ml.castShadow = false; mb.receiveShadow = ml.receiveShadow = true; mb.frustumCulled = ml.frustumCulled = false; mb.count = ml.count = 0;
+      this.scene.add(b, l, mb, ml); v.near = { b, l }; v.mid = { b: mb, l: ml };
       if (v.impTex) {
         const g = new THREE.InstancedBufferGeometry(); const base = new THREE.PlaneGeometry(1, 1); base.translate(0, 0.5, 0);
         g.index = base.index; g.attributes.position = base.attributes.position; g.attributes.uv = base.attributes.uv;
@@ -164,21 +166,31 @@ export class Trees {
     }
   }
 
-  update(cam, ambientColor) {
-    const near = Q().treeNear * (settings.treeK || 1);
+  update(cam, ambientColor, fwd) {
+    const near = Q().treeNear * (settings.treeK || 1); const shadowR = Math.min(Q().shadowR * 0.75, 36);
     for (const v of this.variants) if (v.imp) { v.imp.mat.uniforms.near.value = near; v.imp.mat.uniforms.amb.value.copy(ambientColor); }
-    if (cam.distanceTo(this.nearCenter) < 6) return;
-    this.nearCenter.copy(cam);
+    // só refaz as listas quando a câmera anda ou gira bastante
+    const f = fwd ? new THREE.Vector2(fwd.x, fwd.z).normalize() : new THREE.Vector2(0, -1);
+    if (cam.distanceTo(this.nearCenter) < 5 && this.lastFwd && this.lastFwd.dot(f) > 0.96) return;
+    this.nearCenter.copy(cam); this.lastFwd = f.clone();
     const m4 = new THREE.Matrix4(), qt = new THREE.Quaternion(), sv = new THREE.Vector3(), pv = new THREE.Vector3(), yAx = new THREE.Vector3(0, 1, 0);
     const bushR = near * 0.7;
     for (const v of this.variants) {
-      if (!v.near) continue; let nn = 0, ni = 0; const isBush = v.sp.type === 'bush';
+      if (!v.near) continue; let nn = 0, nm = 0, ni = 0; const isBush = v.sp.type === 'bush'; const rad = isBush ? 2.5 : 7;
       for (const it of v.list) {
-        const d = Math.hypot(it.x - cam.x, it.z - cam.z);
-        if (d < (isBush ? bushR : near * 1.08)) { qt.setFromAxisAngle(yAx, it.rot); sv.set(it.s, it.s, it.s); pv.set(it.x, it.y - 0.15, it.z); m4.compose(pv, qt, sv); v.near.b.setMatrixAt(nn, m4); v.near.l.setMatrixAt(nn, m4); nn++; }
-        if (v.imp && d > near * 0.92 && d < 1400) { const a = v.imp.attr.array; a[ni * 4] = it.x; a[ni * 4 + 1] = it.y - 0.2; a[ni * 4 + 2] = it.z; a[ni * 4 + 3] = it.s; ni++; }
+        const dx = it.x - cam.x, dz = it.z - cam.z, d = Math.hypot(dx, dz);
+        if (d < (isBush ? bushR : near * 1.08)) {
+          // fora da vista (atrás da câmera) não desenha; perto continua, por causa das sombras
+          const inView = d < rad * 2 || (dx * f.x + dz * f.y) / d > -0.25 - rad / d;
+          const cast = d < shadowR + rad;
+          if (!inView && !cast) continue;
+          qt.setFromAxisAngle(yAx, it.rot); sv.set(it.s, it.s, it.s); pv.set(it.x, it.y - 0.15, it.z); m4.compose(pv, qt, sv);
+          if (cast) { v.near.b.setMatrixAt(nn, m4); v.near.l.setMatrixAt(nn, m4); nn++; } else { v.mid.b.setMatrixAt(nm, m4); v.mid.l.setMatrixAt(nm, m4); nm++; }
+        }
+        if (v.imp && d > near * 0.92 && d < 1400 && (dx * f.x + dz * f.y) / d > -0.3) { const a = v.imp.attr.array; a[ni * 4] = it.x; a[ni * 4 + 1] = it.y - 0.2; a[ni * 4 + 2] = it.z; a[ni * 4 + 3] = it.s; ni++; }
       }
       v.near.b.count = v.near.l.count = nn; v.near.b.instanceMatrix.needsUpdate = v.near.l.instanceMatrix.needsUpdate = true;
+      v.mid.b.count = v.mid.l.count = nm; v.mid.b.instanceMatrix.needsUpdate = v.mid.l.instanceMatrix.needsUpdate = true;
       if (v.imp) { v.imp.mesh.geometry.instanceCount = ni; v.imp.attr.needsUpdate = true; v.imp.attr.clearUpdateRanges && v.imp.attr.clearUpdateRanges(); }
     }
   }

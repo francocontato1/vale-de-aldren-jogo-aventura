@@ -1,0 +1,31 @@
+{
+ "id": "ce_noite",
+ "speaker": "celeste",
+ "emotion": "tired",
+ "text": "O forno já esfriou, querida. Volta amanhã cedo, que tem pão de mel.",
+ "dur": 4.57,
+ "cps": 14.7,
+ "cer": 0.016,
+ "wer": 0.077,
+ "asr": "O forno já esfiou, querida. Volta amanhã cedo que tem pão de mel.",
+ "attempt": 0,
+ "gen_s": 23.8,
+ "rtf": 5.22,
+ "max_pause": 0.48,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.45,
+  "cfg_weight": 0.4,
+  "temperature": 0.75
+ },
+ "seed": 821667781,
+ "lufs_in": -22.2,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 12.8,
+  "flow": 9.9,
+  "hift": 1.0
+ },
+ "tokens": 127,
+ "final_problems": []
+}

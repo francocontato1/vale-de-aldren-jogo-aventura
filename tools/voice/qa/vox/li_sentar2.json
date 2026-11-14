@@ -1,0 +1,31 @@
+{
+ "id": "li_sentar2",
+ "speaker": "lia",
+ "emotion": "tender",
+ "text": "Vou ficar mais um pouco. Ninguém está me esperando com pressa.",
+ "dur": 3.08,
+ "cps": 20.1,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Vou ficar mais um pouco. Ninguém está me esperando com pressa.",
+ "attempt": 0,
+ "gen_s": 27.8,
+ "rtf": 9.04,
+ "max_pause": 0.12,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.45,
+  "cfg_weight": 0.35,
+  "temperature": 0.7
+ },
+ "seed": 2818981486,
+ "lufs_in": -21.0,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 13.6,
+  "flow": 13.3,
+  "hift": 0.9
+ },
+ "tokens": 105,
+ "final_problems": []
+}

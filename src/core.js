@@ -39,11 +39,11 @@ export const store = {
 
 export const isTouch = matchMedia('(pointer:coarse)').matches || ('ontouchstart' in window && navigator.maxTouchPoints > 0);
 export const QUAL = {
-  alta: { pr: Math.min(devicePixelRatio, 1.25), shadow: 2048, shadowR: 60, grassR: 42, grassDen: 62, msaa: 0, ao: false, bloom: true, treeNear: 150, view: 1100, fur: 16 },
-  media: { pr: Math.min(devicePixelRatio, 1.0), shadow: 2048, shadowR: 50, grassR: 34, grassDen: 45, msaa: 0, ao: false, bloom: true, treeNear: 105, view: 850, fur: 12 },
-  baixa: { pr: 0.75, shadow: 1024, shadowR: 38, grassR: 22, grassDen: 22, msaa: 0, ao: false, bloom: false, treeNear: 60, view: 600, fur: 6 },
+  alta: { pr: Math.min(devicePixelRatio, 1.25), shadow: 2048, shadowR: 60, grassR: 42, grassDen: 62, msaa: 0, ao: false, bloom: true, treeNear: 120, view: 1100, fur: 16 },
+  media: { pr: Math.min(devicePixelRatio, 1.0), shadow: 2048, shadowR: 50, grassR: 34, grassDen: 45, msaa: 0, ao: false, bloom: true, treeNear: 85, view: 850, fur: 12 },
+  baixa: { pr: 0.75, shadow: 1024, shadowR: 38, grassR: 22, grassDen: 22, msaa: 0, ao: false, bloom: false, treeNear: 55, view: 600, fur: 6 },
 };
-export const settings = { quality: store.get('aldren2-q') || (isTouch ? 'baixa' : 'media'), grassK: 1, treeK: 1 };
+export const settings = { quality: store.get('aldren2-q') || (isTouch ? 'baixa' : 'media'), grassK: 1, treeK: 1, sens: 1 };
 if (!QUAL[settings.quality]) settings.quality = 'media';
 export const Q = () => QUAL[settings.quality];
 
@@ -57,6 +57,7 @@ renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 export const scene = new THREE.Scene();
 export const camera = new THREE.PerspectiveCamera(55, innerWidth / innerHeight, 0.1, 4000);
 camera.rotation.order = 'YXZ';
+camera.layers.enable(1); // camada 1: grama, plantas e partículas (fora do reflexo da água)
 scene.add(camera);
 
 // ---------- atmospheric fog (global shader chunk override) ----------

@@ -1,0 +1,31 @@
+{
+ "id": "od_todos",
+ "speaker": "odessa",
+ "emotion": "excited",
+ "text": "Oito lugares. Você viu coisas que eu nunca vi. Hoje à noite passa a Chuva de Lumes. Acontece uma vez a cada cem anos. Suba até o observatório depois que escurecer. Eu espero você.",
+ "dur": 13.44,
+ "cps": 13.3,
+ "cer": 0.029,
+ "wer": 0.029,
+ "asr": "8. Oito lugares. Você viu coisas que eu nunca vi. Hoje a noite passa a chuva de lumes. Acontece uma vez a cada 100 anos. Suba até o observatório depois que escurecer. Eu espero você.",
+ "attempt": 0,
+ "gen_s": 79.7,
+ "rtf": 5.93,
+ "max_pause": 0.54,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.7,
+  "cfg_weight": 0.25,
+  "temperature": 0.75
+ },
+ "seed": 2239188610,
+ "lufs_in": -20.4,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 49.8,
+  "flow": 26.8,
+  "hift": 2.9
+ },
+ "tokens": 367,
+ "final_problems": []
+}

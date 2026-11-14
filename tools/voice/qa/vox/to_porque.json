@@ -1,0 +1,31 @@
+{
+ "id": "to_porque",
+ "speaker": "tome",
+ "emotion": "excited",
+ "text": "Porque eu quero acordar eles! Todo dia eu grito bom dia para o gigante do lago. Um dia ele vai responder. A tia Celeste diz que paciência é a magia mais forte. Mas é a mais chata também.",
+ "dur": 11.27,
+ "cps": 16.5,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Porque eu quero acordar eles. Todo dia eu grito \"bom dia\" para o gigante do lago. Um dia ele vai responder. A tia Celeste diz que paciência é a magia mais forte, mas é a mais chata também.",
+ "attempt": 0,
+ "gen_s": 60.6,
+ "rtf": 5.37,
+ "max_pause": 0.31,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.95,
+  "cfg_weight": 0.45,
+  "temperature": 0.85
+ },
+ "seed": 1141399843,
+ "lufs_in": -23.6,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 40.0,
+  "flow": 18.1,
+  "hift": 2.2
+ },
+ "tokens": 312,
+ "final_problems": []
+}

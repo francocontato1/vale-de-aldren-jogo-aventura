@@ -1,0 +1,31 @@
+{
+ "id": "od_n4",
+ "speaker": "odessa",
+ "emotion": "tired",
+ "text": "Está quase. Engraçado... e se o mapa ficar pronto e eu não sentir nada? Seiscentos anos é muito tempo para esperar uma resposta.",
+ "dur": 11.16,
+ "cps": 11.5,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Está quase, engraçado. E se o mapa ficar pronto e eu não sentir nada, 600 anos é muito tempo para esperar uma resposta.",
+ "attempt": 0,
+ "gen_s": 71.3,
+ "rtf": 6.39,
+ "max_pause": 0.56,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.25,
+  "cfg_weight": 0.2,
+  "temperature": 0.65
+ },
+ "seed": 3978907104,
+ "lufs_in": -21.8,
+ "tp_limited": false,
+ "stage_s": {
+  "t3": 38.2,
+  "flow": 30.3,
+  "hift": 2.6
+ },
+ "tokens": 290,
+ "final_problems": []
+}

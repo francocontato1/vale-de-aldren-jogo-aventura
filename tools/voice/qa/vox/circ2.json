@@ -1,0 +1,31 @@
+{
+ "id": "circ2",
+ "speaker": "eco_m",
+ "emotion": "neutral",
+ "text": "Talvez. E deve achar a gente tão pequeno.",
+ "dur": 2.53,
+ "cps": 16.2,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Talvez, e deve achar a gente tão pequeno.",
+ "attempt": 0,
+ "gen_s": 23.3,
+ "rtf": 9.22,
+ "max_pause": 0.29,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.5,
+  "cfg_weight": 0.5,
+  "temperature": 0.8
+ },
+ "seed": 78544572,
+ "lufs_in": -23.0,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 9.8,
+  "flow": 13.0,
+  "hift": 0.5
+ },
+ "tokens": 78,
+ "final_problems": []
+}

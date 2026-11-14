@@ -1,124 +1,140 @@
-import { THREE, scene, camera, U, clamp, lerp, rand, rr, lerpAng } from './core.js';
+// Lumes (lembranças de luz), o espírito que acompanha a Lia, vaga-lumes e pólen.
+import { THREE, scene, camera, U, clamp, lerp, rand, rr } from './core.js';
 import { groundH } from './world/terrain.js';
 import { Human } from './actors/human.js';
-import { Speech } from './speech.js';
+import { Voice } from './audio.js';
+import { LINES } from './story.js';
 
-// ---------- shared textures ----------
-function glowTex(inner = 'rgba(255,255,255,1)', mid = 'rgba(190,240,255,0.5)') { const c = document.createElement('canvas'); c.width = c.height = 128; const g = c.getContext('2d'); const gr = g.createRadialGradient(64, 64, 0, 64, 64, 64); gr.addColorStop(0, inner); gr.addColorStop(0.18, mid); gr.addColorStop(1, 'rgba(120,200,255,0)'); g.fillStyle = gr; g.fillRect(0, 0, 128, 128); const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return t; }
-const GLOW = glowTex();
+function glowTex(inner = 'rgba(255,255,255,1)', mid = 'rgba(255,236,200,0.45)', outer = 'rgba(255,220,170,0)') { const c = document.createElement('canvas'); c.width = c.height = 128; const g = c.getContext('2d'); const gr = g.createRadialGradient(64, 64, 0, 64, 64, 64); gr.addColorStop(0, inner); gr.addColorStop(0.2, mid); gr.addColorStop(1, outer); g.fillStyle = gr; g.fillRect(0, 0, 128, 128); const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return t; }
+export const GLOW = glowTex();
 
-// ---------- ghost (memory) figures ----------
-const OUTFIT = { elowen: 'iago', teodor: 'bento', iara: 'tomas', bras: 'mateus', kid: 'tomas' };
-function ghostify(h, mat) {
-  for (const m of h.meshes) { if (m.name === 'Wolf3D_Headwear' && h.ghostNoHat) { m.visible = false; continue; } m.material = mat; m.castShadow = false; m.receiveShadow = false; }
-  if (h.rifle) h.rifle.visible = false;
-}
-function ghostMaterial() {
-  const m = new THREE.MeshStandardMaterial({ color: 0x9fd2ff, emissive: 0x5cb8ff, emissiveIntensity: 0.6, roughness: 0.6, transparent: true, opacity: 0, depthWrite: false, side: THREE.FrontSide });
+// ---------- figuras da lembrança: luz dourada, translúcida ----------
+function lumeMaterial() {
+  const m = new THREE.MeshStandardMaterial({ color: 0xfff0d0, emissive: 0xffd9a0, emissiveIntensity: 0.55, roughness: 0.7, transparent: true, opacity: 0, depthWrite: false });
   m.onBeforeCompile = (s) => {
     s.uniforms.uT = U.time;
     s.fragmentShader = s.fragmentShader.replace('#include <common>', '#include <common>\nuniform float uT;')
       .replace('#include <emissivemap_fragment>', `#include <emissivemap_fragment>
- float fr = pow(1.0 - abs(dot(normalize(vViewPosition), normal)), 2.2);
- totalEmissiveRadiance += vec3(0.55,0.85,1.0) * fr * 1.8;
- float scan = 0.85 + 0.15*sin(gl_FragCoord.y*0.35 + uT*6.0);
- diffuseColor.a *= (0.35 + fr*0.65) * scan;`);
+ float fr = pow(1.0 - abs(dot(normalize(vViewPosition), normal)), 2.0);
+ totalEmissiveRadiance += vec3(1.0,0.86,0.62) * fr * 1.6;
+ float shimmer = 0.88 + 0.12*sin(gl_FragCoord.y*0.12 + uT*2.0);
+ diffuseColor.a *= (0.28 + fr*0.72) * shimmer;`);
   };
-  m.customProgramCacheKey = () => 'ghost';
+  m.customProgramCacheKey = () => 'lume';
   return m;
 }
+const ANIM = { throw: 'throw', sit: 'sit', lie: 'lie', idle: 'idle', idleOld: 'idle', reach: 'interact', kneel: 'kneel', work: 'kneel' };
+const MODEL = { torre: { eco_m: 'eco_old' }, relogios: { eco_m: 'eco_old' } };
 
-let sharedEchoLight = null;
-export function setEchoLight(l) { sharedEchoLight = l; }
-export class Echo {
-  constructor(def, center, yawFaceTargets, onDone) {
-    this.def = def; this.center = center; this.onDone = onDone; this.t = 0; this.fade = 0; this.line = -1; this.lineT = 0; this.done = false; this.speaking = false;
-    this.mat = ghostMaterial(); this.figs = [];
-    for (const f of def.figures) {
-      const h = new Human(OUTFIT[f.who] || 'tomas'); h.ghostNoHat = f.who !== 'iara'; if (f.who === 'kid') h.root.scale.setScalar(0.64);
-      ghostify(h, this.mat); const x = center.x + f.dx, z = center.z + f.dz; h.root.position.set(x, groundH(x, z), z);
-      const tgt = yawFaceTargets(f.face, x, z); h.root.rotation.y = Math.atan2(tgt.x - x, tgt.z - z);
-      if (f.anim) h.play(f.anim, 0); scene.add(h.root); this.figs.push({ h, who: f.who, x, z });
+export class Lume {
+  constructor(place, spot, opts, onDone) {
+    this.def = place; this.onDone = onDone; this.t = 0; this.fade = 0; this.line = -1; this.done = false; this.ending = false; this.speaking = false; this.lineT = 0;
+    this.mat = lumeMaterial(); this.figs = [];
+    const yaw0 = opts.yaw ?? 0;
+    for (const f of place.figures) {
+      const key = (MODEL[place.id] && MODEL[place.id][f.who]) || f.who; const h = new Human(key);
+      for (const m of h.meshes) { m.material = this.mat; m.castShadow = false; m.receiveShadow = false; }
+      const c = Math.cos(yaw0), s = Math.sin(yaw0); let x = spot.x + f.dx * c + f.dz * s, z = spot.z - f.dx * s + f.dz * c; let y = groundH(x, z);
+      if (f.top && opts.top) { x = opts.top.x; z = opts.top.z; y = opts.top.y; }
+      h.root.position.set(x, y + (opts.lift || 0), z); h.root.rotation.y = yaw0 + (f.yaw || 0);
+      const an = ANIM[f.anim] || 'idle'; h.play(an, 0); if (an === 'lie') { h.current.timeScale = 0; h.current.time = 0.02; }
+      h.mixer.update(rand() * 2); scene.add(h.root); this.figs.push({ h, who: f.who, anim: an, x, y, z, t: rr(0, 3) });
     }
-    this.light = sharedEchoLight || new THREE.PointLight(0x8fd0ff, 0, 14, 1.6); this.light.color.set(0x8fd0ff); this.light.distance = 14; this.light.decay = 1.6; if (!this.light.parent) scene.add(this.light); this.light.position.set(center.x, groundH(center.x, center.z) + 2.2, center.z); scene.add(this.light);
-    this.sub = document.getElementById('memory'); this.sub.hidden = false; document.getElementById('memTime').textContent = def.time || '';
+    // poeira de luz em volta
+    const n = 90; const geo = new THREE.BufferGeometry(); this.dp = new Float32Array(n * 3); this.ds = Array.from({ length: n }, () => [rr(-3, 3), rr(0, 2.6), rr(-3, 3), rr(0, 6)]); geo.setAttribute('position', new THREE.BufferAttribute(this.dp, 3));
+    this.dust = new THREE.Points(geo, new THREE.PointsMaterial({ map: GLOW, size: 0.09, color: 0xffe2b0, transparent: true, opacity: 0, blending: THREE.AdditiveBlending, depthWrite: false })); this.dust.frustumCulled = false; scene.add(this.dust);
+    this.center = new THREE.Vector3(spot.x, groundH(spot.x, spot.z), spot.z);
+    this.light = new THREE.PointLight(0xffd9a8, 0, 12, 1.6); this.light.position.copy(this.center).add(new THREE.Vector3(0, 2.2, 0)); scene.add(this.light);
+    this.sub = document.getElementById('memory'); this.sub.hidden = false; document.getElementById('memTime').textContent = place.time || '';
     document.getElementById('memName').textContent = ''; document.getElementById('memText').textContent = '';
+    this.lines = place.lines.slice(); this.reflect = place.reflect;
+    Voice.prefetch([...this.lines, this.reflect]);
   }
-  skip() { Speech.stop(); this.lineT = 99; }
+  skip() { Voice.stop(); this.speaking = false; this.lineT = 99; }
   nextLine() {
-    this.line++; const L = this.def.lines[this.line];
-    if (!L) { this.ending = true; return; }
-    const [name, who, text] = L; document.getElementById('memName').textContent = name; document.getElementById('memText').textContent = text; this.sub.classList.remove('show'); void this.sub.offsetWidth; this.sub.classList.add('show');
-    const fig = this.figs.find(f => f.who === who); this.speaking = true; this.lineT = 0; this.lineMax = 2.5 + text.length * 0.075;
-    for (const f of this.figs) { f.h.talking = 0; }
-    if (fig) { fig.h.talking = 1; fig.h.play(['talk1', 'talk2', 'talk3'][this.line % 3], 0.4); }
-    Speech.speak(text, who === 'kid' ? 'kid' : who, null, () => { this.speaking = false; });
+    this.line++;
+    const id = this.line < this.lines.length ? this.lines[this.line] : (this.line === this.lines.length ? this.reflect : null);
+    if (!id) { this.ending = true; return; }
+    const [who, text] = LINES[id]; const isLia = who === 'lia';
+    document.getElementById('memName').textContent = isLia ? 'Lia, em pensamento' : (who === 'eco_f' ? 'Uma Veladora' : 'Um Velador');
+    document.getElementById('memText').textContent = text; this.sub.classList.toggle('thought', isLia); this.sub.classList.remove('show'); void this.sub.offsetWidth; this.sub.classList.add('show');
+    this.speaking = true; this.lineT = 0; this.lineMax = 2.5 + text.length * 0.075; this.who = who;
+    if (isLia) this.fadeOut = true;
+    Voice.say(id, { eco: !isLia, onEnd: () => { this.speaking = false; } });
   }
   update(dt, lookAt) {
     this.t += dt;
-    if (!this.ending) this.fade = Math.min(1, this.fade + dt / 1.6); else this.fade = Math.max(0, this.fade - dt / 2.2);
-    this.mat.opacity = this.fade * 0.85; this.light.intensity = this.fade * 6;
-    for (const f of this.figs) { f.h.update(dt); f.h.lookAtPoint(lookAt, 0.8); if (!f.h.talking && f.h.currentName && /talk/.test(f.h.currentName)) f.h.play('idle', 0.5); }
-    if (this.t > 1.4 && this.line < 0) this.nextLine();
-    else if (this.line >= 0 && !this.ending) { this.lineT += dt; if ((!this.speaking && this.lineT > 1.4) || this.lineT > this.lineMax + 2.5) this.nextLine(); }
+    if (this.fadeOut || this.ending) this.fade = Math.max(0, this.fade - dt / 2.5); else this.fade = Math.min(1, this.fade + dt / 2.0);
+    this.mat.opacity = this.fade * 0.9; this.light.intensity = this.fade * 5; this.dust.material.opacity = this.fade * 0.8;
+    const lvl = Voice.update();
+    for (const f of this.figs) {
+      f.t += dt; f.h.talking = (this.speaking && f.who === this.who) ? lvl : 0;
+      if ((f.anim === 'throw' || f.anim === 'interact') && f.h.done() && f.t > 3) { f.t = 0; f.h.current.reset().play(); }
+      f.h.update(dt); f.h.lookAtPoint(this.figs.length > 1 ? this.figs.find(o => o !== f).h.headPos : lookAt, 0.8);
+    }
+    for (let i = 0; i < this.ds.length; i++) { const s = this.ds[i]; this.dp[i * 3] = this.center.x + s[0] + Math.sin(this.t * 0.3 + s[3]) * 0.4; this.dp[i * 3 + 1] = this.center.y + ((s[1] + this.t * 0.18) % 2.8); this.dp[i * 3 + 2] = this.center.z + s[2] + Math.cos(this.t * 0.27 + s[3]) * 0.4; }
+    this.dust.geometry.attributes.position.needsUpdate = true;
+    if (this.t > 1.6 && this.line < 0) this.nextLine();
+    else if (this.line >= 0 && !this.ending) { this.lineT += dt; if ((!this.speaking && this.lineT > 1.2) || this.lineT > this.lineMax + 3) this.nextLine(); }
     if (this.ending && this.fade <= 0 && !this.done) { this.done = true; this.dispose(); this.onDone && this.onDone(); }
-    return this.figs;
   }
-  dispose() { for (const f of this.figs) scene.remove(f.h.root); this.light.intensity = 0; if (this.light !== sharedEchoLight) scene.remove(this.light); this.sub.classList.remove('show'); this.sub.hidden = true; Speech.stop(); }
+  dispose() { for (const f of this.figs) scene.remove(f.h.root); scene.remove(this.dust); scene.remove(this.light); this.sub.classList.remove('show'); this.sub.hidden = true; Voice.stop(); }
 }
 
-// ---------- spirits ----------
-const spiritMat = new THREE.SpriteMaterial({ map: GLOW, color: 0xbff0ff, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, fog: false });
-const coreMat = new THREE.MeshBasicMaterial({ color: 0xe8fbff });
+// ---------- o espírito companheiro (uma luzinha curiosa) ----------
+const spiritMat = new THREE.SpriteMaterial({ map: GLOW, color: 0xfff1d6, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, fog: false });
 function makeSpirit(size = 1) {
-  const g = new THREE.Group(); const halo = new THREE.Sprite(spiritMat.clone()); halo.scale.setScalar(0.9 * size); g.add(halo);
-  const core = new THREE.Mesh(new THREE.SphereGeometry(0.06 * size, 10, 8), coreMat); g.add(core);
-  // tiny face: two dark eyes, like a forest spirit
-  for (const s of [-1, 1]) { const e = new THREE.Mesh(new THREE.SphereGeometry(0.011 * size, 6, 4), new THREE.MeshBasicMaterial({ color: 0x203040 })); e.position.set(0.022 * s * size, 0.01 * size, 0.055 * size); core.add(e); }
-  g.userData = { halo, core, ph: rand() * 10 };
-  return g;
+  const g = new THREE.Group(); const halo = new THREE.Sprite(spiritMat.clone()); halo.scale.setScalar(0.8 * size); g.add(halo);
+  const core = new THREE.Mesh(new THREE.SphereGeometry(0.05 * size, 10, 8), new THREE.MeshBasicMaterial({ color: 0xfffaf0 })); g.add(core);
+  g.userData = { halo, core, ph: rand() * 10 }; return g;
 }
-export const spirits = { list: [], companion: null, trail: null };
+export const spirits = { list: [], companion: null };
 export function initSpirits() {
-  const c = makeSpirit(1.25); scene.add(c); const l = new THREE.PointLight(0xa8e4ff, 1.2, 7, 1.8); c.add(l); spirits.companion = { g: c, light: l, pos: new THREE.Vector3(), idleT: 0, guideT: 0 };
-  // sparkle trail
-  const n = 60; const geo = new THREE.BufferGeometry(); geo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(n * 3), 3)); geo.setAttribute('a', new THREE.BufferAttribute(new Float32Array(n), 1));
-  const mat = new THREE.PointsMaterial({ map: GLOW, size: 0.12, color: 0xcff4ff, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, sizeAttenuation: true });
-  const pts = new THREE.Points(geo, mat); pts.frustumCulled = false; scene.add(pts); spirits.trail = { pts, n, i: 0, age: new Float32Array(n).fill(9) };
+  const c = makeSpirit(0.55); scene.add(c); const l = new THREE.PointLight(0xffe2b8, 0.6, 6, 1.8); c.add(l); spirits.companion = { g: c, light: l, pos: new THREE.Vector3(), idleT: 0 };
 }
-export function addSiteSpirits(center, count = 10, radius = 8, height = 3) { for (let i = 0; i < count; i++) { const s = makeSpirit(rr(0.6, 1)); scene.add(s); spirits.list.push({ g: s, c: center.clone(), r: rr(radius * 0.3, radius), h: rr(0.5, height), a: rand() * 6.28, sp: rr(0.15, 0.4) * (rand() < 0.5 ? -1 : 1), born: 0 }); } }
+export function addSiteSpirits(center, count = 10, radius = 8, height = 3) { for (let i = 0; i < count; i++) { const s = makeSpirit(rr(0.5, 0.9)); scene.add(s); spirits.list.push({ g: s, c: center.clone(), r: rr(radius * 0.3, radius), h: rr(0.5, height), a: rand() * 6.28, sp: rr(0.1, 0.3) * (rand() < 0.5 ? -1 : 1), born: 0 }); } }
 export function updateSpirits(dt, t, player, target, nightF, moving) {
   const C = spirits.companion; if (!C) return;
-  // companion: floats near the shoulder; when you stand still it drifts toward the next goal and back
-  const base = new THREE.Vector3(player.x - Math.cos(player.h) * 0.7, player.y + 2.0 + Math.sin(t * 1.7) * 0.15, player.z + Math.sin(player.h) * 0.7);
+  const base = new THREE.Vector3(player.x - Math.cos(player.h) * 0.6, player.y + 1.9 + Math.sin(t * 1.7) * 0.12, player.z + Math.sin(player.h) * 0.6);
   if (moving) C.idleT = 0; else C.idleT += dt;
   let goal = base;
-  if (target && C.idleT > 3.5) { const d = new THREE.Vector3(target.x - player.x, 0, target.z - player.z); const dist = d.length(); if (dist > 6) { d.normalize(); const k = 0.5 - 0.5 * Math.cos(Math.min((C.idleT - 3.5) / 2.5, 1) * Math.PI); const swing = Math.sin((C.idleT - 3.5) * 0.9) * 0.5 + 0.5; goal = base.clone().addScaledVector(d, 6 * k * swing); goal.y = groundH(goal.x, goal.z) + 1.6; } }
+  // parada, a luzinha vai mostrar o caminho do próximo lugar e volta
+  if (target && C.idleT > 5) { const d = new THREE.Vector3(target.x - player.x, 0, target.z - player.z); const dist = d.length(); if (dist > 8) { d.normalize(); const k = 0.5 - 0.5 * Math.cos(Math.min((C.idleT - 5) / 3, 1) * Math.PI); const swing = Math.sin((C.idleT - 5) * 0.7) * 0.5 + 0.5; goal = base.clone().addScaledVector(d, 5 * k * swing); goal.y = groundH(goal.x, goal.z) + 1.6; } }
   if (C.pos.lengthSq() === 0) C.pos.copy(base);
-  C.pos.lerp(goal, 1 - Math.exp(-dt * 2.2)); C.g.position.copy(C.pos).add(new THREE.Vector3(Math.sin(t * 2.3) * 0.08, Math.sin(t * 3.1) * 0.06, Math.cos(t * 1.9) * 0.08));
-  C.g.lookAt(camera.position); const pulse = 0.85 + 0.15 * Math.sin(t * 3); C.g.userData.halo.material.opacity = (0.55 + nightF * 0.45) * pulse; C.light.intensity = (0.4 + nightF * 1.6) * pulse;
-  const T = spirits.trail; if (T) { const p = T.pts.geometry.attributes.position.array; T.i = (T.i + 1) % T.n; p[T.i * 3] = C.g.position.x + rr(-0.05, 0.05); p[T.i * 3 + 1] = C.g.position.y + rr(-0.05, 0.05); p[T.i * 3 + 2] = C.g.position.z + rr(-0.05, 0.05); for (let i = 0; i < T.n; i++) p[i * 3 + 1] -= dt * 0.12; T.pts.geometry.attributes.position.needsUpdate = true; T.pts.material.opacity = 0.35 + nightF * 0.5; }
+  C.pos.lerp(goal, 1 - Math.exp(-dt * 2)); C.g.position.copy(C.pos).add(new THREE.Vector3(Math.sin(t * 2.3) * 0.08, Math.sin(t * 3.1) * 0.06, Math.cos(t * 1.9) * 0.08));
+  const pulse = 0.85 + 0.15 * Math.sin(t * 3); C.g.userData.halo.material.opacity = (0.12 + nightF * 0.6) * pulse; C.g.userData.core.visible = nightF > 0.15; C.light.intensity = (0.2 + nightF * 1.0) * pulse;
   for (const s of spirits.list) {
-    s.born = Math.min(1, s.born + dt * 0.4); s.a += s.sp * dt; const y = groundH(s.c.x + Math.cos(s.a) * s.r, s.c.z + Math.sin(s.a) * s.r);
-    s.g.position.set(s.c.x + Math.cos(s.a) * s.r, Math.max(y, s.c.y) + s.h + Math.sin(t * 1.3 + s.a * 3) * 0.3, s.c.z + Math.sin(s.a) * s.r); s.g.lookAt(camera.position);
-    s.g.userData.halo.material.opacity = s.born * (0.35 + nightF * 0.6) * (0.7 + 0.3 * Math.sin(t * 2 + s.a * 5));
-    s.g.visible = s.g.position.distanceTo(camera.position) < 160;
+    s.born = Math.min(1, s.born + dt * 0.3); s.a += s.sp * dt; const x = s.c.x + Math.cos(s.a) * s.r, z = s.c.z + Math.sin(s.a) * s.r;
+    s.g.position.set(x, Math.max(groundH(x, z), s.c.y) + s.h + Math.sin(t * 1.1 + s.a * 3) * 0.3, z);
+    s.g.userData.halo.material.opacity = s.born * (0.15 + nightF * 0.7) * (0.7 + 0.3 * Math.sin(t * 2 + s.a * 5));
+    s.g.visible = s.g.position.distanceTo(camera.position) < 140;
   }
 }
 
-// ---------- floating motes: golden pollen by day, fireflies at night ----------
+// ---------- pólen dourado de dia, vaga-lumes à noite ----------
 export class Motes {
-  constructor(n = 220) {
+  constructor(n = 260) {
     this.n = n; const geo = new THREE.BufferGeometry(); this.p = new Float32Array(n * 3); geo.setAttribute('position', new THREE.BufferAttribute(this.p, 3));
-    this.seed = Array.from({ length: n }, () => [rr(-22, 22), rr(-22, 22), rr(0.3, 4.5), rand() * 10]);
-    this.mat = new THREE.PointsMaterial({ map: GLOW, size: 0.09, color: 0xffe8a8, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, opacity: 0.6 });
-    this.pts = new THREE.Points(geo, this.mat); this.pts.frustumCulled = false; scene.add(this.pts);
+    this.seed = Array.from({ length: n }, () => [rr(-26, 26), rr(-26, 26), rr(0.3, 4.0), rand() * 10, rand()]);
+    this.mat = new THREE.PointsMaterial({ map: GLOW, size: 0.08, color: 0xffe8a8, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, opacity: 0.6 });
+    this.pts = new THREE.Points(geo, this.mat); this.pts.frustumCulled = false; this.pts.layers.set(1); scene.add(this.pts);
   }
   update(t, px, pz, dayF, nightF, wind) {
-    const cx = Math.round(px / 44) * 44, cz = Math.round(pz / 44) * 44;
-    this.seed.forEach((s, i) => { let x = cx + s[0] + Math.sin(t * 0.21 + s[3]) * 2.5 + wind.x * ((t * 0.3 + s[3]) % 6), z = cz + s[1] + Math.cos(t * 0.17 + s[3] * 1.3) * 2.5 + wind.y * ((t * 0.3 + s[3]) % 6); this.p[i * 3] = x; this.p[i * 3 + 1] = groundH(x, z) + s[2] + Math.sin(t * 0.7 + s[3]) * 0.4; this.p[i * 3 + 2] = z; });
+    const cx = Math.round(px / 52) * 52, cz = Math.round(pz / 52) * 52;
+    for (let i = 0; i < this.n; i++) { const s = this.seed[i]; const x = cx + s[0] + Math.sin(t * 0.21 + s[3]) * 2.5 + wind.x * ((t * 0.3 + s[3]) % 6), z = cz + s[1] + Math.cos(t * 0.17 + s[3] * 1.3) * 2.5 + wind.y * ((t * 0.3 + s[3]) % 6); const blink = nightF > 0.3 ? Math.max(0, Math.sin(t * (0.8 + s[4]) + s[3] * 7)) : 1; this.p[i * 3] = x; this.p[i * 3 + 1] = groundH(x, z) + s[2] * (nightF > 0.3 ? 0.5 : 1) + Math.sin(t * 0.7 + s[3]) * 0.4 - (blink < 0.05 ? 500 : 0); this.p[i * 3 + 2] = z; }
     this.pts.geometry.attributes.position.needsUpdate = true;
-    this.mat.color.setRGB(lerp(1.0, 0.75, nightF), lerp(0.9, 1.0, nightF), lerp(0.62, 0.45, nightF)); this.mat.size = lerp(0.07, 0.13, nightF);
-    this.mat.opacity = (0.35 * dayF + 0.95 * nightF) * (0.8 + 0.2 * Math.sin(t * 2));
+    this.mat.color.setRGB(lerp(1.0, 0.8, nightF), lerp(0.92, 1.0, nightF), lerp(0.7, 0.42, nightF)); this.mat.size = lerp(0.06, 0.14, nightF);
+    this.mat.opacity = (0.3 * dayF + 0.95 * nightF) * (0.85 + 0.15 * Math.sin(t * 2));
   }
+}
+
+// ---------- a Chuva de Lumes: lanternas de luz subindo de todo o vale ----------
+export class LumeRain {
+  constructor(center, n = 420) {
+    const geo = new THREE.BufferGeometry(); this.p = new Float32Array(n * 3); geo.setAttribute('position', new THREE.BufferAttribute(this.p, 3)); this.n = n; this.t = 0;
+    this.s = Array.from({ length: n }, () => { const a = rand() * 6.28, r = Math.sqrt(rand()) * 260; const x = center.x + Math.cos(a) * r, z = center.z + Math.sin(a) * r; return [x, groundH(x, z) + rr(0, 2), z, rr(0, 14), rr(0.6, 1.4), rand() * 6]; });
+    this.mat = new THREE.PointsMaterial({ map: GLOW, size: 1.1, color: 0xffd9a0, transparent: true, opacity: 0, blending: THREE.AdditiveBlending, depthWrite: false, sizeAttenuation: true, fog: false });
+    this.pts = new THREE.Points(geo, this.mat); this.pts.frustumCulled = false; scene.add(this.pts);
+  }
+  update(dt) { this.t += dt; this.mat.opacity = Math.min(1, this.t / 6) * 0.95; for (let i = 0; i < this.n; i++) { const s = this.s[i]; const k = Math.max(0, this.t - s[3]); this.p[i * 3] = s[0] + Math.sin(k * 0.4 + s[5]) * 2; this.p[i * 3 + 1] = s[1] + k * k * 0.12 * s[4] + k * 0.8; this.p[i * 3 + 2] = s[2] + Math.cos(k * 0.35 + s[5]) * 2; } this.pts.geometry.attributes.position.needsUpdate = true; }
 }

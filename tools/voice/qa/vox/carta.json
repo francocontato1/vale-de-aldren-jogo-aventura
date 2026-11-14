@@ -1,0 +1,31 @@
+{
+ "id": "carta",
+ "speaker": "odessa",
+ "emotion": "tired",
+ "text": "Cartógrafa. Que bom que aceitou. Não preciso de um mapa de estradas, essas eu já conheço. Preciso de um mapa do que importa. Me procure no observatório, no alto da colina, depois da vila. E traga sapatos confortáveis. Odessa.",
+ "dur": 16.99,
+ "cps": 13.2,
+ "cer": 0.07,
+ "wer": 0.154,
+ "asr": "Catógrafa, que bom que aceitou. Não precisa de um mapa de estradas, essas eu já conheço. Precise de um mapa do que importa. Me procure no observatório, no alto da colina, depois da vila, e traga sapatos confortáveis. Odessa, era, que iti.",
+ "attempt": 0,
+ "gen_s": 206.8,
+ "rtf": 12.17,
+ "max_pause": 0.41,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.25,
+  "cfg_weight": 0.2,
+  "temperature": 0.65
+ },
+ "seed": 2686702330,
+ "lufs_in": -21.9,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 103.7,
+  "flow": 96.9,
+  "hift": 4.5
+ },
+ "tokens": 422,
+ "final_problems": []
+}

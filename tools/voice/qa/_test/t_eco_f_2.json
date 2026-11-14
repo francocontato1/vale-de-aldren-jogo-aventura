@@ -1,0 +1,25 @@
+{
+ "id": "t_eco_f_2",
+ "speaker": "eco_f",
+ "emotion": "sad",
+ "text": "Lembrem desta noite. Eu vou lembrar por vocês, se for preciso.",
+ "dur": 3.95,
+ "cps": 15.7,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Lembrem desta noite. Eu vou lembrar por vocês, se for preciso.",
+ "attempt": 0,
+ "gen_s": 61.4,
+ "rtf": 15.54,
+ "max_pause": 0.4,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.45,
+  "cfg_weight": 0.4,
+  "temperature": 0.75
+ },
+ "seed": 839007041,
+ "lufs_in": -21.2,
+ "tp_limited": true,
+ "final_problems": []
+}

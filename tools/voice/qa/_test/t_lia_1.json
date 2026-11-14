@@ -1,0 +1,25 @@
+{
+ "id": "t_lia_1",
+ "speaker": "lia",
+ "emotion": "neutral",
+ "text": "Que lugar é esse... Eu juro que já ouvi esse vento antes. Mas onde?",
+ "dur": 4.93,
+ "cps": 13.6,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Que lugar é esse? Eu juro que já ouvi esse vento antes. Mas onde?",
+ "attempt": 0,
+ "gen_s": 123.7,
+ "rtf": 25.09,
+ "max_pause": 0.53,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.5,
+  "cfg_weight": 0.45,
+  "temperature": 0.75
+ },
+ "seed": 2413149176,
+ "lufs_in": -21.3,
+ "tp_limited": true,
+ "final_problems": []
+}
