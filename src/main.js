@@ -291,7 +291,8 @@ function updateNPCs(dt) {
     const wantHome = isNight() && !n.always && n.home && state !== 'finale';
     if (wantHome && !n.inside) { const d = n.home.door.p; const dx = d.x - n.x, dz = d.z - n.z, dd = Math.hypot(dx, dz); if (dd < 0.6 || dp > 120) { n.inside = true; n.x = n.home.x; n.z = n.home.z; } else if (!talking) { speed = n.slow ? 1.0 : 1.3; n.x += dx / dd * speed * dt; n.z += dz / dd * speed * dt; n.yaw = lerpAng(n.yaw, Math.atan2(dx, dz), dt * 4); const p = { x: n.x, z: n.z }; collide(p, 0.3); n.x = p.x; n.z = p.z; } }
     else if (!wantHome && n.inside && state !== 'finale') { n.inside = false; const d = n.home.door.p; n.x = d.x; n.z = d.z; }
-    const vis = !n.inside && Math.hypot(n.x - camera.position.x, n.z - camera.position.z) < 95; n.h.root.visible = vis || n.finale; if (!vis && !n.finale) continue;
+    const camDist = Math.hypot(n.x - camera.position.x, n.z - camera.position.z); const vis = !n.inside && camDist < 95; n.h.root.visible = vis || n.finale; if (!vis && !n.finale) continue;
+    const cast = camDist < 32; if (n.cast !== cast) { n.cast = cast; for (const m of n.h.meshes) if (!m.userData.hair) m.castShadow = cast; }
     if (!wantHome && !talking && !n.finale) {
       if (n.wander && dp > 2.5) { if (n.wait > 0) n.wait -= dt; else { const t = n.wander[n.wi]; const dx = t[0] - n.x, dz = t[1] - n.z, d = Math.hypot(dx, dz); if (d < 0.4) { n.wi = (n.wi + 1) % n.wander.length; n.wait = rr(4, 12); } else { speed = n.fast ? 2.6 : n.slow ? 0.9 : 1.2; n.x += dx / d * speed * dt; n.z += dz / d * speed * dt; n.yaw = lerpAng(n.yaw, Math.atan2(dx, dz), dt * 4); const p = { x: n.x, z: n.z }; collide(p, 0.3); n.x = p.x; n.z = p.z; } } }
       else if (!n.wander) { const dx = n.day[0] - n.x, dz = n.day[1] - n.z, d = Math.hypot(dx, dz); if (d > 0.3) { speed = 1.2; n.x += dx / d * speed * dt; n.z += dz / d * speed * dt; n.yaw = lerpAng(n.yaw, Math.atan2(dx, dz), dt * 4); } }
@@ -352,7 +353,7 @@ function talkBastiao() {
 }
 const met = (id) => () => { S.met[id] = 1; save(); };
 let dlgNPC = null, dlgNode = null, pendingAfterDialog = null;
-function openDialog(n) { if (n.finale) return; document.body.classList.add('cine'); dlgNPC = n; state = 'dialog'; post.bokeh.enabled = true; const node = n.talk(); Voice.prefetch([node.line]); showNode(node); }
+function openDialog(n) { if (n.finale) return; document.body.classList.add('cine'); dlgNPC = n; state = 'dialog'; post.bokeh.enabled = perf.level < 2; const node = n.talk(); Voice.prefetch([node.line]); showNode(node); }
 function showNode(node) {
   if (!node) { closeDialog(); return; } dlgNode = node; $('dialog').hidden = false; $('prompt').hidden = true;
   const sp = LINES[node.line] ? LINES[node.line][0] : null; const who = CAST[sp] || { name: dlgNPC.name || '', role: '' };
@@ -396,13 +397,15 @@ function finishLume(place) {
 function placeDone(place, quiet) { const g = giants.find(g => g.id === place.id); if (g) g.target = 0.35; const sp = SPOTS[place.place]; if (sp) addSiteSpirits(V3(sp.x, groundH(sp.x, sp.z), sp.z), quiet ? 6 : 9, 9, 3); }
 function captureSketch(id) {
   try {
-    post.render(0.016, elapsed); const src = renderer.domElement; const W = 480, H = Math.round(480 * src.height / src.width);
-    const c = document.createElement('canvas'); c.width = W; c.height = H; const g = c.getContext('2d'); g.drawImage(src, 0, 0, W, H);
-    const im = g.getImageData(0, 0, W, H), d = im.data, L = new Float32Array(W * H);
-    for (let i = 0; i < W * H; i++) L[i] = (d[i * 4] * 0.3 + d[i * 4 + 1] * 0.59 + d[i * 4 + 2] * 0.11) / 255;
-    for (let y = 1; y < H - 1; y++) for (let x = 1; x < W - 1; x++) { const i = y * W + x; const gx = L[i + 1 - W] + 2 * L[i + 1] + L[i + 1 + W] - L[i - 1 - W] - 2 * L[i - 1] - L[i - 1 + W]; const gy = L[i + W - 1] + 2 * L[i + W] + L[i + W + 1] - L[i - W - 1] - 2 * L[i - W] - L[i - W + 1]; const e = clamp(Math.hypot(gx, gy) * 2.2, 0, 1); const tone = 0.55 + 0.45 * Math.pow(L[i], 0.6); const hatch = ((x + y) % 5 === 0 && L[i] < 0.35) ? 0.12 : 0; const v = clamp(tone - e * 0.75 - hatch, 0, 1); d[i * 4] = 236 * v + 10; d[i * 4 + 1] = 222 * v + 8; d[i * 4 + 2] = 196 * v + 6; }
+    // render pequeno e direto (sem pós-processamento), lido da GPU e redesenhado como lápis sobre papel
+    const W = 480, H = Math.round(480 / camera.aspect);
+    const rt = new THREE.WebGLRenderTarget(W, H); renderer.setRenderTarget(rt); renderer.render(scene, camera); renderer.setRenderTarget(null);
+    const px = new Uint8Array(W * H * 4); renderer.readRenderTargetPixels(rt, 0, 0, W, H, px); rt.dispose();
+    const c = document.createElement('canvas'); c.width = W; c.height = H; const g = c.getContext('2d'); const im = g.createImageData(W, H), d = im.data, L = new Float32Array(W * H);
+    for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) { const s0 = ((H - 1 - y) * W + x) * 4; const lin = (px[s0] * 0.3 + px[s0 + 1] * 0.59 + px[s0 + 2] * 0.11) / 255; const tm = lin / (1 + lin) * 1.6; L[y * W + x] = Math.pow(clamp(tm, 0, 1), 1 / 2.2); }
+    for (let y = 1; y < H - 1; y++) for (let x = 1; x < W - 1; x++) { const i = y * W + x; const gx = L[i + 1 - W] + 2 * L[i + 1] + L[i + 1 + W] - L[i - 1 - W] - 2 * L[i - 1] - L[i - 1 + W]; const gy = L[i + W - 1] + 2 * L[i + W] + L[i + W + 1] - L[i - W - 1] - 2 * L[i - W] - L[i - W + 1]; const e = clamp(Math.hypot(gx, gy) * 2.2, 0, 1); const tone = 0.55 + 0.45 * Math.pow(L[i], 0.6); const hatch = ((x + y) % 5 === 0 && L[i] < 0.35) ? 0.12 : 0; const v = clamp(tone - e * 0.75 - hatch, 0, 1); d[i * 4] = 236 * v + 10; d[i * 4 + 1] = 222 * v + 8; d[i * 4 + 2] = 196 * v + 6; d[i * 4 + 3] = 255; }
     g.putImageData(im, 0, 0); const url = c.toDataURL('image/jpeg', 0.72); sketches[id] = url; store.set('aldren-sketch-' + id, url);
-  } catch (e) { }
+  } catch (e) { console.warn('esboço', e); }
 }
 function readNote(id) { const n = NOTES[id]; if (!S.notes[id]) { S.notes[id] = 1; Sound.page(); save(); toast('Anotado no caderno', n.title); } think(n.line); }
 function openJournal() {
@@ -734,7 +737,7 @@ $('startBtn').addEventListener('click', () => {
   $('menu').hidden = true; $('hud').hidden = false; cam.yaw = player.h + Math.PI; cam.cur.set(player.x, player.y + 3, player.z + 4); refreshQuest();
   if (isTouch) setupTouch();
   window.focus(); try { renderer.domElement.focus(); } catch (e) { }
-  const go = () => { if (!S.letter && !MANUAL) startIntro(); else { state = 'play'; requestLock(); setTimeout(() => { if (Music.has('title')) Music.play('afternoon', { fade: 6, vol: 0.7 }); }, 4000); } };
+  const go = () => { if (!S.letter && !MANUAL) startIntro(); else { state = 'play'; requestLock(); Music.silence = 6; } };
   if (Sound.ctx) { const w = setInterval(() => { if (Sound.ready) { clearInterval(w); go(); } }, 100); setTimeout(() => { clearInterval(w); if (state === 'menu') go(); }, 6000); } else go();
 });
 window.__game = { sky: () => sky, post: () => post, camera, scene, player, S, npcs, cam, renderer, trees, grass, SPOTS, PLACES, get state() { return state; }, set state(v) { state = v; }, setHour: (h) => { hour = h; }, get hour() { return hour; }, tick: (dt, n = 1) => { for (let i = 0; i < n; i++) frame(dt); }, startLume: (i) => startLume(PLACES[i]), startFinale: () => startFinale(), openJournal, openDialog, choose, get pH() { return pH; }, toggleLantern, sitAt, interiors, think, Voice, Music };
