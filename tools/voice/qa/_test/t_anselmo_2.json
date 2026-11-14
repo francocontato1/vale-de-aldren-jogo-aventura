@@ -1,0 +1,25 @@
+{
+ "id": "t_anselmo_2",
+ "speaker": "anselmo",
+ "emotion": "neutral",
+ "text": "Você viu a pedra grande, lá no alto do morro? Dizem que ela dorme. Eu acho que ela escuta.",
+ "dur": 7.31,
+ "cps": 12.3,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Você viu a pedra grande lá no alto do morro? Dizem que ela dorme. Eu acho que ela escuta.",
+ "attempt": 0,
+ "gen_s": 106.6,
+ "rtf": 14.58,
+ "max_pause": 0.45,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.45,
+  "cfg_weight": 0.3,
+  "temperature": 0.7
+ },
+ "seed": 769707435,
+ "lufs_in": -22.1,
+ "tp_limited": true,
+ "final_problems": []
+}

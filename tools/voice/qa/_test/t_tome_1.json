@@ -1,0 +1,25 @@
+{
+ "id": "t_tome_1",
+ "speaker": "tome",
+ "emotion": "excited",
+ "text": "Lia! Lia! Você viu? A pedra mexeu! Eu juro, ela mexeu sozinha!",
+ "dur": 4.78,
+ "cps": 13.0,
+ "cer": 0.036,
+ "wer": 0.167,
+ "asr": "Ia, Ia, você viu? A pedra mexeu, eu juro ela mexeu sozinha.",
+ "attempt": 0,
+ "gen_s": 62.9,
+ "rtf": 13.16,
+ "max_pause": 0.16,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.95,
+  "cfg_weight": 0.45,
+  "temperature": 0.85
+ },
+ "seed": 393071076,
+ "lufs_in": -23.6,
+ "tp_limited": true,
+ "final_problems": []
+}

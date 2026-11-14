@@ -1,0 +1,25 @@
+{
+ "id": "t_bastiao_1",
+ "speaker": "bastiao",
+ "emotion": "neutral",
+ "text": "Madeira boa. Seca. Não racha. Pode levar.",
+ "dur": 3.71,
+ "cps": 11.1,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Madeira boa, seca, não racha, pode levar.",
+ "attempt": 0,
+ "gen_s": 33.1,
+ "rtf": 8.93,
+ "max_pause": 0.44,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.45,
+  "cfg_weight": 0.5,
+  "temperature": 0.75
+ },
+ "seed": 3093847775,
+ "lufs_in": -24.8,
+ "tp_limited": true,
+ "final_problems": []
+}

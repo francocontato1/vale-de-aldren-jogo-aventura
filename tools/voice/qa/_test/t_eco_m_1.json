@@ -1,0 +1,25 @@
+{
+ "id": "t_eco_m_1",
+ "speaker": "eco_m",
+ "emotion": "neutral",
+ "text": "Se eu não voltar, joguem minha espada no lago. Ela pesa demais para ficar parada num canto.",
+ "dur": 5.11,
+ "cps": 17.8,
+ "cer": 0.023,
+ "wer": 0.118,
+ "asr": "Se eu não voltar, jogue em minha espada no lago. Ela pesa demais para ficar parada num canto.",
+ "attempt": 0,
+ "gen_s": 41.8,
+ "rtf": 8.17,
+ "max_pause": 0.26,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.5,
+  "cfg_weight": 0.5,
+  "temperature": 0.8
+ },
+ "seed": 2434019879,
+ "lufs_in": -22.9,
+ "tp_limited": true,
+ "final_problems": []
+}

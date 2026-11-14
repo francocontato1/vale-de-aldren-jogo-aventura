@@ -1,0 +1,31 @@
+{
+ "id": "intro3",
+ "speaker": "narrador",
+ "emotion": "tender",
+ "text": "Um dia, foram embora. Ninguém sabe para onde. Deixaram as pedras, os gigantes... e uma pergunta.",
+ "dur": 7.72,
+ "cps": 12.4,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Um dia foram embora. Ninguém sabe para onde. Deixaram as pedras os gigantes. E uma pergunta.",
+ "attempt": 0,
+ "gen_s": 112.1,
+ "rtf": 14.52,
+ "max_pause": 0.52,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.35,
+  "cfg_weight": 0.35,
+  "temperature": 0.65
+ },
+ "seed": 1113859366,
+ "lufs_in": -22.6,
+ "tp_limited": false,
+ "stage_s": {
+  "t3": 47.5,
+  "flow": 61.3,
+  "hift": 3.0
+ },
+ "tokens": 213,
+ "final_problems": []
+}

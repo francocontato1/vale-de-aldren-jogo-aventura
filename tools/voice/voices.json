@@ -1,0 +1,75 @@
+{
+  "_doc": "Per-character voice design. 'ref' = how the timbre reference clip is synthesized with Kokoro-82M (Apache-2.0) in pt-br (make_refs.py): a weighted blend of Kokoro style vectors, speaking speed, optional pitch shift (semitones) and formant scale via ffmpeg rubberband. 'tts' = Chatterbox Multilingual sampling params (language_id 'pt'). 'post' = optional post-processing of each rendered line (pitch in semitones, formant: preserve|shifted). Emotion deltas are added to the speaker's base exaggeration/cfg/temperature (see 'emotions').",
+  "emotions": {
+    "neutral":   {"exaggeration": 0.0,  "cfg_weight": 0.0,   "temperature": 0.0},
+    "happy":     {"exaggeration": 0.15, "cfg_weight": -0.05, "temperature": 0.05},
+    "excited":   {"exaggeration": 0.3,  "cfg_weight": -0.05, "temperature": 0.05},
+    "surprised": {"exaggeration": 0.2,  "cfg_weight": 0.0,   "temperature": 0.05},
+    "sad":       {"exaggeration": -0.05,"cfg_weight": -0.1,  "temperature": -0.05},
+    "tender":    {"exaggeration": -0.05,"cfg_weight": -0.1,  "temperature": -0.05},
+    "tired":     {"exaggeration": -0.15,"cfg_weight": -0.1,  "temperature": -0.05}
+  },
+  "speakers": {
+    "lia": {
+      "desc": "protagonist, young woman ~20, gentle, curious, introspective, warm close-mic",
+      "ref": {"blend": {"af_heart": 0.55, "pf_dora": 0.45}, "speed": 0.95,
+              "text": "Às vezes eu acho que o vale está tentando me dizer alguma coisa. O vento muda de direção, a água fica quieta... e eu fico aqui, tentando entender. Será que alguém mais percebe?"},
+      "tts": {"exaggeration": 0.5, "cfg_weight": 0.45, "temperature": 0.75}
+    },
+    "odessa": {
+      "desc": "ageless elf mage, calm, dry humor, unhurried, slightly sleepy, low-mid female, slow with pauses",
+      "ref": {"blend": {"af_kore": 0.45, "af_nicole": 0.35, "bf_emma": 0.2}, "speed": 0.82, "pitch": -1.0, "formant": "preserved",
+              "text": "Calma. Ninguém aqui tem pressa... nem as montanhas. Eu já vi este rio mudar de lugar três vezes. Ele sempre volta. As pessoas também, quando aprendem a esperar."},
+      "tts": {"exaggeration": 0.4, "cfg_weight": 0.3, "temperature": 0.7}
+    },
+    "anselmo": {
+      "desc": "old shepherd ~80, warm, slow, deep, a bit raspy, kind grandfather",
+      "ref": {"blend": {"pm_santa": 0.55, "bm_lewis": 0.3, "am_santa": 0.15}, "speed": 0.8, "pitch": -1.0, "formant": "preserved",
+              "text": "Ah, minha filha... eu cuido dessas ovelhas desde menino. Elas conhecem cada pedra deste morro. Senta aqui um pouco, que eu te conto como era o vale no tempo do meu avô."},
+      "tts": {"exaggeration": 0.45, "cfg_weight": 0.3, "temperature": 0.7}
+    },
+    "celeste": {
+      "desc": "village baker ~45, lively, laughs easily, practical, mid female, faster pace",
+      "ref": {"blend": {"af_bella": 0.45, "pf_dora": 0.35, "af_jessica": 0.2}, "speed": 1.1,
+              "text": "Bom dia, bom dia! Entra, entra, que o pão acabou de sair do forno! Cuidado que está quente, hein? Pega mais um, menina, você está magrinha demais!"},
+      "tts": {"exaggeration": 0.6, "cfg_weight": 0.5, "temperature": 0.8}
+    },
+    "tome": {
+      "desc": "boy ~8, bright, fast, enthusiastic, high pitch",
+      "ref": {"blend": {"af_jessica": 0.5, "bf_lily": 0.3, "af_sky": 0.2}, "speed": 1.12, "pitch": 3.0, "formant": "shifted",
+              "text": "Olha, olha! Eu achei um besouro azul! Ele é enorme! Você quer ver? Eu vou guardar ele numa caixinha e mostrar pra todo mundo da vila!"},
+      "tts": {"exaggeration": 0.65, "cfg_weight": 0.5, "temperature": 0.8},
+      "post": {"pitch": 1.5, "formant": "shifted"}
+    },
+    "irene": {
+      "desc": "young herbalist/painter ~26, dreamy, soft, airy female",
+      "ref": {"blend": {"af_nicole": 0.5, "af_sky": 0.3, "if_sara": 0.2}, "speed": 0.9, "pitch": 1.0, "formant": "preserved",
+              "text": "Você já reparou como a luz fica dourada antes da chuva? Eu tento pintar isso há anos... e nunca consigo. Talvez seja melhor assim. Algumas coisas só existem para serem olhadas."},
+      "tts": {"exaggeration": 0.45, "cfg_weight": 0.4, "temperature": 0.75}
+    },
+    "bastiao": {
+      "desc": "carpenter ~50, gruff baritone, short sentences, kind underneath",
+      "ref": {"blend": {"am_onyx": 0.45, "am_fenrir": 0.3, "pm_alex": 0.25}, "speed": 0.95,
+              "text": "Essa tábua não serve. Está torta. Pega aquela outra, ali. Isso. Agora segura firme. Não, mais pra cá. Pronto. Viu? Não é difícil. Só precisa de calma."},
+      "tts": {"exaggeration": 0.45, "cfg_weight": 0.5, "temperature": 0.75}
+    },
+    "eco_m": {
+      "desc": "man ~35 from a distant past (memory echo), natural, rendered dry",
+      "ref": {"blend": {"am_michael": 0.4, "pm_alex": 0.35, "am_liam": 0.25}, "speed": 1.0,
+              "text": "Amanhã a gente parte cedo. Leva só o necessário, que a estrada é longa. E não se preocupa comigo, eu já atravessei aquela floresta mais vezes do que consigo lembrar."},
+      "tts": {"exaggeration": 0.5, "cfg_weight": 0.5, "temperature": 0.8}
+    },
+    "eco_f": {
+      "desc": "woman ~30 from a distant past (memory echo), natural, rendered dry",
+      "ref": {"blend": {"af_sarah": 0.4, "bf_emma": 0.35, "af_river": 0.25}, "speed": 1.0, "pitch": -1.0, "formant": "preserved",
+              "text": "Você sempre diz isso, e depois volta sem nem um arranhão. Mesmo assim, toma cuidado. Eu não quero ter que contar essa história sozinha para ninguém."},
+      "tts": {"exaggeration": 0.5, "cfg_weight": 0.5, "temperature": 0.8}
+    },
+    "narrador": {
+      "desc": "narrator for opening/ending, mature, calm, neutral male",
+      "ref": {"blend": {"bm_george": 0.45, "bm_fable": 0.3, "pm_alex": 0.25}, "speed": 0.9,
+              "text": "Há muito tempo, quando o vale ainda não tinha nome, as pedras escutavam tudo o que se dizia perto delas. E guardavam. Por isso, até hoje, quem passa por ali fala baixo."},
+      "tts": {"exaggeration": 0.4, "cfg_weight": 0.45, "temperature": 0.7}
+    }
+  }
+}

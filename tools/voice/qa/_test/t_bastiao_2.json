@@ -1,0 +1,25 @@
+{
+ "id": "t_bastiao_2",
+ "speaker": "bastiao",
+ "emotion": "sad",
+ "text": "Meu pai fez essa ponte. Eu só troco as tábuas. Ainda sinto a mão dele nelas.",
+ "dur": 5.32,
+ "cps": 14.3,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Meu pai fez essa ponte, eu só troco as tábuas, ainda sinto a mão dele nelas.",
+ "attempt": 0,
+ "gen_s": 72.4,
+ "rtf": 13.61,
+ "max_pause": 0.37,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.4,
+  "cfg_weight": 0.4,
+  "temperature": 0.7
+ },
+ "seed": 2365809041,
+ "lufs_in": -21.3,
+ "tp_limited": true,
+ "final_problems": []
+}

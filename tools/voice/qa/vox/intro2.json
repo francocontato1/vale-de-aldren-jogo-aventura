@@ -1,0 +1,31 @@
+{
+ "id": "intro2",
+ "speaker": "narrador",
+ "emotion": "neutral",
+ "text": "Há muito tempo, viveu aqui um povo que construía para olhar. Torres, escadas, círculos de pedra. Chamavam a si mesmos de Veladores.",
+ "dur": 8.51,
+ "cps": 15.4,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Há muito tempo viveu aqui um povo que construía para olhar. Torres, escadas, círculos de pedra. Chamavam a si mesmos de veladores.",
+ "attempt": 0,
+ "gen_s": 71.1,
+ "rtf": 8.35,
+ "max_pause": 0.5,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.4,
+  "cfg_weight": 0.45,
+  "temperature": 0.7
+ },
+ "seed": 3591805300,
+ "lufs_in": -21.9,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 35.8,
+  "flow": 31.7,
+  "hift": 3.4
+ },
+ "tokens": 227,
+ "final_problems": []
+}

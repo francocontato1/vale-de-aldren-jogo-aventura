@@ -1,0 +1,22 @@
+{
+ "intro1": {
+  "speaker": "narrador",
+  "dur": 4.19,
+  "text": "Dizem que no vale de Aldren nada se perde. Só muda de lugar."
+ },
+ "intro2": {
+  "speaker": "narrador",
+  "dur": 8.51,
+  "text": "Há muito tempo, viveu aqui um povo que construía para olhar. Torres, escadas, círculos de pedra. Chamavam a si mesmos de Veladores."
+ },
+ "intro3": {
+  "speaker": "narrador",
+  "dur": 7.72,
+  "text": "Um dia, foram embora. Ninguém sabe para onde. Deixaram as pedras, os gigantes... e uma pergunta."
+ },
+ "carta": {
+  "speaker": "odessa",
+  "dur": 16.99,
+  "text": "Cartógrafa. Que bom que aceitou. Não preciso de um mapa de estradas, essas eu já conheço. Preciso de um mapa do que importa. Me procure no observatório, no alto da colina, depois da vila. E traga sapatos confortáveis. Odessa."
+ }
+}

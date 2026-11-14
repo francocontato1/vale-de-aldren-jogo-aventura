@@ -1,0 +1,29 @@
+{
+ "id": "t_eco_m_2",
+ "speaker": "eco_m",
+ "emotion": "tender",
+ "text": "Daqui eu via a vila inteira. Oitenta e três chaminés. Contei todas, duas vezes.",
+ "dur": 5.48,
+ "cps": 14.4,
+ "cer": 0.2,
+ "wer": 0.286,
+ "asr": "Daqui eu via a Vila Enteira, 83 Chaminés, contei todas duas vezes.",
+ "attempt": 0,
+ "gen_s": 39.8,
+ "rtf": 7.26,
+ "max_pause": 0.31,
+ "problems": [
+  "cer=0.20"
+ ],
+ "params": {
+  "exaggeration": 0.45,
+  "cfg_weight": 0.4,
+  "temperature": 0.75
+ },
+ "seed": 2429225322,
+ "lufs_in": -23.5,
+ "tp_limited": true,
+ "final_problems": [
+  "cer=0.20"
+ ]
+}

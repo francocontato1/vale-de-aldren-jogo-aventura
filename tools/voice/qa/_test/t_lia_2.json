@@ -1,0 +1,25 @@
+{
+ "id": "t_lia_2",
+ "speaker": "lia",
+ "emotion": "sad",
+ "text": "Ela me deixou o caderno... e nem se despediu. Tudo bem. Eu vou terminar o que ela começou.",
+ "dur": 7.33,
+ "cps": 12.3,
+ "cer": 0.083,
+ "wer": 0.111,
+ "asr": "Ela me deixou o caderno à pove e nem se despediu. Tudo bem, eu vou terminar o que ela começou.",
+ "attempt": 0,
+ "gen_s": 92.4,
+ "rtf": 12.61,
+ "max_pause": 0.55,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.45,
+  "cfg_weight": 0.35,
+  "temperature": 0.7
+ },
+ "seed": 3172595521,
+ "lufs_in": -21.1,
+ "tp_limited": true,
+ "final_problems": []
+}

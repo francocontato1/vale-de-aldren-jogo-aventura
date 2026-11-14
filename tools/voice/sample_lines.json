@@ -1,0 +1,22 @@
+[
+  {"id": "t_lia_1", "speaker": "lia", "text": "Que lugar é esse... Eu juro que já ouvi esse vento antes. Mas onde?", "emotion": "neutral"},
+  {"id": "t_lia_2", "speaker": "lia", "text": "Ela me deixou o caderno... e nem se despediu. Tudo bem. Eu vou terminar o que ela começou.", "emotion": "sad"},
+  {"id": "t_odessa_1", "speaker": "odessa", "text": "Mil anos, menina... e ainda não aprendi a acordar cedo. Sente-se. O chá não vai fugir.", "emotion": "tired"},
+  {"id": "t_odessa_2", "speaker": "odessa", "text": "Magia não é fazer as coisas aparecerem. É lembrar... que elas existiam.", "emotion": "tender"},
+  {"id": "t_anselmo_1", "speaker": "anselmo", "text": "Ah, minha filha... as ovelhas conhecem o caminho melhor do que eu. Eu só vou atrás, devagarinho.", "emotion": "tender"},
+  {"id": "t_anselmo_2", "speaker": "anselmo", "text": "Você viu a pedra grande, lá no alto do morro? Dizem que ela dorme. Eu acho que ela escuta.", "emotion": "neutral"},
+  {"id": "t_celeste_1", "speaker": "celeste", "text": "Ha ha! Chegou na hora certa! O pão acabou de sair do forno, pega um antes que o Tomás coma tudo!", "emotion": "happy"},
+  {"id": "t_celeste_2", "speaker": "celeste", "text": "Farinha, água, sal e paciência. O resto é conversa. Quer aprender ou só quer comer?", "emotion": "neutral"},
+  {"id": "t_tome_1", "speaker": "tome", "text": "Lia! Lia! Você viu? A pedra mexeu! Eu juro, ela mexeu sozinha!", "emotion": "excited"},
+  {"id": "t_tome_2", "speaker": "tome", "text": "Minha mãe disse que eu não posso ir até o lago. Mas você pode, né? Me conta tudo depois!", "emotion": "happy"},
+  {"id": "t_irene_1", "speaker": "irene", "text": "Olha essa luz no fim da tarde... parece que o vale inteiro está prendendo a respiração.", "emotion": "tender"},
+  {"id": "t_irene_2", "speaker": "irene", "text": "Essa folha aqui acalma o coração. Essa outra... essa só é bonita mesmo.", "emotion": "happy"},
+  {"id": "t_bastiao_1", "speaker": "bastiao", "text": "Madeira boa. Seca. Não racha. Pode levar.", "emotion": "neutral"},
+  {"id": "t_bastiao_2", "speaker": "bastiao", "text": "Meu pai fez essa ponte. Eu só troco as tábuas. Ainda sinto a mão dele nelas.", "emotion": "sad"},
+  {"id": "t_eco_m_1", "speaker": "eco_m", "text": "Se eu não voltar, joguem minha espada no lago. Ela pesa demais para ficar parada num canto.", "emotion": "neutral"},
+  {"id": "t_eco_m_2", "speaker": "eco_m", "text": "Daqui eu via a vila inteira. Oitenta e três chaminés. Contei todas, duas vezes.", "emotion": "tender"},
+  {"id": "t_eco_f_1", "speaker": "eco_f", "text": "Você sempre volta, Teodor. É a coisa mais irritante em você.", "emotion": "happy"},
+  {"id": "t_eco_f_2", "speaker": "eco_f", "text": "Lembrem desta noite. Eu vou lembrar por vocês, se for preciso.", "emotion": "sad"},
+  {"id": "t_narrador_1", "speaker": "narrador", "text": "Oitenta anos atrás, quatro amigos e quatro gigantes de pedra atravessaram a Longa Noite.", "emotion": "neutral"},
+  {"id": "t_narrador_2", "speaker": "narrador", "text": "Os gigantes adormeceram. E, com o tempo, até os seus nomes foram esquecidos.", "emotion": "sad"}
+]

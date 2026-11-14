@@ -1,0 +1,25 @@
+{
+ "id": "t_celeste_1",
+ "speaker": "celeste",
+ "emotion": "happy",
+ "text": "Ha ha! Chegou na hora certa! O pão acabou de sair do forno, pega um antes que o Tomás coma tudo!",
+ "dur": 6.15,
+ "cps": 15.6,
+ "cer": 0.065,
+ "wer": 0.143,
+ "asr": "\"Ah, ah!\" chegou na hora certa. O pão acabou de sair do forno. Pega um antes que o tomasse coma tudo.",
+ "attempt": 0,
+ "gen_s": 93.8,
+ "rtf": 15.26,
+ "max_pause": 0.38,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.75,
+  "cfg_weight": 0.45,
+  "temperature": 0.85
+ },
+ "seed": 2482288360,
+ "lufs_in": -17.9,
+ "tp_limited": true,
+ "final_problems": []
+}

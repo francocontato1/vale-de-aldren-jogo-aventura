@@ -1,0 +1,25 @@
+{
+ "id": "t_odessa_2",
+ "speaker": "odessa",
+ "emotion": "tender",
+ "text": "Magia não é fazer as coisas aparecerem. É lembrar... que elas existiam.",
+ "dur": 6.51,
+ "cps": 10.9,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Magia não é fazer as coisas aparecerem, é lembrar que elas existiam.",
+ "attempt": 0,
+ "gen_s": 118.8,
+ "rtf": 18.25,
+ "max_pause": 0.59,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.35,
+  "cfg_weight": 0.2,
+  "temperature": 0.65
+ },
+ "seed": 822532841,
+ "lufs_in": -20.9,
+ "tp_limited": true,
+ "final_problems": []
+}
