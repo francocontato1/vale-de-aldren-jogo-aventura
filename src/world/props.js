@@ -5,14 +5,14 @@ import { groundH, normalY, splatAt, WATER, forestDensity } from './terrain.js';
 const nearSets = [];
 class NearSet {
   constructor(scene, geo, mat, items, radius, cast) {
-    this.items = items; this.radius = radius; this.im = new THREE.InstancedMesh(geo, mat, Math.max(1, items.length)); this.im.count = 0; this.im.castShadow = cast; this.im.receiveShadow = true; this.im.frustumCulled = false; scene.add(this.im); nearSets.push(this);
+    this.items = items; this.radius = radius; this.im = new THREE.InstancedMesh(geo, mat, Math.max(1, items.length)); this.im.count = 0; this.im.castShadow = cast; this.im.receiveShadow = true; this.im.frustumCulled = false; if (!cast) this.im.layers.set(1); scene.add(this.im); nearSets.push(this);
   }
   update(cx, cz) { const r2 = this.radius * this.radius; let n = 0; for (const it of this.items) { const dx = it.p.x - cx, dz = it.p.z - cz; if (dx * dx + dz * dz < r2 * (it.big ? 4 : 1)) this.im.setMatrixAt(n++, it.m); } this.im.count = n; this.im.instanceMatrix.needsUpdate = true; }
 }
 let lastNear = { x: 1e9, z: 1e9 };
 export function updateProps(cx, cz, force) { if (!force && Math.hypot(cx - lastNear.x, cz - lastNear.z) < 8) return; lastNear = { x: cx, z: cz }; for (const n of nearSets) n.update(cx, cz); }
 export function setPropRadius(k) { for (const n of nearSets) n.radius = n.baseR * k; lastNear = { x: 1e9, z: 1e9 }; }
-export async function buildProps(scene, { avoid, addCircle, villageExclude }) {
+export async function buildProps(scene, { avoid, addCircle, villageExclude, zones = [] }) {
   const [r1, r2, r3, fw, fy, fb, tg] = await Promise.all(['rock1', 'rock2', 'rock3', 'flower_white', 'flower_yellow', 'flower_blue', 'grass'].map(n => loadGLTF('a/' + n + '.glb.wasm')));
   const out = { rockMat: null };
   // ---- rocks ----
@@ -31,16 +31,18 @@ export async function buildProps(scene, { avoid, addCircle, villageExclude }) {
  float hh = max(position.y, 0.0); float k = hh*hh*0.9;
  transformed.xz += (uWind*0.18 + vec2(sin(uTime*2.1+ip.x), cos(uTime*1.7+ip.z))*0.06) * k;
  vec2 dp = ip.xz - uPlayer.xz; float dd = length(dp); float push = (1.0-smoothstep(0.2,1.0,dd)); transformed.xz += normalize(dp+1e-4)*push*k*0.6;`); }; m.customProgramCacheKey = () => 'plant'; return m; };
-  const scatterPlant = (gltf, count, scale, pred) => {
+  const scatterPlant = (gltf, count, scale, pred, zoneShare = 0) => {
     const meshes = []; gltf.scene.updateMatrixWorld(true); gltf.scene.traverse(o => { if (o.isMesh) meshes.push(o); });
     const box = new THREE.Box3().setFromObject(gltf.scene); const h = box.max.y - box.min.y; const base = scale / h;
     const items = []; let t = 0; while (items.length < count && t < count * 30) { t++; const x = rr(-450, 450), z = rr(-450, 450); const y = groundH(x, z); if (y < WATER + 0.6 || normalY(x, z) < 0.85) continue; const sp = splatAt(x, z); if (sp[0] > 0.4 || sp[1] > 0.25 || sp[2] > 0.1) continue; if (villageExclude(x, z)) continue; if (!pred(x, z)) continue; const cluster = 1 + ((rand() * 5) | 0); for (let c = 0; c < cluster && items.length < count; c++) { const cx = x + rr(-1.5, 1.5), cz = z + rr(-1.5, 1.5); items.push([cx, groundH(cx, cz) - 0.03, cz, rr(0.7, 1.3), rand() * 6.28]); } }
+    // canteiros densos (jardim dos relógios, rosto entre as flores...)
+    for (const [zx, zz, zr, zn] of zones) { const k = Math.round(zn * zoneShare); for (let i = 0; i < k; i++) { const a = rand() * 6.283, r = Math.sqrt(rand()) * zr; const cx = zx + Math.cos(a) * r, cz = zz + Math.sin(a) * r; items.push([cx, groundH(cx, cz) - 0.03, cz, rr(0.7, 1.25), rand() * 6.28]); } }
     const its = items.map(it => { q.setFromAxisAngle(new THREE.Vector3(0, 1, 0), it[4]); return { p: { x: it[0], z: it[2] }, m: new THREE.Matrix4().compose(new THREE.Vector3(it[0], it[1], it[2]), q, new THREE.Vector3(it[3], it[3], it[3])) }; });
     for (const mesh of meshes) { const geo = mesh.geometry.clone(); geo.applyMatrix4(mesh.matrixWorld); geo.translate(0, -box.min.y, 0); geo.scale(base, base, base); const ns = new NearSet(scene, geo, plantMat(mesh.material), its, 48, false); ns.baseR = 48; }
   };
-  scatterPlant(fw, 700, 0.42, (x, z) => forestDensity(x, z) < 0.1);
-  scatterPlant(fy, 600, 0.38, (x, z) => forestDensity(x, z) < 0.05);
-  scatterPlant(fb, 400, 0.4, (x, z) => forestDensity(x, z) < 0.15);
+  scatterPlant(fw, 700, 0.42, (x, z) => forestDensity(x, z) < 0.1, 0.3);
+  scatterPlant(fy, 600, 0.38, (x, z) => forestDensity(x, z) < 0.05, 0.4);
+  scatterPlant(fb, 400, 0.4, (x, z) => forestDensity(x, z) < 0.15, 0.3);
   // tall grass cards: tint the bw texture green-gold
   { let src; tg.scene.traverse(o => { if (o.isMesh) src = o.material; }); if (src) { src.color = new THREE.Color(0.2, 0.26, 0.1); } scatterPlant(tg, 1500, 0.75, (x, z) => Math.hypot(x, z) > 80); }
   return out;

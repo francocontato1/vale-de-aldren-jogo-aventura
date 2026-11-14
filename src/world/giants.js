@@ -81,11 +81,11 @@ export function buildGiant(scene, rockMaps, o) {
   geo.applyMatrix4(root.matrixWorld); boxUVWorld(geo, 3.2); geo.computeBoundingSphere();
   const mesh = new THREE.Mesh(geo, giantMaterial(rockMaps)); mesh.castShadow = true; mesh.receiveShadow = true; scene.add(mesh);
   // glowing eyes & chest rune (dark until the name is returned)
-  const glow = new THREE.MeshStandardMaterial({ color: 0x0a1418, emissive: 0x7fe0ff, emissiveIntensity: 0, roughness: 0.4 });
+  const glow = new THREE.MeshStandardMaterial({ color: 0x0a1418, emissive: 0xffcf8a, emissiveIntensity: 0, roughness: 0.4 });
   const eyes = [];
   for (const s of [-1, 1]) { const e = new THREE.Mesh(new THREE.SphereGeometry(0.22, 12, 8), glow); const lp = new THREE.Vector3(0.48 * s, 0.35, 1.12).applyQuaternion(hq).add(new THREE.Vector3(...P.head)).multiplyScalar(S); e.position.copy(lp); root.add(e); eyes.push(e); }
   const runeTex = makeRuneTexture(o.runeIdx || 0);
-  const rune = new THREE.Mesh(new THREE.PlaneGeometry(1.6, 1.6), new THREE.MeshBasicMaterial({ map: runeTex, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, color: 0x7fe0ff, opacity: 0.0, fog: false }));
+  const rune = new THREE.Mesh(new THREE.PlaneGeometry(1.6, 1.6), new THREE.MeshBasicMaterial({ map: runeTex, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, color: 0xffd7a0, opacity: 0.0, fog: false }));
   const cp = new THREE.Vector3(...P.chest).multiplyScalar(S); const forwardish = o.pose === 'lie' ? new THREE.Vector3(0, 1, 0) : new THREE.Vector3(0, 0.15, 1).normalize();
   rune.position.copy(cp).addScaledVector(forwardish, 2.35 * S * 1.0); rune.lookAt(rune.position.clone().add(forwardish)); if (o.pose === 'lie') { rune.position.set(cp.x, cp.y + 2.6 * S * 0.62, cp.z); rune.rotation.set(-Math.PI / 2, 0, 0); } rune.scale.setScalar(S); root.add(rune);
   const light = new THREE.Object3D(); light.intensity = 0; // glow is emissive+bloom only (no extra forward light) light.position.copy(cp); root.add(light);
@@ -112,7 +112,7 @@ export function updateGiants(dt, time) {
   for (const g of giants) {
     g.awake = lerp(g.awake, g.target, 1 - Math.exp(-dt * 0.6));
     const pulse = 0.75 + 0.25 * Math.sin(time * 1.3 + g.x);
-    g.glow.emissiveIntensity = g.awake * 5 * pulse; g.rune.material.opacity = g.awake * 0.95 * pulse + (1 - g.awake) * 0.06 * (0.5 + 0.5 * Math.sin(time * 0.8 + g.z));
+    g.glow.emissiveIntensity = g.awake * 3 * pulse; g.rune.material.opacity = g.awake * 0.5 * pulse;
     g.light.intensity = g.awake * 22 * pulse;
   }
 }

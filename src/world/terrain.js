@@ -3,10 +3,16 @@ import { THREE, clamp, lerp, smooth, fbm, ridged, Simplex, U, loadTex } from '..
 export const POI = {
   village: { x: 0, z: 0, name: 'Aldren' },
   lake: { x: -170, z: 120, name: 'Lago Espelhado' },
-  tower: { x: 70, z: -270, name: 'Torre de Vigia' },
-  camp: { x: 250, z: 150, name: 'Acampamento dos Quatro' },
-  stones: { x: -240, z: -150, name: 'Círculo de Pedras' },
-  peaks: { x: -80, z: -560, name: 'Picos Gelados' },
+  tower: { x: 70, z: -270, name: 'A Torre Partida' },
+  garden: { x: 250, z: 150, name: 'Jardim dos Relógios de Sol' },
+  stones: { x: -240, z: -150, name: 'Círculo das Estrelas' },
+  peaks: { x: -80, z: -560, name: 'Mirante da Gigante' },
+  observatory: { x: 64, z: -116, name: 'Observatório de Odessa' },
+  stairs: { x: 176, z: -36, name: 'Escada para o Céu' },
+  head: { x: 108, z: 22, name: 'O Rosto entre as Flores' },
+  tree: { x: -152, z: -80, name: 'Árvore das Fitas' },
+  shrine: { x: -118, z: -34, name: 'Santuário da Floresta' },
+  bridge: { x: 152, z: 92, name: 'A Ponte Partida' },
 };
 export const PATHS = [
   [[0, -28], [8, -90], [34, -160], [56, -220], [68, -256]],
@@ -14,7 +20,12 @@ export const PATHS = [
   [[-18, 14], [-70, 50], [-118, 84]],
   [[-28, -10], [-110, -60], [-190, -120], [-226, -142]],
   [[0, 26], [4, 60], [-10, 110]],
+  [[8, -90], [36, -104], [58, -112]],
+  [[60, 30], [110, 8], [150, -14], [170, -30]],
 ];
+// leito de um riacho que secou há séculos (atravessado pela ponte partida dos Veladores)
+export const CREEK = [[118, -10], [132, 30], [146, 70], [154, 96], [168, 130], [196, 168], [214, 200]];
+export function creekDist(x, z) { let best = 1e9; for (let i = 0; i < CREEK.length - 1; i++) { const [x1, z1] = CREEK[i], [x2, z2] = CREEK[i + 1]; const dx = x2 - x1, dz = z2 - z1; const t = clamp(((x - x1) * dx + (z - z1) * dz) / (dx * dx + dz * dz), 0, 1); const d = Math.hypot(x1 + dx * t - x, z1 + dz * t - z); if (d < best) best = d; } return best; }
 const SEGS = []; for (const p of PATHS) for (let i = 0; i < p.length - 1; i++) SEGS.push([p[i][0], p[i][1], p[i + 1][0], p[i + 1][1]]);
 export function pathDist(x, z) {
   let best = 1e9;
@@ -38,8 +49,11 @@ function baseHeight(x, z) {
 const FLAT = [
   { x: 0, z: 0, r0: 52, r1: 100, t: 6 },
   { x: POI.tower.x, z: POI.tower.z, r0: 12, r1: 30 },
-  { x: POI.camp.x, z: POI.camp.z, r0: 22, r1: 46 },
+  { x: POI.garden.x, z: POI.garden.z, r0: 22, r1: 46 },
   { x: POI.stones.x, z: POI.stones.z, r0: 14, r1: 32 },
+  { x: POI.observatory.x, z: POI.observatory.z, r0: 11, r1: 24 },
+  { x: POI.stairs.x, z: POI.stairs.z, r0: 9, r1: 22 },
+  { x: POI.shrine.x, z: POI.shrine.z, r0: 5, r1: 12 },
 ];
 for (const f of FLAT) if (f.t === undefined) f.t = Math.max(baseHeight(f.x, f.z), 4);
 export function heightFn(x, z) {
@@ -48,6 +62,8 @@ export function heightFn(x, z) {
   // gentle undulation inside the village so it isn't a table
   const dv = Math.hypot(x, z); if (dv < 100) h += fbm(x * 0.03 + 4, z * 0.03, 2) * 1.1 * (1 - smooth(60, 100, dv)) + 0.0;
   const pd = pathDist(x, z); if (pd < 3) h -= 0.14 * (1 - pd / 3);
+  // riacho seco: um vale estreito com fundo de cascalho
+  const cd = creekDist(x, z) + fbm(x * 0.05, z * 0.05, 2) * 1.5; if (cd < 13) h -= 4.2 * (1 - smooth(2.0, 13, cd));
   return h;
 }
 export const forestDensity = (x, z) => fbm(x * 0.006 + 50, z * 0.006 - 20, 3);
@@ -78,7 +94,7 @@ export function computeTerrainData(extraDirt) {
     dirt = Math.max(dirt, smooth(0.25, 0.6, n2 * 0.5 + n1) * 0.35 * (1 - smooth(20, 60, h)));
     const rock = clamp(smooth(0.22, 0.4, slope + n2 * 0.05) + smooth(58, 88, h + n1 * 14) * 0.85, 0, 1);
     const snow = smooth(100, 130, h + n1 * 16) * (1 - smooth(0.42, 0.6, slope));
-    const shore = 1 - smooth(0.3, 1.8, h + n2 * 0.4);
+    const shore = Math.max(1 - smooth(0.3, 1.8, h + n2 * 0.4), 1 - smooth(2.5, 5.5, creekDist(x, z) + n2 * 1.2));
     SPLAT[k * 4] = clamp(dirt, 0, 1); SPLAT[k * 4 + 1] = rock; SPLAT[k * 4 + 2] = snow; SPLAT[k * 4 + 3] = clamp(shore, 0, 1);
   }
 }
@@ -114,8 +130,8 @@ vec4 tri(sampler2D t, vec3 p, vec3 w, float s){ return texture2D(t,p.zy*s)*w.x +
  // grass: two scales to break tiling, far scale fades in with distance
  vec3 gA = texture2D(tGrass, uv*0.16).rgb; vec3 gB = texture2D(tGrass, uv*0.031+0.5).rgb;
  vec3 grass = mix(gA, gB, 0.35 + 0.4*smoothstep(25.,140.,camD));
- grass *= mix(vec3(1.04,0.98,0.78), vec3(0.82,0.95,0.86), mac.r); grass *= (0.82 + 0.36*mac2.g) * vec3(0.5,0.56,0.4);
- grass = mix(grass, grass*vec3(1.18,1.05,0.7), smoothstep(0.55,0.85,mac.b)*0.6);
+ grass *= mix(vec3(1.04,0.98,0.78), vec3(0.82,0.95,0.86), mac.r); grass *= (0.78 + 0.44*mac2.g) * vec3(0.55,0.57,0.34);
+ grass = mix(grass, grass*vec3(1.25,1.08,0.62), smoothstep(0.5,0.85,mac.b)*0.75);
  grass = mix(grass, grass*vec3(0.78,0.9,0.62), smoothstep(18.,70.,camD)*0.55);
  vec3 dirt = mix(texture2D(tDirt, uv*0.21).rgb, texture2D(tDirt, uv*0.047).rgb, 0.4) * vec3(0.78,0.72,0.66);
  vec3 grav = texture2D(tGravel, uv*0.22).rgb * 0.95;
