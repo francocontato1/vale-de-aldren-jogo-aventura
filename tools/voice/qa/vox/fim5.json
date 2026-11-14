@@ -1,0 +1,31 @@
+{
+ "id": "fim5",
+ "speaker": "odessa",
+ "emotion": "happy",
+ "text": "Vou mostrar um feitiço. O único que eles me ensinaram sem querer. Não serve para nada. É o meu preferido.",
+ "dur": 9.1,
+ "cps": 11.5,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Vou mostrar um feitiço, o único que eles me ensinaram sem querer. Não serve para nada, é o meu preferido.",
+ "attempt": 0,
+ "gen_s": 51.5,
+ "rtf": 5.66,
+ "max_pause": 0.74,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.55,
+  "cfg_weight": 0.25,
+  "temperature": 0.75
+ },
+ "seed": 266599347,
+ "lufs_in": -20.9,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 30.3,
+  "flow": 18.9,
+  "hift": 2.1
+ },
+ "tokens": 234,
+ "final_problems": []
+}

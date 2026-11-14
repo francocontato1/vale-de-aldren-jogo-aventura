@@ -1,0 +1,31 @@
+{
+ "id": "monte1",
+ "speaker": "eco_f",
+ "emotion": "tender",
+ "text": "Daqui eu vejo a vila inteira. As chaminés, o lago, a estrada.",
+ "dur": 3.83,
+ "cps": 15.9,
+ "cer": 0.035,
+ "wer": 0.167,
+ "asr": "Daqui eu vejo a vila inteira, a Chamineis, o Lago, a Estrada.",
+ "attempt": 0,
+ "gen_s": 30.6,
+ "rtf": 8.0,
+ "max_pause": 0.2,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.45,
+  "cfg_weight": 0.4,
+  "temperature": 0.75
+ },
+ "seed": 78643840,
+ "lufs_in": -20.0,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 15.9,
+  "flow": 13.8,
+  "hift": 0.8
+ },
+ "tokens": 123,
+ "final_problems": []
+}

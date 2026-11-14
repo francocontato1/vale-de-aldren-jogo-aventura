@@ -1,0 +1,35 @@
+{
+ "id": "arvore4",
+ "speaker": "eco_f",
+ "emotion": "tender",
+ "text": "Bobo. Era o mesmo pedido.",
+ "dur": 3.59,
+ "cps": 7.0,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Bobo, era o mesmo pedido.",
+ "attempt": 0,
+ "gen_s": 24.0,
+ "rtf": 6.68,
+ "max_pause": 1.03,
+ "problems": [
+  "cps=7.0"
+ ],
+ "params": {
+  "exaggeration": 0.45,
+  "cfg_weight": 0.4,
+  "temperature": 0.75
+ },
+ "seed": 4207512701,
+ "lufs_in": -20.6,
+ "tp_limited": false,
+ "stage_s": {
+  "t3": 10.9,
+  "flow": 12.1,
+  "hift": 0.9
+ },
+ "tokens": 92,
+ "final_problems": [
+  "cps=7.0"
+ ]
+}

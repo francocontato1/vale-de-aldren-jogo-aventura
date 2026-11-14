@@ -1,0 +1,31 @@
+{
+ "id": "od_depois",
+ "speaker": "odessa",
+ "emotion": "happy",
+ "text": "Depois volte e me conte. Sem pressa. A pressa espanta os lumes. Espanta os gatos também.",
+ "dur": 8.81,
+ "cps": 10.0,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Depois volte e me conte, sem pressa. A pressa espanta os lumes, espanta os gatos também.",
+ "attempt": 0,
+ "gen_s": 48.5,
+ "rtf": 5.51,
+ "max_pause": 0.46,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.55,
+  "cfg_weight": 0.25,
+  "temperature": 0.75
+ },
+ "seed": 71833735,
+ "lufs_in": -22.0,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 28.5,
+  "flow": 18.3,
+  "hift": 1.6
+ },
+ "tokens": 223,
+ "final_problems": []
+}

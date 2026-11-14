@@ -1,0 +1,31 @@
+{
+ "id": "escada3",
+ "speaker": "eco_m",
+ "emotion": "surprised",
+ "text": "E depois?",
+ "dur": 0.69,
+ "cps": 13.0,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "E depois?",
+ "attempt": 0,
+ "gen_s": 15.0,
+ "rtf": 21.79,
+ "max_pause": 0.06,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.7,
+  "cfg_weight": 0.5,
+  "temperature": 0.85
+ },
+ "seed": 2366586425,
+ "lufs_in": -26.3,
+ "tp_limited": false,
+ "stage_s": {
+  "t3": 4.7,
+  "flow": 9.9,
+  "hift": 0.4
+ },
+ "tokens": 38,
+ "final_problems": []
+}

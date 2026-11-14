@@ -1,0 +1,31 @@
+{
+ "id": "rosto2",
+ "speaker": "eco_m",
+ "emotion": "tender",
+ "text": "Ele sorria muito.",
+ "dur": 0.98,
+ "cps": 17.3,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Ele sorria muito.",
+ "attempt": 0,
+ "gen_s": 17.4,
+ "rtf": 17.79,
+ "max_pause": 0.05,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.45,
+  "cfg_weight": 0.4,
+  "temperature": 0.75
+ },
+ "seed": 3600890152,
+ "lufs_in": -27.5,
+ "tp_limited": false,
+ "stage_s": {
+  "t3": 6.2,
+  "flow": 10.7,
+  "hift": 0.5
+ },
+ "tokens": 52,
+ "final_problems": []
+}

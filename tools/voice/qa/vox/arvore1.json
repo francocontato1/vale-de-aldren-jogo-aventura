@@ -1,0 +1,31 @@
+{
+ "id": "arvore1",
+ "speaker": "eco_m",
+ "emotion": "happy",
+ "text": "O que você pediu?",
+ "dur": 0.93,
+ "cps": 18.3,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "O que você pediu?",
+ "attempt": 1,
+ "gen_s": 16.0,
+ "rtf": 17.17,
+ "max_pause": 0.04,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.65,
+  "cfg_weight": 0.5,
+  "temperature": 0.78
+ },
+ "seed": 2163767596,
+ "lufs_in": -26.8,
+ "tp_limited": false,
+ "stage_s": {
+  "t3": 4.8,
+  "flow": 10.7,
+  "hift": 0.5
+ },
+ "tokens": 38,
+ "final_problems": []
+}

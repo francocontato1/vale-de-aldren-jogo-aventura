@@ -1,0 +1,31 @@
+{
+ "id": "monte3",
+ "speaker": "eco_f",
+ "emotion": "tender",
+ "text": "Mas hoje... hoje eu vou ficar mais um pouco. Só mais um pouco.",
+ "dur": 4.51,
+ "cps": 13.7,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Mas hoje, hoje eu vou ficar mais um pouco, só mais um pouco.",
+ "attempt": 0,
+ "gen_s": 29.1,
+ "rtf": 6.45,
+ "max_pause": 0.95,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.45,
+  "cfg_weight": 0.4,
+  "temperature": 0.75
+ },
+ "seed": 1052513579,
+ "lufs_in": -20.5,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 14.5,
+  "flow": 13.4,
+  "hift": 1.1
+ },
+ "tokens": 115,
+ "final_problems": []
+}

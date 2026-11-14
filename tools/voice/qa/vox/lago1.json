@@ -1,0 +1,31 @@
+{
+ "id": "lago1",
+ "speaker": "eco_m",
+ "emotion": "excited",
+ "text": "Sete pulos! Você viu? Sete!",
+ "dur": 2.32,
+ "cps": 11.6,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "7 pulos. Você viu? 7.",
+ "attempt": 0,
+ "gen_s": 21.2,
+ "rtf": 9.13,
+ "max_pause": 0.28,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.8,
+  "cfg_weight": 0.45,
+  "temperature": 0.85
+ },
+ "seed": 3372508056,
+ "lufs_in": -25.0,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 8.0,
+  "flow": 11.7,
+  "hift": 0.6
+ },
+ "tokens": 59,
+ "final_problems": []
+}

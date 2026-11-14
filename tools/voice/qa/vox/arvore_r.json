@@ -1,0 +1,31 @@
+{
+ "id": "arvore_r",
+ "speaker": "lia",
+ "emotion": "tender",
+ "text": "Centenas de fitas. Centenas de pedidos que ninguém mais lembra. E a árvore guardou todos, sem saber ler nenhum.",
+ "dur": 7.49,
+ "cps": 14.8,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Centenas de fitas, centenas de pedidos que ninguém mais lembra. E a árvore guardou todos sem saber ler nenhum.",
+ "attempt": 0,
+ "gen_s": 43.4,
+ "rtf": 5.79,
+ "max_pause": 0.39,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.45,
+  "cfg_weight": 0.35,
+  "temperature": 0.7
+ },
+ "seed": 2377562429,
+ "lufs_in": -20.4,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 24.4,
+  "flow": 17.0,
+  "hift": 1.8
+ },
+ "tokens": 198,
+ "final_problems": []
+}

@@ -1,0 +1,31 @@
+{
+ "id": "od_pos2",
+ "speaker": "odessa",
+ "emotion": "tender",
+ "text": "Fique o tempo que quiser. O mapa está pronto, mas o vale não. O vale nunca fica pronto.",
+ "dur": 8.83,
+ "cps": 9.9,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Fique o tempo que quiser. O mapa está pronto, mas o vale não. O vale nunca fica pronto.",
+ "attempt": 0,
+ "gen_s": 48.6,
+ "rtf": 5.51,
+ "max_pause": 0.7,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.35,
+  "cfg_weight": 0.2,
+  "temperature": 0.65
+ },
+ "seed": 950305178,
+ "lufs_in": -21.9,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 28.9,
+  "flow": 17.6,
+  "hift": 2.0
+ },
+ "tokens": 224,
+ "final_problems": []
+}

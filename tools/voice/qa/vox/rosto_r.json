@@ -1,0 +1,31 @@
+{
+ "id": "rosto_r",
+ "speaker": "lia",
+ "emotion": "tender",
+ "text": "Ninguém sabe de quem é este rosto. Mesmo assim, ele faz a gente sorrir de volta. Talvez seja o bastante.",
+ "dur": 7.04,
+ "cps": 14.8,
+ "cer": 0.01,
+ "wer": 0.05,
+ "asr": "Ninguém sabe de quem é este rosto. Mesmo assim, ele faz a gente sorri de volta. Talvez seja o bastante.",
+ "attempt": 0,
+ "gen_s": 42.3,
+ "rtf": 6.01,
+ "max_pause": 0.32,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.45,
+  "cfg_weight": 0.35,
+  "temperature": 0.7
+ },
+ "seed": 767829827,
+ "lufs_in": -20.4,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 24.2,
+  "flow": 16.2,
+  "hift": 1.8
+ },
+ "tokens": 191,
+ "final_problems": []
+}

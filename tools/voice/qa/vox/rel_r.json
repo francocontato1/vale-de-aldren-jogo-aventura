@@ -1,0 +1,31 @@
+{
+ "id": "rel_r",
+ "speaker": "lia",
+ "emotion": "tender",
+ "text": "Se eu tivesse um relógio desses, que hora ele marcaria? Ainda não sei. E acho que está tudo bem não saber ainda.",
+ "dur": 6.38,
+ "cps": 17.6,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Se eu tivesse um relógio desses, que hora ele marcaria? Ainda não sei. E acho que está tudo bem não saber ainda.",
+ "attempt": 1,
+ "gen_s": 37.2,
+ "rtf": 5.82,
+ "max_pause": 0.23,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.45,
+  "cfg_weight": 0.4,
+  "temperature": 0.63
+ },
+ "seed": 2008578743,
+ "lufs_in": -21.2,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 21.3,
+  "flow": 14.9,
+  "hift": 0.8
+ },
+ "tokens": 175,
+ "final_problems": []
+}

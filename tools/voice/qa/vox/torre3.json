@@ -1,0 +1,31 @@
+{
+ "id": "torre3",
+ "speaker": "eco_f",
+ "emotion": "surprised",
+ "text": "Então por que o senhor continua subindo nela toda tarde?",
+ "dur": 3.46,
+ "cps": 16.2,
+ "cer": 0.018,
+ "wer": 0.2,
+ "asr": "Então, porque o Senhor continua subindo nela toda tarde.",
+ "attempt": 0,
+ "gen_s": 23.6,
+ "rtf": 6.81,
+ "max_pause": 0.34,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.7,
+  "cfg_weight": 0.5,
+  "temperature": 0.85
+ },
+ "seed": 3377821973,
+ "lufs_in": -22.1,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 11.4,
+  "flow": 11.4,
+  "hift": 0.7
+ },
+ "tokens": 90,
+ "final_problems": []
+}

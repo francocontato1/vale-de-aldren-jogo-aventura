@@ -1,0 +1,31 @@
+{
+ "id": "od_quem",
+ "speaker": "odessa",
+ "emotion": "neutral",
+ "text": "Sou. Faz seiscentos anos que moro neste vale, e ainda não entendi ele direito. Por isso chamei você.",
+ "dur": 9.11,
+ "cps": 11.0,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Sou, faz 600 anos que moro neste vale e ainda não entendi ele direito, por isso chamei você.",
+ "attempt": 0,
+ "gen_s": 55.3,
+ "rtf": 6.07,
+ "max_pause": 0.86,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.4,
+  "cfg_weight": 0.3,
+  "temperature": 0.7
+ },
+ "seed": 3358271965,
+ "lufs_in": -20.5,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 32.1,
+  "flow": 21.1,
+  "hift": 2.0
+ },
+ "tokens": 236,
+ "final_problems": []
+}

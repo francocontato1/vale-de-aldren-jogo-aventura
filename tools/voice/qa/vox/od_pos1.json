@@ -1,0 +1,31 @@
+{
+ "id": "od_pos1",
+ "speaker": "odessa",
+ "emotion": "happy",
+ "text": "Estou tentando aprender o nome de todo mundo da vila. Comecei pela padeira. Celeste. Viu? Já sei um.",
+ "dur": 8.49,
+ "cps": 11.8,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Estou tentando aprender o nome de todo mundo da vila. Comecei pela padeira. Celeste, viu? Já sei um.",
+ "attempt": 0,
+ "gen_s": 49.6,
+ "rtf": 5.84,
+ "max_pause": 0.71,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.55,
+  "cfg_weight": 0.25,
+  "temperature": 0.75
+ },
+ "seed": 752379415,
+ "lufs_in": -20.7,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 28.1,
+  "flow": 19.8,
+  "hift": 1.5
+ },
+ "tokens": 222,
+ "final_problems": []
+}

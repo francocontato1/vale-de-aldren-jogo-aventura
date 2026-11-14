@@ -1,0 +1,31 @@
+{
+ "id": "torre4",
+ "speaker": "eco_m",
+ "emotion": "tender",
+ "text": "Porque ainda está de pé. Quando cair, eu sento no chão e olho daqui. O céu não muda por causa de uma torre.",
+ "dur": 6.33,
+ "cps": 16.9,
+ "cer": 0.01,
+ "wer": 0.043,
+ "asr": "Porque ainda está de pé. Quando cair, eu sinto no chão e olho daqui. O céu não muda por causa de uma torre.",
+ "attempt": 0,
+ "gen_s": 40.6,
+ "rtf": 6.41,
+ "max_pause": 0.76,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.45,
+  "cfg_weight": 0.4,
+  "temperature": 0.75
+ },
+ "seed": 142228947,
+ "lufs_in": -23.9,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 22.2,
+  "flow": 16.8,
+  "hift": 1.5
+ },
+ "tokens": 173,
+ "final_problems": []
+}

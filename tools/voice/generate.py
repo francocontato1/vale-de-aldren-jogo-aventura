@@ -121,6 +121,39 @@ def trim_silence(x, keep=0.08, rel_db=-42.0, abs_db=-50.0):
     return y
 
 
+def compress_pauses(x, max_sil=0.8, target=0.5, rel_db=-40.0):
+    """shorten model-made silences inside a chunk (intended '...' pauses are inserted separately)"""
+    hop = int(0.01 * SR); n = len(x) // hop
+    if n < 3:
+        return x
+    db = 20 * np.log10(np.sqrt(np.mean(x[: n * hop].reshape(n, hop) ** 2, axis=1) + 1e-12))
+    sil = db < db.max() + rel_db
+    runs, i = [], 0
+    while i < n:
+        if sil[i]:
+            j = i
+            while j < n and sil[j]:
+                j += 1
+            if (j - i) * 0.01 > max_sil and i > 0 and j < n:
+                runs.append((i * hop, j * hop))
+            i = j
+        else:
+            i += 1
+    if not runs:
+        return x
+    out, prev, f = [], 0, int(0.01 * SR)
+    for a, b in runs:
+        keep = int(target * SR / 2)
+        out.append(x[prev:a + keep])
+        prev = b - keep
+    out.append(x[prev:])
+    y = out[0]
+    for seg in out[1:]:  # 10 ms crossfade at each cut
+        fade = np.linspace(0, 1, f, dtype=np.float32)
+        y = np.concatenate([y[:-f], y[-f:] * (1 - fade) + seg[:f] * fade, seg[f:]])
+    return y
+
+
 def max_internal_pause(x, rel_db=-40.0):
     hop = int(0.01 * SR); n = len(x) // hop
     if n < 3:
@@ -275,7 +308,7 @@ def render_line(eng, line, voices, refs_dir, attempt):
     pauses = {"ellipsis": spk.get("pause", 0.45), "sentence": 0.3}
     pieces = []
     for i, (chunk, kind) in enumerate(split_chunks(line["text"])):
-        w = trim_silence(eng.tts(chunk, seed + i, **p), keep=0.04)
+        w = compress_pauses(trim_silence(eng.tts(chunk, seed + i, **p), keep=0.04))
         pieces.append(w)
         if kind:
             pieces.append(np.zeros(int(pauses[kind] * SR), np.float32))

@@ -1,0 +1,31 @@
+{
+ "id": "fim1",
+ "speaker": "odessa",
+ "emotion": "tender",
+ "text": "Chegou. Olhe para cima.",
+ "dur": 2.19,
+ "cps": 10.5,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Chegou, olhe para cima.",
+ "attempt": 0,
+ "gen_s": 20.8,
+ "rtf": 9.51,
+ "max_pause": 0.41,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.35,
+  "cfg_weight": 0.2,
+  "temperature": 0.65
+ },
+ "seed": 2910583046,
+ "lufs_in": -22.3,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 8.0,
+  "flow": 12.0,
+  "hift": 0.7
+ },
+ "tokens": 67,
+ "final_problems": []
+}

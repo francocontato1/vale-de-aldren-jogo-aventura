@@ -1,0 +1,31 @@
+{
+ "id": "fim2",
+ "speaker": "odessa",
+ "emotion": "tender",
+ "text": "Seiscentos anos eu procurei os Veladores nas pedras. E eles estavam nas coisas pequenas. Numa pedra que pula na água. Num pedido amarrado numa fita. Numa escada que não leva a lugar nenhum.",
+ "dur": 14.57,
+ "cps": 13.0,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Seiscentos anos, eu procurei os veladores nas pedras, e eles estavam nas coisas pequenas, numa pedra que pula na água, num pedido amarrado numa fita, numa escada que não leva a lugar nenhum.",
+ "attempt": 0,
+ "gen_s": 81.7,
+ "rtf": 5.61,
+ "max_pause": 0.68,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.35,
+  "cfg_weight": 0.2,
+  "temperature": 0.65
+ },
+ "seed": 788448804,
+ "lufs_in": -19.9,
+ "tp_limited": false,
+ "stage_s": {
+  "t3": 51.0,
+  "flow": 27.2,
+  "hift": 3.3
+ },
+ "tokens": 383,
+ "final_problems": []
+}

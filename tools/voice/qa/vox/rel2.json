@@ -1,0 +1,31 @@
+{
+ "id": "rel2",
+ "speaker": "eco_m",
+ "emotion": "tender",
+ "text": "Não estão. Cada um marca a hora mais feliz de alguém. Este aqui é o meu. Quatro e meia da tarde.",
+ "dur": 6.99,
+ "cps": 13.7,
+ "cer": 0.054,
+ "wer": 0.095,
+ "asr": "Não estão. Cada um marca a hora mais feliz de alguém. Este aqui é o meu. 4h30 da tarde.",
+ "attempt": 0,
+ "gen_s": 39.9,
+ "rtf": 5.7,
+ "max_pause": 0.52,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.45,
+  "cfg_weight": 0.4,
+  "temperature": 0.75
+ },
+ "seed": 3383600839,
+ "lufs_in": -22.5,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 22.5,
+  "flow": 15.8,
+  "hift": 1.4
+ },
+ "tokens": 177,
+ "final_problems": []
+}

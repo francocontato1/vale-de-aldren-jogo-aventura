@@ -1,0 +1,31 @@
+{
+ "id": "od_n2",
+ "speaker": "odessa",
+ "emotion": "happy",
+ "text": "Nos meus primeiros cem anos aqui, eu colecionava feitiços inúteis. Um que deixa o chá sempre morno. Um que acha botões perdidos. Todo mundo achava bobagem. Eu também. Mas eram os que eu mais usava.",
+ "dur": 16.69,
+ "cps": 11.8,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Nos meus primeiros 100 anos aqui, eu colecionava feitiços inúteis. Um que deixa o chá sempre morno, um que acha botões perdidos. Todo mundo achava bobagem. Eu também. Mas eram os que eu mais usava.",
+ "attempt": 0,
+ "gen_s": 92.9,
+ "rtf": 5.56,
+ "max_pause": 0.5,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.55,
+  "cfg_weight": 0.25,
+  "temperature": 0.75
+ },
+ "seed": 119936857,
+ "lufs_in": -20.2,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 58.3,
+  "flow": 30.3,
+  "hift": 4.1
+ },
+ "tokens": 420,
+ "final_problems": []
+}

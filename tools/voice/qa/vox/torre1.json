@@ -1,0 +1,31 @@
+{
+ "id": "torre1",
+ "speaker": "eco_f",
+ "emotion": "sad",
+ "text": "A torre não vai aguentar outro inverno, mestre.",
+ "dur": 2.83,
+ "cps": 16.6,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "A torre não vai aguentar outro inverno, mestre.",
+ "attempt": 0,
+ "gen_s": 23.7,
+ "rtf": 8.38,
+ "max_pause": 0.16,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.45,
+  "cfg_weight": 0.4,
+  "temperature": 0.75
+ },
+ "seed": 1233784636,
+ "lufs_in": -21.2,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 10.6,
+  "flow": 12.3,
+  "hift": 0.8
+ },
+ "tokens": 84,
+ "final_problems": []
+}

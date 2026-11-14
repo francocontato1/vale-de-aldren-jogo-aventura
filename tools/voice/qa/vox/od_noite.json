@@ -1,0 +1,31 @@
+{
+ "id": "od_noite",
+ "speaker": "odessa",
+ "emotion": "neutral",
+ "text": "Ainda está claro. Os lumes são tímidos. Volte quando as estrelas aparecerem.",
+ "dur": 6.2,
+ "cps": 12.3,
+ "cer": 0.014,
+ "wer": 0.083,
+ "asr": "Ainda está claro, os rumes são tímidos, volte quando as estrelas aparecerem.",
+ "attempt": 0,
+ "gen_s": 39.1,
+ "rtf": 6.3,
+ "max_pause": 0.52,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.4,
+  "cfg_weight": 0.3,
+  "temperature": 0.7
+ },
+ "seed": 3439944269,
+ "lufs_in": -20.8,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 21.7,
+  "flow": 15.9,
+  "hift": 1.4
+ },
+ "tokens": 172,
+ "final_problems": []
+}

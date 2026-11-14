@@ -1,0 +1,31 @@
+{
+ "id": "od_n3",
+ "speaker": "odessa",
+ "emotion": "sad",
+ "text": "Pensei uma coisa ontem, olhando o céu. Para mim, vocês humanos são como estrelas cadentes. Passam rápido demais. E eu passei séculos olhando para o chão, estudando pedra.",
+ "dur": 16.04,
+ "cps": 10.6,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Pensei uma coisa ontem, olhando o céu. Para mim, vocês humanos são como estrelas cadentes. Passam rápido demais, e eu passei séculos, olhando para o chão, estudando pedra.",
+ "attempt": 0,
+ "gen_s": 96.7,
+ "rtf": 6.03,
+ "max_pause": 1.21,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.35,
+  "cfg_weight": 0.2,
+  "temperature": 0.65
+ },
+ "seed": 2919457204,
+ "lufs_in": -20.7,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 60.9,
+  "flow": 31.6,
+  "hift": 4.0
+ },
+ "tokens": 438,
+ "final_problems": []
+}
