@@ -104,6 +104,7 @@ html,body{height:100%;margin:0;background:#0b0a08;color:var(--ink);overflow:hidd
 #tbtns button,#tmap button{all:unset;width:60px;height:60px;border-radius:50%;border:1px solid var(--line);background:rgba(20,16,12,.5);color:var(--ink);font-size:11px;font-weight:600;text-align:center}
 #tbtns button.big{background:rgba(232,199,142,.25)}
 #tbtns button.on{border-color:var(--gold)}
+#tbtns button[hidden]{display:none}
 #tmap{position:absolute;right:calc(16px + env(safe-area-inset-right,0px));top:calc(110px + env(safe-area-inset-top,0px));pointer-events:auto}
 #tmap button{width:auto;height:auto;padding:6px 12px;border-radius:999px}
 @media (max-width:560px){#quest{max-width:56vw}#questText{font-size:15px}.toast{font-size:21px}#dlgText{font-size:20px}#memText{font-size:21px}#thought{font-size:19px}}
@@ -122,7 +123,7 @@ html,body{height:100%;margin:0;background:#0b0a08;color:var(--ink);overflow:hidd
 <div id="game"></div>
 <div class="hud" id="hud" hidden>
   <div id="compass"><canvas id="compassCv" width="880" height="76"></canvas></div>
-  <div id="status">Caderno <b id="lumeCount">0/8</b> · <span id="clock">16:30</span> · <span id="keyHint">J caderno · M mapa · L lanterna · F tela cheia · Esc menu</span></div>
+  <div id="status">Caderno <b id="lumeCount">0/8</b> · <span id="clock">16:30</span> · <span id="keyHint">J caderno · M mapa · L lanterna · V assoviar · F tela cheia · Esc menu</span></div>
   <div id="quest"><div id="questText"></div></div>
   <div id="prompt" hidden></div>
   <div id="sailHud" hidden><div id="sailInfo"></div><div id="sailKeys"></div></div>
@@ -138,7 +139,7 @@ html,body{height:100%;margin:0;background:#0b0a08;color:var(--ink);overflow:hidd
   <div id="joy"><div id="joyKnob"></div></div>
   <div id="tmap"><button id="tbMap">Mapa</button></div>
   <div id="tbtns">
-    <button id="tbBook">Caderno</button><button id="tbLamp">Lanterna</button><button id="tbTime">Tempo</button>
+    <button id="tbBook">Caderno</button><button id="tbLamp">Lanterna</button><button id="tbTime">Tempo</button><button id="tbWhistle" hidden>Assoviar</button>
     <button id="tbRun">Correr</button><button id="tbJump">Pular</button><button id="tbUse" class="big">Usar</button>
   </div>
 </div>
@@ -165,6 +166,7 @@ html,body{height:100%;margin:0;background:#0b0a08;color:var(--ink);overflow:hidd
       <kbd>E</kbd><span>Conversar, observar, sentar</span>
       <kbd>T</kbd><span>Sentada: deixar o tempo passar</span>
       <kbd>J · M · L</kbd><span>Caderno · Mapa · Lanterna</span>
+      <kbd>V</kbd><span>Assoviar: depois do primeiro voo, a Vésper vem até você</span>
       <kbd>Espaço</kbd><span>Pular · avançar uma fala</span>
       <kbd>No barco</kbd><span>A D leme · W S vela · E desembarcar</span>
       <kbd>Voando</kbd><span>W asas · S frear · A D curvas · Espaço subir · Shift descer · E pousar</span>
@@ -194,5 +196,5 @@ html,body{height:100%;margin:0;background:#0b0a08;color:var(--ink);overflow:hidd
 <div class="overlay" id="journal" hidden><div class="jcard"><div class="eyebrow">Caderno de Lia</div><h1>O mapa do que importa</h1><div id="journalCount"></div><div id="journalList"></div><p class="jhint">J ou Esc para fechar</p></div></div>
 <div class="overlay" id="ending" hidden><div class="card"><div class="eyebrow">Fim, e começo</div><h1 style="font-size:64px">O vale lembra</h1><p class="lede">Os lumes subiram de todo o vale e se misturaram às estrelas. O caderno está cheio. Mas o vale, como disse Odessa, nunca fica pronto: ainda há cantos esperando alguém que olhe com calma.</p><button class="btn" id="endBtn">Continuar andando</button></div></div>
 <div id="fade"></div>
-<script type="module" src="game-b5484739.js"></script>
+<script type="module" src="game-7fe446fd.js"></script>
 </body></html>

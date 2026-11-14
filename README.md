@@ -22,6 +22,7 @@ Você é Lia, uma jovem cartógrafa chamada por Odessa, uma maga elfa que mora n
 | 1 a 4 | Escolher o que dizer |
 | No barco | A D leme · W S caçar/folgar a vela · E desembarcar (perto do píer ou de uma praia rasa) |
 | Voando com a Vésper | W bater asas · S frear · A D curvas (ou o mouse) · Espaço subir · Shift descer · E pousar |
+| Chamar a Vésper | V assoviar (depois do primeiro voo): ela vem de onde estiver e pousa ao seu lado |
 
 No celular, há um joystick e botões na tela.
 
@@ -33,7 +34,7 @@ No celular, há um joystick e botões na tela.
 - **A Vila da Maré:** uma vila de pescadores na enseada a sudeste, com praia de areia, mar com ondas, píer, taberna, galpão do barqueiro e um farol no promontório. Moram lá a Dona Marta, o Joca, o Tião, a Nina e o Seu Davi.
 - **Amizades e favores:** conversar todo dia e levar coisas de uma vila para a outra (o pão da Celeste, o desenho do Tomé, a carta do Seu Davi) aumenta a amizade; os corações aparecem no diálogo e no caderno.
 - **O barco do mestre Elias:** depois de falar com o Joca, dá para velejar pela enseada e ver os cardumes.
-- **Vésper, a dragoa dos Veladores:** mora no ninho ao lado da gigante do monte (há uma trilha até lá). Chegue andando devagar; depois, monte e voe sobre o vale.
+- **Vésper, a dragoa dos Veladores:** mora no ninho ao lado da gigante do monte (há uma trilha até lá). Chegue andando devagar; depois, monte e voe sobre o vale. Ao pousar, ela fica esperando ali; de qualquer lugar, um assovio (V) a chama de volta.
 - **Casas vivas:** dá para sentar nas cadeiras e bancos, deitar na cama e dormir até de manhã. À noite os moradores sentam perto da lareira e depois dormem nas suas camas.
 - **Floresta:** coelhos, passarinhos que voam quando a gente chega perto, gaivotas, borboletas, e curiosidades perto das trilhas (círculo de cogumelos, colmeia, fonte, pedra com estrela, cabana de caçador...).
 - **O céu:** cerca de 5 mil estrelas reais do catálogo Hipparcos, com cor pela temperatura, Via Láctea, lua com fases e estrelas cadentes, girando como vistas de 23° de latitude sul.
