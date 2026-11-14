@@ -30,7 +30,7 @@
     },
     "celeste": {
       "desc": "village baker ~45, lively, laughs easily, practical, mid female, faster pace",
-      "ref": {"blend": {"af_bella": 0.45, "pf_dora": 0.35, "af_jessica": 0.2}, "speed": 1.1,
+      "ref": {"blend": {"af_bella": 0.4, "af_alloy": 0.35, "if_sara": 0.25}, "speed": 1.1, "pitch": -1.0, "formant": "preserved",
               "text": "Bom dia, bom dia! Entra, entra, que o pão acabou de sair do forno! Cuidado que está quente, hein? Pega mais um, menina, você está magrinha demais!"},
       "tts": {"exaggeration": 0.6, "cfg_weight": 0.5, "temperature": 0.8}
     },

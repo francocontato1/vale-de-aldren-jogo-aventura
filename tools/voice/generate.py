@@ -172,15 +172,27 @@ def true_peak_db(x):
 
 
 def loudness_normalize(x, target=-18.0, tp_max=-1.5):
+    """gain to `target` LUFS; if the true peak then exceeds `tp_max`, a transparent look-ahead limiter
+    (ffmpeg alimiter, 5 ms attack) shaves the few peaks instead of turning the whole line down."""
     import pyloudnorm as pyln
     meter = pyln.Meter(SR)
-    pad = np.concatenate([x, np.zeros(int(0.5 * SR), dtype=x.dtype)]) if len(x) < SR else x
-    lufs = meter.integrated_loudness(pad)
-    y = x * (10 ** ((target - lufs) / 20.0))
-    tp = true_peak_db(y)
+    def lufs_of(z):
+        return meter.integrated_loudness(np.concatenate([z, np.zeros(int(0.5 * SR), z.dtype)]) if len(z) < SR else z)
+    lufs = lufs_of(x)
+    y = (x * (10 ** ((target - lufs) / 20.0))).astype(np.float32)
     limited = False
-    if tp > tp_max:  # keep it clean: lower gain rather than squash transients
-        y = y * (10 ** ((tp_max - 0.05 - tp) / 20.0)); limited = True
+    for _ in range(3):
+        tp = true_peak_db(y)
+        if tp <= tp_max:
+            break
+        limited = True
+        lim = 10 ** ((tp_max - 1.0) / 20.0)
+        y = ffmpeg_filter(np.concatenate([y, np.zeros(int(0.05 * SR), np.float32)]),
+                          f"alimiter=limit={lim:.4f}:attack=5:release=60:level=disabled")[: len(y)]
+        y = (y * (10 ** ((target - lufs_of(y)) / 20.0))).astype(np.float32)  # restore loudness
+    tp = true_peak_db(y)
+    if tp > tp_max:  # last resort
+        y = y * (10 ** ((tp_max - 0.05 - tp) / 20.0))
     return y.astype(np.float32), lufs, limited
 
 
@@ -228,12 +240,15 @@ class Engine:
         self.torch = torch
         self.m = ChatterboxMultilingualTTS.from_local(ckpt_dir, "cpu")
         self.conds = {}
+        self.max_tokens = 0
         self.timing = {"t3": 0.0, "flow": 0.0, "hift": 0.0, "tokens": 0}
         T = self.timing
 
         def timed(obj, name, key, ctx=contextlib.nullcontext):
             f = getattr(obj, name)
             def g(*a, **k):
+                if key == "t3" and self.max_tokens:
+                    k["max_new_tokens"] = min(k.get("max_new_tokens") or 1000, self.max_tokens)
                 t = time.time()
                 with ctx():
                     r = f(*a, **k)
@@ -256,6 +271,8 @@ class Engine:
 
     def tts(self, text, seed, exaggeration, cfg_weight, temperature):
         self.torch.manual_seed(seed)
+        # speech tokens are 25/s; cap at ~3.3 chars/s worth of tokens (+3 s) so a runaway take ends early
+        self.max_tokens = int(75 + 7.5 * len(text))
         w = self.m.generate(text, language_id="pt", exaggeration=exaggeration,
                             cfg_weight=cfg_weight, temperature=temperature)
         for layer in self.m.t3.tfmr.layers:  # drop leaked hooks
@@ -300,11 +317,11 @@ def params_for(line, voices, attempt):
     return {k: round(v, 3) for k, v in p.items()}
 
 
-def render_line(eng, line, voices, refs_dir, attempt):
+def render_line(eng, line, voices, refs_dir, attempt, seed_offset=0):
     spk = voices["speakers"][line["speaker"]]
     p = params_for(line, voices, attempt)
     eng.set_speaker(line["speaker"], refs_dir / f"{line['speaker']}.ogg", p["exaggeration"])
-    seed = int(hashlib.sha1(f"{line['id']}#{attempt}".encode()).hexdigest()[:8], 16)
+    seed = int(hashlib.sha1(f"{line['id']}#{attempt + seed_offset}".encode()).hexdigest()[:8], 16)
     pauses = {"ellipsis": spk.get("pause", 0.45), "sentence": 0.3}
     pieces = []
     for i, (chunk, kind) in enumerate(split_chunks(line["text"])):
@@ -391,6 +408,7 @@ def main():
     ap.add_argument("--max-retries", type=int, default=1, help="extra takes for a flagged line")
     ap.add_argument("--max-retries-bad", type=int, default=2, help="extra takes allowed when CER is really bad")
     ap.add_argument("--bad-cer", type=float, default=0.3)
+    ap.add_argument("--seed-offset", type=int, default=0, help="use with --force to get different takes")
     ap.add_argument("--priority", default="", help="comma list of id prefixes (fnmatch globs) rendered first, in this order")
     ap.add_argument("--cer-max", type=float, default=0.12)
     ap.add_argument("--no-asr", action="store_true")
@@ -438,9 +456,9 @@ def main():
     t_all = time.time(); audio_all = 0.0
     for n, ln in enumerate(todo, 1):
         best = None
-        for attempt in range(a.max_retries + 1):
+        for attempt in range(max(a.max_retries, a.max_retries_bad) + 1):
             t0 = time.time(); tm0 = dict(eng.timing)
-            x, info = render_line(eng, ln, voices, Path(a.refs), attempt)
+            x, info = render_line(eng, ln, voices, Path(a.refs), attempt, a.seed_offset)
             gen_s = time.time() - t0
             info["stage_s"] = {k: round(eng.timing[k] - tm0[k], 1) for k in ("t3", "flow", "hift")}
             info["tokens"] = eng.timing["tokens"] - tm0["tokens"]

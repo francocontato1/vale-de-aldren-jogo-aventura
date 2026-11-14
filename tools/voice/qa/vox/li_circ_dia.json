@@ -1,0 +1,31 @@
+{
+ "id": "li_circ_dia",
+ "speaker": "lia",
+ "emotion": "neutral",
+ "text": "Acho que este lugar precisa das estrelas. Vou esperar a noite.",
+ "dur": 5.07,
+ "cps": 12.2,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Acho que este lugar precisa das estrelas. Vou esperar a noite.",
+ "attempt": 0,
+ "gen_s": 31.6,
+ "rtf": 6.23,
+ "max_pause": 0.54,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.5,
+  "cfg_weight": 0.45,
+  "temperature": 0.75
+ },
+ "seed": 2396235954,
+ "lufs_in": -22.4,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 15.9,
+  "flow": 14.5,
+  "hift": 1.1
+ },
+ "tokens": 131,
+ "final_problems": []
+}

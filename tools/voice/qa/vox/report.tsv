@@ -1,0 +1,115 @@
+id	speaker	emotion	dur	cps	cer	wer	tries	rtf	problems	asr
+intro1	narrador	tender	4.19	14.3	0.017	0.077	1	16.84		Dizem que no Vale de Aldrem nada se perde, só muda de lugar.
+intro2	narrador	neutral	8.51	15.4	0.0	0.0	1	8.35		Há muito tempo viveu aqui um povo que construía para olhar. Torres, escadas, círculos de pedra. Chamavam a si mesmos de veladores.
+intro3	narrador	tender	7.72	12.4	0.0	0.0	1	14.52		Um dia foram embora. Ninguém sabe para onde. Deixaram as pedras os gigantes. E uma pergunta.
+carta	odessa	tired	16.99	13.2	0.07	0.154	1	12.17		Catógrafa, que bom que aceitou. Não precisa de um mapa de estradas, essas eu já conheço. Precise de um mapa do que importa. Me procure no observatório, no alto da colina, depois da vila, e traga sapatos confortáveis. Odessa, era, que iti.
+chegada	lia	tender	6.1	13.0	0.013	0.059	1	6.39		Então este é o Vale de Aldrin. É mais quieto do que eu imaginava. Do jeito bom.
+od_first	odessa	tired	9.37	12.3	0.0	0.0	1	5.6		Ah, você veio à pé, eu tinha certeza de que ia chegar amanhã, ou daqui a 10 anos, eu me confundo com essas coisas.
+od_quem	odessa	neutral	9.11	11.0	0.0	0.0	1	6.07		Sou, faz 600 anos que moro neste vale e ainda não entendi ele direito, por isso chamei você.
+od_mapa	odessa	tender	14.36	11.6	0.037	0.1	1	5.88		A sé em mapa dos lugares onde alguém foi feliz. Os veladores deixaram oito. Eu sinto eles, mas já não consigo ver. Meus olhos ficaram cansados de tanto olhar a mesma coisa.
+od_como	odessa	neutral	12.84	13.7	0.012	0.03	1	5.71		"Va até eles e fique. Sente, espere, olhe." Quando o lugar percebe que está sendo olhado com calma, ele lembra. Nós chamamos isso de lume. Desenhe no seu caderno o que você vir.
+od_depois	odessa	happy	8.81	10.0	0.0	0.0	1	5.51		Depois volte e me conte, sem pressa. A pressa espanta os lumes, espanta os gatos também.
+od_n1	odessa	tender	14.17	12.8	0.023	0.062	1	5.58		Um lume, então, fazia tempo que ninguém via um. Eu dei nomes aos gigantes, sabia? Os veladores nunca disseram como chamavam eles, talvez o nome seja a coisa de quem tem medo de esquecer.
+od_n2	odessa	happy	16.69	11.8	0.0	0.0	1	5.56		Nos meus primeiros 100 anos aqui, eu colecionava feitiços inúteis. Um que deixa o chá sempre morno, um que acha botões perdidos. Todo mundo achava bobagem. Eu também. Mas eram os que eu mais usava.
+od_n3	odessa	sad	16.04	10.6	0.0	0.0	1	6.03		Pensei uma coisa ontem, olhando o céu. Para mim, vocês humanos são como estrelas cadentes. Passam rápido demais, e eu passei séculos, olhando para o chão, estudando pedra.
+od_n4	odessa	tired	11.16	11.5	0.0	0.0	1	6.39		Está quase, engraçado. E se o mapa ficar pronto e eu não sentir nada, 600 anos é muito tempo para esperar uma resposta.
+od_todos	odessa	excited	13.44	13.3	0.029	0.029	1	5.93		8. Oito lugares. Você viu coisas que eu nunca vi. Hoje a noite passa a chuva de lumes. Acontece uma vez a cada 100 anos. Suba até o observatório depois que escurecer. Eu espero você.
+od_noite	odessa	neutral	6.2	12.3	0.014	0.083	1	6.3		Ainda está claro, os rumes são tímidos, volte quando as estrelas aparecerem.
+od_pos1	odessa	happy	8.49	11.8	0.0	0.0	1	5.84		Estou tentando aprender o nome de todo mundo da vila. Comecei pela padeira. Celeste, viu? Já sei um.
+od_pos2	odessa	tender	8.83	9.9	0.0	0.0	1	5.51		Fique o tempo que quiser. O mapa está pronto, mas o vale não. O vale nunca fica pronto.
+od_cha	odessa	happy	6.41	9.0	0.111	0.273	1	6.08		Queixa, está morno, está sempre morno, esse é o fiteiço.
+an_first	anselmo	happy	11.33	14.2	0.032	0.094	2	6.47		Boa tarde, moça. Você é que veio fazer o mapa da Odessa? Um, ela começa o mapa desses a cada século. Nunca termina. Diz que o vale muda enquanto ela desenha.
+an_gigantes	anselmo	tender	11.47	13.6	0.013	0.037	1	6.02		Conheço desde menino. Meu avô dizia que eles não são estátuas, são gente que sentou para ver alguma coisa bonita. E gostou o tanto que esqueceu de levantar.
+an_veladores	anselmo	neutral	11.34	13.5	0.0	0.0	1	5.61		Acho que não aconteceu nada. Às vezes as pessoas só vão embora, não precisa ser tragédia. As ovelhas também mudam de pasto e ninguém faz poema por isso.
+an_c1	anselmo	tender	8.03	13.3	0.087	0.286	1	5.53		Sabe porque o gosto de pastoriares ou velhas não tem pressa? Com elas a gente aprende o tamanho certo do dia.
+an_c2	anselmo	neutral	8.02	13.3	0.0	0.0	1	5.35		Quando o vento vira e cheira a chuva, olhe para a gigante do monte. Ela sempre fica com uma nuvem no ombro.
+an_c3	anselmo	tender	7.42	14.4	0.0	0.0	1	5.85		Na minha idade, a gente para de perguntar para onde as coisas vão. Começa a perguntar onde elas estão agora.
+an_noite	anselmo	tired	8.02	11.2	0.023	0.118	1	5.79		Já em noite, um, nessa idade, a gente conta estrela para dormir. Eu nunca passo das trinta.
+ce_first	celeste	excited	15.06	14.6	0.014	0.047	1	5.25		A gente nova entra, entra, que o pão acabou de sair. Você é a moça do mapa? A Odessa encomendou o pão para você. Três por dia, ela disse. Eu disse que ninguém come três pães por dia. Ela disse que cartógrafo anda muito.
+ce_odessa	celeste	happy	10.89	18.4	0.021	0.073	1	5.19		Ah, dessa? Vem aqui uma vez por ano, se tanto. Fica parada na porta sentindo cheiro e vai embora sem comprar nada. Ano passado eu dei um pão para ela. Ficou olhando para o pão como se fosse um livro.
+ce_ruinas	celeste	happy	9.89	17.4	0.012	0.03	1	6.75		Eu acho que eles eram padeiros. É sério. Quem mais acorda antes do sol para olhar o céu? Toda aquela gente de torre escada. Tinha fome de alguma coisa. Isso eu garanto.
+ce_c1	celeste	tender	4.4	18.9	0.038	0.062	1	6.66		Bom, bom é igual conversa boa, precisa de tempo de calor e de alguém para dividir.
+ce_c2	celeste	sad	10.15	16.0	0.0	0.0	1	5.15		Meu marido construia barcos, faz seis invernos que ele se foi. Eu ainda faço pão para dois, o que sobra eu dou para os passarinhos. Eles agradecem do jeito deles.
+ce_c3	celeste	happy	6.56	18.0	0.0	0.0	1	5.98		O Tomé passou aqui correndo de novo. Aquele menino acha que vai acordar os gigantes. Deixa ele. Alguém tem que tentar.
+ce_noite	celeste	tired	4.19	16.0	0.0	0.0	1	7.69		O forno já esfriou, querida. Volta amanhã cedo, que tem pão de mel.
+to_first	tome	excited	7.06	15.9	0.028	0.05	1	5.23		Você é cartógrafa? De verdade? Então você sabe onde fica tudo, me diz onde os gigantes guardam sonhos deles?
+to_naosei	tome	happy	4.41	15.6	0.0	0.0	1	6.16		Ah, tudo bem. Eu acho que é na barriga, por isso eles ficam sentados.
+to_porque	tome	excited	11.27	16.5	0.0	0.0	1	5.37		Porque eu quero acordar eles. Todo dia eu grito "bom dia" para o gigante do lago. Um dia ele vai responder. A tia Celeste diz que paciência é a magia mais forte, mas é a mais chata também.
+to_c1	tome	excited	4.71	19.3	0.0	0.0	2	5.85		Sabia que se você deitar na grama e olhar as nuvens, parece que é a terra que está andando?
+to_c2	tome	happy	8.61	16.4	0.022	0.037	1	5.37		Eu achei uma pedra com desenho de estrela. Escondi. Não vou contar onde. Tá bom? É perto do círculo de pedras, mas não conta para ninguém.
+to_c3	tome	happy	5.63	16.2	0.023	0.059	1	6.19		Quando eu crescer, eu vou ser velador. Vou construir uma escada até a lua, mas com coimão.
+to_pos	tome	excited	5.2	15.8	0.0	0.0	1	5.47		Você viu? Os lumes subiram. Eu falei que os gigantes estavam acordados por dentro.
+ir_first	irene	tender	9.8	13.5	0.0	0.0	1	5.35		Ah, desculpa, não vi você chegar, estou tentando pintar a luz em cima do lago, é impossível, quando eu acerto a cor, a luz já mudou.
+ir_porque	irene	tender	8.97	12.2	0.0	0.0	1	5.29		Porque a parte boa não é o quadro, é a meia hora olhando. O quadro é só a desculpa que eu dou para os outros.
+ir_ver	irene	happy	9.58	9.1	0.0	0.0	1	6.0		Pode, está horrível, mas olha este canto aqui, o reflexo. Por um segundo eu acertei.
+ir_c1	irene	tender	8.06	14.5	0.0	0.0	1	5.29		Os veladores pintavam? Eu acho que sim. Ninguém constrói uma escada para o céu sem ter vontade de desenhar ele antes.
+ir_c2	irene	tender	7.41	15.1	0.0	0.0	1	5.91		Já reparou que à noite o lago vira outro céu? Às vezes eu não sei em qual dos dois as estrelas estão de verdade.
+ir_c3	irene	neutral	7.91	13.0	0.02	0.105	1	5.28		Côlio Camomila de manhã, Pinto à tarde, Dormo cedo, as pessoas acham pouco, eu acho que é o suficiente.
+ba_first	bastiao	neutral	4.78	15.9	0.085	0.333	1	6.9		1. Visita. Se veio pedir com certo, entra na fila. A fila é o valenteiro.
+ba_conhecer	bastiao	neutral	5.15	16.3	0.052	0.2	1	6.49		1. Então tá. Bastião carpinteiro. Concerto que quebra que é tudo com o tempo.
+ba_ponte	bastiao	neutral	12.6	15.7	0.0	0.0	1	5.39		Uma ponte. Os veladores fizeram uma de pedra ali no riacho seco. Caiu faz 300 anos. Ninguém precisa dela. O riacho nem tem água, mas uma ponte caída parece uma frase pela metade. Me incomoda.
+ba_c1	bastiao	neutral	3.62	15.5	0.019	0.111	1	8.02		Madeira boa visa antes de quebrar. RANGE, gente também.
+ba_c2	bastiao	happy	7.7	17.7	0.031	0.077	1	5.97		Aldeça me pediu uma estante nova. "Para quê?" eu perguntei. "Para guardar o que eu ainda não li?" ela disse. "Vai precisar de mil estantes."
+ba_c3	bastiao	happy	8.82	17.2	0.0	0.0	1	5.27		Os veladores cortavam pedra como eu nunca vi, nenhuma junta torta, mas a escada deles não leva a lugar nenhum, bons de mão, ruins de plano, igual a mim.
+lago1	eco_m	excited	2.32	11.6	0.0	0.0	1	9.13		7 pulos. Você viu? 7.
+lago2	eco_f	happy	2.65	13.2	0.03	0.143	2	18.42		Vi. A pedra fundou do mesmo jeito.
+lago3	eco_m	happy	2.33	13.3	0.0	0.0	1	12.38		Mas antes ela voou. Isso conta.
+lago4	eco_f	tender	4.86	8.6	0.0	0.0	1	6.57		Joga outra. Eu quero ver ela voar de novo.
+lago_r	lia	tender	7.31	13.7	0.0	0.0	1	5.7		Talvez seja isso que o gigante segura com a mão erguida, não o céu, uma pedra que ainda não afundou.
+circ1	eco_f	tender	4.9	14.9	0.0	0.0	1	6.05		Se cada estrela é um sol, será que alguém lá também está olhando para cá?
+circ2	eco_m	neutral	2.53	16.2	0.0	0.0	1	9.22		Talvez, e deve achar a gente tão pequeno.
+circ3	eco_f	tender	3.27	15.0	0.0	0.0	1	6.93		ou tão bonito. Depende de quanto tempo ele olhar.
+circ_r	lia	tender	6.22	15.8	0.0	0.0	1	6.33		Eles construíram um círculo inteiro só para deitar no meio e olhar para cima. Acho que eu entendo.
+torre1	eco_f	sad	2.83	16.6	0.0	0.0	1	8.38		A torre não vai aguentar outro inverno, mestre.
+torre2	eco_m	tired	0.46	15.2	0.0	0.0	1	29.94		Eu sei.
+torre3	eco_f	surprised	3.46	16.2	0.018	0.2	1	6.81		Então, porque o Senhor continua subindo nela toda tarde.
+torre4	eco_m	tender	6.33	16.9	0.01	0.043	1	6.41		Porque ainda está de pé. Quando cair, eu sinto no chão e olho daqui. O céu não muda por causa de uma torre.
+torre_r	lia	tender	7.27	11.8	0.0	0.0	1	5.71		Nada aqui foi feito para durar para sempre. Foi feito para ser usado enquanto durasse.
+monte1	eco_f	tender	3.83	15.9	0.035	0.167	1	8.0		Daqui eu vejo a vila inteira, a Chamineis, o Lago, a Estrada.
+monte2	eco_f	sad	4.42	15.6	0.0	0.0	1	6.93		Amanhã, eles vão me chamar para ir embora junto. Eu vou dizer que sim.
+monte3	eco_f	tender	4.51	13.7	0.0	0.0	1	6.45		Mas hoje, hoje eu vou ficar mais um pouco, só mais um pouco.
+monte_r	lia	tender	6.66	14.4	0.0	0.0	1	5.68		Só mais um pouco. Talvez seja assim que alguém vira pedra. Não de tristeza, de vontade de ficar.
+arvore1	eco_m	happy	0.93	18.3	0.0	0.0	2	17.17		O que você pediu?
+arvore2	eco_f	happy	3.1	9.4	0.037	0.333	2	7.18		Não se conta. Se não, não vale.
+arvore3	eco_m	tender	3.44	16.3	0.0	0.0	1	7.64		Então eu conto o meu. Pedi que a gente lembre deste dia.
+arvore4	eco_f	tender	1.87	13.4	0.0	0.0	1	21.81		Bobo, era o mesmo pedido.
+arvore_r	lia	tender	7.49	14.8	0.0	0.0	1	5.79		Centenas de fitas, centenas de pedidos que ninguém mais lembra. E a árvore guardou todos sem saber ler nenhum.
+rel1	eco_m	neutral	6.26	14.2	0.0	0.0	1	5.72		Cada relógio deste jardim marca uma hora diferente. As pessoas acham que estão quebrados.
+rel2	eco_m	tender	6.99	13.7	0.054	0.095	1	5.7		Não estão. Cada um marca a hora mais feliz de alguém. Este aqui é o meu. 4h30 da tarde.
+rel3	eco_m	tender	3.26	17.2	0.0	0.0	1	9.6		Foi quando ela riu pela primeira vez ali perto do poço.
+rel_r	lia	tender	6.38	17.6	0.0	0.0	2	5.82		Se eu tivesse um relógio desses, que hora ele marcaria? Ainda não sei. E acho que está tudo bem não saber ainda.
+escada1	eco_m	neutral	2.29	18.3	0.0	0.0	1	9.05		Você sabe que ela não leva a lugar nenhum?
+escada2	eco_f	happy	1.78	14.0	0.0	0.0	2	10.38		Leva até o último degrau.
+escada3	eco_m	surprised	0.69	13.0	0.0	0.0	1	21.79		E depois?
+escada4	eco_f	tender	2.96	16.6	0.043	0.1	1	8.87		Depois eu ódio. É para isso que serve uma escada.
+escada_r	lia	tender	5.06	14.6	0.0	0.0	1	7.1		Talvez o lugar nunca tenha sido lá em cima. Talvez o lugar fosse a subida.
+rosto1	eco_f	tender	3.27	11.0	0.029	0.167	1	7.29		Você escupiu o rosto dele sorrindo.
+rosto2	eco_m	tender	0.98	17.3	0.0	0.0	1	17.79		Ele sorria muito.
+rosto3	eco_f	sad	2.45	18.4	0.0	0.0	1	8.66		E se um dia ninguém mais souber quem ele era.
+rosto4	eco_m	tender	6.78	14.5	0.0	0.0	1	5.63		Então vai ser só um rosto sorrindo no meio das flores. Também não é um jeito ruim de ser lembrado.
+rosto_r	lia	tender	7.04	14.8	0.01	0.05	1	6.01		Ninguém sabe de quem é este rosto. Mesmo assim, ele faz a gente sorri de volta. Talvez seja o bastante.
+fim1	odessa	tender	2.19	10.5	0.0	0.0	1	9.51		Chegou, olhe para cima.
+fim2	odessa	tender	14.57	13.0	0.0	0.0	1	5.61		Seiscentos anos, eu procurei os veladores nas pedras, e eles estavam nas coisas pequenas, numa pedra que pula na água, num pedido amarrado numa fita, numa escada que não leva a lugar nenhum.
+fim3	lia	tender	3.24	15.1	0.0	0.0	1	7.34		Você acha que eles ainda existem em algum lugar?
+fim4	odessa	tender	9.75	10.9	0.0	0.0	1	6.32		Acho que fizeram o que todo mundo faz. Olharam o mundo com carinho. E depois foram ver outra parte dele.
+fim5	odessa	happy	9.1	11.5	0.0	0.0	1	5.66		Vou mostrar um feitiço, o único que eles me ensinaram sem querer. Não serve para nada, é o meu preferido.
+fim6	odessa	tender	6.13	8.0	0.043	0.222	2	13.09	cps=8.0	Pronto! Agora o valenteiro sabe que foi olhado.
+fim7	anselmo	happy	4.38	12.8	0.0	0.0	1	8.27		Faz 80 anos que eu não fico acordado até tão tarde.
+fim8	celeste	happy	6.65	11.9	0.027	0.143	1	5.61		Trouxe pão para todo mundo, até para você ou dessa. Não adianta fazer essa cara.
+fim9	tome	excited	3.45	13.3	0.0	0.0	1	7.03		Eu falei, eu falei que eles estavam acordados.
+fim10	odessa	tender	8.23	10.4	0.0	0.0	1	6.1		Obrigada, cartógrafa. Seu mapa está pronto. Mas o vale, não. O vale nunca fica pronto.
+fim11	narrador	tender	4.48	13.8	0.017	0.077	1	7.38		E assim, no Vale de Aldrin, nada se perdeu, só mudou de lugar.
+li_espada	lia	tender	6.92	16.6	0.009	0.053	1	6.2		Uma espada ficada na pedra, ninguém tirou ou ninguém quis tirar. Tem coisas que ficam melhor onde foram deixadas.
+li_aqueduto	lia	tender	8.22	15.7	0.0	0.0	1	9.8		Um aqueduto que não leva mais água a lugar nenhum. As ovelhas dormem na sombra dos arcos. Ele ainda serve, só que de outro jeito.
+li_balanco	lia	happy	7.81	16.8	0.0	0.0	1	5.86		Alguém pendurou este balanço há muito tempo. As cordas já foram trocadas várias vezes, gerações de crianças cuidando de um balanço.
+li_ponte	lia	tender	7.29	15.5	0.009	0.1	1	5.99		Aponte dos veladores partida no meio. O riacho secou faz séculos. Mesmo assim, o bastião quer terminar a frase.
+li_santuario	lia	surprised	6.56	13.9	0.0	0.0	1	5.78		Estatuetas no meio da floresta, cobertas de musgo. Alguém deixou flores frescas aqui, hoje.
+li_banco	lia	tender	5.82	14.9	0.0	0.0	1	6.31		Um banco virado para o oeste. Quem colocou ele aqui sabia exatamente onde o sol se põe.
+li_poco	lia	neutral	5.61	16.2	0.0	0.0	1	7.07		Dizem que, numa noite sem vento, dá para ver as estrelas no fundo deste poço, mesmo de dia.
+li_noite	lia	neutral	2.55	15.7	0.0	0.0	1	8.57		Já escureceu, melhor acender a lanterna.
+li_circ_dia	lia	neutral	5.07	12.2	0.0	0.0	1	6.23		Acho que este lugar precisa das estrelas. Vou esperar a noite.
+li_sentar1	lia	tender	3.54	16.9	0.0	0.0	1	7.41		Daqui dá para ouvir o vento passando na grama. Parece o mar.
+li_sentar2	lia	tender	3.08	20.1	0.0	0.0	1	9.04		Vou ficar mais um pouco. Ninguém está me esperando com pressa.
+li_sentar3	lia	tender	7.02	8.5	0.0	0.0	1	5.55		As nuvens andam tão devagar. Ou sou eu que finalmente parei.
+li_mapa_cheio	lia	tender	6.07	17.1	0.0	0.0	1	6.53		8 lugares, o caderno está cheio de gente que eu nunca vou conhecer, e mesmo assim parece que conheço.
+li_estrela	lia	happy	4.93	15.0	0.029	0.143	1	6.91		Uma estrela cadente. Esqueci de fazer um pedido. Tudo bem? Veja, foi bom!

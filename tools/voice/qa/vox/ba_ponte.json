@@ -1,0 +1,31 @@
+{
+ "id": "ba_ponte",
+ "speaker": "bastiao",
+ "emotion": "neutral",
+ "text": "Uma ponte. Os Veladores fizeram uma de pedra, ali no riacho seco. Caiu faz trezentos anos. Ninguém precisa dela, o riacho nem tem água. Mas uma ponte caída parece uma frase pela metade. Me incomoda.",
+ "dur": 12.6,
+ "cps": 15.7,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Uma ponte. Os veladores fizeram uma de pedra ali no riacho seco. Caiu faz 300 anos. Ninguém precisa dela. O riacho nem tem água, mas uma ponte caída parece uma frase pela metade. Me incomoda.",
+ "attempt": 0,
+ "gen_s": 67.9,
+ "rtf": 5.39,
+ "max_pause": 0.37,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.45,
+  "cfg_weight": 0.5,
+  "temperature": 0.75
+ },
+ "seed": 3725299714,
+ "lufs_in": -22.2,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 42.7,
+  "flow": 22.4,
+  "hift": 2.6
+ },
+ "tokens": 329,
+ "final_problems": []
+}

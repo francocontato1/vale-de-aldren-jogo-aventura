@@ -1,0 +1,31 @@
+{
+ "id": "to_c3",
+ "speaker": "tome",
+ "emotion": "happy",
+ "text": "Quando eu crescer eu vou ser Velador. Vou construir uma escada até a lua. Mas com corrimão.",
+ "dur": 5.63,
+ "cps": 16.2,
+ "cer": 0.023,
+ "wer": 0.059,
+ "asr": "Quando eu crescer, eu vou ser velador. Vou construir uma escada até a lua, mas com coimão.",
+ "attempt": 0,
+ "gen_s": 34.8,
+ "rtf": 6.19,
+ "max_pause": 0.17,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.8,
+  "cfg_weight": 0.45,
+  "temperature": 0.85
+ },
+ "seed": 718059745,
+ "lufs_in": -24.2,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 21.0,
+  "flow": 12.4,
+  "hift": 1.2
+ },
+ "tokens": 171,
+ "final_problems": []
+}

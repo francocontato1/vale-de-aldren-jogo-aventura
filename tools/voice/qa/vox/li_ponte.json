@@ -1,0 +1,31 @@
+{
+ "id": "li_ponte",
+ "speaker": "lia",
+ "emotion": "tender",
+ "text": "A ponte dos Veladores, partida no meio. O riacho secou faz séculos. Mesmo assim, o Bastião quer terminar a frase.",
+ "dur": 7.29,
+ "cps": 15.5,
+ "cer": 0.009,
+ "wer": 0.1,
+ "asr": "Aponte dos veladores partida no meio. O riacho secou faz séculos. Mesmo assim, o bastião quer terminar a frase.",
+ "attempt": 0,
+ "gen_s": 43.7,
+ "rtf": 5.99,
+ "max_pause": 0.36,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.45,
+  "cfg_weight": 0.35,
+  "temperature": 0.7
+ },
+ "seed": 2334579181,
+ "lufs_in": -20.9,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 25.3,
+  "flow": 16.5,
+  "hift": 1.8
+ },
+ "tokens": 201,
+ "final_problems": []
+}

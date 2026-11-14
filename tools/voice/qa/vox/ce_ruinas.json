@@ -1,0 +1,31 @@
+{
+ "id": "ce_ruinas",
+ "speaker": "celeste",
+ "emotion": "happy",
+ "text": "Eu acho que eles eram padeiros. É sério! Quem mais acorda antes do sol para olhar o céu? Toda aquela gente de torre e escada... tinha fome de alguma coisa, isso eu garanto.",
+ "dur": 9.89,
+ "cps": 17.4,
+ "cer": 0.012,
+ "wer": 0.03,
+ "asr": "Eu acho que eles eram padeiros. É sério. Quem mais acorda antes do sol para olhar o céu? Toda aquela gente de torre escada. Tinha fome de alguma coisa. Isso eu garanto.",
+ "attempt": 0,
+ "gen_s": 66.8,
+ "rtf": 6.75,
+ "max_pause": 0.53,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.75,
+  "cfg_weight": 0.45,
+  "temperature": 0.85
+ },
+ "seed": 1315441164,
+ "lufs_in": -20.8,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 37.4,
+  "flow": 26.6,
+  "hift": 2.6
+ },
+ "tokens": 299,
+ "final_problems": []
+}

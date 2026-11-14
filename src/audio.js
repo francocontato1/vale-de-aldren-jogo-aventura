@@ -39,7 +39,7 @@ export const Sound = {
     // estalos da lareira/fogueira (ruído filtrado)
     const n = c.sampleRate * 2; const wb = c.createBuffer(1, n, c.sampleRate); const wd = wb.getChannelData(0); for (let i = 0; i < n; i++) wd[i] = Math.random() < 0.002 ? (Math.random() * 2 - 1) : (Math.random() * 2 - 1) * 0.08; this.white = wb;
     const fs = c.createBufferSource(); fs.buffer = wb; fs.loop = true; const ff = c.createBiquadFilter(); ff.type = 'bandpass'; ff.frequency.value = 1800; ff.Q.value = 0.6; this.fireG = c.createGain(); this.fireG.gain.value = 0; fs.connect(ff).connect(this.fireG).connect(this.amb); fs.start();
-    Music.init(c, this.mus); Voice.init(c, this.vox, this.dream);
+    await Promise.all([Music.init(c, this.mus), Voice.init(c, this.vox, this.dream)]);
     this.ready = true;
   },
   loop(k) { const b = this.buf[FILES[k][0]]; if (!b) return; const s = this.ctx.createBufferSource(); s.buffer = b; s.loop = true; const g = this.ctx.createGain(); g.gain.value = 0; s.connect(g).connect(this.amb); s.start(0, Math.random() * b.duration); this.loops[k] = g; },
@@ -126,7 +126,7 @@ export const Voice = {
     this.cache.set(id, p); return p;
   },
   prefetch(ids) { if (!this.ctx) return; for (const id of ids) this.load(id); },
-  stop() { if (this.playing) { try { this.playing.src.stop(); } catch (e) { } this.playing = null; } Speech.stop(); },
+  stop() { if (this.playing) { const p = this.playing; this.playing = null; try { p.src.onended = null; p.src.stop(); } catch (e) { } } Speech.stop(); },
   // toca uma fala; onEnd é chamado quando ela termina (ou após um tempo estimado, sem áudio)
   async say(id, { onStart, onEnd, eco = false } = {}) {
     this.stop(); const token = (this.token = (this.token || 0) + 1);
@@ -138,7 +138,9 @@ export const Voice = {
     if (eco) { const lp = c.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 5200; const hp = c.createBiquadFilter(); hp.type = 'highpass'; hp.frequency.value = 160; g.connect(hp).connect(lp).connect(this.bus); const send = c.createGain(); send.gain.value = 0.7; g.connect(send).connect(this.dream); }
     else g.connect(this.bus);
     const it = { src, id }; this.playing = it; onStart && onStart();
-    src.onended = () => { if (this.playing === it) this.playing = null; onEnd && onEnd(); };
+    // 'ended' às vezes não chega (abas em segundo plano, alguns navegadores): um relógio garante o fim
+    let fin = false; const done = () => { if (fin) return; fin = true; if (this.playing === it) this.playing = null; onEnd && onEnd(); };
+    src.onended = done; setTimeout(() => { if (!fin && this.playing === it) { try { src.stop(); } catch (e) { } done(); } }, buf.duration * 1000 + 600);
     src.start();
   },
   // amplitude atual (0..1) para animar a fala dos personagens

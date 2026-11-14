@@ -1,0 +1,31 @@
+{
+ "id": "li_espada",
+ "speaker": "lia",
+ "emotion": "tender",
+ "text": "Uma espada fincada na pedra. Ninguém tirou. Ou ninguém quis tirar. Tem coisas que ficam melhor onde foram deixadas.",
+ "dur": 6.92,
+ "cps": 16.6,
+ "cer": 0.009,
+ "wer": 0.053,
+ "asr": "Uma espada ficada na pedra, ninguém tirou ou ninguém quis tirar. Tem coisas que ficam melhor onde foram deixadas.",
+ "attempt": 0,
+ "gen_s": 42.9,
+ "rtf": 6.2,
+ "max_pause": 0.41,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.45,
+  "cfg_weight": 0.35,
+  "temperature": 0.7
+ },
+ "seed": 1850006216,
+ "lufs_in": -21.6,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 24.2,
+  "flow": 16.2,
+  "hift": 1.6
+ },
+ "tokens": 192,
+ "final_problems": []
+}

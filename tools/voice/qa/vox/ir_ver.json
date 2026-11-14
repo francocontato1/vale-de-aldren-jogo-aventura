@@ -1,0 +1,31 @@
+{
+ "id": "ir_ver",
+ "speaker": "irene",
+ "emotion": "happy",
+ "text": "Pode. Está horrível. Mas olha este canto aqui... o reflexo. Por um segundo, eu acertei.",
+ "dur": 9.58,
+ "cps": 9.1,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Pode, está horrível, mas olha este canto aqui, o reflexo. Por um segundo eu acertei.",
+ "attempt": 0,
+ "gen_s": 57.4,
+ "rtf": 6.0,
+ "max_pause": 0.66,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.6,
+  "cfg_weight": 0.35,
+  "temperature": 0.8
+ },
+ "seed": 515444428,
+ "lufs_in": -22.0,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 27.6,
+  "flow": 27.7,
+  "hift": 2.0
+ },
+ "tokens": 236,
+ "final_problems": []
+}

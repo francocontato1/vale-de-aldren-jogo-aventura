@@ -80,3 +80,14 @@
 2026-11-14 02:32:25,270 Inference time: 9.951 s
 2026-11-14 02:32:25,270 [18/20] t_eco_f_2 eco_f    try0 4.0s audio in 61s (rtf 15.5) cps 15.7 cer 0.0 ok
 2026-11-14 02:55:58,886 manifest updated (2 todo)
+2026-11-14 04:50:53,603 rendering 2/20 lines -> ../../a/vox/_test (shard 0/1)
+2026-11-14 04:51:06,418 input frame rate=25
+2026-11-14 04:51:09,471 Initializing the model ...
+2026-11-14 04:52:34,112 Transcribing ...
+2026-11-14 04:52:44,210 Inference time: 10.097 s
+2026-11-14 04:52:44,241 [1/2] t_narrador_1 narrador try0 6.0s audio in 84s (rtf 14.2; t3 33s/164 tok, flow 47s) cps 14.8 cer 0.0 ok
+2026-11-14 04:53:51,399 Transcribing ...
+2026-11-14 04:53:55,784 Inference time: 4.385 s
+2026-11-14 04:53:55,785 [2/2] t_narrador_2 narrador try0 4.7s audio in 67s (rtf 14.4; t3 29s/131 tok, flow 37s) cps 16.3 cer 0.0 ok
+2026-11-14 04:53:56,137 done: 2 lines, 166s CPU wall for 11s audio rendered (rtf 15.69 incl. ASR/retries)
+2026-11-14 04:54:59,503 manifest updated (0 todo)

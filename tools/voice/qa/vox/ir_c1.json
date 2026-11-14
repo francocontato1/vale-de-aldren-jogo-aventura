@@ -1,0 +1,31 @@
+{
+ "id": "ir_c1",
+ "speaker": "irene",
+ "emotion": "tender",
+ "text": "Os Veladores pintavam? Eu acho que sim. Ninguém constrói uma escada para o céu sem ter vontade de desenhar ele antes.",
+ "dur": 8.06,
+ "cps": 14.5,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Os veladores pintavam? Eu acho que sim. Ninguém constrói uma escada para o céu sem ter vontade de desenhar ele antes.",
+ "attempt": 0,
+ "gen_s": 42.6,
+ "rtf": 5.29,
+ "max_pause": 0.24,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.4,
+  "cfg_weight": 0.3,
+  "temperature": 0.7
+ },
+ "seed": 1460979429,
+ "lufs_in": -20.8,
+ "tp_limited": false,
+ "stage_s": {
+  "t3": 25.0,
+  "flow": 16.1,
+  "hift": 1.5
+ },
+ "tokens": 204,
+ "final_problems": []
+}

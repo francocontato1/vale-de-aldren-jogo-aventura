@@ -1,0 +1,31 @@
+{
+ "id": "to_first",
+ "speaker": "tome",
+ "emotion": "excited",
+ "text": "Você é cartógrafa? De verdade? Então você sabe onde fica tudo! Me diz: onde os gigantes guardam os sonhos deles?",
+ "dur": 7.06,
+ "cps": 15.9,
+ "cer": 0.028,
+ "wer": 0.05,
+ "asr": "Você é cartógrafa? De verdade? Então você sabe onde fica tudo, me diz onde os gigantes guardam sonhos deles?",
+ "attempt": 0,
+ "gen_s": 36.9,
+ "rtf": 5.23,
+ "max_pause": 0.31,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.95,
+  "cfg_weight": 0.45,
+  "temperature": 0.85
+ },
+ "seed": 994272422,
+ "lufs_in": -24.4,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 22.1,
+  "flow": 13.0,
+  "hift": 1.6
+ },
+ "tokens": 178,
+ "final_problems": []
+}

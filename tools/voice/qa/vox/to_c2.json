@@ -1,0 +1,31 @@
+{
+ "id": "to_c2",
+ "speaker": "tome",
+ "emotion": "happy",
+ "text": "Eu achei uma pedra com um desenho de estrela! Escondi. Não vou contar onde. Tá bom, é perto do círculo de pedras. Mas não conta para ninguém!",
+ "dur": 8.61,
+ "cps": 16.4,
+ "cer": 0.022,
+ "wer": 0.037,
+ "asr": "Eu achei uma pedra com desenho de estrela. Escondi. Não vou contar onde. Tá bom? É perto do círculo de pedras, mas não conta para ninguém.",
+ "attempt": 0,
+ "gen_s": 46.3,
+ "rtf": 5.37,
+ "max_pause": 0.15,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.8,
+  "cfg_weight": 0.45,
+  "temperature": 0.85
+ },
+ "seed": 2650876618,
+ "lufs_in": -24.9,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 28.9,
+  "flow": 14.2,
+  "hift": 1.6
+ },
+ "tokens": 231,
+ "final_problems": []
+}

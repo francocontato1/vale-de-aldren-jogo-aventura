@@ -1,0 +1,31 @@
+{
+ "id": "ir_porque",
+ "speaker": "irene",
+ "emotion": "tender",
+ "text": "Porque a parte boa não é o quadro. É a meia hora olhando. O quadro é só a desculpa que eu dou para os outros.",
+ "dur": 8.97,
+ "cps": 12.2,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Porque a parte boa não é o quadro, é a meia hora olhando. O quadro é só a desculpa que eu dou para os outros.",
+ "attempt": 0,
+ "gen_s": 47.5,
+ "rtf": 5.29,
+ "max_pause": 0.43,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.4,
+  "cfg_weight": 0.3,
+  "temperature": 0.7
+ },
+ "seed": 3780147179,
+ "lufs_in": -21.6,
+ "tp_limited": false,
+ "stage_s": {
+  "t3": 28.0,
+  "flow": 17.6,
+  "hift": 1.8
+ },
+ "tokens": 227,
+ "final_problems": []
+}

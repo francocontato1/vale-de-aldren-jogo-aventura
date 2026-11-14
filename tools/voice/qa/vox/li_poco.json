@@ -1,0 +1,31 @@
+{
+ "id": "li_poco",
+ "speaker": "lia",
+ "emotion": "neutral",
+ "text": "Dizem que, numa noite sem vento, dá para ver as estrelas no fundo deste poço. Mesmo de dia.",
+ "dur": 5.61,
+ "cps": 16.2,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Dizem que, numa noite sem vento, dá para ver as estrelas no fundo deste poço, mesmo de dia.",
+ "attempt": 0,
+ "gen_s": 39.7,
+ "rtf": 7.07,
+ "max_pause": 0.2,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.5,
+  "cfg_weight": 0.45,
+  "temperature": 0.75
+ },
+ "seed": 3270684188,
+ "lufs_in": -20.5,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 22.1,
+  "flow": 16.0,
+  "hift": 1.5
+ },
+ "tokens": 182,
+ "final_problems": []
+}

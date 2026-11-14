@@ -1,0 +1,31 @@
+{
+ "id": "t_narrador_2",
+ "speaker": "narrador",
+ "emotion": "sad",
+ "text": "Os gigantes adormeceram. E, com o tempo, até os seus nomes foram esquecidos.",
+ "dur": 4.65,
+ "cps": 16.3,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Os gigantes adormeceram e com o tempo até os seus nomes foram esquecidos.",
+ "attempt": 0,
+ "gen_s": 66.7,
+ "rtf": 14.35,
+ "max_pause": 0.15,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.35,
+  "cfg_weight": 0.35,
+  "temperature": 0.65
+ },
+ "seed": 709127011,
+ "lufs_in": -23.1,
+ "tp_limited": false,
+ "stage_s": {
+  "t3": 28.9,
+  "flow": 36.6,
+  "hift": 1.1
+ },
+ "tokens": 131,
+ "final_problems": []
+}

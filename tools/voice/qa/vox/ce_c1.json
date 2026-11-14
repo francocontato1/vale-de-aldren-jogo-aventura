@@ -1,0 +1,31 @@
+{
+ "id": "ce_c1",
+ "speaker": "celeste",
+ "emotion": "tender",
+ "text": "Pão bom é igual conversa boa. Precisa de tempo, de calor, e de alguém para dividir.",
+ "dur": 4.4,
+ "cps": 18.9,
+ "cer": 0.038,
+ "wer": 0.062,
+ "asr": "Bom, bom é igual conversa boa, precisa de tempo de calor e de alguém para dividir.",
+ "attempt": 0,
+ "gen_s": 29.3,
+ "rtf": 6.66,
+ "max_pause": 0.17,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.55,
+  "cfg_weight": 0.4,
+  "temperature": 0.75
+ },
+ "seed": 4268440624,
+ "lufs_in": -21.1,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 15.1,
+  "flow": 13.2,
+  "hift": 0.9
+ },
+ "tokens": 124,
+ "final_problems": []
+}

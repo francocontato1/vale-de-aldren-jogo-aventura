@@ -1,0 +1,31 @@
+{
+ "id": "an_veladores",
+ "speaker": "anselmo",
+ "emotion": "neutral",
+ "text": "Acho que não aconteceu nada. Às vezes as pessoas só vão embora. Não precisa ser tragédia. As ovelhas também mudam de pasto, e ninguém faz poema por isso.",
+ "dur": 11.34,
+ "cps": 13.5,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Acho que não aconteceu nada. Às vezes as pessoas só vão embora, não precisa ser tragédia. As ovelhas também mudam de pasto e ninguém faz poema por isso.",
+ "attempt": 0,
+ "gen_s": 63.6,
+ "rtf": 5.61,
+ "max_pause": 0.56,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.45,
+  "cfg_weight": 0.3,
+  "temperature": 0.7
+ },
+ "seed": 3186871923,
+ "lufs_in": -23.3,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 39.3,
+  "flow": 21.9,
+  "hift": 2.2
+ },
+ "tokens": 306,
+ "final_problems": []
+}

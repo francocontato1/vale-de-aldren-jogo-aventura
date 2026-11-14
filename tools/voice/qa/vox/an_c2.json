@@ -1,0 +1,31 @@
+{
+ "id": "an_c2",
+ "speaker": "anselmo",
+ "emotion": "neutral",
+ "text": "Quando o vento vira e cheira a chuva, olhe para a gigante do monte. Ela sempre fica com uma nuvem no ombro.",
+ "dur": 8.02,
+ "cps": 13.3,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Quando o vento vira e cheira a chuva, olhe para a gigante do monte. Ela sempre fica com uma nuvem no ombro.",
+ "attempt": 0,
+ "gen_s": 42.9,
+ "rtf": 5.35,
+ "max_pause": 0.42,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.45,
+  "cfg_weight": 0.3,
+  "temperature": 0.7
+ },
+ "seed": 1942122070,
+ "lufs_in": -23.2,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 24.7,
+  "flow": 16.4,
+  "hift": 1.7
+ },
+ "tokens": 203,
+ "final_problems": []
+}

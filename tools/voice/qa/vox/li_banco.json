@@ -1,0 +1,31 @@
+{
+ "id": "li_banco",
+ "speaker": "lia",
+ "emotion": "tender",
+ "text": "Um banco virado para o oeste. Quem colocou ele aqui sabia exatamente onde o sol se põe.",
+ "dur": 5.82,
+ "cps": 14.9,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Um banco virado para o oeste. Quem colocou ele aqui sabia exatamente onde o sol se põe.",
+ "attempt": 0,
+ "gen_s": 36.7,
+ "rtf": 6.31,
+ "max_pause": 0.42,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.45,
+  "cfg_weight": 0.35,
+  "temperature": 0.7
+ },
+ "seed": 808152710,
+ "lufs_in": -20.6,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 20.4,
+  "flow": 14.8,
+  "hift": 1.5
+ },
+ "tokens": 168,
+ "final_problems": []
+}

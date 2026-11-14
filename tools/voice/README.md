@@ -10,6 +10,7 @@ refs/              the generated reference clips (committed so renders are repro
 generate.py        renders lines with Chatterbox Multilingual (language 'pt'), post-processes, ASR-checks, retries
 run_all.sh         resumable full render (priority order, auto-restart on memory guard), then manifest + QA report
 qa_report.py       summary table of the QA sidecars (qa/<out-dir-name>/*.json, report.tsv)
+fix_loudness.py    one-off re-leveling of existing mp3s with the current limiter (used after the first full render)
 voice_check.py     cast distinctness: per-speaker F0 + speaker-embedding cosine matrix of rendered lines
 sample_lines.json  test script (2 lines per speaker) -> a/vox/_test/
 lines.json         the game script (same schema) -> a/vox/
@@ -35,7 +36,7 @@ Write numbers out in words.
    Perth watermark in its output (left on).
 3. **Post** – 70 Hz high-pass, optional per-speaker pitch (Tomé +1.5 st) and per-line tempo (`speed`),
    silence trim keeping ~80 ms, loudness -18 LUFS (pyloudnorm) with true peak ≤ -1.5 dBTP
-   (gain reduced, never limited), MP3 encode.
+   (look-ahead limiter `alimiter` 5 ms/60 ms shaves the peaks, loudness restored), MP3 encode.
 4. **QA** – round-trip ASR with whisper.cpp `small` (language pt), CER/WER on accent-less normalized
    text, speaking rate (flag outside 8–22 chars/s), longest internal pause (flag > 1.6 s). Lines with
    CER > 0.12 or a flag are re-rendered with new seeds and slightly more conservative sampling

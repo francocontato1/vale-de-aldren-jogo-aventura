@@ -1,0 +1,31 @@
+{
+ "id": "li_sentar1",
+ "speaker": "lia",
+ "emotion": "tender",
+ "text": "Daqui dá para ouvir o vento passando na grama. Parece o mar.",
+ "dur": 3.54,
+ "cps": 16.9,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Daqui dá para ouvir o vento passando na grama. Parece o mar.",
+ "attempt": 0,
+ "gen_s": 26.2,
+ "rtf": 7.41,
+ "max_pause": 0.19,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.45,
+  "cfg_weight": 0.35,
+  "temperature": 0.7
+ },
+ "seed": 496250154,
+ "lufs_in": -20.8,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 12.6,
+  "flow": 12.7,
+  "hift": 0.9
+ },
+ "tokens": 103,
+ "final_problems": []
+}

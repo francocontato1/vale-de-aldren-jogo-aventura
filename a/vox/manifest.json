@@ -1,307 +1,572 @@
 {
  "intro1": {
   "speaker": "narrador",
-  "dur": 4.19,
+  "dur": 4.248,
   "text": "Dizem que no vale de Aldren nada se perde. Só muda de lugar."
  },
  "intro2": {
   "speaker": "narrador",
-  "dur": 8.51,
+  "dur": 8.568,
   "text": "Há muito tempo, viveu aqui um povo que construía para olhar. Torres, escadas, círculos de pedra. Chamavam a si mesmos de Veladores."
  },
  "intro3": {
   "speaker": "narrador",
-  "dur": 7.72,
+  "dur": 7.776,
   "text": "Um dia, foram embora. Ninguém sabe para onde. Deixaram as pedras, os gigantes... e uma pergunta."
  },
  "carta": {
   "speaker": "odessa",
-  "dur": 16.99,
+  "dur": 17.04,
   "text": "Cartógrafa. Que bom que aceitou. Não preciso de um mapa de estradas, essas eu já conheço. Preciso de um mapa do que importa. Me procure no observatório, no alto da colina, depois da vila. E traga sapatos confortáveis. Odessa."
  },
  "chegada": {
   "speaker": "lia",
-  "dur": 6.1,
+  "dur": 6.168,
   "text": "Então este é o vale de Aldren. É mais quieto do que eu imaginava. Do jeito bom."
  },
  "od_first": {
   "speaker": "odessa",
-  "dur": 9.37,
+  "dur": 9.432,
   "text": "Ah. Você veio a pé. Eu tinha certeza de que ia chegar amanhã. Ou daqui a dez anos. Eu me confundo com essas coisas."
  },
  "od_quem": {
   "speaker": "odessa",
-  "dur": 9.11,
+  "dur": 9.168,
   "text": "Sou. Faz seiscentos anos que moro neste vale, e ainda não entendi ele direito. Por isso chamei você."
  },
  "od_mapa": {
   "speaker": "odessa",
-  "dur": 14.36,
+  "dur": 14.424,
   "text": "Um mapa dos lugares onde alguém foi feliz. Os Veladores deixaram oito. Eu sinto eles, mas já não consigo ver. Meus olhos ficaram cansados de tanto olhar a mesma coisa."
  },
  "od_como": {
   "speaker": "odessa",
-  "dur": 12.84,
+  "dur": 12.888,
   "text": "Vá até eles e fique. Sente, espere, olhe. Quando um lugar percebe que está sendo olhado com calma, ele lembra. Nós chamamos isso de lume. Desenhe no seu caderno o que você vir."
  },
  "od_depois": {
   "speaker": "odessa",
-  "dur": 8.81,
+  "dur": 8.88,
   "text": "Depois volte e me conte. Sem pressa. A pressa espanta os lumes. Espanta os gatos também."
  },
  "od_n1": {
   "speaker": "odessa",
-  "dur": 14.17,
+  "dur": 14.232,
   "text": "Um lume, então. Fazia tempo que ninguém via um. Eu dei nomes aos gigantes, sabia? Os Veladores nunca disseram como chamavam eles. Talvez nome seja coisa de quem tem medo de esquecer."
  },
  "od_n2": {
   "speaker": "odessa",
-  "dur": 16.69,
+  "dur": 16.752,
   "text": "Nos meus primeiros cem anos aqui, eu colecionava feitiços inúteis. Um que deixa o chá sempre morno. Um que acha botões perdidos. Todo mundo achava bobagem. Eu também. Mas eram os que eu mais usava."
  },
  "od_n3": {
   "speaker": "odessa",
-  "dur": 16.04,
+  "dur": 16.104,
   "text": "Pensei uma coisa ontem, olhando o céu. Para mim, vocês humanos são como estrelas cadentes. Passam rápido demais. E eu passei séculos olhando para o chão, estudando pedra."
  },
  "od_n4": {
   "speaker": "odessa",
-  "dur": 11.16,
+  "dur": 11.208,
   "text": "Está quase. Engraçado... e se o mapa ficar pronto e eu não sentir nada? Seiscentos anos é muito tempo para esperar uma resposta."
  },
  "od_todos": {
   "speaker": "odessa",
-  "dur": 13.44,
+  "dur": 13.488,
   "text": "Oito lugares. Você viu coisas que eu nunca vi. Hoje à noite passa a Chuva de Lumes. Acontece uma vez a cada cem anos. Suba até o observatório depois que escurecer. Eu espero você."
  },
  "od_noite": {
   "speaker": "odessa",
-  "dur": 6.2,
+  "dur": 6.264,
   "text": "Ainda está claro. Os lumes são tímidos. Volte quando as estrelas aparecerem."
  },
  "od_pos1": {
   "speaker": "odessa",
-  "dur": 8.49,
+  "dur": 8.544,
   "text": "Estou tentando aprender o nome de todo mundo da vila. Comecei pela padeira. Celeste. Viu? Já sei um."
  },
  "od_pos2": {
   "speaker": "odessa",
-  "dur": 8.83,
+  "dur": 8.88,
   "text": "Fique o tempo que quiser. O mapa está pronto, mas o vale não. O vale nunca fica pronto."
  },
  "od_cha": {
   "speaker": "odessa",
-  "dur": 6.41,
+  "dur": 6.48,
   "text": "Quer chá? Está morno. Está sempre morno. Esse é o feitiço."
  },
  "lago1": {
   "speaker": "eco_m",
-  "dur": 2.32,
+  "dur": 2.376,
   "text": "Sete pulos! Você viu? Sete!"
  },
  "lago2": {
   "speaker": "eco_f",
-  "dur": 4.09,
+  "dur": 2.712,
   "text": "Vi. A pedra afundou do mesmo jeito."
  },
  "lago3": {
   "speaker": "eco_m",
-  "dur": 2.33,
+  "dur": 2.4,
   "text": "Mas antes ela voou. Isso conta."
  },
  "lago4": {
   "speaker": "eco_f",
-  "dur": 4.86,
+  "dur": 4.92,
   "text": "Joga outra. Eu quero ver ela voar de novo."
  },
  "lago_r": {
   "speaker": "lia",
-  "dur": 7.31,
+  "dur": 7.368,
   "text": "Talvez seja isso que o gigante segura com a mão erguida. Não o céu. Uma pedra que ainda não afundou."
  },
  "circ1": {
   "speaker": "eco_f",
-  "dur": 4.9,
+  "dur": 4.968,
   "text": "Se cada estrela é um sol, será que alguém lá também está olhando para cá?"
  },
  "circ2": {
   "speaker": "eco_m",
-  "dur": 2.53,
+  "dur": 2.592,
   "text": "Talvez. E deve achar a gente tão pequeno."
  },
  "circ3": {
   "speaker": "eco_f",
-  "dur": 3.27,
+  "dur": 3.336,
   "text": "Ou tão bonito. Depende de quanto tempo ele olhar."
  },
  "circ_r": {
   "speaker": "lia",
-  "dur": 6.22,
+  "dur": 6.288,
   "text": "Eles construíram um círculo inteiro só para deitar no meio e olhar para cima. Acho que eu entendo."
  },
  "torre1": {
   "speaker": "eco_f",
-  "dur": 2.83,
+  "dur": 2.88,
   "text": "A torre não vai aguentar outro inverno, mestre."
  },
  "torre2": {
   "speaker": "eco_m",
-  "dur": 0.46,
+  "dur": 0.528,
   "text": "Eu sei."
  },
  "torre3": {
   "speaker": "eco_f",
-  "dur": 3.46,
+  "dur": 3.528,
   "text": "Então por que o senhor continua subindo nela toda tarde?"
  },
  "torre4": {
   "speaker": "eco_m",
-  "dur": 6.33,
+  "dur": 6.384,
   "text": "Porque ainda está de pé. Quando cair, eu sento no chão e olho daqui. O céu não muda por causa de uma torre."
  },
  "torre_r": {
   "speaker": "lia",
-  "dur": 7.27,
+  "dur": 7.32,
   "text": "Nada aqui foi feito para durar para sempre. Foi feito para ser usado enquanto durasse."
  },
  "monte1": {
   "speaker": "eco_f",
-  "dur": 3.83,
+  "dur": 3.888,
   "text": "Daqui eu vejo a vila inteira. As chaminés, o lago, a estrada."
  },
  "monte2": {
   "speaker": "eco_f",
-  "dur": 4.42,
+  "dur": 4.488,
   "text": "Amanhã eles vão me chamar para ir embora junto. Eu vou dizer que sim."
  },
  "monte3": {
   "speaker": "eco_f",
-  "dur": 4.51,
+  "dur": 4.56,
   "text": "Mas hoje... hoje eu vou ficar mais um pouco. Só mais um pouco."
  },
  "monte_r": {
   "speaker": "lia",
-  "dur": 6.66,
+  "dur": 6.72,
   "text": "Só mais um pouco. Talvez seja assim que alguém vira pedra. Não de tristeza. De vontade de ficar."
  },
  "arvore1": {
   "speaker": "eco_m",
-  "dur": 0.93,
+  "dur": 0.984,
   "text": "O que você pediu?"
  },
  "arvore2": {
   "speaker": "eco_f",
-  "dur": 3.1,
+  "dur": 3.168,
   "text": "Não se conta. Senão não vale."
  },
  "arvore3": {
   "speaker": "eco_m",
-  "dur": 3.44,
+  "dur": 3.504,
   "text": "Então eu conto o meu. Pedi que a gente lembre deste dia."
  },
  "arvore4": {
   "speaker": "eco_f",
-  "dur": 3.59,
+  "dur": 1.92,
   "text": "Bobo. Era o mesmo pedido."
  },
  "arvore_r": {
   "speaker": "lia",
-  "dur": 7.49,
+  "dur": 7.56,
   "text": "Centenas de fitas. Centenas de pedidos que ninguém mais lembra. E a árvore guardou todos, sem saber ler nenhum."
  },
  "rel1": {
   "speaker": "eco_m",
-  "dur": 6.26,
+  "dur": 6.312,
   "text": "Cada relógio deste jardim marca uma hora diferente. As pessoas acham que estão quebrados."
  },
  "rel2": {
   "speaker": "eco_m",
-  "dur": 6.99,
+  "dur": 7.056,
   "text": "Não estão. Cada um marca a hora mais feliz de alguém. Este aqui é o meu. Quatro e meia da tarde."
  },
  "rel3": {
   "speaker": "eco_m",
-  "dur": 3.26,
+  "dur": 3.312,
   "text": "Foi quando ela riu pela primeira vez, ali perto do poço."
  },
  "rel_r": {
   "speaker": "lia",
-  "dur": 6.38,
+  "dur": 6.432,
   "text": "Se eu tivesse um relógio desses, que hora ele marcaria? Ainda não sei. E acho que está tudo bem não saber ainda."
  },
  "escada1": {
   "speaker": "eco_m",
-  "dur": 2.29,
+  "dur": 2.352,
   "text": "Você sabe que ela não leva a lugar nenhum."
  },
  "escada2": {
   "speaker": "eco_f",
-  "dur": 1.78,
+  "dur": 1.848,
   "text": "Leva até o último degrau."
  },
  "escada3": {
   "speaker": "eco_m",
-  "dur": 0.69,
+  "dur": 0.744,
   "text": "E depois?"
  },
  "escada4": {
   "speaker": "eco_f",
-  "dur": 2.96,
+  "dur": 3.024,
   "text": "Depois eu olho. É para isso que serve uma escada."
  },
  "escada_r": {
   "speaker": "lia",
-  "dur": 5.06,
+  "dur": 5.112,
   "text": "Talvez o lugar nunca tenha sido lá em cima. Talvez o lugar fosse a subida."
  },
  "rosto1": {
   "speaker": "eco_f",
-  "dur": 3.27,
+  "dur": 3.336,
   "text": "Você esculpiu o rosto dele sorrindo."
  },
  "rosto2": {
   "speaker": "eco_m",
-  "dur": 0.98,
+  "dur": 1.032,
   "text": "Ele sorria muito."
  },
  "rosto3": {
   "speaker": "eco_f",
-  "dur": 2.45,
+  "dur": 2.52,
   "text": "E se um dia ninguém mais souber quem ele era?"
  },
  "rosto4": {
   "speaker": "eco_m",
-  "dur": 6.78,
+  "dur": 6.84,
   "text": "Então vai ser só um rosto sorrindo no meio das flores. Também não é um jeito ruim de ser lembrado."
  },
  "rosto_r": {
   "speaker": "lia",
-  "dur": 7.04,
+  "dur": 7.104,
   "text": "Ninguém sabe de quem é este rosto. Mesmo assim, ele faz a gente sorrir de volta. Talvez seja o bastante."
  },
  "fim1": {
   "speaker": "odessa",
-  "dur": 2.19,
+  "dur": 2.256,
   "text": "Chegou. Olhe para cima."
  },
  "fim2": {
   "speaker": "odessa",
-  "dur": 14.57,
+  "dur": 14.64,
   "text": "Seiscentos anos eu procurei os Veladores nas pedras. E eles estavam nas coisas pequenas. Numa pedra que pula na água. Num pedido amarrado numa fita. Numa escada que não leva a lugar nenhum."
  },
  "fim3": {
   "speaker": "lia",
-  "dur": 3.24,
+  "dur": 3.288,
   "text": "Você acha que eles ainda existem? Em algum lugar?"
  },
  "fim4": {
   "speaker": "odessa",
-  "dur": 9.75,
+  "dur": 9.816,
   "text": "Acho que fizeram o que todo mundo faz. Olharam o mundo com carinho... e depois foram ver outra parte dele."
  },
  "fim5": {
   "speaker": "odessa",
-  "dur": 9.1,
+  "dur": 9.168,
   "text": "Vou mostrar um feitiço. O único que eles me ensinaram sem querer. Não serve para nada. É o meu preferido."
+ },
+ "fim6": {
+  "speaker": "odessa",
+  "dur": 6.192,
+  "text": "Pronto. Agora o vale inteiro sabe que foi olhado."
+ },
+ "fim7": {
+  "speaker": "anselmo",
+  "dur": 4.44,
+  "text": "Faz oitenta anos que eu não fico acordado até tão tarde."
+ },
+ "fim8": {
+  "speaker": "celeste",
+  "dur": 6.72,
+  "text": "Trouxe pão para todo mundo! Até para você, Odessa. Não adianta fazer essa cara."
+ },
+ "fim9": {
+  "speaker": "tome",
+  "dur": 3.504,
+  "text": "Eu falei! Eu falei que eles estavam acordados!"
+ },
+ "fim10": {
+  "speaker": "odessa",
+  "dur": 8.28,
+  "text": "Obrigada, cartógrafa. Seu mapa está pronto. Mas o vale, não. O vale nunca fica pronto."
+ },
+ "fim11": {
+  "speaker": "narrador",
+  "dur": 4.536,
+  "text": "E assim, no vale de Aldren, nada se perdeu. Só mudou de lugar."
+ },
+ "an_first": {
+  "speaker": "anselmo",
+  "dur": 11.4,
+  "text": "Boa tarde, moça. Você é a que veio fazer o mapa da Odessa? Hum. Ela começa um mapa desses a cada século. Nunca termina. Diz que o vale muda enquanto ela desenha."
+ },
+ "an_gigantes": {
+  "speaker": "anselmo",
+  "dur": 11.52,
+  "text": "Conheço desde menino. Meu avô dizia que eles não são estátuas. São gente que sentou para ver alguma coisa bonita... e gostou tanto que esqueceu de levantar."
+ },
+ "an_veladores": {
+  "speaker": "anselmo",
+  "dur": 11.4,
+  "text": "Acho que não aconteceu nada. Às vezes as pessoas só vão embora. Não precisa ser tragédia. As ovelhas também mudam de pasto, e ninguém faz poema por isso."
+ },
+ "an_c1": {
+  "speaker": "anselmo",
+  "dur": 8.088,
+  "text": "Sabe por que eu gosto de pastorear? Ovelha não tem pressa. Com elas a gente aprende o tamanho certo do dia."
+ },
+ "an_c2": {
+  "speaker": "anselmo",
+  "dur": 8.088,
+  "text": "Quando o vento vira e cheira a chuva, olhe para a gigante do monte. Ela sempre fica com uma nuvem no ombro."
+ },
+ "an_c3": {
+  "speaker": "anselmo",
+  "dur": 7.488,
+  "text": "Na minha idade a gente para de perguntar para onde as coisas vão. Começa a perguntar onde elas estão agora."
+ },
+ "an_noite": {
+  "speaker": "anselmo",
+  "dur": 8.088,
+  "text": "Já é noite? Hum. Nessa idade a gente conta estrela para dormir. Eu nunca passo das trinta."
+ },
+ "ce_first": {
+  "speaker": "celeste",
+  "dur": 15.12,
+  "text": "Ah! Gente nova! Entra, entra, que o pão acabou de sair. Você é a moça do mapa? A Odessa encomendou pão para você. Três por dia, ela disse. Eu disse que ninguém come três pães por dia. Ela disse que cartógrafo anda muito."
+ },
+ "ce_odessa": {
+  "speaker": "celeste",
+  "dur": 10.944,
+  "text": "A Odessa? Vem aqui uma vez por ano, se tanto. Fica parada na porta sentindo o cheiro e vai embora sem comprar nada. Ano passado eu dei um pão para ela. Ficou olhando para o pão como se fosse um livro!"
+ },
+ "ce_ruinas": {
+  "speaker": "celeste",
+  "dur": 9.96,
+  "text": "Eu acho que eles eram padeiros. É sério! Quem mais acorda antes do sol para olhar o céu? Toda aquela gente de torre e escada... tinha fome de alguma coisa, isso eu garanto."
+ },
+ "ce_c1": {
+  "speaker": "celeste",
+  "dur": 4.464,
+  "text": "Pão bom é igual conversa boa. Precisa de tempo, de calor, e de alguém para dividir."
+ },
+ "ce_c2": {
+  "speaker": "celeste",
+  "dur": 10.2,
+  "text": "Meu marido construía barcos. Faz seis invernos que ele se foi. Eu ainda faço pão para dois. O que sobra eu dou para os passarinhos. Eles agradecem do jeito deles."
+ },
+ "ce_c3": {
+  "speaker": "celeste",
+  "dur": 6.624,
+  "text": "O Tomé passou aqui correndo de novo. Aquele menino acha que vai acordar os gigantes. Deixa ele. Alguém tem que tentar."
+ },
+ "ce_noite": {
+  "speaker": "celeste",
+  "dur": 4.248,
+  "text": "O forno já esfriou, querida. Volta amanhã cedo, que tem pão de mel."
+ },
+ "to_first": {
+  "speaker": "tome",
+  "dur": 7.128,
+  "text": "Você é cartógrafa? De verdade? Então você sabe onde fica tudo! Me diz: onde os gigantes guardam os sonhos deles?"
+ },
+ "to_naosei": {
+  "speaker": "tome",
+  "dur": 4.464,
+  "text": "Ah. Tudo bem. Eu acho que é na barriga. Por isso eles ficam sentados."
+ },
+ "to_porque": {
+  "speaker": "tome",
+  "dur": 11.328,
+  "text": "Porque eu quero acordar eles! Todo dia eu grito bom dia para o gigante do lago. Um dia ele vai responder. A tia Celeste diz que paciência é a magia mais forte. Mas é a mais chata também."
+ },
+ "to_c1": {
+  "speaker": "tome",
+  "dur": 4.776,
+  "text": "Sabia que se você deitar na grama e olhar as nuvens, parece que é a terra que está andando?"
+ },
+ "to_c2": {
+  "speaker": "tome",
+  "dur": 8.664,
+  "text": "Eu achei uma pedra com um desenho de estrela! Escondi. Não vou contar onde. Tá bom, é perto do círculo de pedras. Mas não conta para ninguém!"
+ },
+ "to_c3": {
+  "speaker": "tome",
+  "dur": 5.688,
+  "text": "Quando eu crescer eu vou ser Velador. Vou construir uma escada até a lua. Mas com corrimão."
+ },
+ "to_pos": {
+  "speaker": "tome",
+  "dur": 5.256,
+  "text": "Você viu? Os lumes subiram! Eu falei que os gigantes estavam acordados por dentro!"
+ },
+ "ir_first": {
+  "speaker": "irene",
+  "dur": 9.864,
+  "text": "Ah, desculpa, não vi você chegar. Estou tentando pintar a luz em cima do lago. É impossível. Quando eu acerto a cor, a luz já mudou."
+ },
+ "ir_porque": {
+  "speaker": "irene",
+  "dur": 9.024,
+  "text": "Porque a parte boa não é o quadro. É a meia hora olhando. O quadro é só a desculpa que eu dou para os outros."
+ },
+ "ir_ver": {
+  "speaker": "irene",
+  "dur": 9.648,
+  "text": "Pode. Está horrível. Mas olha este canto aqui... o reflexo. Por um segundo, eu acertei."
+ },
+ "ir_c1": {
+  "speaker": "irene",
+  "dur": 8.112,
+  "text": "Os Veladores pintavam? Eu acho que sim. Ninguém constrói uma escada para o céu sem ter vontade de desenhar ele antes."
+ },
+ "ir_c2": {
+  "speaker": "irene",
+  "dur": 7.464,
+  "text": "Já reparou que à noite o lago vira outro céu? Às vezes eu não sei em qual dos dois as estrelas estão de verdade."
+ },
+ "ir_c3": {
+  "speaker": "irene",
+  "dur": 7.968,
+  "text": "Colho camomila de manhã, pinto à tarde, durmo cedo. As pessoas acham pouco. Eu acho que é o suficiente."
+ },
+ "ba_first": {
+  "speaker": "bastiao",
+  "dur": 4.848,
+  "text": "Hum. Visita. Se veio pedir conserto, entra na fila. A fila é o vale inteiro."
+ },
+ "ba_conhecer": {
+  "speaker": "bastiao",
+  "dur": 5.208,
+  "text": "Hum. Então tá. Bastião. Carpinteiro. Conserto o que quebra. Que é tudo, com o tempo."
+ },
+ "ba_ponte": {
+  "speaker": "bastiao",
+  "dur": 12.648,
+  "text": "Uma ponte. Os Veladores fizeram uma de pedra, ali no riacho seco. Caiu faz trezentos anos. Ninguém precisa dela, o riacho nem tem água. Mas uma ponte caída parece uma frase pela metade. Me incomoda."
+ },
+ "ba_c1": {
+  "speaker": "bastiao",
+  "dur": 3.672,
+  "text": "Madeira boa avisa antes de quebrar. Range. Gente também."
+ },
+ "ba_c2": {
+  "speaker": "bastiao",
+  "dur": 7.752,
+  "text": "A Odessa me pediu uma estante nova. Para quê, eu perguntei. Para guardar o que eu ainda não li, ela disse. Vai precisar de mil estantes."
+ },
+ "ba_c3": {
+  "speaker": "bastiao",
+  "dur": 8.88,
+  "text": "Os Veladores cortavam pedra como eu nunca vi. Nenhuma junta torta. Mas a escada deles não leva a lugar nenhum. Bons de mão, ruins de plano. Igual a mim."
+ },
+ "li_espada": {
+  "speaker": "lia",
+  "dur": 6.984,
+  "text": "Uma espada fincada na pedra. Ninguém tirou. Ou ninguém quis tirar. Tem coisas que ficam melhor onde foram deixadas."
+ },
+ "li_aqueduto": {
+  "speaker": "lia",
+  "dur": 8.28,
+  "text": "Um aqueduto que não leva mais água a lugar nenhum. As ovelhas dormem na sombra dos arcos. Ele ainda serve. Só que de outro jeito."
+ },
+ "li_balanco": {
+  "speaker": "lia",
+  "dur": 7.872,
+  "text": "Alguém pendurou este balanço há muito tempo. As cordas já foram trocadas várias vezes. Gerações de crianças cuidando de um balanço."
+ },
+ "li_ponte": {
+  "speaker": "lia",
+  "dur": 7.344,
+  "text": "A ponte dos Veladores, partida no meio. O riacho secou faz séculos. Mesmo assim, o Bastião quer terminar a frase."
+ },
+ "li_santuario": {
+  "speaker": "lia",
+  "dur": 6.624,
+  "text": "Estatuetas no meio da floresta, cobertas de musgo. Alguém deixou flores frescas aqui. Hoje."
+ },
+ "li_banco": {
+  "speaker": "lia",
+  "dur": 5.88,
+  "text": "Um banco virado para o oeste. Quem colocou ele aqui sabia exatamente onde o sol se põe."
+ },
+ "li_poco": {
+  "speaker": "lia",
+  "dur": 5.664,
+  "text": "Dizem que, numa noite sem vento, dá para ver as estrelas no fundo deste poço. Mesmo de dia."
+ },
+ "li_noite": {
+  "speaker": "lia",
+  "dur": 2.616,
+  "text": "Já escureceu. Melhor acender a lanterna."
+ },
+ "li_circ_dia": {
+  "speaker": "lia",
+  "dur": 5.136,
+  "text": "Acho que este lugar precisa das estrelas. Vou esperar a noite."
+ },
+ "li_sentar1": {
+  "speaker": "lia",
+  "dur": 3.6,
+  "text": "Daqui dá para ouvir o vento passando na grama. Parece o mar."
+ },
+ "li_sentar2": {
+  "speaker": "lia",
+  "dur": 3.144,
+  "text": "Vou ficar mais um pouco. Ninguém está me esperando com pressa."
+ },
+ "li_sentar3": {
+  "speaker": "lia",
+  "dur": 7.08,
+  "text": "As nuvens andam tão devagar. Ou sou eu que finalmente parei."
+ },
+ "li_mapa_cheio": {
+  "speaker": "lia",
+  "dur": 6.12,
+  "text": "Oito lugares. O caderno está cheio de gente que eu nunca vou conhecer. E mesmo assim parece que conheço."
+ },
+ "li_estrela": {
+  "speaker": "lia",
+  "dur": 4.992,
+  "text": "Uma estrela cadente. Esqueci de fazer um pedido. Tudo bem. Ver já foi bom."
  }
 }

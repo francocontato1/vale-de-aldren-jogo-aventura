@@ -1,0 +1,31 @@
+{
+ "id": "fim11",
+ "speaker": "narrador",
+ "emotion": "tender",
+ "text": "E assim, no vale de Aldren, nada se perdeu. Só mudou de lugar.",
+ "dur": 4.48,
+ "cps": 13.8,
+ "cer": 0.017,
+ "wer": 0.077,
+ "asr": "E assim, no Vale de Aldrin, nada se perdeu, só mudou de lugar.",
+ "attempt": 0,
+ "gen_s": 33.1,
+ "rtf": 7.38,
+ "max_pause": 0.26,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.35,
+  "cfg_weight": 0.35,
+  "temperature": 0.65
+ },
+ "seed": 175670689,
+ "lufs_in": -22.4,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 16.8,
+  "flow": 15.1,
+  "hift": 1.1
+ },
+ "tokens": 126,
+ "final_problems": []
+}

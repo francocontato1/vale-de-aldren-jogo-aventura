@@ -1,0 +1,31 @@
+{
+ "id": "ba_c2",
+ "speaker": "bastiao",
+ "emotion": "happy",
+ "text": "A Odessa me pediu uma estante nova. Para quê, eu perguntei. Para guardar o que eu ainda não li, ela disse. Vai precisar de mil estantes.",
+ "dur": 7.7,
+ "cps": 17.7,
+ "cer": 0.031,
+ "wer": 0.077,
+ "asr": "Aldeça me pediu uma estante nova. \"Para quê?\" eu perguntei. \"Para guardar o que eu ainda não li?\" ela disse. \"Vai precisar de mil estantes.\"",
+ "attempt": 0,
+ "gen_s": 46.0,
+ "rtf": 5.97,
+ "max_pause": 0.37,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.6,
+  "cfg_weight": 0.45,
+  "temperature": 0.8
+ },
+ "seed": 1508120994,
+ "lufs_in": -22.1,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 27.5,
+  "flow": 16.6,
+  "hift": 1.7
+ },
+ "tokens": 214,
+ "final_problems": []
+}

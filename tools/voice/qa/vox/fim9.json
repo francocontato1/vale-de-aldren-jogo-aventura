@@ -1,0 +1,31 @@
+{
+ "id": "fim9",
+ "speaker": "tome",
+ "emotion": "excited",
+ "text": "Eu falei! Eu falei que eles estavam acordados!",
+ "dur": 3.45,
+ "cps": 13.3,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Eu falei, eu falei que eles estavam acordados.",
+ "attempt": 0,
+ "gen_s": 24.3,
+ "rtf": 7.03,
+ "max_pause": 0.21,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.95,
+  "cfg_weight": 0.45,
+  "temperature": 0.85
+ },
+ "seed": 1126793128,
+ "lufs_in": -25.0,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 12.6,
+  "flow": 10.1,
+  "hift": 0.8
+ },
+ "tokens": 100,
+ "final_problems": []
+}

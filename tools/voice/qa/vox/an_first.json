@@ -1,0 +1,31 @@
+{
+ "id": "an_first",
+ "speaker": "anselmo",
+ "emotion": "happy",
+ "text": "Boa tarde, moça. Você é a que veio fazer o mapa da Odessa? Hum. Ela começa um mapa desses a cada século. Nunca termina. Diz que o vale muda enquanto ela desenha.",
+ "dur": 11.33,
+ "cps": 14.2,
+ "cer": 0.032,
+ "wer": 0.094,
+ "asr": "Boa tarde, moça. Você é que veio fazer o mapa da Odessa? Um, ela começa o mapa desses a cada século. Nunca termina. Diz que o vale muda enquanto ela desenha.",
+ "attempt": 1,
+ "gen_s": 73.3,
+ "rtf": 6.47,
+ "max_pause": 0.39,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.6,
+  "cfg_weight": 0.3,
+  "temperature": 0.68
+ },
+ "seed": 2424124569,
+ "lufs_in": -22.4,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 46.0,
+  "flow": 24.2,
+  "hift": 2.9
+ },
+ "tokens": 354,
+ "final_problems": []
+}

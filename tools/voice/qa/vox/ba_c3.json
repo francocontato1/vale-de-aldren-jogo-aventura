@@ -1,0 +1,31 @@
+{
+ "id": "ba_c3",
+ "speaker": "bastiao",
+ "emotion": "happy",
+ "text": "Os Veladores cortavam pedra como eu nunca vi. Nenhuma junta torta. Mas a escada deles não leva a lugar nenhum. Bons de mão, ruins de plano. Igual a mim.",
+ "dur": 8.82,
+ "cps": 17.2,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Os veladores cortavam pedra como eu nunca vi, nenhuma junta torta, mas a escada deles não leva a lugar nenhum, bons de mão, ruins de plano, igual a mim.",
+ "attempt": 0,
+ "gen_s": 46.5,
+ "rtf": 5.27,
+ "max_pause": 0.63,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.6,
+  "cfg_weight": 0.45,
+  "temperature": 0.8
+ },
+ "seed": 942571668,
+ "lufs_in": -20.3,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 27.8,
+  "flow": 16.7,
+  "hift": 1.8
+ },
+ "tokens": 223,
+ "final_problems": []
+}

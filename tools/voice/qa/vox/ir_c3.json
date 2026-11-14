@@ -1,0 +1,31 @@
+{
+ "id": "ir_c3",
+ "speaker": "irene",
+ "emotion": "neutral",
+ "text": "Colho camomila de manhã, pinto à tarde, durmo cedo. As pessoas acham pouco. Eu acho que é o suficiente.",
+ "dur": 7.91,
+ "cps": 13.0,
+ "cer": 0.02,
+ "wer": 0.105,
+ "asr": "Côlio Camomila de manhã, Pinto à tarde, Dormo cedo, as pessoas acham pouco, eu acho que é o suficiente.",
+ "attempt": 0,
+ "gen_s": 41.8,
+ "rtf": 5.28,
+ "max_pause": 0.45,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.45,
+  "cfg_weight": 0.4,
+  "temperature": 0.75
+ },
+ "seed": 3456523616,
+ "lufs_in": -21.5,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 24.6,
+  "flow": 15.5,
+  "hift": 1.6
+ },
+ "tokens": 200,
+ "final_problems": []
+}

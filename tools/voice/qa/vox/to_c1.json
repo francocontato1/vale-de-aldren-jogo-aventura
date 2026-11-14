@@ -1,0 +1,31 @@
+{
+ "id": "to_c1",
+ "speaker": "tome",
+ "emotion": "excited",
+ "text": "Sabia que se você deitar na grama e olhar as nuvens, parece que é a terra que está andando?",
+ "dur": 4.71,
+ "cps": 19.3,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Sabia que se você deitar na grama e olhar as nuvens, parece que é a terra que está andando?",
+ "attempt": 1,
+ "gen_s": 27.6,
+ "rtf": 5.85,
+ "max_pause": 0.15,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.95,
+  "cfg_weight": 0.5,
+  "temperature": 0.78
+ },
+ "seed": 737423714,
+ "lufs_in": -26.0,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 15.8,
+  "flow": 10.5,
+  "hift": 1.0
+ },
+ "tokens": 131,
+ "final_problems": []
+}

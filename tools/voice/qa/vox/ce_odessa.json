@@ -1,0 +1,31 @@
+{
+ "id": "ce_odessa",
+ "speaker": "celeste",
+ "emotion": "happy",
+ "text": "A Odessa? Vem aqui uma vez por ano, se tanto. Fica parada na porta sentindo o cheiro e vai embora sem comprar nada. Ano passado eu dei um pão para ela. Ficou olhando para o pão como se fosse um livro!",
+ "dur": 10.89,
+ "cps": 18.4,
+ "cer": 0.021,
+ "wer": 0.073,
+ "asr": "Ah, dessa? Vem aqui uma vez por ano, se tanto. Fica parada na porta sentindo cheiro e vai embora sem comprar nada. Ano passado eu dei um pão para ela. Ficou olhando para o pão como se fosse um livro.",
+ "attempt": 0,
+ "gen_s": 56.5,
+ "rtf": 5.19,
+ "max_pause": 0.7,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.75,
+  "cfg_weight": 0.45,
+  "temperature": 0.85
+ },
+ "seed": 1089703318,
+ "lufs_in": -20.1,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 35.7,
+  "flow": 18.4,
+  "hift": 2.3
+ },
+ "tokens": 275,
+ "final_problems": []
+}

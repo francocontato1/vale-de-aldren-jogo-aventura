@@ -1,0 +1,31 @@
+{
+ "id": "an_gigantes",
+ "speaker": "anselmo",
+ "emotion": "tender",
+ "text": "Conheço desde menino. Meu avô dizia que eles não são estátuas. São gente que sentou para ver alguma coisa bonita... e gostou tanto que esqueceu de levantar.",
+ "dur": 11.47,
+ "cps": 13.6,
+ "cer": 0.013,
+ "wer": 0.037,
+ "asr": "Conheço desde menino. Meu avô dizia que eles não são estátuas, são gente que sentou para ver alguma coisa bonita. E gostou o tanto que esqueceu de levantar.",
+ "attempt": 0,
+ "gen_s": 69.1,
+ "rtf": 6.02,
+ "max_pause": 0.53,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.4,
+  "cfg_weight": 0.2,
+  "temperature": 0.65
+ },
+ "seed": 1032084082,
+ "lufs_in": -23.2,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 37.1,
+  "flow": 29.6,
+  "hift": 2.2
+ },
+ "tokens": 293,
+ "final_problems": []
+}
