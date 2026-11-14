@@ -80,6 +80,19 @@ export const Sound = {
     this.play(k, { x, z, vol: base * vol * rr(0.75, 1.0), rate: rr(0.9, 1.06), lp: kind === 'grass' ? 2600 : 3800 });
   },
   // batida de asa da dragoa: sopro grave de ar empurrado
+  // assovio de chamar: dois glissandos com vibrato e um pouco de sopro
+  whistle() {
+    if (!this.ctx) return; const c = this.ctx, t = c.currentTime, L = this.listener;
+    const o = c.createOscillator(); o.type = 'sine'; const f = o.frequency;
+    f.setValueAtTime(1350, t); f.exponentialRampToValueAtTime(2250, t + 0.2); f.setValueAtTime(2250, t + 0.32); f.exponentialRampToValueAtTime(1900, t + 0.42);
+    f.setValueAtTime(1500, t + 0.55); f.exponentialRampToValueAtTime(2600, t + 0.85); f.exponentialRampToValueAtTime(2350, t + 1.25);
+    const lfo = c.createOscillator(); lfo.frequency.value = 5.5; const lg = c.createGain(); lg.gain.value = 22; lfo.connect(lg).connect(f);
+    const g = c.createGain(); const G = g.gain; G.setValueAtTime(0.0001, t); G.exponentialRampToValueAtTime(0.16, t + 0.06); G.setValueAtTime(0.16, t + 0.36); G.exponentialRampToValueAtTime(0.004, t + 0.47);
+    G.exponentialRampToValueAtTime(0.18, t + 0.6); G.setValueAtTime(0.17, t + 1.1); G.exponentialRampToValueAtTime(0.0001, t + 1.4);
+    o.connect(g); this.out(g, L.x, L.z, 0.45);
+    if (this.white) { const n = c.createBufferSource(); n.buffer = this.white; const bp = c.createBiquadFilter(); bp.type = 'bandpass'; bp.frequency.value = 2300; bp.Q.value = 1.2; const ng = c.createGain(); ng.gain.setValueAtTime(0.0001, t); ng.gain.exponentialRampToValueAtTime(0.025, t + 0.06); ng.gain.exponentialRampToValueAtTime(0.0001, t + 1.4); n.connect(bp).connect(ng); this.out(ng, L.x, L.z, 0.2); n.start(t, Math.random()); n.stop(t + 1.45); }
+    o.start(t); lfo.start(t); o.stop(t + 1.45); lfo.stop(t + 1.45);
+  },
   flap(x, z, vol = 1) { if (!this.ctx || !this.white) return; const c = this.ctx, t = c.currentTime; const src = c.createBufferSource(); src.buffer = this.white; const f = c.createBiquadFilter(); f.type = 'lowpass'; f.frequency.setValueAtTime(900, t); f.frequency.exponentialRampToValueAtTime(140, t + 0.6); const g = c.createGain(); g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.9 * vol, t + 0.12); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.75); src.connect(f).connect(g); this.out(g, x, z, 0.3); src.start(t, Math.random()); src.stop(t + 0.8); },
   door(open, x, z) { this.play(open ? 'doorOpen' : 'doorClose', { x, z, vol: 0.35 }); },
   clang(x, z) { this.play('anvil', { x, z, vol: 0.25, verb: 0.3 }); },

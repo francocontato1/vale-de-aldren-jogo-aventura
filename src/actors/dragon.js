@@ -2,7 +2,8 @@
 // tools/chars/dragon.mjs. Ela descansa no ninho ao lado da gigante do monte; deixa a Lia chegar perto
 // se ela vier andando devagar. Montada, voa com física simples mas honesta: velocidade, sustentação,
 // perda de velocidade ao subir e ganho ao mergulhar, inclinação nas curvas, batidas de asa quando falta
-// fôlego e planeio quando sobra. Sem cavaleira, volta sozinha para o ninho.
+// fôlego e planeio quando sobra. Sem cavaleira, fica onde pousou; depois do primeiro voo, atende ao assovio da
+// Lia: decola, voa até ela de onde estiver e pousa ao lado.
 import { THREE, scene, camera, loadGLTF, clamp, lerp, smooth, rand, rr, angDiff, lerpAng } from '../core.js';
 import { groundH, normalY, WATER, NINHO } from '../world/terrain.js';
 
@@ -34,7 +35,10 @@ export class Dragon {
   // posição (mundo) do lugar da cavaleira, na base do pescoço
   seatMatrix(out) { this.model.updateMatrixWorld(true); const b = this.saddle; const p = new THREE.Vector3(), q = new THREE.Quaternion(); b.getWorldPosition(p); this.root.getWorldQuaternion(q); p.add(new THREE.Vector3(0, 1.0, 0).applyQuaternion(q)); out.p = p; out.q = q; return out; }
   bodyPos() { return new THREE.Vector3(this.x, this.y + (this.airborne ? 0 : BODY), this.z); }
-  get airborne() { return this.mode === 'fly' || this.mode === 'auto' || this.mode === 'takeoff' || this.mode === 'land'; }
+  get airborne() { return this.mode === 'fly' || this.mode === 'auto' || this.mode === 'approach' || this.mode === 'takeoff' || this.mode === 'land'; }
+  get onGround() { return this.mode === 'rest' || this.mode === 'ready' || this.mode === 'ground'; }
+  // assovio: voar até o ponto {x,z,face} e pousar ali
+  callTo(spot) { this.target = spot; if (this.onGround) this.takeoff(); else if (this.mode === 'descend') this.mode = 'auto'; }
   // ---------------------------------------------------------------- comandos
   takeoff() { if (this.mode !== 'rest' && this.mode !== 'ready' && this.mode !== 'ground') return; this.mode = 'takeoff'; this.t = 0; this.play('takeoff', 0.4); this.speed = 0; }
   requestLand() { if (this.mode !== 'fly' && this.mode !== 'auto') return false; const gh = groundH(this.x, this.z); if (gh < WATER + 0.5 || normalY(this.x, this.z) < 0.82) return false; this.landTarget = gh; this.mode = 'descend'; return true; }
@@ -50,25 +54,45 @@ export class Dragon {
       if (mode === 'ground' && this.t > 2) this.mode = 'rest';
     } else if (mode === 'takeoff') {
       this.y = groundH(this.x, this.z);
-      if (this.done() || this.t > 1.6) { this.mode = this.rider ? 'fly' : 'auto'; this.y += AIR; this.speed = 7; this.play('hover', 0.25); this.t = 0; }
+      if (this.done() || this.t > 1.6) { this.mode = this.rider ? 'fly' : 'auto'; this.y += AIR; this.speed = 7; this.play('hover', 0.25); this.t = 0;
+        // chamada de muito longe: decolou fora da vista; reaparece já a caminho, a uns 300 m, vindo do lado onde estava
+        const T = this.target; if (!this.rider && T) { const dx = this.x - T.x, dz = this.z - T.z, d = Math.hypot(dx, dz); if (d > 340) { this.x = T.x + dx / d * 300; this.z = T.z + dz / d * 300; this.y = Math.max(groundH(this.x, this.z), WATER) + AIR + 55; this.yaw = Math.atan2(-dx, -dz); this.speed = 18; this.play('glide', 0.2); } } }
     } else if (mode === 'fly' || mode === 'auto' || mode === 'descend') {
       this.flight(dt, mode === 'fly' ? input : this.autopilot(mode));
+    } else if (mode === 'approach') {
+      this.approach(dt);
     } else if (mode === 'land') {
-      if (this.done() || this.t > 1.9) { this.mode = 'ground'; this.t = 0; this.y = groundH(this.x, this.z); this.play('idle', 0.4); this.landed = true; }
+      if (this.done() || this.t > 1.9) { this.mode = 'ground'; this.t = 0; this.y = groundH(this.x, this.z); this.play('idle', 0.4); this.landed = true; this.target = null; this.onLand && this.onLand(); }
     }
     // pose final
-    const lift = (mode === 'fly' || mode === 'auto' || mode === 'descend') ? -AIR : 0;
+    const lift = (this.mode === 'fly' || this.mode === 'auto' || this.mode === 'descend' || this.mode === 'approach') ? -AIR : 0;
     this.root.position.set(this.x, this.y + lift, this.z); this.root.rotation.set(0, 0, 0, 'YXZ'); this.root.rotation.order = 'YXZ'; this.root.rotation.set(-this.pitch, this.yaw, this.bank);
     this.mixer.update(dt);
     this.proceduralHead(dt);
   }
   autopilot(mode) {
-    // sem cavaleira: volta para o ninho, sobe, desce e pousa
-    const dx = this.home.x - this.x, dz = this.home.z - this.z, d = Math.hypot(dx, dz);
-    const want = Math.atan2(dx, dz); const turn = clamp(angDiff(want, this.yaw) * 1.4, -1, 1);
+    // sem cavaleira: voa até o alvo (a Lia que assoviou, ou o ninho), perde altura ao chegar e passa à aproximação final
+    // (antes o sinal da curva estava trocado: ela virava para o lado oposto e se perdia longe do vale)
+    const T = this.target || this.home; const dx = T.x - this.x, dz = T.z - this.z, d = Math.hypot(dx, dz);
+    const want = Math.atan2(dx, dz); const turn = clamp(-angDiff(want, this.yaw) * 1.6, -1, 1);
     if (mode === 'descend') return { turn: 0, climb: -0.6, thrust: 0.2, brake: 0.6 };
-    if (d < 25 && this.speed < 9) { this.landTarget = groundH(this.home.x, this.home.z); this.mode = 'descend'; }
-    const ah = this.y - Math.max(groundH(this.x, this.z), WATER); return { turn, climb: ah < 45 ? 0.6 : d < 80 ? -0.35 : 0, thrust: d < 60 ? 0.2 : 0.8, brake: d < 50 ? 0.7 : 0 };
+    if (d < 45) { this.mode = 'approach'; this.t = 0; return { turn, climb: 0, thrust: 0, brake: 0 }; }
+    const ah = this.y - Math.max(groundH(this.x, this.z), WATER) - AIR; const wantAh = d > 160 ? 45 : 12 + d * 0.2;
+    return { turn, climb: clamp((wantAh - ah) * 0.06, -0.7, 0.7), thrust: d > 160 ? 1.4 : 0.5, brake: d < 90 && this.speed > 14 ? 0.8 : 0 };
+  }
+  approach(dt) {
+    // aproximação final: diminui a velocidade, desce pairando e pousa no ponto, virada para a Lia
+    const T = this.target || this.home; const dx = T.x - this.x, dz = T.z - this.z, d = Math.hypot(dx, dz);
+    this.speed = lerp(this.speed, clamp(d * 0.45, 0, 13), clamp(dt * 1.2, 0, 1));
+    if (d > 0.05) { const k = Math.min(1, this.speed * dt / d); this.x += dx * k; this.z += dz * k; }
+    const wantYaw = d > 6 ? Math.atan2(dx, dz) : (T.face ?? this.yaw); const prev = this.yaw; this.yaw = lerpAng(this.yaw, wantYaw, clamp(dt * (d > 6 ? 1.4 : 2.2), 0, 1));
+    this.turnRate = lerp(this.turnRate || 0, angDiff(prev, this.yaw) / Math.max(dt, 1e-3), clamp(dt * 3, 0, 1));
+    this.bank = lerp(this.bank, clamp(-this.turnRate * 0.5, -0.3, 0.3), clamp(dt * 2, 0, 1)); this.pitch = lerp(this.pitch, d > 8 ? -0.06 : 0.08, clamp(dt * 1.5, 0, 1));
+    const gh = Math.max(groundH(this.x, this.z), WATER); const wantY = gh + AIR + clamp(d - 2, 0, 50) * 0.55;
+    this.y += clamp(wantY - this.y, -7 * dt, 9 * dt); if (this.y < gh + AIR) this.y = gh + AIR;
+    this.play(this.speed < 6.5 ? 'hover' : 'glide', 0.8); this.flapSound();
+    if (d < 1.2 && this.y - groundH(T.x, T.z) < AIR + 0.7) { this.x = T.x; this.z = T.z; this.mode = 'land'; this.t = 0; this.y = groundH(this.x, this.z); this.pitch = 0; this.flapK = 0; this.bank = 0; this.speed = 0; this.turnRate = 0; this.play('land', 0.3); }
+    if (this.t > 40) { this.x = T.x; this.z = T.z; this.y = groundH(T.x, T.z) + AIR + 0.5; } // segurança
   }
   flight(dt, inp) {
     inp = inp || { turn: 0, climb: 0, thrust: 0, brake: 0 };
@@ -96,8 +120,9 @@ export class Dragon {
     // pouso: chegou perto do chão descendo
     if (this.mode === 'descend') { const gh = groundH(this.x, this.z); this.speed = lerp(this.speed, 5.5, clamp(dt * 0.8, 0, 1)); this.pitch = lerp(this.pitch, -0.12, clamp(dt * 2, 0, 1)); this.y -= clamp((this.y - gh - AIR) * 0.4 + 1.5, 1.5, 16) * dt; if (this.y - gh < AIR + 0.4) { this.mode = 'land'; this.t = 0; this.y = gh; this.pitch = 0; this.flapK = 0; this.bank = 0; this.speed = 0; this.play('land', 0.3); } }
     // batida de asa: avisa para tocar o som
-    if (this.curName === 'fly' || this.curName === 'hover') { const ph = (this.cur.time / this.cur.getClip().duration); if (ph < this.lastPhase) this.onFlap && this.onFlap(this.speed); this.lastPhase = ph; }
+    this.flapSound();
   }
+  flapSound() { if (this.curName === 'fly' || this.curName === 'hover') { const ph = (this.cur.time / this.cur.getClip().duration); if (ph < this.lastPhase) this.onFlap && this.onFlap(this.speed); this.lastPhase = ph; } }
   proceduralHead(dt) {
     // vira a cabeça para olhar a Lia (no chão) ou na direção da curva (no ar)
     if (!this.head) return; let want = 0, wantP = 0;

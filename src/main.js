@@ -313,9 +313,36 @@ function updateSailing(dt) {
 // voar com a Vésper (no código: alva)
 // =====================================================================
 let alva = null; const seatTmp = {};
-function buildDragon() { alva = new Dragon(); POI.ninho = { x: NINHO.x, z: NINHO.z, name: 'O Ninho da Vésper' }; alva.onFlap = (sp) => Sound.flap(alva.x, alva.z, state === 'fly' ? 1 : 0.6); }
+function buildDragon() {
+  alva = new Dragon(); POI.ninho = { x: NINHO.x, z: NINHO.z, name: 'O Ninho da Vésper' }; alva.onFlap = (sp) => Sound.flap(alva.x, alva.z, state === 'fly' ? 1 : 0.6);
+  // ela fica onde a Lia a deixou (inclusive depois de recarregar o jogo)
+  const p = S.alvaPos; if (p && Number.isFinite(p.x) && Number.isFinite(p.z) && groundH(p.x, p.z) > WATER + 0.3) { alva.x = p.x; alva.z = p.z; alva.yaw = p.yaw || 0; alva.y = groundH(p.x, p.z); alva.update(0, null); }
+  alva.onLand = () => { if (!alva.rider) { S.alvaPos = { x: +alva.x.toFixed(2), z: +alva.z.toFixed(2), yaw: +alva.yaw.toFixed(3) }; save(); } };
+}
+// lugar aberto e plano perto da Lia onde a Vésper cabe (corpo ~15 m, asas ~32 m)
+function alvaSpotOk(x, z) {
+  const gh = groundH(x, z); if (gh < WATER + 0.6 || normalY(x, z) < 0.86) return false;
+  if (Math.hypot(x, z) > 700) return false;
+  for (let a = 0; a < 12; a++) { const t = a / 12 * Math.PI * 2; for (const r of [0, 3.5, 6.5]) { const px = x + Math.cos(t) * r, pz = z + Math.sin(t) * r; if (!nav.free(px, pz) || Math.abs(groundH(px, pz) - gh) > 1.6) return false; if (r === 0) break; } }
+  return true;
+}
+function alvaSpot(px, pz) {
+  for (const r of [14, 17, 21, 26, 32, 39, 47, 56, 66, 80, 95, 115, 140]) { const n = Math.ceil(r * 0.5); const a0 = Math.atan2(px - cam.cur.x, pz - cam.cur.z); // à frente da câmera, para ver a chegada
+    for (let i = 0; i < n; i++) { const t = a0 + (i % 2 ? 1 : -1) * Math.ceil(i / 2) / n * Math.PI * 2; const x = px + Math.sin(t) * r, z = pz + Math.cos(t) * r; if (alvaSpotOk(x, z)) return { x, z, face: Math.atan2(px - x, pz - z), px, pz }; } }
+  return null;
+}
+// assovio (V): depois do primeiro voo, a Vésper vem de onde estiver e pousa ao lado da Lia
+function whistle() {
+  if (!alva || whistle.t && elapsed - whistle.t < 1.5) return; whistle.t = elapsed; Sound.whistle();
+  if (!S.flags.voou) { toast('Um assovio no vento', S.alva ? 'A Vésper ainda não conhece o seu chamado. Voe com ela primeiro.' : 'Ninguém responde... ainda.'); return; }
+  const d = Math.hypot(alva.x - player.x, alva.z - player.z);
+  if (alva.onGround && d < 30) { alva.lookAt = V3(player.x, player.y + 1.5, player.z); toast('A Vésper já está aqui', 'Chegue perto dela e aperte E para montar'); return; }
+  const spot = alvaSpot(player.x, player.z);
+  if (!spot) { toast('A Vésper ouviu o assovio', 'Mas aqui não há espaço para ela pousar. Vá para um lugar aberto e plano, fora da água.'); return; }
+  alva.callTo(spot); toast('A Vésper ouviu o assovio', d > 150 ? 'Ela está vindo de longe. Olhe para o céu.' : 'Ela está vindo.');
+}
 function mountDragon() {
-  if (!alva || alva.mode !== 'rest' && alva.mode !== 'ground') return; state = 'fly'; $('prompt').hidden = true; curInter = null; player.sit = null; alva.rider = true; alva.takeoff(); pH.play('drive', 0.3); cam.yaw = alva.yaw + Math.PI; cam.pitch = -0.2; cam.flyT = 0; timeLapse = 0;
+  if (!alva || alva.mode !== 'rest' && alva.mode !== 'ground') return; state = 'fly'; $('prompt').hidden = true; curInter = null; player.sit = null; alva.rider = true; alva.target = null; alva.takeoff(); pH.play('drive', 0.3); cam.yaw = alva.yaw + Math.PI; cam.pitch = -0.2; cam.flyT = 0; timeLapse = 0;
   const hint = $('lapseHint'); hint.hidden = false; hint.classList.remove('on'); hint.textContent = isTouch ? 'joystick · voar   ·   Pular · subir   ·   Usar · pousar' : 'W · bater asas   S · frear   A D · curvas   Espaço · subir   Shift · descer   mouse · olhar   E · pousar';
   if (!S.flags.voou) { S.flags.voou = 1; setTimeout(() => think('li_voo'), 6000); } Music.stop(2); setTimeout(() => Music.play('title', { fade: 4, vol: 0.9 }), 2500); save();
 }
@@ -336,8 +363,10 @@ function dismountDragon() {
   state = 'play'; alva.rider = false; const sx = Math.cos(alva.yaw), sz = -Math.sin(alva.yaw); let px = alva.x + sx * 6, pz = alva.z + sz * 6; if (groundH(px, pz) < WATER + 0.2) { px = alva.x - sx * 6; pz = alva.z - sz * 6; }
   player.x = px; player.z = pz; player.y = groundH(px, pz); player.vy = 0; player.onGround = true; player.h = Math.atan2(alva.x - px, alva.z - pz); cam.yaw = player.h + Math.PI; pH.play('idle', 0.3); pH.root.quaternion.identity();
   $('lapseHint').hidden = true; $('lapseHint').textContent = lapseText; think(S.flags.pousou ? 'li_sentar2' : 'li_voo_fim'); S.flags.pousou = 1; save();
-  // longe do ninho, ela espera um pouco e volta voando sozinha
-  if (Math.hypot(alva.x - NINHO.x, alva.z - NINHO.z) > 40) setTimeout(() => { if (state !== 'fly' && alva.mode === 'rest') alva.takeoff(); }, 9000);
+  // ela fica ali, onde pousou; a Lia pode chamá-la de qualquer lugar com um assovio
+  S.alvaPos = { x: +alva.x.toFixed(2), z: +alva.z.toFixed(2), yaw: +alva.yaw.toFixed(3) }; save();
+  if (!S.flags.assovio) { S.flags.assovio = 1; save(); setTimeout(() => toast('A Vésper fica esperando aqui', (isTouch ? 'Toque em Assoviar' : 'Aperte V para assoviar') + ' e, de qualquer lugar do vale, ela voa até você e pousa ao seu lado.'), 4500); }
+  if (isTouch) $('tbWhistle').hidden = false;
 }
 
 // =====================================================================
@@ -738,7 +767,7 @@ function interactables() {
   else for (const pl of PLACES) { const sp = SPOTS[pl.place]; if (sp) out.push({ x: sp.x, z: sp.z, r: 3.2, label: 'Sentar um pouco', act: () => sitAt(spAt(sp), sitThought) }); }
   for (const k in NOTES) { const sp = storySpots[k]; if (sp) out.push({ x: sp.x, z: sp.z, r: 2.4, label: S.notes[k] ? 'Olhar de novo' : 'Observar', act: () => readNote(k) }); }
   // a Alva
-  if (alva && (alva.mode === 'rest' || alva.mode === 'ground')) { const d = Math.hypot(alva.x - player.x, alva.z - player.z); if (d < 16) { if (!S.alva) out.push({ x: alva.x, z: alva.z, r: 14, label: 'Aproximar-se devagar da dragoa', act: () => { if (player.speed > 2.2 || alva.alert > 0.5) { think('li_alva_corre'); return; } alva.bow = 1; think('li_alva1', () => { think('li_alva2'); S.alva = 1; alva.trust = 1; save(); setTimeout(() => { if (alva) alva.bow = 0; }, 8000); }); } }); else out.push({ x: alva.x, z: alva.z, r: 14, label: 'Montar na Vésper e voar', act: mountDragon }); } }
+  if (alva && (alva.mode === 'rest' || alva.mode === 'ground')) { const d = Math.hypot(alva.x - player.x, alva.z - player.z); if (d < 21) { if (!S.alva) out.push({ x: alva.x, z: alva.z, r: 19, label: 'Aproximar-se devagar da dragoa', act: () => { if (player.speed > 2.2 || alva.alert > 0.5) { think('li_alva_corre'); return; } alva.bow = 1; think('li_alva1', () => { think('li_alva2'); S.alva = 1; alva.trust = 1; save(); setTimeout(() => { if (alva) alva.bow = 0; }, 8000); }); } }); else out.push({ x: alva.x, z: alva.z, r: 19, label: 'Montar na Vésper e voar', act: mountDragon }); } }
   // o barco
   if (boat && !boat.sailing) { const at = boatAtDock() ? storySpots.barco : { x: boat.x, z: boat.z }; if (Math.abs(at.x - player.x) < 6 && Math.abs(at.z - player.z) < 6) out.push({ x: at.x, z: at.z, r: boatAtDock() ? 2.4 : 4.5, label: S.boat ? 'Velejar no barco do mestre Elias' : 'Olhar o barco', act: () => S.boat ? startSailing() : think('li_barco0') }); }
   // cadeiras, bancos e camas (dentro e fora das casas)
@@ -817,7 +846,7 @@ function drawMap() {
   for (const k in POI) { const p = POI[k]; const known = k === 'village' || S.found[k]; if (!known || k === 'ninho') continue; ctx.fillStyle = '#3a2c1c'; ctx.beginPath(); ctx.arc(tx(p.x), tz(p.z), 5, 0, 7); ctx.fill(); label(p.name, tx(p.x), tz(p.z) - 13); }
   for (const pl of PLACES) { const sp = SPOTS[pl.place]; if (!sp || !S.lumes[pl.id]) continue; ctx.fillStyle = '#c9902f'; ctx.beginPath(); ctx.arc(tx(sp.x), tz(sp.z), 9, 0, 7); ctx.fill(); ctx.strokeStyle = '#fff6dc'; ctx.lineWidth = 2.5; ctx.stroke(); }
   // a Vésper (sempre marcada), o barco e a jogadora
-  if (alva) { const x = tx(alva.x), y = tz(alva.z); ctx.save(); ctx.translate(x, y); ctx.fillStyle = '#5a2a4a'; ctx.strokeStyle = '#fff6dc'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(0, -12); ctx.quadraticCurveTo(10, -14, 22, -4); ctx.quadraticCurveTo(10, -2, 0, 8); ctx.quadraticCurveTo(-10, -2, -22, -4); ctx.quadraticCurveTo(-10, -14, 0, -12); ctx.fill(); ctx.stroke(); ctx.restore(); label(alva.mode === 'rest' ? 'Vésper (no ninho)' : 'Vésper', x, y + 30, 22, '#5a2a4a'); }
+  if (alva) { const x = tx(alva.x), y = tz(alva.z); ctx.save(); ctx.translate(x, y); ctx.fillStyle = '#5a2a4a'; ctx.strokeStyle = '#fff6dc'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(0, -12); ctx.quadraticCurveTo(10, -14, 22, -4); ctx.quadraticCurveTo(10, -2, 0, 8); ctx.quadraticCurveTo(-10, -2, -22, -4); ctx.quadraticCurveTo(-10, -14, 0, -12); ctx.fill(); ctx.stroke(); ctx.restore(); label(alva.onGround && Math.hypot(alva.x - NINHO.x, alva.z - NINHO.z) < 40 ? 'Vésper (no ninho)' : alva.target ? 'Vésper (vindo até você)' : 'Vésper', x, y + 30, 22, '#5a2a4a'); }
   if (boat) { const x = tx(boat.x), y = tz(boat.z); ctx.save(); ctx.translate(x, y); ctx.rotate(Math.PI - boat.yaw); ctx.fillStyle = '#2f5d85'; ctx.beginPath(); ctx.moveTo(0, -10); ctx.lineTo(5, 6); ctx.lineTo(-5, 6); ctx.closePath(); ctx.fill(); ctx.restore(); if (S.boat) label('barco', x, y + 22, 17, '#2f5d85'); }
   ctx.save(); ctx.translate(tx(player.x), tz(player.z)); ctx.rotate(Math.PI - player.h); ctx.fillStyle = '#b23a22'; ctx.strokeStyle = '#fff'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(0, -15); ctx.lineTo(10, 11); ctx.lineTo(0, 5); ctx.lineTo(-10, 11); ctx.closePath(); ctx.fill(); ctx.stroke(); ctx.restore();
   // rosa dos ventos
@@ -937,6 +966,7 @@ addEventListener('keydown', (e) => {
   if (state === 'sail') { if (e.code === 'KeyE') stopSailing(); if (e.code === 'KeyM') $('mapView').hidden = !$('mapView').hidden; if ((e.code === 'Escape' && lockFailed) || e.code === 'KeyP') pauseGame(); return; }
   if (state !== 'play') return;
   if (e.code === 'KeyL') toggleLantern();
+  if (e.code === 'KeyV' && !e.repeat) whistle();
   if (e.code === 'KeyE') interact();
   if (e.code === 'KeyT' && player.sit) { if (player.sit.lie && isNight()) sleepUntilMorning(); else { timeLapse = timeLapse ? 0 : 1; $('lapseHint').classList.toggle('on', !!timeLapse); } }
   if (e.code === 'KeyM') $('mapView').hidden = !$('mapView').hidden;
@@ -970,12 +1000,12 @@ $('voiceToggle').onclick = (e) => { e.stopPropagation(); Voice.enabled = !Voice.
 if (store.get('aldren-vox') === '0') { Voice.enabled = false; $('voiceToggle').textContent = 'Vozes: desligadas'; }
 $('endBtn').onclick = (e) => { e.stopPropagation(); endFinale(); };
 function setupTouch() {
-  document.body.classList.add('touchmode'); $('touch').hidden = false; $('keysList').hidden = true; let joyId = null, lookId = null, jx = 0, jy = 0, lx = 0, ly = 0; const joy = $('joy'), knob = $('joyKnob');
+  document.body.classList.add('touchmode'); $('touch').hidden = false; if (S.flags.voou) $('tbWhistle').hidden = false; $('keysList').hidden = true; let joyId = null, lookId = null, jx = 0, jy = 0, lx = 0, ly = 0; const joy = $('joy'), knob = $('joyKnob');
   addEventListener('touchstart', (e) => { if (state !== 'play') return; for (const t of e.changedTouches) { if (t.target.closest('button')) continue; if (t.clientX < innerWidth * 0.45 && joyId === null) { joyId = t.identifier; jx = t.clientX; jy = t.clientY; joy.style.left = (jx - 60) + 'px'; joy.style.top = (jy - 60) + 'px'; joy.style.bottom = 'auto'; } else if (lookId === null) { lookId = t.identifier; lx = t.clientX; ly = t.clientY; } } }, { passive: true });
   addEventListener('touchmove', (e) => { for (const t of e.changedTouches) { if (t.identifier === joyId) { let dx = t.clientX - jx, dy = t.clientY - jy; const d = Math.hypot(dx, dy); if (d > 50) { dx *= 50 / d; dy *= 50 / d; } knob.style.transform = `translate(${dx}px,${dy}px)`; touch.mx = dx / 50; touch.my = -dy / 50; } else if (t.identifier === lookId && state === 'play') { cam.yaw -= (t.clientX - lx) * 0.005; cam.pitch = clamp(cam.pitch - (t.clientY - ly) * 0.005, -1.1, 0.9); lx = t.clientX; ly = t.clientY; } } }, { passive: true });
   const end = (e) => { for (const t of e.changedTouches) { if (t.identifier === joyId) { joyId = null; touch.mx = touch.my = 0; knob.style.transform = ''; } if (t.identifier === lookId) lookId = null; } }; addEventListener('touchend', end); addEventListener('touchcancel', end);
   const tb = (id, fn) => { const b = $(id); b.addEventListener('touchstart', (e) => { e.preventDefault(); e.stopPropagation(); fn(); }, { passive: false }); };
-  tb('tbUse', () => { if (state === 'dialog') { if (dlgNode && dlgNode.opts.length === 1) choose(0); } else if (state === 'lume' && lume) lume.skip(); else interact(); }); tb('tbJump', () => { touch.jump = true; }); tb('tbMap', () => { $('mapView').hidden = !$('mapView').hidden; }); tb('tbRun', () => { touch.run = !touch.run; $('tbRun').classList.toggle('on', touch.run); }); tb('tbLamp', toggleLantern); tb('tbBook', () => { if (state === 'journal') closeJournal(); else openJournal(); }); tb('tbTime', () => { if (player.sit) { if (player.sit.lie && isNight()) sleepUntilMorning(); else { timeLapse = timeLapse ? 0 : 1; $('lapseHint').classList.toggle('on', !!timeLapse); } } });
+  tb('tbUse', () => { if (state === 'dialog') { if (dlgNode && dlgNode.opts.length === 1) choose(0); } else if (state === 'lume' && lume) lume.skip(); else interact(); }); tb('tbJump', () => { touch.jump = true; }); tb('tbMap', () => { $('mapView').hidden = !$('mapView').hidden; }); tb('tbRun', () => { touch.run = !touch.run; $('tbRun').classList.toggle('on', touch.run); }); tb('tbLamp', toggleLantern); tb('tbWhistle', () => { if (state === 'play') whistle(); }); tb('tbBook', () => { if (state === 'journal') closeJournal(); else openJournal(); }); tb('tbTime', () => { if (player.sit) { if (player.sit.lie && isNight()) sleepUntilMorning(); else { timeLapse = timeLapse ? 0 : 1; $('lapseHint').classList.toggle('on', !!timeLapse); } } });
 }
 
 // =====================================================================
@@ -1050,6 +1080,7 @@ function frame(fixedDt) {
   const inK = cam.inK || 0; scene.environmentIntensity *= lerp(1, 0.62, inK); renderer.toneMappingExposure *= lerp(1, 1.3, inK);
   updateCuriosities(dt, elapsed, (o) => dust.emit(o)); updateAnimals(dt, player, sky.nightF); updateFauna(dt, elapsed, player, sky.dayF, (x, z, s) => { ripple(x, z, s); for (let i = 0; i < 10; i++) dust.emit({ x: x + rr(-0.15, 0.15), y: WATER + 0.05, z: z + rr(-0.15, 0.15), vx: rr(-0.8, 0.8), vy: rr(1, 2.4), vz: rr(-0.8, 0.8), g: 9, drag: 0.4, life: rr(0.4, 0.7), s0: 0.05, s1: 0.12, c: [0.9, 0.94, 0.95], a0: 0.55, wind: 0 }); });
   updateDoors(dt); updateInteriorLights(dt); updateLantern(dt); updateRipples(dt); updateLamps();
+  if (alva && state !== 'fly' && alva.target && alva.mode === 'auto' && Math.hypot(player.x - alva.target.px, player.z - alva.target.pz) > 35 && (!alva.retT || elapsed - alva.retT > 2)) { alva.retT = elapsed; const sp = alvaSpot(player.x, player.z); if (sp) alva.target = sp; }
   if (alva && state !== 'fly') { alva.update(dt, null, player); if (alva.alert > 0.9 && state === 'play' && !S.alva && (!alva.spookT || elapsed - alva.spookT > 40)) { alva.spookT = elapsed; think('li_alva_corre'); } }
   updateOcean(); updateHarbor(dt, elapsed, scene); if (boat && state !== 'sail') boat.update(dt, null, elapsed); updateGiants(dt, elapsed); const obj = state !== 'menu' ? objectives()[0] : null; updateSpirits(dt, elapsed, player, obj ? obj.tgt : null, sky.nightF, player.speed > 0.3); if (motes) motes.update(elapsed, camera.position.x, camera.position.z, sky.dayF, sky.nightF, U.wind.value);
   post.updateLook(U.sunDir.value, sky.dayF, sky.nightF, sky.dusk || 0, U.sunColor.value);
