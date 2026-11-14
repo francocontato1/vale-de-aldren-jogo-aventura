@@ -1,0 +1,22 @@
+{
+  "name": "ecos-de-aldren",
+  "version": "1.0.0",
+  "description": "Ecos de Aldren: jogo de exploração contemplativo e mágico no navegador (three.js)",
+  "main": "src/main.js",
+  "scripts": {
+    "build": "sh build.sh",
+    "offline": "python3 standalone.py"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@dgreenheck/ez-tree": "^1.1.0",
+    "@gltf-transform/cli": "^4.1.1",
+    "draco3dgltf": "^1.5.9",
+    "esbuild": "^0.24.0",
+    "sharp": "^0.33.5",
+    "three": "^0.170.0"
+  },
+  "private": true
+}
