@@ -91,3 +91,19 @@
 2026-11-14 04:53:55,785 [2/2] t_narrador_2 narrador try0 4.7s audio in 67s (rtf 14.4; t3 29s/131 tok, flow 37s) cps 16.3 cer 0.0 ok
 2026-11-14 04:53:56,137 done: 2 lines, 166s CPU wall for 11s audio rendered (rtf 15.69 incl. ASR/retries)
 2026-11-14 04:54:59,503 manifest updated (0 todo)
+2026-11-14 05:12:40,391 rendering 2/20 lines -> ../../a/vox/_test (shard 0/1)
+2026-11-14 05:12:52,904 input frame rate=25
+2026-11-14 05:12:56,010 Initializing the model ...
+2026-11-14 05:12:57,463 Reference mel length is not equal to 2 * reference token length.
+
+2026-11-14 05:13:29,801 Transcribing ...
+2026-11-14 05:13:34,606 Inference time: 4.806 s
+2026-11-14 05:13:34,635 [1/2] t_celeste_1 celeste  try0 6.8s audio in 33s (rtf 4.9; t3 19s/174 tok, flow 11s) cps 14.0 cer 0.13 cer=0.13
+2026-11-14 05:14:06,584 Transcribing ...
+2026-11-14 05:14:11,365 Inference time: 4.781 s
+2026-11-14 05:14:11,366 [1/2] t_celeste_1 celeste  try1 7.0s audio in 32s (rtf 4.6; t3 19s/176 tok, flow 12s) cps 13.8 cer 0.054 ok
+2026-11-14 05:14:44,349 Transcribing ...
+2026-11-14 05:14:49,070 Inference time: 4.722 s
+2026-11-14 05:14:49,071 [2/2] t_celeste_2 celeste  try0 7.0s audio in 33s (rtf 4.7; t3 19s/177 tok, flow 12s) cps 11.9 cer 0.026 ok
+2026-11-14 05:14:49,419 done: 2 lines, 113s CPU wall for 21s audio rendered (rtf 5.44 incl. ASR/retries)
+2026-11-14 05:14:58,652 manifest updated (0 todo)

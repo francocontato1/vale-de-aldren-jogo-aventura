@@ -25,13 +25,13 @@ an_c1	anselmo	tender	8.03	13.3	0.087	0.286	1	5.53		Sabe porque o gosto de pastor
 an_c2	anselmo	neutral	8.02	13.3	0.0	0.0	1	5.35		Quando o vento vira e cheira a chuva, olhe para a gigante do monte. Ela sempre fica com uma nuvem no ombro.
 an_c3	anselmo	tender	7.42	14.4	0.0	0.0	1	5.85		Na minha idade, a gente para de perguntar para onde as coisas vão. Começa a perguntar onde elas estão agora.
 an_noite	anselmo	tired	8.02	11.2	0.023	0.118	1	5.79		Já em noite, um, nessa idade, a gente conta estrela para dormir. Eu nunca passo das trinta.
-ce_first	celeste	excited	15.06	14.6	0.014	0.047	1	5.25		A gente nova entra, entra, que o pão acabou de sair. Você é a moça do mapa? A Odessa encomendou o pão para você. Três por dia, ela disse. Eu disse que ninguém come três pães por dia. Ela disse que cartógrafo anda muito.
-ce_odessa	celeste	happy	10.89	18.4	0.021	0.073	1	5.19		Ah, dessa? Vem aqui uma vez por ano, se tanto. Fica parada na porta sentindo cheiro e vai embora sem comprar nada. Ano passado eu dei um pão para ela. Ficou olhando para o pão como se fosse um livro.
-ce_ruinas	celeste	happy	9.89	17.4	0.012	0.03	1	6.75		Eu acho que eles eram padeiros. É sério. Quem mais acorda antes do sol para olhar o céu? Toda aquela gente de torre escada. Tinha fome de alguma coisa. Isso eu garanto.
-ce_c1	celeste	tender	4.4	18.9	0.038	0.062	1	6.66		Bom, bom é igual conversa boa, precisa de tempo de calor e de alguém para dividir.
-ce_c2	celeste	sad	10.15	16.0	0.0	0.0	1	5.15		Meu marido construia barcos, faz seis invernos que ele se foi. Eu ainda faço pão para dois, o que sobra eu dou para os passarinhos. Eles agradecem do jeito deles.
-ce_c3	celeste	happy	6.56	18.0	0.0	0.0	1	5.98		O Tomé passou aqui correndo de novo. Aquele menino acha que vai acordar os gigantes. Deixa ele. Alguém tem que tentar.
-ce_noite	celeste	tired	4.19	16.0	0.0	0.0	1	7.69		O forno já esfriou, querida. Volta amanhã cedo, que tem pão de mel.
+ce_first	celeste	excited	14.66	15.0	0.033	0.07	1	5.03		Gente nova, entra, entra que o pão acabou de sair. Você é a moça do mapa? A Odeca encomendou o pão para você? Três por dia, ela disse. Eu disse que ninguém come três pães por dia. Ela disse que cartógrafo anda muito.
+ce_odessa	celeste	happy	12.06	16.6	0.021	0.073	1	4.62		Al dessa? Vem aqui uma vez por ano se tanto. Fica parada na porta sentindo cheiro e vai embora sem comprar nada. Ano passado eu dei um pão para ela. Ficou olhando para o pão como se fosse um livro.
+ce_ruinas	celeste	happy	11.54	14.9	0.012	0.03	1	5.03		Eu acho que eles eram padeiros. É sério! Quem mais acorda antes do sol para olhar o céu, toda aquela gente de torre escada? Tinha fome de alguma coisa, isso eu garanto.
+ce_c1	celeste	tender	5.98	13.9	0.038	0.062	1	5.32		Bom bom é igual conversa boa. Precisa de tempo, de calor e de alguém para dividir.
+ce_c2	celeste	sad	9.78	16.6	0.013	0.033	1	4.43		Meu marido construía barcos. Faz seis invernos que ele se foi. Eu ainda faço pão para dois. O que sobe, eu dou para os passarinhos. Eles agradecem do jeito deles.
+ce_c3	celeste	happy	7.06	16.7	0.018	0.048	1	4.51		Tomé passou aqui correndo de novo. Aquele menino acha que vai acordar os gigantes. Deixa ele. Alguém tem que tentar.
+ce_noite	celeste	tired	4.57	14.7	0.016	0.077	1	5.22		O forno já esfiou, querida. Volta amanhã cedo que tem pão de mel.
 to_first	tome	excited	7.06	15.9	0.028	0.05	1	5.23		Você é cartógrafa? De verdade? Então você sabe onde fica tudo, me diz onde os gigantes guardam sonhos deles?
 to_naosei	tome	happy	4.41	15.6	0.0	0.0	1	6.16		Ah, tudo bem. Eu acho que é na barriga, por isso eles ficam sentados.
 to_porque	tome	excited	11.27	16.5	0.0	0.0	1	5.37		Porque eu quero acordar eles. Todo dia eu grito "bom dia" para o gigante do lago. Um dia ele vai responder. A tia Celeste diz que paciência é a magia mais forte, mas é a mais chata também.
@@ -95,7 +95,7 @@ fim4	odessa	tender	9.75	10.9	0.0	0.0	1	6.32		Acho que fizeram o que todo mundo f
 fim5	odessa	happy	9.1	11.5	0.0	0.0	1	5.66		Vou mostrar um feitiço, o único que eles me ensinaram sem querer. Não serve para nada, é o meu preferido.
 fim6	odessa	tender	6.13	8.0	0.043	0.222	2	13.09	cps=8.0	Pronto! Agora o valenteiro sabe que foi olhado.
 fim7	anselmo	happy	4.38	12.8	0.0	0.0	1	8.27		Faz 80 anos que eu não fico acordado até tão tarde.
-fim8	celeste	happy	6.65	11.9	0.027	0.143	1	5.61		Trouxe pão para todo mundo, até para você ou dessa. Não adianta fazer essa cara.
+fim8	celeste	happy	5.29	14.9	0.0	0.0	1	5.67		Trouxe pão para todo mundo, até para você, Odessa. Não adianta fazer essa cara.
 fim9	tome	excited	3.45	13.3	0.0	0.0	1	7.03		Eu falei, eu falei que eles estavam acordados.
 fim10	odessa	tender	8.23	10.4	0.0	0.0	1	6.1		Obrigada, cartógrafa. Seu mapa está pronto. Mas o vale, não. O vale nunca fica pronto.
 fim11	narrador	tender	4.48	13.8	0.017	0.077	1	7.38		E assim, no Vale de Aldrin, nada se perdeu, só mudou de lugar.

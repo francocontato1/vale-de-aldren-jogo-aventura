@@ -66,7 +66,10 @@ export async function buildWater(scene) {
   const m = mesh.material; m.transparent = true; m.fog = true; m.depthWrite = false; m.uniforms.tN.value = nrm; m.uniforms.time = U.time; m.uniforms.sunDir = U.sunDir; m.uniforms.sunCol = U.sunColor; m.uniforms.night = waterSky.night; m.uniforms.skyCol.value = waterSky.color;
   // só calcula o reflexo quando há água por perto da câmera (economiza muito)
   const orig = mesh.onBeforeRender;
-  mesh.onBeforeRender = function (r, s, c) { if (c !== camera) return; const near = LAKES.some(([x, z, rad]) => Math.hypot(c.position.x - x, c.position.z - z) < rad + 260); m.uniforms.reflOn.value = near && enabled ? 1 : 0; if (near && enabled) orig.call(this, r, s, c); };
+  const fwd = new THREE.Vector3();
+  mesh.onBeforeRender = function (r, s, c) { if (c !== camera) return; c.getWorldDirection(fwd);
+    // reflexo só com água perto e à frente (antes ligava na vila inteira e desenhava a cena duas vezes)
+    const near = LAKES.some(([x, z, rad]) => { const dx = x - c.position.x, dz = z - c.position.z, d = Math.hypot(dx, dz); if (d < rad + 25) return true; if (d > rad + 140) return false; return (dx * fwd.x + dz * fwd.z) / d > Math.cos(Math.min(1.4, 0.75 + rad / d)); }); m.uniforms.reflOn.value = near && enabled ? 1 : 0; if (near && enabled) orig.call(this, r, s, c); };
   scene.add(mesh);
   addEventListener('resize', () => { const rt = mesh.getRenderTarget(); rt.setSize(Math.round(innerWidth * res), Math.round(innerHeight * res)); });
   return mesh;

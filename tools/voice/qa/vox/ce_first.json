@@ -3,15 +3,15 @@
  "speaker": "celeste",
  "emotion": "excited",
  "text": "Ah! Gente nova! Entra, entra, que o pão acabou de sair. Você é a moça do mapa? A Odessa encomendou pão para você. Três por dia, ela disse. Eu disse que ninguém come três pães por dia. Ela disse que cartógrafo anda muito.",
- "dur": 15.06,
- "cps": 14.6,
- "cer": 0.014,
- "wer": 0.047,
- "asr": "A gente nova entra, entra, que o pão acabou de sair. Você é a moça do mapa? A Odessa encomendou o pão para você. Três por dia, ela disse. Eu disse que ninguém come três pães por dia. Ela disse que cartógrafo anda muito.",
+ "dur": 14.66,
+ "cps": 15.0,
+ "cer": 0.033,
+ "wer": 0.07,
+ "asr": "Gente nova, entra, entra que o pão acabou de sair. Você é a moça do mapa? A Odeca encomendou o pão para você? Três por dia, ela disse. Eu disse que ninguém come três pães por dia. Ela disse que cartógrafo anda muito.",
  "attempt": 0,
- "gen_s": 79.1,
- "rtf": 5.25,
- "max_pause": 1.17,
+ "gen_s": 73.7,
+ "rtf": 5.03,
+ "max_pause": 0.5,
  "problems": [],
  "params": {
   "exaggeration": 0.9,
@@ -19,13 +19,13 @@
   "temperature": 0.85
  },
  "seed": 226820262,
- "lufs_in": -20.0,
+ "lufs_in": -20.3,
  "tp_limited": true,
  "stage_s": {
-  "t3": 51.5,
-  "flow": 24.4,
-  "hift": 3.0
+  "t3": 43.4,
+  "flow": 20.3,
+  "hift": 3.9
  },
- "tokens": 379,
+ "tokens": 368,
  "final_problems": []
 }

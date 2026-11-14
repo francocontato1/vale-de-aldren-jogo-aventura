@@ -417,3 +417,35 @@
 2026-11-14 04:59:35,921 Initializing the model ...
 2026-11-14 04:59:37,886 Reference mel length is not equal to 2 * reference token length.
 
+2026-11-14 05:04:15,357 rendering 8/114 lines -> ../../a/vox (shard 0/1)
+2026-11-14 05:05:31,299 input frame rate=25
+2026-11-14 05:05:40,164 Initializing the model ...
+2026-11-14 05:05:58,450 Reference mel length is not equal to 2 * reference token length.
+
+2026-11-14 05:07:08,685 Transcribing ...
+2026-11-14 05:07:15,217 Inference time: 6.532 s
+2026-11-14 05:07:16,043 [1/8] ce_first celeste  try0 14.7s audio in 74s (rtf 5.0; t3 43s/368 tok, flow 20s) cps 15.0 cer 0.033 ok
+2026-11-14 05:08:12,248 Transcribing ...
+2026-11-14 05:08:18,300 Inference time: 6.052 s
+2026-11-14 05:08:18,303 [2/8] ce_odessa celeste  try0 12.1s audio in 56s (rtf 4.6; t3 35s/304 tok, flow 18s) cps 16.6 cer 0.021 ok
+2026-11-14 05:09:16,730 Transcribing ...
+2026-11-14 05:09:22,965 Inference time: 6.235 s
+2026-11-14 05:09:22,967 [3/8] ce_ruinas celeste  try0 11.5s audio in 58s (rtf 5.0; t3 34s/305 tok, flow 22s) cps 14.9 cer 0.012 ok
+2026-11-14 05:09:55,208 Transcribing ...
+2026-11-14 05:09:59,905 Inference time: 4.697 s
+2026-11-14 05:09:59,906 [4/8] ce_c1 celeste  try0 6.0s audio in 32s (rtf 5.3; t3 19s/151 tok, flow 12s) cps 13.9 cer 0.038 ok
+2026-11-14 05:10:43,634 Transcribing ...
+2026-11-14 05:10:48,920 Inference time: 5.287 s
+2026-11-14 05:10:48,924 [5/8] ce_c2 celeste  try0 9.8s audio in 43s (rtf 4.4; t3 28s/246 tok, flow 14s) cps 16.6 cer 0.013 ok
+2026-11-14 05:11:21,203 Transcribing ...
+2026-11-14 05:11:25,884 Inference time: 4.680 s
+2026-11-14 05:11:25,885 [6/8] ce_c3 celeste  try0 7.1s audio in 32s (rtf 4.5; t3 19s/180 tok, flow 12s) cps 16.7 cer 0.018 ok
+2026-11-14 05:11:50,114 Transcribing ...
+2026-11-14 05:11:54,547 Inference time: 4.433 s
+2026-11-14 05:11:54,548 [7/8] ce_noite celeste  try0 4.6s audio in 24s (rtf 5.2; t3 13s/127 tok, flow 10s) cps 14.7 cer 0.016 ok
+2026-11-14 05:12:24,873 Transcribing ...
+2026-11-14 05:12:29,391 Inference time: 4.518 s
+2026-11-14 05:12:29,391 [8/8] fim8 celeste  try0 5.3s audio in 30s (rtf 5.7; t3 17s/170 tok, flow 12s) cps 14.9 cer 0.0 ok
+2026-11-14 05:12:29,735 done: 8 lines, 395s CPU wall for 71s audio rendered (rtf 5.57 incl. ASR/retries)
+2026-11-14 05:14:57,632 manifest updated (0 todo)
+2026-11-14 05:17:06,944 manifest updated (0 todo)

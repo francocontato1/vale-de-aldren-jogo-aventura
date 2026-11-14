@@ -3,15 +3,15 @@
  "speaker": "celeste",
  "emotion": "happy",
  "text": "O Tomé passou aqui correndo de novo. Aquele menino acha que vai acordar os gigantes. Deixa ele. Alguém tem que tentar.",
- "dur": 6.56,
- "cps": 18.0,
- "cer": 0.0,
- "wer": 0.0,
- "asr": "O Tomé passou aqui correndo de novo. Aquele menino acha que vai acordar os gigantes. Deixa ele. Alguém tem que tentar.",
+ "dur": 7.06,
+ "cps": 16.7,
+ "cer": 0.018,
+ "wer": 0.048,
+ "asr": "Tomé passou aqui correndo de novo. Aquele menino acha que vai acordar os gigantes. Deixa ele. Alguém tem que tentar.",
  "attempt": 0,
- "gen_s": 39.2,
- "rtf": 5.98,
- "max_pause": 0.36,
+ "gen_s": 31.9,
+ "rtf": 4.51,
+ "max_pause": 0.37,
  "problems": [],
  "params": {
   "exaggeration": 0.75,
@@ -19,12 +19,12 @@
   "temperature": 0.85
  },
  "seed": 3131990200,
- "lufs_in": -20.9,
+ "lufs_in": -19.2,
  "tp_limited": true,
  "stage_s": {
-  "t3": 22.7,
-  "flow": 14.9,
-  "hift": 1.5
+  "t3": 18.9,
+  "flow": 11.7,
+  "hift": 1.1
  },
  "tokens": 180,
  "final_problems": []

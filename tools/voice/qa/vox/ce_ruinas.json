@@ -3,14 +3,14 @@
  "speaker": "celeste",
  "emotion": "happy",
  "text": "Eu acho que eles eram padeiros. É sério! Quem mais acorda antes do sol para olhar o céu? Toda aquela gente de torre e escada... tinha fome de alguma coisa, isso eu garanto.",
- "dur": 9.89,
- "cps": 17.4,
+ "dur": 11.54,
+ "cps": 14.9,
  "cer": 0.012,
  "wer": 0.03,
- "asr": "Eu acho que eles eram padeiros. É sério. Quem mais acorda antes do sol para olhar o céu? Toda aquela gente de torre escada. Tinha fome de alguma coisa. Isso eu garanto.",
+ "asr": "Eu acho que eles eram padeiros. É sério! Quem mais acorda antes do sol para olhar o céu, toda aquela gente de torre escada? Tinha fome de alguma coisa, isso eu garanto.",
  "attempt": 0,
- "gen_s": 66.8,
- "rtf": 6.75,
+ "gen_s": 58.0,
+ "rtf": 5.03,
  "max_pause": 0.53,
  "problems": [],
  "params": {
@@ -22,10 +22,10 @@
  "lufs_in": -20.8,
  "tp_limited": true,
  "stage_s": {
-  "t3": 37.4,
-  "flow": 26.6,
-  "hift": 2.6
+  "t3": 33.7,
+  "flow": 21.6,
+  "hift": 2.3
  },
- "tokens": 299,
+ "tokens": 305,
  "final_problems": []
 }

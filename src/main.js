@@ -411,7 +411,7 @@ function readNote(id) { const n = NOTES[id]; if (!S.notes[id]) { S.notes[id] = 1
 function openJournal() {
   const list = $('journalList'); list.innerHTML = '';
   const n = lumesN(); $('journalCount').textContent = `${n} de 8 lugares`;
-  for (const pl of PLACES) { const b = document.createElement('article'); const done = S.lumes[pl.id];
+  for (const pl of [...PLACES].sort((a, b) => (S.lumes[b.id] ? 1 : 0) - (S.lumes[a.id] ? 1 : 0))) { const b = document.createElement('article'); const done = S.lumes[pl.id];
     b.innerHTML = done ? `${sketches[pl.id] ? `<img alt="" src="${sketches[pl.id]}">` : ''}<h3>${pl.name}</h3><p class="cap">${pl.sketch}</p><p>${lineText(pl.reflect)}</p>` : `<h3 class="unk">Um lugar ainda não visto</h3><p class="cap">${pl.hint}</p>`; list.appendChild(b); }
   const notes = Object.keys(S.notes); if (notes.length) { const h = document.createElement('h2'); h.textContent = 'Anotações'; list.appendChild(h); for (const k of notes) { const b = document.createElement('article'); b.innerHTML = `<h3>${NOTES[k].title}</h3><p>${lineText(NOTES[k].line)}</p>`; list.appendChild(b); } }
   $('journal').hidden = false; if (state === 'play') state = 'journal';

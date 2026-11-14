@@ -5,8 +5,8 @@ t_odessa_1	odessa	tired	8.23	10.4	0.0	0.0	1	17.09		Mil anos, menina, e ainda nã
 t_odessa_2	odessa	tender	6.51	10.9	0.0	0.0	1	18.25		Magia não é fazer as coisas aparecerem, é lembrar que elas existiam.
 t_anselmo_1	anselmo	tender	7.37	13.0	0.0	0.0	1	21.04		- Ah, minha filha, as ovelhas conhecem o caminho melhor do que eu, eu só vou atrás devagarinho.
 t_anselmo_2	anselmo	neutral	7.31	12.3	0.0	0.0	1	14.58		Você viu a pedra grande lá no alto do morro? Dizem que ela dorme. Eu acho que ela escuta.
-t_celeste_1	celeste	happy	6.15	15.6	0.065	0.143	1	15.26		"Ah, ah!" chegou na hora certa. O pão acabou de sair do forno. Pega um antes que o tomasse coma tudo.
-t_celeste_2	celeste	neutral	5.13	16.2	0.0	0.0	1	16.03		Farinha, água, sal e paciência. O resto é conversa. Quer aprender ou só quer comer?
+t_celeste_1	celeste	happy	6.95	13.8	0.054	0.143	2	4.6		Ah, ah, ah, chegou na hora certa. O pão acabou de sair do forno. Pega um antes que o Tomás coma tudo.
+t_celeste_2	celeste	neutral	6.97	11.9	0.026	0.067	1	4.68		A, farinha, água, sal e paciência. O resto é conversa. Quer aprender ou só quer comer?
 t_tome_1	tome	excited	4.78	13.0	0.036	0.167	1	13.16		Ia, Ia, você viu? A pedra mexeu, eu juro ela mexeu sozinha.
 t_tome_2	tome	happy	4.95	17.8	0.0	0.0	1	12.26		Minha mãe disse que eu não posso ir até o lago, mas você pode, né? Me conta tudo depois.
 t_irene_1	irene	tender	6.94	12.5	0.012	0.062	1	12.05		Olha essa luz no fim da tarde. Parece que o Vale inteiro está aprendendo a respiração.

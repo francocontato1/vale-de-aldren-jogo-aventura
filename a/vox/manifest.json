@@ -316,7 +316,7 @@
  },
  "fim8": {
   "speaker": "celeste",
-  "dur": 6.72,
+  "dur": 5.352,
   "text": "Trouxe pão para todo mundo! Até para você, Odessa. Não adianta fazer essa cara."
  },
  "fim9": {
@@ -371,37 +371,37 @@
  },
  "ce_first": {
   "speaker": "celeste",
-  "dur": 15.12,
+  "dur": 14.712,
   "text": "Ah! Gente nova! Entra, entra, que o pão acabou de sair. Você é a moça do mapa? A Odessa encomendou pão para você. Três por dia, ela disse. Eu disse que ninguém come três pães por dia. Ela disse que cartógrafo anda muito."
  },
  "ce_odessa": {
   "speaker": "celeste",
-  "dur": 10.944,
+  "dur": 12.12,
   "text": "A Odessa? Vem aqui uma vez por ano, se tanto. Fica parada na porta sentindo o cheiro e vai embora sem comprar nada. Ano passado eu dei um pão para ela. Ficou olhando para o pão como se fosse um livro!"
  },
  "ce_ruinas": {
   "speaker": "celeste",
-  "dur": 9.96,
+  "dur": 11.592,
   "text": "Eu acho que eles eram padeiros. É sério! Quem mais acorda antes do sol para olhar o céu? Toda aquela gente de torre e escada... tinha fome de alguma coisa, isso eu garanto."
  },
  "ce_c1": {
   "speaker": "celeste",
-  "dur": 4.464,
+  "dur": 6.048,
   "text": "Pão bom é igual conversa boa. Precisa de tempo, de calor, e de alguém para dividir."
  },
  "ce_c2": {
   "speaker": "celeste",
-  "dur": 10.2,
+  "dur": 9.84,
   "text": "Meu marido construía barcos. Faz seis invernos que ele se foi. Eu ainda faço pão para dois. O que sobra eu dou para os passarinhos. Eles agradecem do jeito deles."
  },
  "ce_c3": {
   "speaker": "celeste",
-  "dur": 6.624,
+  "dur": 7.128,
   "text": "O Tomé passou aqui correndo de novo. Aquele menino acha que vai acordar os gigantes. Deixa ele. Alguém tem que tentar."
  },
  "ce_noite": {
   "speaker": "celeste",
-  "dur": 4.248,
+  "dur": 4.632,
   "text": "O forno já esfriou, querida. Volta amanhã cedo, que tem pão de mel."
  },
  "to_first": {
