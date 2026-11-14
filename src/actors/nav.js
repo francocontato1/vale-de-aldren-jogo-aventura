@@ -24,7 +24,7 @@ export class Nav {
   test(x, z) {
     const y = groundH(x, z); if (y < WATER + 0.12) return false; if (normalY(x, z) < 0.72) return false;
     const arr = this.bgrid.get(Math.floor(x / this.BG) + ',' + Math.floor(z / this.BG));
-    if (arr) for (const b of arr) { if (y + 1.7 < b.y0 || y > b.y1) continue; const dx = x - b.x, dz = z - b.z; const lx = dx * b.c - dz * b.s, lz = dx * b.s + dz * b.c; if (Math.abs(lx) < b.hw + 0.22 && Math.abs(lz) < b.hd + 0.22) return false; }
+    if (arr) for (const b of arr) { if (b.found || y + 1.7 < b.y0 || y > b.y1) continue; const dx = x - b.x, dz = z - b.z; const lx = dx * b.c - dz * b.s, lz = dx * b.s + dz * b.c; if (Math.abs(lx) < b.hw + 0.22 && Math.abs(lz) < b.hd + 0.22) return false; }
     let hit = false; this.circles(x, z, (cx, cz, r) => { if (!hit && (x - cx) ** 2 + (z - cz) ** 2 < (r + 0.26) ** 2) hit = true; }); if (hit) return false;
     if (this.extra && this.extra(x, z)) return false;
     return true;

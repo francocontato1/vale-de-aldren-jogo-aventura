@@ -106,12 +106,20 @@ html,body{height:100%;margin:0;background:#0b0a08;color:var(--ink);overflow:hidd
 @media (max-width:560px){#quest{max-width:56vw}#questText{font-size:15px}.toast{font-size:21px}#dlgText{font-size:20px}#memText{font-size:21px}#thought{font-size:19px}}
 @media (prefers-reduced-motion:reduce){.toast{animation-duration:6s}#memory.show #memText,#dlgText.in{animation:none}}
 .hearts{color:#b0503c;font-size:.8em;letter-spacing:.08em;margin-left:6px}
+#pause .card{max-width:640px;background:rgba(12,10,8,.62);padding:22px 26px 18px;border-radius:14px;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.opts{margin:18px auto 0;max-width:460px;text-align:left;font-size:13px;color:var(--ink-dim);pointer-events:auto}
+.opts .row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:8px 0}
+.opts .row.quality{justify-content:flex-start;margin-top:12px}
+.opts input[type=range]{width:200px;accent-color:#e8c78e}
+.opts button,#fsBtn0{all:unset;cursor:pointer;padding:4px 11px;border:1px solid var(--line);border-radius:999px;color:var(--ink);background:rgba(0,0,0,.25)}
+.opts details{margin-top:12px}.opts summary{cursor:pointer;letter-spacing:.14em;text-transform:uppercase;font-size:11px}
+.qnote{margin:6px 0;font-size:12px}
 </style></head><body>
 
 <div id="game"></div>
 <div class="hud" id="hud" hidden>
   <div id="compass"><canvas id="compassCv" width="880" height="76"></canvas></div>
-  <div id="status">Caderno <b id="lumeCount">0/8</b> · <span id="clock">16:30</span> · <span id="keyHint">J caderno · M mapa · L lanterna</span></div>
+  <div id="status">Caderno <b id="lumeCount">0/8</b> · <span id="clock">16:30</span> · <span id="keyHint">J caderno · M mapa · L lanterna · F tela cheia · Esc menu</span></div>
   <div id="quest"><div id="questText"></div></div>
   <div id="prompt" hidden></div>
   <div id="lapseHint" hidden>T · deixar o tempo passar · mova-se para levantar</div>
@@ -138,7 +146,7 @@ html,body{height:100%;margin:0;background:#0b0a08;color:var(--ink);overflow:hidd
     <button class="btn" id="startBtn" disabled>Entrar no vale</button>
     <div class="loadwrap"><div id="loadBar"></div></div>
     <div id="loading">Preparando…</div>
-    <div class="quality"><span>Gráficos</span><button data-q="ultra">Ultra</button><button data-q="alta">Alta</button><button data-q="media">Média</button><button data-q="baixa">Baixa</button><span id="qualNote" hidden>· <button id="reloadQ">Aplicar e recarregar</button></span><span>·</span><button id="voiceToggle">Vozes: ligadas</button></div>
+    <div class="quality"><button id="fsBtn0">Tela cheia</button><span>·</span><span>Gráficos</span><button data-q="ultra">Ultra</button><button data-q="alta">Alta</button><button data-q="media">Média</button><button data-q="baixa">Baixa</button><span id="qualNote" hidden>· <button id="reloadQ">Aplicar e recarregar</button></span><span>·</span><button id="voiceToggle">Vozes: ligadas</button></div>
     <details class="credits"><summary>Créditos</summary>
       <p>Personagens e animações: Quaternius (Universal Base Characters, Modular Character Outfits: Fantasy, Universal Animation Library 1 e 2), CC0.</p>
       <p>Música: trilha original composta para Vale de Aldren. Piano: <i>Salamander Grand Piano</i>, de Alexander Holm (CC BY 3.0). Cordas, flauta, trompa, harpa e violão: <i>tonejs-instruments</i>, de Nicholaus P. Brosowsky (CC BY 3.0), com amostras do VSCO-2 Community Edition (Versilian Studios) e dos usuários flcellogrl e quartertone do Freesound. As amostras foram modificadas.</p>
@@ -165,6 +173,16 @@ html,body{height:100%;margin:0;background:#0b0a08;color:var(--ink);overflow:hidd
     <h1 style="font-size:60px">Vale de Aldren</h1>
     <p class="lede" id="pauseInfo"></p>
     <button class="btn" id="resumeBtn">Continuar</button>
+    <div class="opts">
+      <div class="row"><span>Tela</span><button id="fsBtn">Tela cheia (F)</button></div>
+      <div class="row"><span>Música</span><input type="range" id="volMus" min="0" max="100"></div>
+      <div class="row"><span>Sons do mundo</span><input type="range" id="volAmb" min="0" max="100"></div>
+      <div class="row"><span>Vozes</span><input type="range" id="volVox" min="0" max="100"></div>
+      <div class="row"><span>Sensibilidade do mouse</span><input type="range" id="sens" min="30" max="250"></div>
+      <div class="row quality" id="pauseQual"><span>Gráficos</span><button data-q="ultra">Ultra</button><button data-q="alta">Alta</button><button data-q="media">Média</button><button data-q="baixa">Baixa</button></div>
+      <p class="qnote" id="pauseQualNote" hidden>A qualidade nova vale ao recarregar. <button id="reloadQ2">Salvar e recarregar</button></p>
+      <details><summary>Controles</summary><div class="keys" id="pauseKeys"></div></details>
+    </div>
     <div class="quality"><button id="resetBtn">Começar um caderno novo</button><span id="resetConfirm" hidden>Clique de novo para confirmar</span></div>
   </div>
 </div>
@@ -172,5 +190,5 @@ html,body{height:100%;margin:0;background:#0b0a08;color:var(--ink);overflow:hidd
 <div class="overlay" id="journal" hidden><div class="jcard"><div class="eyebrow">Caderno de Lia</div><h1>O mapa do que importa</h1><div id="journalCount"></div><div id="journalList"></div><p class="jhint">J ou Esc para fechar</p></div></div>
 <div class="overlay" id="ending" hidden><div class="card"><div class="eyebrow">Fim, e começo</div><h1 style="font-size:64px">O vale lembra</h1><p class="lede">Os lumes subiram de todo o vale e se misturaram às estrelas. O caderno está cheio. Mas o vale, como disse Odessa, nunca fica pronto: ainda há cantos esperando alguém que olhe com calma.</p><button class="btn" id="endBtn">Continuar andando</button></div></div>
 <div id="fade"></div>
-<script type="module" src="game-00ae3064.js"></script>
+<script type="module" src="game-dcb1b69b.js"></script>
 </body></html>

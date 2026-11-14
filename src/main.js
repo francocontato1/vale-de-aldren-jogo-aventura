@@ -196,7 +196,9 @@ function updatePlayer(dt) {
   const mvDir = len > 0.05 ? V3(Math.sin(player.h), 0, Math.cos(player.h)).lerp(dir, 0.35).normalize() : V3();
   let nx = player.x + mvDir.x * player.speed * dt, nz = player.z + mvDir.z * player.speed * dt;
   const pr0 = probe(nx, nz, player.y); const stepLen = Math.hypot(nx - player.x, nz - player.z);
-  if (pr0.block || (stepLen > 1e-4 && player.onGround && (pr0.h - player.y) / stepLen > 1.1 && pr0.h > player.y + 0.05)) { nx = player.x; nz = player.z; }
+  // degraus construídos (soleira, escada, píer) sobem até 40 cm de uma vez; no terreno vale a inclinação máxima
+  const builtStep = pr0.h > groundH(nx, nz) + 0.02;
+  if (pr0.block || (stepLen > 1e-4 && player.onGround && pr0.h > player.y + 0.05 && (builtStep ? pr0.h - player.y > 0.42 : (pr0.h - player.y) / stepLen > 1.1))) { nx = player.x; nz = player.z; }
   if (groundH(nx, nz) < WATER - 1.1 && pr0.h < WATER) { nx = player.x; nz = player.z; if (!player.deepWarn) { player.deepWarn = true; toast('A água fica funda', 'Melhor contornar pela margem'); setTimeout(() => player.deepWarn = false, 8000); } }
   const p = { x: nx, z: nz }; collide(p, 0.3, player.y); for (const n of npcs) { if (!n.h.root.visible) continue; const dx = p.x - n.x, dz = p.z - n.z, d = Math.hypot(dx, dz); if (d < 0.6 && d > 1e-3) { p.x = n.x + dx / d * 0.6; p.z = n.z + dz / d * 0.6; } }
   const r = Math.hypot(p.x, p.z); if (r > 690) { p.x *= 690 / r; p.z *= 690 / r; }
@@ -893,27 +895,44 @@ addEventListener('keydown', (e) => {
   keys[e.code] = true;
   if ((state === 'lume' || state === 'finale') && (e.code === 'Space' || e.code === 'Enter') && !e.repeat) { if (lume) lume.skip(); else Voice.stop(); return; }
   if (state === 'intro' && (e.code === 'Space' || e.code === 'Enter') && !e.repeat) { Voice.stop(); return; }
+  if (state === 'paused' && e.code === 'KeyP' && !e.repeat) { resume(); return; }
+  if (e.code === 'KeyF' && !e.repeat && !['dialog'].includes(state)) { toggleFullscreen(); return; }
   if (e.code === 'KeyJ' && !e.repeat) { if (state === 'journal') closeJournal(); else if (state === 'play') openJournal(); return; }
   if (state === 'journal' && e.code === 'Escape') { closeJournal(); return; }
   if (/^Arrow|Space/.test(e.code) && (state === 'play' || state === 'sail' || state === 'fly')) e.preventDefault(); if (e.repeat) return;
   if (state === 'dialog') { const m = e.code.match(/^(Digit|Numpad)([1-9])$/); if (m) choose(+m[2] - 1); else if (e.code === 'KeyE' || e.code === 'Enter' || e.code === 'Space') { if (Voice.playing) Voice.stop(); else if (dlgNode && dlgNode.opts.length === 1) choose(0); } else if (e.code === 'Escape') closeDialog(); return; }
-  if (state === 'fly') { if (e.code === 'KeyE') { if (!alva.requestLand()) toast('Aqui não dá para pousar', 'Procure um chão firme e plano, longe da água'); } if (e.code === 'KeyM') $('mapView').hidden = !$('mapView').hidden; if (e.code === 'Escape' && lockFailed) pauseGame(); return; }
-  if (state === 'sail') { if (e.code === 'KeyE') stopSailing(); if (e.code === 'KeyM') $('mapView').hidden = !$('mapView').hidden; if (e.code === 'Escape' && lockFailed) pauseGame(); return; }
+  if (state === 'fly') { if (e.code === 'KeyE') { if (!alva.requestLand()) toast('Aqui não dá para pousar', 'Procure um chão firme e plano, longe da água'); } if (e.code === 'KeyM') $('mapView').hidden = !$('mapView').hidden; if ((e.code === 'Escape' && lockFailed) || e.code === 'KeyP') pauseGame(); return; }
+  if (state === 'sail') { if (e.code === 'KeyE') stopSailing(); if (e.code === 'KeyM') $('mapView').hidden = !$('mapView').hidden; if ((e.code === 'Escape' && lockFailed) || e.code === 'KeyP') pauseGame(); return; }
   if (state !== 'play') return;
   if (e.code === 'KeyL') toggleLantern();
   if (e.code === 'KeyE') interact();
   if (e.code === 'KeyT' && player.sit) { if (player.sit.lie && isNight()) sleepUntilMorning(); else { timeLapse = timeLapse ? 0 : 1; $('lapseHint').classList.toggle('on', !!timeLapse); } }
   if (e.code === 'KeyM') $('mapView').hidden = !$('mapView').hidden;
-  if (e.code === 'Escape' && lockFailed) pauseGame();
+  if ((e.code === 'Escape' && lockFailed) || e.code === 'KeyP') pauseGame();
 });
-addEventListener('keyup', (e) => { keys[e.code] = false; });
+// Shift não fica 'preso' (ex.: soltou o Shift com a janela sem foco): qualquer tecla solta sem Shift o libera
+addEventListener('keyup', (e) => { keys[e.code] = false; if (!e.shiftKey) keys.ShiftLeft = keys.ShiftRight = false; });
 addEventListener('blur', () => { for (const k in keys) keys[k] = false; });
+document.addEventListener('visibilitychange', () => { for (const k in keys) keys[k] = false; });
 addEventListener('resize', () => { renderer.setSize(innerWidth, innerHeight); camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); post && post.setSize(innerWidth, innerHeight); });
 $('resumeBtn').onclick = (e) => { e.stopPropagation(); resume(); };
+// ---------- tela cheia e menu dentro do jogo ----------
+function toggleFullscreen() {
+  const d = document; if (!d.fullscreenElement) { const r = d.documentElement.requestFullscreen ? d.documentElement.requestFullscreen({ navigationUI: 'hide' }) : null; if (r && r.then) r.then(() => { if (state === 'play' || state === 'sail' || state === 'fly') requestLock(); }).catch(() => toast('Tela cheia', 'O navegador não permitiu. Tente F11.')); }
+  else d.exitFullscreen && d.exitFullscreen();
+}
+document.addEventListener('fullscreenchange', () => { const on = !!document.fullscreenElement; for (const id of ['fsBtn', 'fsBtn0']) { const b = $(id); if (b) b.textContent = on ? 'Sair da tela cheia (F)' : 'Tela cheia (F)'; } });
+for (const id of ['fsBtn', 'fsBtn0']) { const b = $(id); if (b) b.onclick = (e) => { e.stopPropagation(); toggleFullscreen(); }; }
+const VOL = JSON.parse(store.get('aldren-vol') || '{"mus":55,"amb":90,"vox":100,"sens":100}');
+function applyVol() { Sound.vol.music = VOL.mus / 100; Sound.vol.amb = VOL.amb / 100; Sound.vol.voice = VOL.vox / 100; if (Sound.mus) Sound.mus.gain.value = Sound.vol.music; if (Sound.vox) Sound.vox.gain.value = Sound.vol.voice; if (Sound.sfx) Sound.sfx.gain.value = 0.85 * VOL.amb / 90; settings.sens = VOL.sens / 100; store.set('aldren-vol', JSON.stringify(VOL)); }
+for (const [id, k] of [['volMus', 'mus'], ['volAmb', 'amb'], ['volVox', 'vox'], ['sens', 'sens']]) { const el = $(id); el.value = VOL[k]; el.addEventListener('input', () => { VOL[k] = +el.value; applyVol(); }); el.addEventListener('click', (e) => e.stopPropagation()); }
+applyVol();
+$('pauseKeys').innerHTML = $('keysList').innerHTML;
+$('reloadQ2').onclick = () => location.reload();
 let resetArm = false; $('resetBtn').onclick = (e) => { e.stopPropagation(); if (!resetArm) { resetArm = true; $('resetConfirm').hidden = false; return; } store.del(SAVE_KEY); for (const pl of PLACES) store.del('aldren-sketch-' + pl.id); location.reload(); };
 $('mapView').addEventListener('click', () => { $('mapView').hidden = true; });
 $('journal').addEventListener('click', (e) => { if (e.target.id === 'journal') closeJournal(); });
-document.querySelectorAll('.quality button[data-q]').forEach(b => { b.setAttribute('aria-pressed', b.dataset.q === settings.quality); b.addEventListener('click', (e) => { e.stopPropagation(); settings.quality = b.dataset.q; store.set('aldren2-q', settings.quality); $('qualNote').hidden = false; document.querySelectorAll('.quality button[data-q]').forEach(x => x.setAttribute('aria-pressed', x.dataset.q === settings.quality)); }); });
+document.querySelectorAll('.quality button[data-q]').forEach(b => { b.setAttribute('aria-pressed', b.dataset.q === settings.quality); b.addEventListener('click', (e) => { e.stopPropagation(); settings.quality = b.dataset.q; store.set('aldren2-q', settings.quality); $('qualNote').hidden = false; $('pauseQualNote').hidden = false; document.querySelectorAll('.quality button[data-q]').forEach(x => x.setAttribute('aria-pressed', x.dataset.q === settings.quality)); }); });
 $('reloadQ').onclick = () => location.reload();
 $('voiceToggle').onclick = (e) => { e.stopPropagation(); Voice.enabled = !Voice.enabled; $('voiceToggle').textContent = Voice.enabled ? 'Vozes: ligadas' : 'Vozes: desligadas'; store.set('aldren-vox', Voice.enabled ? '1' : '0'); };
 if (store.get('aldren-vox') === '0') { Voice.enabled = false; $('voiceToggle').textContent = 'Vozes: desligadas'; }
@@ -956,6 +975,7 @@ function applyLevel() {
   trees.nearCenter.set(1e9, 0, 1e9);
 }
 function adaptQuality(dt) {
+  return; // a qualidade escolhida fica fixa o tempo todo (antes caía sozinha quando o fps baixava)
   if (MANUAL || ['loading', 'paused', 'menu'].includes(state) || document.hidden) return;
   perf.acc += dt; perf.n++; perf.cool -= dt;
   if (perf.acc >= 2) { const fps = perf.n / perf.acc; perf.acc = 0; perf.n = 0; window.__fps = fps;
@@ -1025,7 +1045,7 @@ $('startBtn').addEventListener('click', () => {
   const go = () => { if (!S.letter && !MANUAL) startIntro(); else { state = 'play'; requestLock(); Music.silence = 6; } };
   if (Sound.ctx) { const w = setInterval(() => { if (Sound.ready) { clearInterval(w); go(); } }, 100); setTimeout(() => { clearInterval(w); if (state === 'menu') go(); }, 6000); } else go();
 });
-window.__game = { get alva() { return alva; }, mountDragon, FAUNA, get boat() { return boat; }, startSailing, stopSailing, harbor, storySpots, groundH, probe, get nav() { return nav; }, npcPlan, planRoute, sky: () => sky, post: () => post, camera, scene, player, S, npcs, cam, renderer, trees, grass, SPOTS, PLACES, get state() { return state; }, set state(v) { state = v; }, setHour: (h) => { hour = h; }, get hour() { return hour; }, tick: (dt, n = 1) => { for (let i = 0; i < n; i++) frame(dt); }, startLume: (i) => startLume(PLACES[i]), lieAt, seats, beds, Human, startFinale: () => startFinale(), openJournal, openDialog, choose, get pH() { return pH; }, toggleLantern, sitAt, interiors, think, Voice, Music };
+window.__game = { keys, get alva() { return alva; }, mountDragon, FAUNA, get boat() { return boat; }, startSailing, stopSailing, harbor, storySpots, groundH, probe, get nav() { return nav; }, npcPlan, planRoute, sky: () => sky, post: () => post, camera, scene, player, S, npcs, cam, renderer, trees, grass, SPOTS, PLACES, get state() { return state; }, set state(v) { state = v; }, setHour: (h) => { hour = h; }, get hour() { return hour; }, tick: (dt, n = 1) => { for (let i = 0; i < n; i++) frame(dt); }, startLume: (i) => startLume(PLACES[i]), lieAt, seats, beds, Human, startFinale: () => startFinale(), openJournal, openDialog, choose, get pH() { return pH; }, toggleLantern, sitAt, interiors, think, Voice, Music };
 renderer.domElement.addEventListener('webglcontextlost', (e) => { e.preventDefault(); store.set('aldren2-q', settings.quality === 'alta' ? 'media' : 'baixa'); $('loading').textContent = 'A placa de vídeo reiniciou. Recarregando com gráficos mais leves…'; $('menu').hidden = false; $('loadBar').parentElement.hidden = true; setTimeout(() => location.reload(), 1500); });
 document.addEventListener('visibilitychange', () => { if (Sound.ctx) { if (document.hidden) Sound.ctx.suspend(); else Sound.ctx.resume(); } if (document.hidden && state === 'play') pauseGame(); });
 boot().catch((e) => { console.error(e); $('loading').textContent = 'Falha ao carregar: ' + e.message; });

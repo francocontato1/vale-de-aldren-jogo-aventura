@@ -165,7 +165,11 @@ export function house(x, z, rot, o) {
   const B = mtx(x, y0, z, 0, rot, 0); const L = (lx, ly, lz) => new THREE.Vector3(lx, ly, lz).applyMatrix4(B);
   const lower = M[o.lower] || M.stone, upper = M[o.upper] || lower; const base = 0.55; const iw = w - 2 * T, id = d - 2 * T;
   const tl = (m) => (m === M.stone || m === M.stoneWarm || m === M.block) ? 2.2 : 3;
-  box(w + 0.35, 1.9, d + 0.35, M.stone, 1.6, mtx(0, -0.4, 0, 0, 0, 0, B), true);
+  // alicerce de pedra até o chão mais baixo do terreno (em declive a casa fica sobre um embasamento, sem vão)
+  let minG = 1e9; for (const a of [-0.5, -0.25, 0, 0.25, 0.5]) for (const b of [-0.5, -0.25, 0, 0.25, 0.5]) { const c = Math.cos(rot), s2 = Math.sin(rot); const lx = a * (w + 0.35), lz = b * (d + 0.35); minG = Math.min(minG, groundH(x + lx * c + lz * s2, z - lx * s2 + lz * c)); }
+  { const bot = Math.min(-1.35, minG - y0 - 0.4), hgt = 0.55 - bot; box(w + 0.35, hgt, d + 0.35, M.stone, 1.6, mtx(0, bot + hgt / 2, 0, 0, 0, 0, B), true); }
+  // o espaço sob o piso é sólido: ninguém entra por baixo da casa (antes dava para passar pelo vão da porta e ficar preso)
+  colliders.boxes.push({ x, z, hw: w / 2 + 0.17, hd: d / 2 + 0.17, c: Math.cos(rot), s: Math.sin(rot), rad: Math.hypot(w / 2 + 0.17, d / 2 + 0.17), y0: -1e9, y1: y0 + 0.55 - 0.6, found: true });
   // degrau da porta e piso térreo como superfícies
   addWalk(B, -iw / 2, iw / 2, -id / 2, id / 2, base + 0.02);
   addWalk(B, -0.8, 0.8, d / 2 - 0.2, d / 2 + 0.78, 0.53);
@@ -357,6 +361,11 @@ export function house(x, z, rot, o) {
   const leaf = new THREE.Mesh(boxUV(new THREE.BoxGeometry(DW - 0.04, DH - 0.03, 0.07), 1.3), doorMat); leaf.position.set(DW / 2, DH / 2, 0); leaf.castShadow = true; leaf.receiveShadow = true; pivot.add(leaf);
   const knob = new THREE.Mesh(new THREE.SphereGeometry(0.035, 8, 6), M.brass); knob.position.set(DW - 0.16, DH * 0.48, 0.06); pivot.add(knob);
   for (const hy of [0.3, DH - 0.35]) { const st = new THREE.Mesh(new THREE.BoxGeometry(DW * 0.7, 0.05, 0.08), M.iron); st.position.set(DW * 0.36, hy, 0.01); pivot.add(st); }
+  // degraus de pedra até o chão quando a soleira fica alta (casas em declive)
+  { const f0 = L(dx, 0, dz + 0.78); const gy = groundH(f0.x, f0.z); let drop = (y0 + 0.53) - gy; if (drop > 0.3) { const n = Math.ceil(drop / 0.17), run = 0.3; let gEnd = gy, n2 = n; for (let k = 0; k < 5; k++) { const e = L(dx, 0, dz + 0.78 + n2 * run); gEnd = groundH(e.x, e.z); drop = (y0 + 0.53) - gEnd; n2 = Math.max(2, Math.ceil(drop / 0.17)); }
+      for (let i = 0; i < n2; i++) { const top = 0.53 - (i + 1) * drop / n2 + 0.02, bot = gEnd - y0 - 0.6; box(1.6, top - bot, run + 0.01, M.block, 1.2, mtx(dx, (top + bot) / 2, dz + 0.78 + (i + 0.5) * run, 0, 0, 0, B)); }
+      for (const sx of [-1, 1]) { for (let i = 0; i < n2; i++) { const top = 0.53 - (i + 1) * drop / n2 + 0.32, bot = gEnd - y0 - 0.6; box(0.22, top - bot, run + 0.01, M.stone, 1.4, mtx(dx + sx * 0.92, (top + bot) / 2, dz + 0.78 + (i + 0.5) * run, 0, 0, 0, B)); } const zz = dz + 0.78 + n2 * run / 2; const c = L(dx + sx * 0.92, 0, zz); addBox(c.x, c.z, 0.12, n2 * run / 2, rot); }
+      addWalk(B, dx - 0.8, dx + 0.8, dz + 0.7, dz + 0.78 + n2 * run, 0.53, gEnd - y0 + 0.02, 'z'); } }
   const door = { pivot, open: 0, target: 0, rot, p: L(dx, 0, dz + 0.4), was: false }; doors.push(door);
   // lampião ao lado da porta (acende à noite)
   { const lp = L(dx + DW / 2 + 0.45, base + DH + 0.05, dz + 0.22); box(0.06, 0.06, 0.32, M.iron, 1, mtx(dx + DW / 2 + 0.45, base + DH + 0.25, dz + 0.12, 0, 0, 0, B), false); lamps.push(lp); }
@@ -493,7 +502,7 @@ export function buildVillage(scene) {
   fenceLine([[32, 38], [56, 38], [58, 58], [36, 60], [32, 46]]);
   woodpile(-31, -7.5, 0.35); woodpile(-38, 5, 1.57);
   [[31, 10], [32, 9.0], [-17.5, -13.5], [12, 25], [-40, -4]].forEach(([x, z]) => barrel(x, z));
-  [[-27, -11.5], [19, -17], [-38, -34]].forEach(([x, z]) => crate(x, z));
+  [[-27, -11.5], [16.2, -19.5], [-38, -34]].forEach(([x, z]) => crate(x, z));
   hay(48, 52); hay(50, 48); hay(44, 55);
   cart(8, 18, 0.6);
   // forno de pão da Celeste, do lado de fora
