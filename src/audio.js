@@ -86,7 +86,7 @@ export const Sound = {
 
 // ---------------- música: faixas com silêncios longos entre elas ----------------
 export const Music = {
-  ctx: null, bus: null, man: null, cur: null, silence: 25, t: 0, history: [], forced: null,
+  ctx: null, bus: null, man: null, cur: null, silence: 8, t: 0, history: [], forced: null,
   async init(c, bus) { this.ctx = c; this.bus = bus; try { const r = await fetch(resolveURL('a/music/manifest.json')); if (r.ok) this.man = await r.json(); } catch (e) { } },
   has(cue) { return !!(this.man && this.man[cue]); },
   play(cue, { fade = 3, vol = 1 } = {}) {
@@ -95,7 +95,7 @@ export const Music = {
     const src = this.ctx.createMediaElementSource(el); const g = this.ctx.createGain(); g.gain.value = 0; src.connect(g).connect(this.bus);
     const t = this.ctx.currentTime; g.gain.linearRampToValueAtTime(vol, t + fade);
     el.play().catch(() => { }); const it = { cue, el, g, vol }; this.cur = it; this.history.push(cue); if (this.history.length > 4) this.history.shift();
-    el.onended = () => { if (this.cur === it) { this.cur = null; this.silence = rr(80, 200); } };
+    el.onended = () => { if (this.cur === it) { this.cur = null; this.silence = rr(14, 38); } };
     return true;
   },
   stop(fade = 3) { const it = this.cur; if (!it) return; this.cur = null; const t = this.ctx.currentTime; it.g.gain.cancelScheduledValues(t); it.g.gain.setValueAtTime(it.g.gain.value, t); it.g.gain.linearRampToValueAtTime(0, t + fade); setTimeout(() => { try { it.el.pause(); } catch (e) { } }, fade * 1000 + 100); },
@@ -103,15 +103,17 @@ export const Music = {
   pick(p) {
     const h = p.hour; const opts = [];
     if (p.ruins) opts.push('ruins');
-    if (h >= 5 && h < 10) opts.push('morning'); else if (h >= 10 && h < 16.5) opts.push('afternoon'); else if (h >= 16.5 && h < 19.6) opts.push('dusk'); else { opts.push('night'); if (p.village > 0.5) opts.push('village_night'); }
-    const fresh = opts.filter(o => this.has(o) && this.history[this.history.length - 1] !== o); return fresh[(Math.random() * fresh.length) | 0] || null;
+    if (h >= 5 && h < 10) opts.push('morning', 'title'); else if (h >= 10 && h < 16.5) opts.push('afternoon', 'morning'); else if (h >= 16.5 && h < 19.6) opts.push('dusk', 'title'); else { opts.push('night'); if (p.village > 0.5) opts.push('village_night'); else opts.push('dusk'); }
+    if (p.flying) opts.unshift('title', 'discover');
+    // evita repetir as duas últimas; se não houver alternativa, repete mesmo (melhor que silêncio longo)
+    const ok = opts.filter(o => this.has(o)); const fresh = ok.filter(o => !this.history.slice(-2).includes(o)); const pool = fresh.length ? fresh : ok; return pool[(Math.random() * pool.length) | 0] || null;
   },
   update(dt, p) {
     if (!this.ctx || !this.man) return;
     if (this.cur) { const duck = Voice.playing ? 0.45 : 1; this.cur.g.gain.value = lerp(this.cur.g.gain.value, this.cur.vol * duck, clamp(dt * 2, 0, 1)); return; }
     if (p.cinematic) return;
     this.silence -= dt; if (this.silence > 0) return;
-    const cue = this.pick(p); if (cue) this.play(cue, { fade: 6, vol: 0.9 }); else this.silence = 30;
+    const cue = this.pick(p); if (cue) this.play(cue, { fade: 6, vol: 0.9 }); else this.silence = 12;
   },
 };
 
@@ -132,7 +134,8 @@ export const Voice = {
     this.stop(); const token = (this.token = (this.token || 0) + 1);
     const text = LINES[id] ? LINES[id][1] : id; const who = speaker(id);
     const buf = this.enabled && this.ctx ? await this.load(id) : null; if (token !== this.token) return;
-    if (!buf) { Speech.speak(text, who, onStart, onEnd, this.enabled); return; }
+    // falas novas ainda sem dublagem: só legenda (a voz sintética do navegador destoaria das vozes gravadas)
+    if (!buf) { const silent = this.man && !this.man[id]; Speech.speak(text, who, onStart, onEnd, this.enabled && !silent); return; }
     const c = this.ctx; const src = c.createBufferSource(); src.buffer = buf; const g = c.createGain(); g.gain.value = eco ? 0.85 : 1;
     src.connect(g); g.connect(this.analyser);
     if (eco) { const lp = c.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 5200; const hp = c.createBiquadFilter(); hp.type = 'highpass'; hp.frequency.value = 160; g.connect(hp).connect(lp).connect(this.bus); const send = c.createGain(); send.gain.value = 0.7; g.connect(send).connect(this.dream); }

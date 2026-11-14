@@ -1,7 +1,7 @@
 // Ruínas e lugares dos Veladores: observatório da Odessa, jardim dos relógios de sol, escada para o céu,
 // aqueduto, ponte partida sobre o riacho seco e o santuário da floresta.
 import { THREE, rand, rr } from '../core.js';
-import { groundH, POI, CREEK } from './terrain.js';
+import { groundH, POI, CREEK, TRAIL } from './terrain.js';
 import { M, put, box, mtx, cyl, cylUV, boxUV, addBox, addCircle, addWalk, storySpots, bench, lamps, fires } from './village.js';
 
 const face = (x, z, tx, tz) => Math.atan2(tx - x, tz - z);
@@ -85,26 +85,80 @@ function aqueduct() {
   const mid = 0.38; storySpots.aqueduto = new THREE.Vector3(A[0] + dx * mid + 3, 0, A[1] + dz * mid - 2); storySpots.aqueduto.y = groundH(storySpots.aqueduto.x, storySpots.aqueduto.z);
 }
 
+// Ponte de arco de pedra dos Veladores sobre o riacho seco. O fecho do arco caiu há trezentos anos: o
+// vão do meio desabou e as aduelas estão espalhadas no leito. O Bastião montou embaixo um cimbre de
+// madeira (a armação em arco que serve de molde para reassentar as pedras) e uma passarela de tábuas.
 function bridge() {
   const { x, z } = POI.bridge; const i = 3; const cdx = CREEK[i][0] - CREEK[i - 1][0], cdz = CREEK[i][1] - CREEK[i - 1][1]; const ry = Math.atan2(cdx, cdz) + Math.PI / 2; // eixo da ponte atravessa o riacho
-  const deck = Math.max(groundH(x + Math.sin(ry) * 13, z + Math.cos(ry) * 13), groundH(x - Math.sin(ry) * 13, z - Math.cos(ry) * 13)) + 0.3; const B = mtx(x, deck, z, 0, ry, 0);
-  const halfL = 13, gap = 1.6, W = 2.8;
-  for (const s of [-1, 1]) {
-    // metade de pedra
-    const len = halfL - gap; const cz = s * (gap + len / 2); box(W, 0.45, len, M.ruin, 1.3, mtx(0, -0.22, cz, 0, 0, 0, B)); addWalk(B, -W / 2, W / 2, Math.min(s * gap, s * halfL), Math.max(s * gap, s * halfL), 0);
-    for (const sx of [-1, 1]) box(0.3, 0.55, len, M.ruin, 1.3, mtx(sx * (W / 2 - 0.15), 0.27, cz, 0, 0, 0, B));
-    for (const sx of [-1, 1]) { const c = new THREE.Vector3(sx * (W / 2 - 0.15), 0, cz).applyMatrix4(B); addBox(c.x, c.z, 0.15, len / 2, ry, deck - 0.5, deck + 1.2); }
-    const sh = new THREE.Shape(); sh.moveTo(-len / 2, 0); sh.lineTo(len / 2, 0); sh.lineTo(len / 2, -4.6); sh.lineTo(-len / 2, -4.6); sh.lineTo(-len / 2, 0); const hole = new THREE.Path(); hole.absarc(s * len / 2, -4.6, len * 0.55, 0, Math.PI, false); sh.holes.push(hole);
-    const ag = new THREE.ExtrudeGeometry(sh, { depth: W - 0.2, bevelEnabled: false, curveSegments: 12 }); ag.translate(0, 0, -(W - 0.2) / 2); put(boxUV(ag, 1.3), M.ruin, mtx(0, -0.45, cz, 0, Math.PI / 2, 0, B));
+  const ax = Math.sin(ry), az = Math.cos(ry);
+  // altura do tabuleiro e comprimento de cada lado: a ponte vai até onde o barranco alcança o tabuleiro
+  const deck = Math.max(groundH(x + ax * 11, z + az * 11), groundH(x - ax * 11, z - az * 11)) + 0.25;
+  const reach = (sg) => { for (let d = 6; d < 24; d += 0.25) if (groundH(x + ax * d * sg, z + az * d * sg) >= deck - 0.15) return d + 0.6; return 24; };
+  const Lp = reach(1), Ln = reach(-1);
+  const B = mtx(x, deck, z, 0, ry, 0); const W = 3.4, gap = 1.7;
+  const toW = (lx, ly, lz) => new THREE.Vector3(lx, ly, lz).applyMatrix4(B);
+  // arco: intradorso circular, nascentes em z=±S
+  const S = 7.4, bed = Math.min(groundH(x, z), groundH(x + ax * 3, z + az * 3), groundH(x - ax * 3, z - az * 3)) - deck; const ys = Math.max(bed + 0.6, -4.9), rise = Math.min(3.6, -ys - 1.0);
+  const R = (S * S + rise * rise) / (2 * rise), cy = ys + rise - R, phi = Math.asin(S / R), ring = 0.62;
+  const broken = (zz, yy) => Math.abs(zz) < gap + (yy > -0.9 ? 0.55 * hash(zz * 3.1) : 0) + Math.max(0, (yy + 2.2)) * 0.18;
+  function hash(v) { const t = Math.sin(v * 91.7) * 43758.5; return t - Math.floor(t); }
+  // aduelas (pedras do arco), cada uma um pouco diferente, com junta de argamassa
+  const nV = 31;
+  for (let k = 0; k < nV; k++) {
+    const a = -phi + (k + 0.5) / nV * 2 * phi; const zz = Math.sin(a) * (R + ring / 2), yy = cy + Math.cos(a) * (R + ring / 2);
+    if (broken(zz, yy)) continue;
+    const len = 2 * phi / nV * R * 0.96;
+    for (const sx of [-1, 0, 1]) { const g = boxUV(new THREE.BoxGeometry(W / 3 - 0.04, ring * rr(0.96, 1.05), len), 0.9); put(g, M.ruin, mtx(sx * W / 3, yy + rr(-0.02, 0.02), zz, a + rr(-0.012, 0.012), 0, 0, B)); }
   }
-  // o vão do meio: tábuas novas do Bastião e um andaime
-  for (let k = 0; k < 6; k++) box(0.32, 0.06, gap * 2 + 0.5, M.planks, 1, mtx(-0.8 + k * 0.32, 0.03, 0, 0, rr(-0.03, 0.03), 0, B));
-  addWalk(B, -1.0, 1.0, -gap - 0.3, gap + 0.3, 0.06);
-  for (const s of [-1, 1]) for (const sx of [-1, 1]) cyl(0.08, 0.08, 4.6, 6, M.oldWood, 1, mtx(sx * 1.3, -2.2, s * gap, 0, 0, 0, B));
-  box(0.08, 0.08, gap * 2, M.oldWood, 1, mtx(1.3, 0.9, 0, 0, 0, 0, B)); for (let k = 0; k < 5; k++) box(0.9, 0.04, 0.2, M.planks, 1, mtx(2.2, 0.0, -1 + k * 0.5, 0, 0, 0.0, B), false);
-  // bancada e ferramentas na margem
-  { const w = new THREE.Vector3(2.8, 0, halfL + 2.2).applyMatrix4(B); const gy = groundH(w.x, w.z); const T = mtx(w.x, gy, w.z, 0, ry, 0); box(1.8, 0.1, 0.7, M.oldWood, 1, mtx(0, 0.85, 0, 0, 0, 0, T)); for (const a of [-1, 1]) for (const b of [-1, 1]) box(0.09, 0.85, 0.09, M.oldWood, 1, mtx(a * 0.8, 0.42, b * 0.28, 0, 0, 0, T)); for (let k = 0; k < 5; k++) box(2.2, 0.06, 0.25, M.planks, 1, mtx(0.3, 0.06 + k * 0.07, 1.0, 0, 0.1, 0, T), false); addBox(w.x, w.z, 0.95, 0.4, ry); storySpots.bastiao = new THREE.Vector3(1.6, 0, halfL + 1.4).applyMatrix4(B); storySpots.bastiao.y = groundH(storySpots.bastiao.x, storySpots.bastiao.z); storySpots.bastiaoYaw = ry; }
-  storySpots.ponte = new THREE.Vector3(-1.4, 0, halfL + 2.5).applyMatrix4(B); storySpots.ponte.y = groundH(storySpots.ponte.x, storySpots.ponte.z);
+  // tímpanos (paredes de pedra entre o arco e o tabuleiro) e encontros enterrados no barranco
+  for (const sg of [-1, 1]) {
+    const L = sg > 0 ? Lp : Ln; const sh = new THREE.Shape(); const pts = [];
+    const z0 = sg * L, zIn = sg * (gap + 0.35);
+    pts.push([zIn, -0.08]); pts.push([z0, -0.08]); pts.push([z0, -7.5]); pts.push([sg * S, -7.5]); pts.push([sg * S, ys]);
+    for (let k = 1; k <= 24; k++) { const a = sg * phi * (1 - k / 24); const zz = Math.sin(a) * (R + ring), yy = cy + Math.cos(a) * (R + ring); if (Math.abs(zz) < Math.abs(zIn) + 0.4) break; pts.push([zz, yy]); }
+    // borda partida irregular, em degraus de pedra
+    { const [za, ya] = pts[pts.length - 1]; const nB = 7; for (let k = 1; k < nB; k++) { const t = k / nB; const zz = sg * Math.max(gap + 0.05, Math.abs(za + (zIn - za) * t) + rr(-0.28, 0.32)); const yy = ya + (-0.08 - ya) * t + rr(-0.18, 0.12); pts.push([zz, yy]); } }
+    pts.forEach(([a, b], k) => k ? sh.lineTo(a, b) : sh.moveTo(a, b));
+    for (const side of [-1, 1]) { const eg = new THREE.ExtrudeGeometry(sh, { depth: 0.55, bevelEnabled: false }); eg.rotateY(-Math.PI / 2); eg.translate(side * (W / 2 - 0.02) + (side > 0 ? 0 : 0.55), 0, 0); put(boxUV(eg, 1.25), M.ruin, B.clone().multiply(mtx(0, 0, 0)).multiply(new THREE.Matrix4().makeTranslation(0, 0, 0)), true); }
+    // enchimento entre as paredes (invisível de fora, segura o tabuleiro)
+    const fl = Math.abs(z0) - Math.abs(zIn); box(W - 1.1, 0.5, fl, M.ruin, 1.3, mtx(0, -0.33, (z0 + zIn) / 2, 0, 0, 0, B));
+    // tabuleiro de pedra (calçamento) e parapeitos
+    box(W - 0.9, 0.1, fl, M.cobble, 1.1, mtx(0, -0.04, (z0 + zIn) / 2, 0, 0, 0, B), false);
+    addWalk(B, -W / 2 + 0.55, W / 2 - 0.55, Math.min(z0, zIn), Math.max(z0, zIn), 0);
+    for (const side of [-1, 1]) {
+      const n = Math.round(fl / 0.9); for (let k = 0; k < n; k++) { const zc = zIn + sg * (k + 0.5) * fl / n; if (k === 0 && hash(sg * 7 + side) < 0.7) continue; const h = k < 2 ? rr(0.3, 0.55) : 0.62; box(0.36, h, fl / n - 0.03, M.ruin, 1.2, mtx(side * (W / 2 - 0.3), h / 2 - 0.05, zc, 0, rr(-0.02, 0.02), 0, B)); if (h > 0.6) box(0.44, 0.1, fl / n - 0.02, M.block, 1, mtx(side * (W / 2 - 0.3), h - 0.02, zc, 0, 0, 0, B)); }
+      const c = toW(side * (W / 2 - 0.3), 0, (z0 + zIn) / 2); addBox(c.x, c.z, 0.18, fl / 2, ry, deck - 0.5, deck + 1.2);
+    }
+    // cunhas e musgo na pedra exposta da quebra
+    for (let k = 0; k < 5; k++) { const g = boxUV(new THREE.BoxGeometry(rr(0.4, 0.8), rr(0.3, 0.5), rr(0.3, 0.6)), 1.2); put(g, M.ruin, mtx(rr(-1.2, 1.2), -0.15, zIn + sg * rr(0.1, 0.5), rand(), rand(), rand(), B)); }
+  }
+  // pedras caídas no leito do riacho, debaixo do vão
+  for (let k = 0; k < 38; k++) { const lx = rr(-3.2, 3.2), lz = rr(-gap - 2.5, gap + 2.5); const w = toW(lx, 0, lz); const gy = groundH(w.x, w.z); const sz = rr(0.35, 0.85);
+    const g = k % 3 ? boxUV(new THREE.BoxGeometry(sz * 1.3, sz * 0.8, sz), 1) : boxUV(new THREE.DodecahedronGeometry(sz * 0.6, 0), 1); put(g, k % 3 === 0 ? M.ruinMoss : M.ruin, mtx(w.x, gy + sz * 0.25, w.z, rr(-0.5, 0.5), rand() * 6, rr(-0.5, 0.5))); if (sz > 0.6) addCircle(w.x, w.z, sz * 0.5); }
+  // cimbre do Bastião: duas costelas de madeira seguindo o intradorso, escoradas no leito
+  const ribA = Math.asin(Math.min(1, (gap + 1.2) / R));
+  for (const sx of [-1.05, 1.05]) {
+    const nS = 9; for (let k = 0; k < nS; k++) { const a0 = -ribA + k / nS * 2 * ribA, a1 = -ribA + (k + 1) / nS * 2 * ribA; const z0 = Math.sin(a0) * (R - 0.08), y0 = cy + Math.cos(a0) * (R - 0.08), z1 = Math.sin(a1) * (R - 0.08), y1 = cy + Math.cos(a1) * (R - 0.08); const L = Math.hypot(z1 - z0, y1 - y0); box(0.16, 0.22, L + 0.02, M.oldWood, 1, mtx(sx, (y0 + y1) / 2 - 0.11, (z0 + z1) / 2, -Math.atan2(y1 - y0, z1 - z0), 0, 0, B)); }
+    // escoras verticais até o leito
+    for (const zz of [-gap - 0.9, -gap * 0.35, gap * 0.35, gap + 0.9]) { const a = Math.asin(zz / R); const yTop = cy + Math.cos(a) * (R - 0.08) - 0.2; const w = toW(sx, 0, zz); const gyL = groundH(w.x, w.z) - deck; const h = yTop - gyL; if (h > 0.2) cyl(0.085, 0.1, h + 0.3, 7, M.oldWood, 1, mtx(sx, gyL - 0.3 + (h + 0.3) / 2, zz, 0, 0, 0, B)); }
+  }
+  // travessas ligando as costelas e tábuas sobre o cimbre
+  for (const zz of [-gap - 0.9, 0, gap + 0.9]) { const a = Math.asin(zz / R); const yy = cy + Math.cos(a) * (R - 0.08) - 0.2; box(2.4, 0.12, 0.12, M.oldWood, 1, mtx(0, yy, zz, 0, 0, 0, B)); }
+  // passarela de tábuas no vão, com corda de corrimão
+  for (let k = 0; k < 7; k++) box(0.24, 0.05, gap * 2 + 1.0, M.planks, 1, mtx(-0.75 + k * 0.25, 0.03, 0, 0, rr(-0.015, 0.015), 0, B));
+  for (const zz of [-gap - 0.3, gap + 0.3]) box(1.8, 0.1, 0.14, M.oldWood, 1, mtx(0, -0.02, zz, 0, 0, 0, B));
+  addWalk(B, -0.9, 0.9, -gap - 0.6, gap + 0.6, 0.06);
+  for (const side of [-1, 1]) { for (const zz of [-gap - 0.3, 0, gap + 0.3]) cyl(0.04, 0.045, 1.05, 6, M.oldWood, 1, mtx(side * 0.95, 0.55, zz, 0, 0, 0, B));
+    cyl(0.018, 0.018, gap * 2 + 0.6, 5, M.hay, 1, mtx(side * 0.95, 0.98, 0, Math.PI / 2, 0, 0, B), false); cyl(0.014, 0.014, gap * 2 + 0.6, 5, M.hay, 1, mtx(side * 0.95, 0.6, 0, Math.PI / 2, 0, 0, B), false);
+    const c = toW(side * 0.95, 0, 0); addBox(c.x, c.z, 0.05, gap + 0.3, ry, deck - 0.5, deck + 1.2); }
+  // bancada, pedras novas já talhadas esperando e ferramentas na margem
+  const hL = Lp;
+  { const w = toW(2.8, 0, hL + 2.2); const gy = groundH(w.x, w.z); const T = mtx(w.x, gy, w.z, 0, ry, 0); box(1.8, 0.1, 0.7, M.oldWood, 1, mtx(0, 0.85, 0, 0, 0, 0, T)); for (const a of [-1, 1]) for (const b of [-1, 1]) box(0.09, 0.85, 0.09, M.oldWood, 1, mtx(a * 0.8, 0.42, b * 0.28, 0, 0, 0, T)); for (let k = 0; k < 5; k++) box(2.2, 0.06, 0.25, M.planks, 1, mtx(0.3, 0.06 + k * 0.07, 1.0, 0, 0.1, 0, T), false);
+    // malho e esquadro sobre a bancada
+    box(0.3, 0.1, 0.12, M.iron, 1, mtx(-0.4, 0.95, 0.1, 0, 0.6, 0, T), false); cyl(0.018, 0.018, 0.42, 6, M.timber, 1, mtx(-0.25, 0.92, 0.05, Math.PI / 2, 0.6, 0, T), false); box(0.4, 0.015, 0.04, M.iron, 1, mtx(0.3, 0.91, -0.1, 0, 0.2, 0, T), false); box(0.04, 0.015, 0.3, M.iron, 1, mtx(0.48, 0.91, 0.03, 0, 0.2, 0, T), false);
+    addBox(w.x, w.z, 0.95, 0.4, ry); storySpots.bastiao = toW(1.6, 0, hL + 1.4); storySpots.bastiao.y = groundH(storySpots.bastiao.x, storySpots.bastiao.z); storySpots.bastiaoYaw = ry; }
+  { const w = toW(-2.6, 0, hL + 2.4); const gy = groundH(w.x, w.z); for (let k = 0; k < 6; k++) { const g = boxUV(new THREE.BoxGeometry(0.7, 0.42, 0.55), 0.9); put(g, M.block, mtx(w.x + (k % 3) * 0.06 * Math.cos(ry), gy + 0.21 + Math.floor(k / 3) * 0.43, w.z, 0, ry + (k % 3) * 0.6 - 0.6, 0)); } addCircle(w.x, w.z, 0.8); }
+  storySpots.ponte = toW(-1.4, 0, hL + 2.5); storySpots.ponte.y = groundH(storySpots.ponte.x, storySpots.ponte.z);
 }
 
 function shrine() {
@@ -123,5 +177,11 @@ function shrine() {
   storySpots.santuario = new THREE.Vector3(0, 0, 2.6).applyMatrix4(B); storySpots.santuario.y = groundH(storySpots.santuario.x, storySpots.santuario.z);
 }
 
-export function buildLandmarks() { observatory(); garden(); stairs(); aqueduct(); bridge(); shrine(); }
+// montinhos de pedra (marcos) ao longo da trilha da montanha, e uma placa no começo
+function trailMarks() {
+  for (let i = 1; i < TRAIL.length - 1; i += 2) { const [x1, z1] = TRAIL[i], [x2, z2] = TRAIL[i + 1]; const dx = x2 - x1, dz = z2 - z1, L = Math.hypot(dx, dz); const px = x1 - dz / L * 2.6, pz = z1 + dx / L * 2.6; const gy = groundH(px, pz);
+    let y = gy; for (let k = 0; k < 5; k++) { const sz = 0.42 - k * 0.07; const g = new THREE.DodecahedronGeometry(sz, 0); g.scale(1.2, 0.55, 1); put(boxUV(g, 0.8), k % 2 ? M.ruinMoss : M.ruin, mtx(px + rr(-0.05, 0.05), y + sz * 0.45, pz + rr(-0.05, 0.05), rr(-0.1, 0.1), rand() * 6, 0)); y += sz * 0.8; } addCircle(px, pz, 0.45); }
+  { const [x, z] = TRAIL[1]; const px = x + 2.2, pz = z + 1; const gy = groundH(px, pz); cyl(0.07, 0.08, 1.8, 7, M.oldWood, 1, mtx(px, gy + 0.9, pz)); box(0.9, 0.32, 0.05, M.oldWood, 1, mtx(px + 0.3, gy + 1.55, pz, 0, -0.6, -0.08)); addCircle(px, pz, 0.15); storySpots.placaMonte = new THREE.Vector3(px, gy, pz); }
+}
+export function buildLandmarks() { observatory(); garden(); stairs(); aqueduct(); bridge(); shrine(); trailMarks(); }
 export const FLOWER_ZONES = () => [[POI.garden.x, POI.garden.z, 14, 900], [POI.head.x, POI.head.z, 16, 700], [POI.observatory.x, POI.observatory.z + 12, 8, 120], [-42, 27, 6, 80]];

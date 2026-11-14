@@ -1,10 +1,11 @@
 import { THREE, renderer, scene, camera, U, Q, settings, store, clamp, lerp, smooth, rand, rr, angDiff, lerpAng, makeMacroTexture, loadGLTF, progress, isTouch, trackP } from './core.js';
-import { computeTerrainData, buildTerrain, groundH, normalY, splatAt, POI, PATHS, forestDensity, WATER, HGT, NRM, SPLAT, NV, CELL, HALF, creekDist } from './world/terrain.js';
+import { computeTerrainData, buildTerrain, groundH, normalY, splatAt, POI, PATHS, MIRANTE, TRAIL, forestDensity, WATER, HGT, NRM, SPLAT, NV, CELL, HALF, creekDist } from './world/terrain.js';
 import { buildWater, setWaterQuality } from './world/water.js';
 import { SkySystem } from './world/sky.js';
 import { Grass } from './world/grass.js';
 import { Trees } from './world/trees.js';
-import { loadVillageMaterials, buildVillage, colliders, villageDirt, smokes, fires, M, interiors, doors, insideHouse, inFootprint, storySpots, probe, lamps, windmills } from './world/village.js';
+import { loadVillageMaterials, buildVillage, colliders, villageDirt, smokes, fires, M, interiors, doors, insideHouse, inFootprint, storySpots, probe, lamps, windmills, seats, beds, inSolid } from './world/village.js';
+import { Nav } from './actors/nav.js';
 import { FLOWER_ZONES } from './world/landmarks.js';
 import { LINES, CAST, PLACES, NOTES, FINALE, text as lineText } from './story.js';
 import { buildGiant, buildHeadFragment, updateGiants, giants } from './world/giants.js';
@@ -127,7 +128,7 @@ async function boot() {
   roomLight = new THREE.PointLight(0xfff0dc, 0, 9, 1.4); scene.add(roomLight);
   buildLamps(); buildLantern(); buildRipples();
   const had = !!store.get(SAVE_KEY);
-  await step('Últimos detalhes…', 0.9, () => { buildPlayer(); buildNPCs(); spawnAnimals(); buildMapBase(); });
+  await step('Últimos detalhes…', 0.9, () => { initNav(); buildPlayer(); buildNPCs(); spawnAnimals(); buildMapBase(); });
   post = new Post(); post.setSize(innerWidth, innerHeight);
   player.y = groundH(player.x, player.z);
   for (let i = 0; i < 30; i++) grass.update(player.x, player.z, 100);
@@ -148,9 +149,10 @@ function placeGiants(rockMat) {
     SPOTS.lake = { x: sx, z: sz, yaw: face(sx, sz, gx, gz) }; }
   { const gx = POI.stones.x - 22, gz = POI.stones.z - 16; buildGiant(scene, rockMat, { pose: 'kneel', x: gx, y: groundH(gx, gz) - 0.4, z: gz, rot: face(gx, gz, POI.stones.x, POI.stones.z), seed: 23, id: 'circulo' }); SPOTS.stones = { x: POI.stones.x + 1.5, z: POI.stones.z + 2, yaw: face(POI.stones.x, POI.stones.z, gx, gz) }; }
   { const gx = POI.tower.x + 26, gz = POI.tower.z + 18; buildGiant(scene, rockMat, { pose: 'lie', x: gx, y: groundH(gx, gz) - 0.5, z: gz, rot: -0.7, seed: 37, id: 'torre' }); SPOTS.tower = { x: storySpots.tower.x, z: storySpots.tower.z, yaw: face(storySpots.tower.x, storySpots.tower.z, POI.tower.x, POI.tower.z) }; }
-  { let best = null; for (let z = -330; z > -520; z -= 6) for (let x = -120; x <= 40; x += 8) { const h = groundH(x, z); const ny = normalY(x, z); if (h > 55 && h < 110 && ny > 0.86) { const sc = h - Math.abs(x + 50) * 0.2; if (!best || sc > best.sc) best = { x, z, sc }; } }
-    if (!best) best = { x: -50, z: -420 }; const gx = best.x, gz = best.z; const g = buildGiant(scene, rockMat, { pose: 'sit', x: gx, y: groundH(gx, gz) - 0.8, z: gz, rot: face(gx, gz, 0, 0), seed: 51, id: 'monte' });
-    const fx = Math.sin(g.rot), fz = Math.cos(g.rot); const sx = gx + fx * 13, sz = gz + fz * 13; SPOTS.peak = { x: sx, z: sz, yaw: g.rot }; POI.peaks.x = sx; POI.peaks.z = sz; }
+  { // a gigante sentada no alto do monte, atrás do mirante (o platô no fim da trilha), olhando a vila
+    const sx = MIRANTE.x, sz = MIRANTE.z; const fx0 = -sx, fz0 = -sz, fl = Math.hypot(fx0, fz0); const gx = sx - fx0 / fl * 13, gz = sz - fz0 / fl * 13;
+    const g = buildGiant(scene, rockMat, { pose: 'sit', x: gx, y: groundH(gx, gz) - 0.8, z: gz, rot: face(gx, gz, 0, 0), seed: 51, id: 'monte' });
+    SPOTS.peak = { x: sx, z: sz, yaw: g.rot }; POI.peaks.x = sx; POI.peaks.z = sz; }
   { const hx = POI.head.x, hz = POI.head.z; const hf = buildHeadFragment(scene, rockMat, hx, hz, 0.9); addCirc(hf[0], hf[1], hf[2] * 0.6); SPOTS.head = { x: storySpots.head.x, z: storySpots.head.z, yaw: face(storySpots.head.x, storySpots.head.z, hx, hz) }; }
   SPOTS.tree = { x: storySpots.tree.x, z: storySpots.tree.z, yaw: face(storySpots.tree.x, storySpots.tree.z, storySpots.treeRoot.x, storySpots.treeRoot.z) };
   SPOTS.garden = { x: storySpots.relogios.x, z: storySpots.relogios.z, yaw: face(storySpots.relogios.x, storySpots.relogios.z, POI.garden.x, POI.garden.z) };
@@ -212,23 +214,43 @@ function surface() { if (insideHouse(player.x, player.z) || player.y > groundH(p
 
 // sentar (bancos, lugares dos Veladores)
 function sitAt(spot, onSat) {
-  player.sit = { t: 0, onSat, spot, lapse: false }; player.x = spot.x; player.z = spot.z; player.y = probe(spot.x, spot.z, (spot.y ?? groundH(spot.x, spot.z)) + 0.3).h; player.h = spot.yaw ?? player.h; player.speed = 0;
+  player.sit = { t: 0, onSat, spot, lapse: false }; player.x = spot.x; player.z = spot.z; player.y = spot.seat ? spot.y - SIT_H : probe(spot.x, spot.z, (spot.y ?? groundH(spot.x, spot.z)) + 0.3).h; player.h = spot.yaw ?? player.h; player.speed = 0;
   pH.root.position.set(player.x, player.y, player.z); pH.root.rotation.y = player.h; pH.play('sitDown', 0.3); Sound.rustle(player.x, player.z);
-  cam.mode = 'sit'; cam.orbit = 0;
+  cam.mode = 'sit'; cam.orbit = 0; if (spot.seat) taken.set(spot.seat, 'lia');
+}
+// deitar na cama: a pose é o primeiro quadro de LayToIdle; levantar toca o clipe inteiro
+function lieAt(b) {
+  const L = Human.LIE; const c = Math.cos(b.yaw), sn = Math.sin(b.yaw);
+  player.sit = { t: 0, spot: { x: b.side.x, z: b.side.z, yaw: b.yaw }, lie: b, from: { x: player.x, z: player.z, y: player.y }, k: 0 };
+  player.sit.to = { x: b.x + L.dx * c + L.dz * sn, z: b.z - L.dx * sn + L.dz * c, y: b.y + L.dy, yaw: b.yaw + L.yaw };
+  player.speed = 0; pH.pose('lie', 0, 1.2); Sound.rustle(player.x, player.z); taken.set(b, 'lia');
+  cam.mode = 'lie'; cam.orbit = 0; $('lapseHint').hidden = false; $('lapseHint').textContent = isNight() ? 'T · dormir até de manhã' : 'T · deixar o tempo passar';
 }
 function updateSitting(dt) {
   const st = player.sit; st.t += dt;
+  if (st.lie) { // deitada
+    if (!st.rising) { st.k = Math.min(1, st.k + dt / 1.4); const k = smooth(0, 1, st.k); player.x = lerp(st.from.x, st.to.x, k); player.z = lerp(st.from.z, st.to.z, k); player.y = lerp(st.from.y, st.to.y, k); player.h = lerpAng(player.h, st.to.yaw, dt * 5); }
+    else if (pH.done() || st.t > 5) { player.x = st.lie.side.x; player.z = st.lie.side.z; player.y = probe(player.x, player.z, player.y + 0.3).h; taken.delete(st.lie); player.sit = null; cam.mode = 'follow'; $('lapseHint').hidden = true; $('lapseHint').textContent = lapseText; pH.play('idle', 0.3); }
+    pH.root.position.set(player.x, player.y, player.z); pH.root.rotation.y = player.h; pH.lookAtPoint(null); pH.update(dt); return;
+  }
   if (pH.currentName === 'sitDown' && pH.done()) pH.play('sit', 0.4);
-  if (pH.currentName === 'standUp' && pH.done()) { player.sit = null; cam.mode = 'follow'; }
+  if (pH.currentName === 'standUp' && pH.done()) { const sp = st.spot; if (sp && sp.seat) { const e = seatExit(sp.seat), ex = e.x, ez = e.z; player.x = ex; player.z = ez; player.y = probe(ex, ez, player.y + 0.5).h; } player.sit = null; cam.mode = 'follow'; }
   if (st.onSat && st.t > 2.2) { const f = st.onSat; st.onSat = null; f(); }
   pH.root.position.set(player.x, player.y, player.z); pH.root.rotation.y = player.h; pH.lookAtPoint(null); pH.update(dt);
 }
-function standUp() { if (!player.sit || pH.currentName === 'standUp' || state !== 'play') return; timeLapse = 0; pH.play('standUp', 0.25); $('lapseHint').hidden = true; }
+function standUp() { if (!player.sit || pH.currentName === 'standUp' || state !== 'play') return; timeLapse = 0; $('lapseHint').classList.remove('on'); if (player.sit.lie) { if (!player.sit.rising) { player.sit.rising = true; player.sit.t = 0; pH.unpose(1); } return; } if (player.sit.spot && player.sit.spot.seat) taken.delete(player.sit.spot.seat); pH.play('standUp', 0.25); $('lapseHint').hidden = true; }
+let lapseText = 'T · deixar o tempo passar · mova-se para levantar';
+// dormir: tela escurece, a noite passa, amanhece
+function sleepUntilMorning() {
+  if (state !== 'play' || !player.sit || !player.sit.lie || player.sit.sleeping) return; player.sit.sleeping = true; const f = $('fade'); f.style.opacity = '1'; Music.stop(3);
+  setTimeout(() => { hour = 6.6; S.day++; if (sky) sky.setHour(hour); save(); setTimeout(() => { f.style.opacity = '0'; toast('Bom dia', 'A noite passou num instante'); if (player.sit) player.sit.sleeping = false; Music.silence = 4; }, 900); }, 2200);
+}
 
 // =====================================================================
 // câmera
 // =====================================================================
 function updateCamera(dt) {
+  if (window.__camOverride) { const o = window.__camOverride; if (pH) pH.root.visible = true; camera.position.set(...o.pos); camera.lookAt(...o.look); camera.fov = o.fov || 50; camera.updateProjectionMatrix(); return; }
   const cy = cam.yaw, cp = cam.pitch;
   camFwd.set(-Math.sin(cy) * Math.cos(cp), Math.sin(cp), -Math.cos(cy) * Math.cos(cp));
   // lume: órbita lenta em volta da lembrança
@@ -236,6 +258,12 @@ function updateCamera(dt) {
   cam.lumeA = undefined;
   if (state === 'finale' && finale) { finale.camera(dt); return; }
   cam.inK = lerp(cam.inK || 0, insideHouse(player.x, player.z) ? 1 : 0, 1 - Math.exp(-dt * 4));
+  if (cam.mode === 'lie' && player.sit && player.sit.lie) {
+    const b = player.sit.lie; const head = pH.headPos; const sd = V3(b.side.x - b.x, 0, b.side.z - b.z).normalize(); const fw = V3(Math.sin(b.yaw), 0, Math.cos(b.yaw));
+    let want = head.clone().addScaledVector(sd, 1.25).addScaledVector(fw, 0.9 + Math.sin(elapsed * 0.05) * 0.2).add(V3(0, 1.05, 0)); let last = head.clone();
+    for (let i = 1; i <= 12; i++) { const q = head.clone().lerp(want, i / 12); if (insideBox(q.x, q.z, 0.15, player.y) || inSolid(q.x, q.y, q.z, 0.18)) break; last = q; }
+    cam.cur.lerp(last, 1 - Math.exp(-dt * 3)); camera.position.copy(cam.cur); camera.lookAt(head.x, head.y - 0.15, head.z); camera.fov = lerp(camera.fov, 50, 1 - Math.exp(-dt * 3)); camera.updateProjectionMatrix(); if (pH) pH.root.visible = true; return;
+  }
   const sitK = cam.mode === 'sit' ? 1 : 0; cam.sitK = lerp(cam.sitK || 0, sitK, 1 - Math.exp(-dt * 1.2));
   const dist = lerp(lerp(3.5, 1.9, cam.inK), 5.2, cam.sitK * (1 - cam.inK)), shoulder = lerp(0.3, 0.18, cam.inK), fov = lerp(lerp(52, 62, cam.inK), 46, cam.sitK);
   if (cam.mode === 'sit') { cam.yaw = lerpAng(cam.yaw, player.h + Math.PI + 0.5 + Math.sin(elapsed * 0.05) * 0.15, dt * 0.25); cam.pitch = lerp(cam.pitch, -0.05, dt * 0.4); }
@@ -243,7 +271,7 @@ function updateCamera(dt) {
   const pivot = V3(player.x, player.y + (player.sit ? 1.0 : 1.5), player.z);
   let want = pivot.clone().addScaledVector(camFwd, -dist).addScaledVector(right, shoulder).add(V3(0, 0.12, 0));
   const steps = 14; let last = pivot.clone().addScaledVector(right, shoulder * 0.3);
-  for (let i = 1; i <= steps; i++) { const t = i / steps; const q = pivot.clone().lerp(want, t); if (q.y < groundH(q.x, q.z) + 0.3 || insideBox(q.x, q.z, 0.15, player.y)) break; last = q; }
+  for (let i = 1; i <= steps; i++) { const t = i / steps; const q = pivot.clone().lerp(want, t); if (q.y < groundH(q.x, q.z) + 0.3 || insideBox(q.x, q.z, 0.15, player.y) || inSolid(q.x, q.y, q.z, 0.18) || q.y < probe(q.x, q.z, player.y + 0.4).h + 0.25) break; last = q; }
   want = last;
   if (cam.cine > 0.001 && dlgNPC && dlgNPC.h) {
     const H = dlgNPC.h.headPos; const P = pH.headPos; const d = H.clone().sub(P); d.y = 0; d.normalize(); const rr2 = V3(d.z, 0, -d.x);
@@ -266,9 +294,6 @@ function updateCamera(dt) {
 // =====================================================================
 // moradores
 // =====================================================================
-function addNPC(o) { const h = new Human(o.key); scene.add(h.root); const n = Object.assign({ h, wi: 0, wait: rr(1, 4), speed: 0, talkT: 0, x: o.day[0], z: o.day[1], yaw: o.day[2] || 0, inside: false }, o); h.root.position.set(n.x, groundH(n.x, n.z), n.z); npcs.push(n); return n; }
-let odessa, anselmo, celeste, tome, irene, bastiao;
-function houseOf(role) { return interiors.find(h => h.role === role); }
 function buildNPCs() {
   const od = storySpots.odessa; odessa = addNPC({ id: 'odessa', key: 'odessa', day: [od.x, od.z, Math.atan2(-POI.observatory.x, -POI.observatory.z)], talk: talkOdessa, idle: 'fold', always: true, nightIdle: 'idle', lookSky: true });
   anselmo = addNPC({ id: 'anselmo', key: 'anselmo', day: [44, 47, 0.4], talk: talkAnselmo, idle: 'idle', wander: [[44, 47], [52, 44], [50, 55], [40, 52]], home: houseOf('anselmo'), slow: true });
@@ -283,32 +308,122 @@ function buildNPCs() {
 }
 function paintingMat() { const c = document.createElement('canvas'); c.width = 256; c.height = 192; const g = c.getContext('2d'); const gr = g.createLinearGradient(0, 0, 0, 192); gr.addColorStop(0, '#f2c78a'); gr.addColorStop(0.45, '#e9a06a'); gr.addColorStop(0.55, '#5a7c86'); gr.addColorStop(1, '#2f4f5a'); g.fillStyle = gr; g.fillRect(0, 0, 256, 192); g.fillStyle = 'rgba(255,240,200,0.8)'; for (let i = 0; i < 40; i++) g.fillRect(90 + Math.random() * 80, 110 + Math.random() * 60, 18 + Math.random() * 20, 2); g.fillStyle = '#2b3a2a'; g.beginPath(); g.moveTo(0, 105); g.quadraticCurveTo(60, 70, 120, 100); g.lineTo(256, 95); g.lineTo(256, 108); g.lineTo(0, 110); g.fill(); const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return new THREE.MeshStandardMaterial({ map: t, roughness: 0.9 }); }
 const isNight = () => hour >= 20.2 || hour < 6.3;
+const isBedtime = () => hour >= 22.4 || hour < 6.3;
+// ---------------------------------------------------------------------
+// rotina dos moradores: de dia cada um no seu canto; ao anoitecer vão para casa e sentam perto da
+// lareira; mais tarde dormem na cama (de verdade, dá para vê-los pela janela). Os trajetos são
+// planejados com A* (nav.js) e simulados mesmo longe da câmera, então ninguém fica preso no caminho.
+// ---------------------------------------------------------------------
+let nav = null;
+function initNav() {
+  const stairs = interiors.flatMap(h => h.stair.map(st => [st.foot.x, st.foot.z, st.top.x, st.top.z]));
+  nav = new Nav({ boxes: colliders.boxes,
+    circles: (x, z, cb) => { const cx = Math.floor(x / CG), cz = Math.floor(z / CG); for (let a = -1; a <= 1; a++) for (let b = -1; b <= 1; b++) { const arr = circGrid.get((cx + a) + ',' + (cz + b)); if (!arr) continue; for (let i = 0; i < arr.length; i += 3) cb(arr[i], arr[i + 1], arr[i + 2]); } },
+    extra: (x, z) => { for (const [ax, az, bx, bz] of stairs) { const dx = bx - ax, dz = bz - az; const t = clamp(((x - ax) * dx + (z - az) * dz) / (dx * dx + dz * dz), 0, 1); if (Math.hypot(ax + dx * t - x, az + dz * t - z) < 0.62) return true; } return false; } });
+}
+const SIT_H = 0.48; // altura do assento esperada pelo clipe "Sitting" (calibrada olhando a pose)
+const taken = new Map(); // assento/cama -> morador
+function claim(n, spot) { if (!spot) return null; const o = taken.get(spot); if (o && o !== n) return null; taken.set(spot, n); return spot; }
+// ponto livre ao lado de um assento para sentar/levantar (frente, lados, trás)
+function seatExit(st) { if (st._exit) return st._exit; const f = [Math.sin(st.yaw), Math.cos(st.yaw)], r = [Math.cos(st.yaw), -Math.sin(st.yaw)]; const c = [[st.exit, 0], [0.15, 0.62], [0.15, -0.62], [-0.55, 0], [0.6, 0.5], [0.6, -0.5]];
+  for (const [a, b] of c) { const x = st.x + f[0] * a + r[0] * b, z = st.z + f[1] * a + r[1] * b; if (!nav || nav.free(x, z)) return (st._exit = { x, z }); } return (st._exit = { x: st.x + f[0] * st.exit, z: st.z + f[1] * st.exit }); }
+function release(n) { for (const [k, v] of taken) if (v === n) taken.delete(k); }
+function homeSeat(n) { if (n.homeSeat && taken.get(n.homeSeat) === n) return n.homeSeat; const h = n.home; if (!h) return null; const list = [...h.seats].sort((a, b) => (a.kind === 'chair' ? 0 : 1) - (b.kind === 'chair' ? 0 : 1)); for (const st of list) if (!taken.get(st) || taken.get(st) === n) { n.homeSeat = claim(n, st); return st; } return null; }
+function homeBed(n) { if (n.homeBed && taken.get(n.homeBed) === n) return n.homeBed; const h = n.home; if (!h) return null; for (const b of h.beds) if (!taken.get(b) || taken.get(b) === n) { n.homeBed = claim(n, b); return b; } return null; }
+// o que o morador quer fazer agora: { key, x, z, act, yaw, spot }
+function npcPlan(n) {
+  if (n.home && !n.always) {
+    if (isBedtime()) { const b = homeBed(n); if (b) return { key: 'bed', x: b.side.x, z: b.side.z, act: 'sleep', spot: b }; }
+    if (isNight()) { const st = homeSeat(n); if (st) { const e = seatExit(st); return { key: 'seat', x: e.x, z: e.z, act: 'sit', spot: st }; } }
+  }
+  if (n.wander) { const t = n.wander[n.wi]; return { key: 'w' + n.wi, x: t[0], z: t[1], act: 'wander' }; }
+  return { key: 'day', x: n.day[0], z: n.day[1], act: 'day', yaw: n.day[2] };
+}
+// rota até o plano: A* no térreo; se a cama for no andar de cima, sobe pela escada
+function planRoute(n, plan) {
+  const pts = []; let from = [n.x, n.z];
+  const up = plan.spot && plan.spot.house && plan.spot.y > plan.spot.house.levels[0] + 1.2;
+  const st = up ? plan.spot.house.stair[0] : null;
+  // descendo do andar de cima, primeiro volta à escada
+  if (n.floorUp && n.floorUp.stair && !(up && n.floorUp.house === plan.spot.house)) { const s2 = n.floorUp.stair; pts.push([s2.landing.x, s2.landing.z], [s2.top.x, s2.top.z], [s2.foot.x, s2.foot.z], [s2.bottom.x, s2.bottom.z]); from = [s2.bottom.x, s2.bottom.z]; }
+  if (up && n.floorUp && n.floorUp.house === plan.spot.house) { pts.push([plan.x, plan.z]); return pts; }
+  const goal = up ? [st.bottom.x, st.bottom.z] : [plan.x, plan.z];
+  const p = nav.path(from[0], from[1], goal[0], goal[1]); if (!p) return null; pts.push(...p);
+  if (up) pts.push([st.foot.x, st.foot.z], [st.top.x, st.top.z], [st.landing.x, st.landing.z], [plan.x, plan.z]);
+  return pts;
+}
+function addNPC(o) { const h = new Human(o.key); scene.add(h.root); const n = Object.assign({ h, wi: 0, wait: rr(1, 4), speed: 0, talkT: 0, x: o.day[0], z: o.day[1], y: groundH(o.day[0], o.day[1]), yaw: o.day[2] || 0, route: null, pose: null, fails: 0, stuckT: 0 }, o); h.root.position.set(n.x, n.y, n.z); npcs.push(n); return n; }
+let odessa, anselmo, celeste, tome, irene, bastiao;
+function houseOf(role) { return interiors.find(h => h.role === role); }
+function teleportNPC(n, x, z, y) { n.x = x; n.z = z; n.y = y ?? probe(x, z, groundH(x, z) + 0.3).h; n.floorUp = null; }
+function npcVisible(n) { const dx = n.x - camera.position.x, dz = n.z - camera.position.z, d = Math.hypot(dx, dz); if (d < 6) return true; if (d > 95) return false; const f = camFwd; return (dx * f.x + dz * f.z) / d > 0.35; }
+function arrive(n, plan) {
+  if (plan.act === 'sit' && plan.spot) { const st = plan.spot; n.mode = 'settle'; n.settle = { t: 0, x0: n.x, z0: n.z, y0: n.y, x1: st.x, z1: st.z, y1: st.y - SIT_H, yaw: st.yaw, then: 'sitting' }; n.h.play('sitDown', 0.35); return; }
+  if (plan.act === 'sleep' && plan.spot) { const b = plan.spot; const L = Human.LIE; const c = Math.cos(b.yaw), sn = Math.sin(b.yaw); n.mode = 'settle'; n.settle = { t: 0, x0: n.x, z0: n.z, y0: n.y, x1: b.x + L.dx * c + L.dz * sn, z1: b.z - L.dx * sn + L.dz * c, y1: b.y + L.dy, yaw: b.yaw + L.yaw, then: 'lying', dur: 1.6 }; n.h.pose('lie', 0, 1.2); return; }
+  if (plan.act === 'wander') { n.mode = 'wait'; n.wait = rr(5, 14); return; }
+  n.mode = 'idle';
+}
+function rise(n) {
+  // levanta da cadeira ou da cama antes de seguir para o próximo plano
+  if (n.mode === 'sitting') { n.mode = 'rising'; n.riseT = 0; n.h.play('standUp', 0.3); }
+  else if (n.mode === 'lying') { n.mode = 'rising'; n.riseT = 0; n.h.unpose(1); }
+  else n.mode = 'walk';
+}
 function updateNPCs(dt) {
   const lvl = Voice.update();
   for (const n of npcs) {
     const talking = state === 'dialog' && dlgNPC === n; const dp = Math.hypot(player.x - n.x, player.z - n.z); let speed = 0;
-    // rotina: à noite, quase todos vão para casa
-    const wantHome = isNight() && !n.always && n.home && state !== 'finale';
-    if (wantHome && !n.inside) { const d = n.home.door.p; const dx = d.x - n.x, dz = d.z - n.z, dd = Math.hypot(dx, dz); if (dd < 0.6 || dp > 120) { n.inside = true; n.x = n.home.x; n.z = n.home.z; } else if (!talking) { speed = n.slow ? 1.0 : 1.3; n.x += dx / dd * speed * dt; n.z += dz / dd * speed * dt; n.yaw = lerpAng(n.yaw, Math.atan2(dx, dz), dt * 4); const p = { x: n.x, z: n.z }; collide(p, 0.3); n.x = p.x; n.z = p.z; } }
-    else if (!wantHome && n.inside && state !== 'finale') { n.inside = false; const d = n.home.door.p; n.x = d.x; n.z = d.z; }
-    const camDist = Math.hypot(n.x - camera.position.x, n.z - camera.position.z); const vis = !n.inside && camDist < 95; n.h.root.visible = vis || n.finale; if (!vis && !n.finale) continue;
-    const cast = camDist < 32; if (n.cast !== cast) { n.cast = cast; for (const m of n.h.meshes) if (!m.userData.hair) m.castShadow = cast; }
-    if (!wantHome && !talking && !n.finale) {
-      if (n.wander && dp > 2.5) { if (n.wait > 0) n.wait -= dt; else { const t = n.wander[n.wi]; const dx = t[0] - n.x, dz = t[1] - n.z, d = Math.hypot(dx, dz); if (d < 0.4) { n.wi = (n.wi + 1) % n.wander.length; n.wait = rr(4, 12); } else { speed = n.fast ? 2.6 : n.slow ? 0.9 : 1.2; n.x += dx / d * speed * dt; n.z += dz / d * speed * dt; n.yaw = lerpAng(n.yaw, Math.atan2(dx, dz), dt * 4); const p = { x: n.x, z: n.z }; collide(p, 0.3); n.x = p.x; n.z = p.z; } } }
-      else if (!n.wander) { const dx = n.day[0] - n.x, dz = n.day[1] - n.z, d = Math.hypot(dx, dz); if (d > 0.3) { speed = 1.2; n.x += dx / d * speed * dt; n.z += dz / d * speed * dt; n.yaw = lerpAng(n.yaw, Math.atan2(dx, dz), dt * 4); } }
+    if (n.finale) { n.mode = 'idle'; n.route = null; release(n); n.y = probe(n.x, n.z, groundH(n.x, n.z) + 0.5).h; }
+    else if (!talking) {
+      const plan = npcPlan(n);
+      if (n.planKey !== plan.key) { n.planKey = plan.key; n.route = null; n.fails = 0; if (['sitting', 'lying', 'settle'].includes(n.mode)) rise(n); else if (n.mode !== 'rising') n.mode = 'walk'; }
+      if (n.mode === 'rising') { n.riseT += dt; if (n.h.done() || n.riseT > 4) { const back = n.homeBed && n.mode === 'rising' && n.lastPose === 'lying' ? n.homeBed.side : null; if (back) { n.x = back.x; n.z = back.z; } else if (n.settle) { n.x = n.settle.x0; n.z = n.settle.z0; } n.y = probe(n.x, n.z, n.y + 0.4).h; n.mode = 'walk'; n.route = null; } }
+      else if (n.mode === 'settle') { const S2 = n.settle; S2.t += dt; const k = smooth(0, S2.dur || 0.7, S2.t); n.x = lerp(S2.x0, S2.x1, k); n.z = lerp(S2.z0, S2.z1, k); n.y = lerp(S2.y0, S2.y1, k); n.yaw = lerpAng(n.yaw, S2.yaw, dt * 6); if (S2.t > (S2.dur || 0.7) + 0.2) { n.mode = S2.then; n.lastPose = S2.then; n.yaw = S2.yaw; } }
+      else if (n.mode === 'wait') { n.wait -= dt; if (n.wait <= 0) { n.wi = (n.wi + 1) % n.wander.length; } }
+      else if (n.mode === 'walk' || !n.mode) {
+        n.mode = 'walk';
+        if (!n.route) { n.retryT = (n.retryT || 0) - dt; if (n.retryT <= 0) { const pts = planRoute(n, plan); if (pts) n.route = { pts, i: 0, best: 1e9, stuckT: 0 }; else { n.fails++; n.retryT = 2.5; if (n.fails >= 2 && !npcVisible(n)) { teleportNPC(n, plan.x, plan.z, plan.spot && plan.spot.house ? plan.spot.house.levels[plan.spot.y > plan.spot.house.levels[0] + 1.2 ? 1 : 0] : undefined); n.route = { pts: [], i: 0 }; } } } }
+        if (n.route) {
+          const R = n.route; const wp = R.pts[R.i];
+          if (!wp) { n.route = { pts: [], i: 0, done: true }; arrive(n, plan); }
+          else {
+            const dx = wp[0] - n.x, dz = wp[1] - n.z, d = Math.hypot(dx, dz);
+            const pause = n.wander && dp < 2.2 && !isNight();
+            if (d < 0.22) { R.i++; R.best = 1e9; R.stuckT = 0;
+              // passou pelo topo da escada: está no andar de cima
+              if (plan.spot && plan.spot.house && plan.spot.house.stair[0]) { const st = plan.spot.house.stair[0]; if (Math.hypot(wp[0] - st.top.x, wp[1] - st.top.z) < 0.05) n.floorUp = { house: plan.spot.house, stair: st }; }
+              if (n.floorUp && Math.hypot(wp[0] - n.floorUp.stair.bottom.x, wp[1] - n.floorUp.stair.bottom.z) < 0.05) n.floorUp = null; }
+            else if (!pause) {
+              const base = n.fast ? 2.4 : n.slow ? 0.95 : 1.25; const stairK = n.y > groundH(n.x, n.z) + 0.8 ? 0.75 : 1; speed = base * stairK * clamp(d / 0.6 + 0.4, 0.4, 1);
+              const step = Math.min(d, speed * dt); n.x += dx / d * step; n.z += dz / d * step; n.yaw = lerpAng(n.yaw, Math.atan2(dx, dz), dt * 5);
+              n.y = probe(n.x, n.z, n.y + 0.3).h;
+              // preso? (não se aproxima do ponto há alguns segundos) -> replaneja; persistente -> reposiciona fora da vista
+              if (d < R.best - 0.05) { R.best = d; R.stuckT = 0; } else { R.stuckT += dt; if (R.stuckT > 3) { n.route = null; n.fails++; if (n.fails > 3 && !npcVisible(n)) teleportNPC(n, plan.x, plan.z); } }
+            }
+          }
+        }
+      }
     }
-    if (talking || (dp < 3.2 && !n.finale)) { const want = Math.atan2(player.x - n.x, player.z - n.z); if (Math.abs(angDiff(want, n.yaw)) > 0.7 || talking) n.yaw = lerpAng(n.yaw, want, dt * 2.5); }
-    else if (!n.wander && speed === 0 && !n.finale) n.yaw = lerpAng(n.yaw, n.day[2], dt * 1.2);
-    const py = probe(n.x, n.z, (n.h.root.position.y || groundH(n.x, n.z)) + 0.3).h; n.h.root.position.set(n.x, py, n.z); n.h.root.rotation.y = n.yaw;
+    // sobe/desce degraus suavemente quando parado
+    if (n.mode === 'idle' || n.mode === 'wait') n.y = probe(n.x, n.z, n.y + 0.3).h;
+    const camDist = Math.hypot(n.x - camera.position.x, n.z - camera.position.z); const vis = camDist < 95 || n.finale; n.h.root.visible = vis; n.inside = !!insideHouse(n.x, n.z);
+    if (!vis) continue;
+    const cast = camDist < 32; if (n.cast !== cast) { n.cast = cast; for (const m of n.h.meshes) if (!m.userData.hair) m.castShadow = cast; }
+    const posed = ['sitting', 'lying', 'settle', 'rising'].includes(n.mode);
+    if (!posed && (talking || (dp < 3.2 && !n.finale))) { const want = Math.atan2(player.x - n.x, player.z - n.z); if (Math.abs(angDiff(want, n.yaw)) > 0.7 || talking) n.yaw = lerpAng(n.yaw, want, dt * 2.5); }
+    else if (n.mode === 'idle' && !n.finale && n.planKey === 'day') n.yaw = lerpAng(n.yaw, n.day[2], dt * 1.2);
+    n.h.root.position.set(n.x, n.y, n.z); n.h.root.rotation.y = n.yaw;
     const speaking = (talking && Voice.playing) || (n.finale && finale && finale.speaker === n.id && Voice.playing);
     n.h.talking = speaking ? lvl : 0;
-    const idle = n.finale ? (n.finaleIdle || 'idle') : (isNight() && n.nightIdle) ? n.nightIdle : (dp > 6 && n.work && hour > 7 && hour < 17) ? n.work : n.idle;
-    n.h.locomote(speed, { idle: talking ? 'talk' : idle, talk: speaking, slow: n.slow });
-    if (dp < 7 || talking) n.h.lookAtPoint(pH.headPos, 1); else if (n.lookSky && isNight()) n.h.lookAtPoint(n.h.headPos.add(V3(Math.sin(n.yaw) * 3, 4, Math.cos(n.yaw) * 3)), 0.8); else n.h.lookAtPoint(null);
+    if (n.mode === 'sitting') { const want = speaking ? 'sitTalk' : 'sit'; if (n.h.currentName !== want) n.h.play(want, 0.4); }
+    else if (n.mode === 'settle' && n.settle.then === 'sitting') { if (n.h.currentName === 'sitDown' && n.h.done()) n.h.play('sit', 0.4); }
+    else if (n.mode === 'lying' || n.mode === 'settle' || n.mode === 'rising') { }
+    else { const idle = n.finale ? (n.finaleIdle || 'idle') : (isNight() && n.nightIdle) ? n.nightIdle : (dp > 6 && n.work && hour > 7 && hour < 17) ? n.work : n.idle; n.h.locomote(speed, { idle: talking ? 'talk' : idle, talk: speaking, slow: n.slow }); }
+    if (n.mode === 'lying') n.h.lookAtPoint(null);
+    else if (dp < 7 || talking) n.h.lookAtPoint(pH.headPos, 1); else if (n.lookSky && isNight()) n.h.lookAtPoint(n.h.headPos.add(V3(Math.sin(n.yaw) * 3, 4, Math.cos(n.yaw) * 3)), 0.8); else n.h.lookAtPoint(null);
     n.h.update(dt);
   }
 }
-
 // =====================================================================
 // diálogos
 // =====================================================================
@@ -392,7 +507,7 @@ function finishLume(place) {
   captureSketch(place.id); Sound.page();
   const n = lumesN(); toast('Desenhado no caderno', `${place.name} · ${n}/8`); refreshQuest(); save();
   if (n === 8) setTimeout(() => think('li_mapa_cheio'), 2500);
-  Music.silence = rr(40, 90);
+  Music.silence = rr(12, 30);
 }
 function placeDone(place, quiet) { const g = giants.find(g => g.id === place.id); if (g) g.target = 0.35; const sp = SPOTS[place.place]; if (sp) addSiteSpirits(V3(sp.x, groundH(sp.x, sp.z), sp.z), quiet ? 6 : 9, 9, 3); }
 function captureSketch(id) {
@@ -449,11 +564,13 @@ function hideSub() { $('memory').classList.remove('show'); $('memory').hidden = 
 let curInter = null;
 function interactables() {
   const out = [];
-  for (const n of npcs) if (n.h.root.visible && !n.finale) out.push({ x: n.x, z: n.z, r: 2.6, label: 'Conversar com ' + CAST[n.id].name, act: () => openDialog(n) });
+  for (const n of npcs) { if (!n.h.root.visible || n.finale || Math.abs(n.y - player.y) > 1.6) continue; if (n.mode === 'lying' || (n.mode === 'settle' && n.settle.then === 'lying')) out.push({ x: n.x, z: n.z, r: 2.6, label: CAST[n.id].name + ' está dormindo', act: () => think('li_dormindo') }); else out.push({ x: n.x, z: n.z, r: 2.6, label: 'Conversar com ' + CAST[n.id].name, act: () => openDialog(n) }); }
   if (S.met.odessa) for (const pl of PLACES) { const sp = SPOTS[pl.place]; if (!sp) continue; out.push({ x: sp.x, z: sp.z, r: 3.2, label: S.lumes[pl.id] ? 'Sentar e olhar um pouco' : 'Sentar e contemplar', act: () => S.lumes[pl.id] ? sitAt(spAt(sp), sitThought) : contemplate(pl) }); }
   else for (const pl of PLACES) { const sp = SPOTS[pl.place]; if (sp) out.push({ x: sp.x, z: sp.z, r: 3.2, label: 'Sentar um pouco', act: () => sitAt(spAt(sp), sitThought) }); }
   for (const k in NOTES) { const sp = storySpots[k]; if (sp) out.push({ x: sp.x, z: sp.z, r: 2.4, label: S.notes[k] ? 'Olhar de novo' : 'Observar', act: () => readNote(k) }); }
-  for (const b of [storySpots.banco, storySpots.fogueira, storySpots.obsBench1]) if (b) out.push({ x: b.x, z: b.z, r: 1.8, label: 'Sentar no banco', act: () => sitAt({ x: b.x, z: b.z, yaw: Math.atan2(b.x - camera.position.x, b.z - camera.position.z) }, sitThought) });
+  // cadeiras, bancos e camas (dentro e fora das casas)
+  for (const st of seats) { if (Math.abs(st.x - player.x) > 2 || Math.abs(st.z - player.z) > 2 || Math.abs(st.y - SIT_H - player.y) > 0.8 || taken.get(st)) continue; out.push({ x: st.x, z: st.z, r: 1.25, label: st.kind === 'chair' ? 'Sentar na cadeira' : st.outdoor ? 'Sentar no banco' : 'Sentar à mesa', act: () => sitAt({ x: st.x, z: st.z, y: st.y, yaw: st.yaw, seat: st }, st.outdoor ? sitThought : () => { $('lapseHint').hidden = false; }) }); }
+  for (const b of beds) { if (Math.abs(b.x - player.x) > 2.6 || Math.abs(b.z - player.z) > 2.6 || Math.abs(b.y - 0.5 - player.y) > 0.9 || taken.get(b)) continue; out.push({ x: b.side.x, z: b.side.z, r: 1.6, label: 'Deitar na cama', act: () => lieAt(b) }); }
   return out;
 }
 const sitThought = () => { const ids = ['li_sentar1', 'li_sentar2', 'li_sentar3']; think(ids[S.sat++ % 3]); $('lapseHint').hidden = false; save(); };
@@ -548,7 +665,7 @@ function updateLamps() {
 }
 let hearthLights = [], candleLight = null, roomLight = null;
 function updateDoors(dt) {
-  for (const d of doors) { let near = Math.hypot(player.x - d.p.x, player.z - d.p.z) < 2.4; for (const n of npcs) if (!n.inside && Math.hypot(n.x - d.p.x, n.z - d.p.z) < 1.8) near = true;
+  for (const d of doors) { let near = Math.hypot(player.x - d.p.x, player.z - d.p.z) < 2.4; for (const n of npcs) if (n.mode !== 'lying' && n.mode !== 'sitting' && Math.abs(n.y - d.p.y) < 2.5 && Math.hypot(n.x - d.p.x, n.z - d.p.z) < 1.8) near = true;
     d.target = near ? 1 : 0; if (near !== d.was) { d.was = near; if (Math.hypot(camera.position.x - d.p.x, camera.position.z - d.p.z) < 25) Sound.door(near, d.p.x, d.p.z); }
     d.open = lerp(d.open, d.target, 1 - Math.exp(-dt * 3)); d.pivot.rotation.y = d.rot - d.open * 1.75; }
 }
@@ -622,7 +739,7 @@ addEventListener('keydown', (e) => {
   if (state !== 'play') return;
   if (e.code === 'KeyL') toggleLantern();
   if (e.code === 'KeyE') interact();
-  if (e.code === 'KeyT' && player.sit) { timeLapse = timeLapse ? 0 : 1; $('lapseHint').classList.toggle('on', !!timeLapse); }
+  if (e.code === 'KeyT' && player.sit) { if (player.sit.lie && isNight()) sleepUntilMorning(); else { timeLapse = timeLapse ? 0 : 1; $('lapseHint').classList.toggle('on', !!timeLapse); } }
   if (e.code === 'KeyM') $('mapView').hidden = !$('mapView').hidden;
   if (e.code === 'Escape' && lockFailed) pauseGame();
 });
@@ -644,7 +761,7 @@ function setupTouch() {
   addEventListener('touchmove', (e) => { for (const t of e.changedTouches) { if (t.identifier === joyId) { let dx = t.clientX - jx, dy = t.clientY - jy; const d = Math.hypot(dx, dy); if (d > 50) { dx *= 50 / d; dy *= 50 / d; } knob.style.transform = `translate(${dx}px,${dy}px)`; touch.mx = dx / 50; touch.my = -dy / 50; } else if (t.identifier === lookId && state === 'play') { cam.yaw -= (t.clientX - lx) * 0.005; cam.pitch = clamp(cam.pitch - (t.clientY - ly) * 0.005, -1.1, 0.9); lx = t.clientX; ly = t.clientY; } } }, { passive: true });
   const end = (e) => { for (const t of e.changedTouches) { if (t.identifier === joyId) { joyId = null; touch.mx = touch.my = 0; knob.style.transform = ''; } if (t.identifier === lookId) lookId = null; } }; addEventListener('touchend', end); addEventListener('touchcancel', end);
   const tb = (id, fn) => { const b = $(id); b.addEventListener('touchstart', (e) => { e.preventDefault(); e.stopPropagation(); fn(); }, { passive: false }); };
-  tb('tbUse', () => { if (state === 'dialog') { if (dlgNode && dlgNode.opts.length === 1) choose(0); } else if (state === 'lume' && lume) lume.skip(); else interact(); }); tb('tbJump', () => { touch.jump = true; }); tb('tbMap', () => { $('mapView').hidden = !$('mapView').hidden; }); tb('tbRun', () => { touch.run = !touch.run; $('tbRun').classList.toggle('on', touch.run); }); tb('tbLamp', toggleLantern); tb('tbBook', () => { if (state === 'journal') closeJournal(); else openJournal(); }); tb('tbTime', () => { if (player.sit) { timeLapse = timeLapse ? 0 : 1; $('lapseHint').classList.toggle('on', !!timeLapse); } });
+  tb('tbUse', () => { if (state === 'dialog') { if (dlgNode && dlgNode.opts.length === 1) choose(0); } else if (state === 'lume' && lume) lume.skip(); else interact(); }); tb('tbJump', () => { touch.jump = true; }); tb('tbMap', () => { $('mapView').hidden = !$('mapView').hidden; }); tb('tbRun', () => { touch.run = !touch.run; $('tbRun').classList.toggle('on', touch.run); }); tb('tbLamp', toggleLantern); tb('tbBook', () => { if (state === 'journal') closeJournal(); else openJournal(); }); tb('tbTime', () => { if (player.sit) { if (player.sit.lie && isNight()) sleepUntilMorning(); else { timeLapse = timeLapse ? 0 : 1; $('lapseHint').classList.toggle('on', !!timeLapse); } } });
 }
 
 // =====================================================================
@@ -740,7 +857,7 @@ $('startBtn').addEventListener('click', () => {
   const go = () => { if (!S.letter && !MANUAL) startIntro(); else { state = 'play'; requestLock(); Music.silence = 6; } };
   if (Sound.ctx) { const w = setInterval(() => { if (Sound.ready) { clearInterval(w); go(); } }, 100); setTimeout(() => { clearInterval(w); if (state === 'menu') go(); }, 6000); } else go();
 });
-window.__game = { sky: () => sky, post: () => post, camera, scene, player, S, npcs, cam, renderer, trees, grass, SPOTS, PLACES, get state() { return state; }, set state(v) { state = v; }, setHour: (h) => { hour = h; }, get hour() { return hour; }, tick: (dt, n = 1) => { for (let i = 0; i < n; i++) frame(dt); }, startLume: (i) => startLume(PLACES[i]), startFinale: () => startFinale(), openJournal, openDialog, choose, get pH() { return pH; }, toggleLantern, sitAt, interiors, think, Voice, Music };
+window.__game = { storySpots, groundH, probe, get nav() { return nav; }, npcPlan, planRoute, sky: () => sky, post: () => post, camera, scene, player, S, npcs, cam, renderer, trees, grass, SPOTS, PLACES, get state() { return state; }, set state(v) { state = v; }, setHour: (h) => { hour = h; }, get hour() { return hour; }, tick: (dt, n = 1) => { for (let i = 0; i < n; i++) frame(dt); }, startLume: (i) => startLume(PLACES[i]), lieAt, seats, beds, Human, startFinale: () => startFinale(), openJournal, openDialog, choose, get pH() { return pH; }, toggleLantern, sitAt, interiors, think, Voice, Music };
 renderer.domElement.addEventListener('webglcontextlost', (e) => { e.preventDefault(); store.set('aldren2-q', settings.quality === 'alta' ? 'media' : 'baixa'); $('loading').textContent = 'A placa de vídeo reiniciou. Recarregando com gráficos mais leves…'; $('menu').hidden = false; $('loadBar').parentElement.hidden = true; setTimeout(() => location.reload(), 1500); });
 document.addEventListener('visibilitychange', () => { if (Sound.ctx) { if (document.hidden) Sound.ctx.suspend(); else Sound.ctx.resume(); } if (document.hidden && state === 'play') pauseGame(); });
 boot().catch((e) => { console.error(e); $('loading').textContent = 'Falha ao carregar: ' + e.message; });

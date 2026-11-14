@@ -167,6 +167,7 @@ export const LINES = {
   li_sentar3: ['lia', 'As nuvens andam tão devagar. Ou sou eu que finalmente parei.', 'tender'],
   li_mapa_cheio: ['lia', 'Oito lugares. O caderno está cheio de gente que eu nunca vou conhecer. E mesmo assim parece que conheço.', 'tender'],
   li_estrela: ['lia', 'Uma estrela cadente. Esqueci de fazer um pedido. Tudo bem. Ver já foi bom.', 'happy'],
+  li_dormindo: ['lia', 'Está dormindo. Melhor não acordar. Amanhã a gente conversa.', 'tender'],
 };
 
 // Os oito lugares de memória. `place` é a chave do ponto no mundo (ver world/landmarks.js).

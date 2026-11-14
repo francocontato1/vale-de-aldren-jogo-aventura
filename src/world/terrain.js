@@ -23,6 +23,10 @@ export const PATHS = [
   [[8, -90], [36, -104], [58, -112]],
   [[60, 30], [110, 8], [150, -14], [170, -30]],
 ];
+// trilha da montanha: da torre partida até o mirante da gigante (traçada por A* sobre o relevo, rampa ≤ ~30%)
+export const MIRANTE = { x: -46, z: -503 };
+export const TRAIL = [[68, -256], [84, -284], [76, -306], [80, -322], [100, -334], [116, -358], [106, -368], [96, -390], [90, -412], [80, -421], [76, -438], [84, -462], [76, -482], [70, -496], [48, -502], [28, -510], [4, -506], [-20, -510], [-38, -505], [MIRANTE.x, MIRANTE.z]];
+PATHS.push(TRAIL);
 // leito de um riacho que secou há séculos (atravessado pela ponte partida dos Veladores)
 export const CREEK = [[118, -10], [132, 30], [146, 70], [154, 96], [168, 130], [196, 168], [214, 200]];
 export function creekDist(x, z) { let best = 1e9; for (let i = 0; i < CREEK.length - 1; i++) { const [x1, z1] = CREEK[i], [x2, z2] = CREEK[i + 1]; const dx = x2 - x1, dz = z2 - z1; const t = clamp(((x - x1) * dx + (z - z1) * dz) / (dx * dx + dz * dz), 0, 1); const d = Math.hypot(x1 + dx * t - x, z1 + dz * t - z); if (d < best) best = d; } return best; }
@@ -33,6 +37,11 @@ export function pathDist(x, z) {
   return Math.sqrt(best) + fbm(x * 0.08, z * 0.08, 2) * 0.9;
 }
 export const WATER = 0;
+let TRAIL_H = null; // alturas-alvo dos nós da trilha (relevo suavizado)
+function trailInfo(x, z) {
+  let best = 1e9, bh = 0; for (let i = 0; i < TRAIL.length - 1; i++) { const [x1, z1] = TRAIL[i], [x2, z2] = TRAIL[i + 1]; const dx = x2 - x1, dz = z2 - z1; const t = clamp(((x - x1) * dx + (z - z1) * dz) / (dx * dx + dz * dz), 0, 1); const d = Math.hypot(x1 + dx * t - x, z1 + dz * t - z); if (d < best) { best = d; bh = TRAIL_H[i] + (TRAIL_H[i + 1] - TRAIL_H[i]) * t; } }
+  return [best, bh];
+}
 function baseHeight(x, z) {
   const d = Math.hypot(x, z);
   let h = fbm(x * 0.0022 + 3.1, z * 0.0022 - 7.3, 5) * 26 + 10;
@@ -55,12 +64,22 @@ const FLAT = [
   { x: POI.stairs.x, z: POI.stairs.z, r0: 9, r1: 22 },
   { x: POI.shrine.x, z: POI.shrine.z, r0: 5, r1: 12 },
 ];
+// platô atrás do mirante (a gigante senta nele); o mirante fica na borda, olhando o vale lá embaixo
+{ const l = Math.hypot(MIRANTE.x, MIRANTE.z); FLAT.push({ x: MIRANTE.x + MIRANTE.x / l * 7, z: MIRANTE.z + MIRANTE.z / l * 7, r0: 9.5, r1: 19 }); }
 for (const f of FLAT) if (f.t === undefined) f.t = Math.max(baseHeight(f.x, f.z), 4);
+{ // alturas da trilha: relevo amostrado, suavizado, e rampa limitada a 28% entre nós
+  let h = TRAIL.map(([x, z]) => baseHeight(x, z)); for (let it = 0; it < 3; it++) h = h.map((v, i) => i === 0 || i === h.length - 1 ? v : (h[i - 1] + 2 * v + h[i + 1]) / 4);
+  h[0] = FLAT[1].t; h[h.length - 1] = FLAT[FLAT.length - 1].t;
+  for (let pass = 0; pass < 4; pass++) for (let i = 1; i < h.length; i++) { const L = Math.hypot(TRAIL[i][0] - TRAIL[i - 1][0], TRAIL[i][1] - TRAIL[i - 1][1]); const mx = L * 0.28; if (h[i] - h[i - 1] > mx) h[i] = h[i - 1] + mx; if (h[i - 1] - h[i] > mx) h[i - 1] = h[i] + mx; }
+  TRAIL_H = h;
+}
 export function heightFn(x, z) {
   let h = baseHeight(x, z);
   for (const f of FLAT) { const d = Math.hypot(x - f.x, z - f.z); if (d < f.r1) h = lerp(h, f.t, 1 - smooth(f.r0, f.r1, d)); }
   // gentle undulation inside the village so it isn't a table
   const dv = Math.hypot(x, z); if (dv < 100) h += fbm(x * 0.03 + 4, z * 0.03, 2) * 1.1 * (1 - smooth(60, 100, dv)) + 0.0;
+  // trilha da montanha: corta/aterra a encosta numa faixa caminhável
+  if (z < -240 && x > -80 && x < 140) { const [td, th] = trailInfo(x, z); if (td < 11) h = lerp(h, th, 1 - smooth(2.6, 11, td)); }
   const pd = pathDist(x, z); if (pd < 3) h -= 0.14 * (1 - pd / 3);
   // riacho seco: um vale estreito com fundo de cascalho
   const cd = creekDist(x, z) + fbm(x * 0.05, z * 0.05, 2) * 1.5; if (cd < 13) h -= 4.2 * (1 - smooth(2.0, 13, cd));

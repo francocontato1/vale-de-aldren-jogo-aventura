@@ -86,6 +86,8 @@ const _v1 = new THREE.Vector3(), _v2 = new THREE.Vector3(), _q1 = new THREE.Quat
 function setBoneWorldQuat(bone, q) { bone.parent.getWorldQuaternion(_q3); bone.quaternion.copy(_q3.invert().multiply(q)); bone.updateMatrixWorld(true); }
 
 export class Human {
+  // deitada na cama: deslocamento da raiz em relação ao centro do colchão (no referencial da cama, cabeceira em -z)
+  static LIE = { dx: 0, dz: 0, dy: 0, yaw: 0 };
   constructor(key, opts = {}) {
     const def = CHARS[key] || CHARS.aldeao1; this.def = def; this.key = key; this.sex = def.sex;
     this.root = new THREE.Group(); this.meshes = [];
@@ -146,6 +148,9 @@ export class Human {
     a.reset().setEffectiveWeight(1).play(); if (this.current && fade > 0) a.crossFadeFrom(this.current, fade, true); else if (this.current) this.current.stop();
     this.current = a; this.currentName = name; return true;
   }
+  // pose parada num quadro de um clipe (ex.: deitada = primeiro quadro de LayToIdle)
+  pose(name, t = 0, fade = 0.4) { this.play(name, fade); const a = this.current; if (a && this.currentName === name) { a.time = t; a.timeScale = 0; } }
+  unpose(speed = 1) { const a = this.current; if (!a) return; a.paused = false; a.enabled = true; a.timeScale = speed; a.play(); }
   done() { return !this.current || (this.current.loop === THREE.LoopOnce && this.current.time >= this.current.getClip().duration - 0.02); }
   // velocidade em m/s → clipe e ritmo para não "patinar"
   locomote(speed, opts = {}) {

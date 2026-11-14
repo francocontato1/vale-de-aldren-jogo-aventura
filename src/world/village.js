@@ -15,6 +15,7 @@ export async function loadVillageMaterials(barkMat) {
   M.stoneWarm = S({ map: stoneC, normalMap: stoneN, roughness: 0.92, color: 0xe2cdb0, normalScale: new THREE.Vector2(1.3, 1.3) });
   M.block = S({ map: blockC, normalMap: blockN, roughness: 0.9, color: 0xd9d0c2 });
   M.ruin = S({ map: blockC, normalMap: blockN, roughness: 0.95, color: 0xc9c4b6 });
+  M.ruinMoss = S({ map: blockC, normalMap: blockN, roughness: 0.98, color: 0x8f9c78 });
   const plaster = (c) => S({ map: plasterC, normalMap: plasterN, roughness: 0.95, color: c });
   M.plaster = plaster(0xf1e7d6); M.plasterOchre = plaster(0xf3d7a4); M.plasterBlue = plaster(0xc9d9e6); M.plasterRose = plaster(0xf0cfc2); M.plasterSage = plaster(0xd3dcc0);
   M.roof = S({ map: roofC, normalMap: roofN, roughness: 0.82, color: 0xd09a7e, normalScale: new THREE.Vector2(1.4, 1.4) });
@@ -47,6 +48,15 @@ export async function loadVillageMaterials(barkMat) {
   M.paint = { green: S({ map: planksC, roughness: 0.7, color: 0x4f7a55 }), blue: S({ map: planksC, roughness: 0.7, color: 0x4a6f96 }), red: S({ map: planksC, roughness: 0.7, color: 0x9a4436 }), ochre: S({ map: planksC, roughness: 0.7, color: 0xc89a48 }), wood: M.planks };
   M.flowers = [0xe8574a, 0xf2c94c, 0xf0f0f0, 0x9a6ad6, 0xf08fb0].map(c => S({ color: c, roughness: 0.7 }));
   M.leaf = S({ color: 0x4a6e2e, roughness: 0.85 });
+  M.ceramic = S({ color: 0xe6ddcb, roughness: 0.32, envMapIntensity: 0.9 });
+  M.ceramicBlue = S({ color: 0x40618a, roughness: 0.3, envMapIntensity: 0.9 });
+  M.pewter = S({ color: 0x8c8b86, roughness: 0.42, metalness: 0.8 });
+  M.apple = S({ color: 0x8e2116, roughness: 0.45 });
+  M.appleG = S({ color: 0x8aa03a, roughness: 0.5 });
+  M.wicker = S({ map: woodC, roughness: 1, color: 0xb48a52 });
+  M.linen = S({ map: plasterC, roughness: 1, color: 0xe9e1cf, side: THREE.DoubleSide });
+  M.wool = S({ map: plasterC, normalMap: plasterN, roughness: 1, color: 0x7d5a3c });
+  M.paintings = [0, 1, 2, 3, 4, 5].map(i => S({ map: paintingTex(i), roughness: 0.85 }));
   return M;
 }
 
@@ -74,6 +84,16 @@ export const colliders = { boxes: [], circles: [] };
 export function addBox(x, z, hw, hd, rot, y0 = -1e9, y1 = 1e9) { colliders.boxes.push({ x, z, hw, hd, c: Math.cos(rot), s: Math.sin(rot), rad: Math.hypot(hw, hd), y0, y1 }); }
 export function addCircle(x, z, r) { colliders.circles.push([x, z, r]); }
 
+// sólidos horizontais (lajes, forros): a câmera não atravessa
+export const solids = [];
+export function addSolid(B, lx0, lx1, lz0, lz1, ly0, ly1) {
+  const p = new THREE.Vector3(); const q = new THREE.Quaternion(); const sc = new THREE.Vector3(); B.decompose(p, q, sc); const e = new THREE.Euler().setFromQuaternion(q, 'YXZ');
+  solids.push({ x: p.x, z: p.z, c: Math.cos(e.y), s: Math.sin(e.y), lx0, lx1, lz0, lz1, y0: p.y + ly0, y1: p.y + ly1, rad: Math.hypot(Math.max(Math.abs(lx0), Math.abs(lx1)), Math.max(Math.abs(lz0), Math.abs(lz1))) });
+}
+export function inSolid(x, y, z, m = 0.12) {
+  for (const w of solids) { if (y < w.y0 - m || y > w.y1 + m) continue; const dx = x - w.x, dz = z - w.z; if (Math.abs(dx) > w.rad + 0.5 || Math.abs(dz) > w.rad + 0.5) continue; const lx = dx * w.c - dz * w.s, lz = dx * w.s + dz * w.c; if (lx > w.lx0 - m && lx < w.lx1 + m && lz > w.lz0 - m && lz < w.lz1 + m) return true; }
+  return false;
+}
 // superfícies caminháveis acima do terreno (andares, escadas, ruínas)
 export const walk = [];
 export function addWalk(B, lx0, lx1, lz0, lz1, y0, y1 = y0, axis = 'x') {
@@ -117,6 +137,8 @@ export const storySpots = {};
 
 // --------------- casa ---------------
 export const interiors = []; export const doors = [];
+// lugares para sentar e deitar (jogadora e moradores): { x, y, z, yaw, kind, house }
+export const seats = []; export const beds = [];
 function wallO(len, H, T, mat, tile, openings, Mx, colRot, collide = true, cy0 = -1e9, cy1 = 1e9) {
   const ops = openings.slice().sort((a, b) => a.x - b.x); let cur = -len / 2;
   const piece = (x0, x1, y0, y1) => { if (x1 - x0 < 0.02 || y1 - y0 < 0.02) return; const m = mtx((x0 + x1) / 2, (y0 + y1) / 2 - H / 2, 0, 0, 0, 0, Mx); box(x1 - x0, y1 - y0, T, mat, tile, m);
@@ -137,7 +159,7 @@ function house(x, z, rot, o) {
   addWalk(B, -0.8, 0.8, d / 2 - 0.2, d / 2 + 0.78, 0.53);
   const dx = o.doorX || 0; const DW = 1.1, DH = 2.15; const winY0 = 0.95, WW = 0.9, WH = 1.05;
   const winsFront = [-w * 0.3]; if (w > 6.3) winsFront.push(w * 0.3);
-  const ops0 = { front: [{ x: dx, y0: 0, w: DW, h: DH }, ...winsFront.map(px => ({ x: px, y0: winY0, w: WW, h: WH }))], back: floors > 1 ? [] : [{ x: -w * 0.2, y0: winY0, w: WW, h: WH }], right: [{ x: 0, y0: winY0, w: WW, h: WH }], left: floors > 1 ? [] : [{ x: 0, y0: winY0, w: WW, h: WH }] };
+  const ops0 = { front: [{ x: dx, y0: 0, w: DW, h: DH }, ...winsFront.map(px => ({ x: px, y0: winY0, w: WW, h: WH }))], back: floors > 1 ? [] : [{ x: -w * 0.2, y0: winY0, w: WW, h: WH }], right: [{ x: floors > 1 ? id * 0.22 : 0, y0: winY0, w: WW, h: WH }], left: floors > 1 ? [] : [{ x: 0, y0: winY0, w: WW, h: WH }] };
   const wallsAt = (yb, mat, ops, ow, od, colY0, colY1) => {
     wallO(ow, FH, T, mat, tl(mat), ops.front, mtx(0, yb + FH / 2, od / 2 - T / 2, 0, 0, 0, B), rot, true, colY0, colY1);
     wallO(ow, FH, T, mat, tl(mat), ops.back.map(o2 => ({ ...o2, x: -o2.x })), mtx(0, yb + FH / 2, -od / 2 + T / 2, 0, Math.PI, 0, B), rot, true, colY0, colY1);
@@ -160,28 +182,36 @@ function house(x, z, rot, o) {
   };
   if (o.frame) timberFrame(base, FH, w, d);
   // ---- andares de cima, com escada de verdade ----
+  // A escada corre junto à parede do fundo: o primeiro degrau fica virado para o cômodo e o topo chega
+  // junto à parede lateral, onde se sai para o patamar (antes era o contrário: começava colada na parede).
   const stairW = 0.95, rise = FH + SLAB, steps = Math.round(rise / 0.2), run = Math.min(0.28, (iw - 1.9) / steps), stairLen = steps * run;
-  const sx0 = -iw / 2 + 0.05, szc = -id / 2 + stairW / 2 + 0.02;
-  let top = base + FH; const outs = [];
+  const sx0 = -iw / 2 + 0.05, szc = -id / 2 + stairW / 2 + 0.02, sxB = sx0 + stairLen;
+  let top = base + FH; const outs = []; const stair = [];
   for (let f = 1; f < floors; f++) {
     const fy = base + f * FH + (f - 1) * SLAB; // nível do chão do andar (topo da laje anterior, antes da laje)
     const prev = fy - FH; // chão do andar de baixo
-    // escada: degraus do andar de baixo até este
-    for (let i = 0; i < steps; i++) { const h = (i + 1) * (rise / steps); box(run + 0.01, h, stairW, M.oldWood, 1.2, mtx(sx0 + (i + 0.5) * run, prev + h / 2, szc, 0, 0, 0, B), true); }
-    addWalk(B, sx0, sx0 + stairLen, szc - stairW / 2, szc + stairW / 2, prev + 0.02, prev + rise, 'x');
-    // laje com abertura sobre a escada
-    const hx0 = sx0 + 0.9, hx1 = sx0 + stairLen + 0.05, hz1 = szc + stairW / 2 + 0.03;
+    // degraus: o mais baixo no lado do cômodo (x maior), subindo em direção à parede
+    for (let i = 0; i < steps; i++) { const h = (i + 1) * (rise / steps); box(run + 0.01, h, stairW, M.oldWood, 1.2, mtx(sxB - (i + 0.5) * run, prev + h / 2, szc, 0, 0, 0, B), true); }
+    // espelho de cada degrau um pouco mais escuro (lê melhor a forma)
+    for (let i = 0; i < steps; i++) { const h = (i + 1) * (rise / steps); box(0.025, 0.03, stairW + 0.02, M.timber, 1, mtx(sxB - i * run, prev + h - 0.015, szc, 0, 0, 0, B), false); }
+    addWalk(B, sx0, sxB, szc - stairW / 2, szc + stairW / 2, prev + rise, prev + 0.02, 'x');
+    // laje com abertura sobre a parte alta da escada (há altura livre na parte baixa)
+    const hxb = sxB - 0.9, hz1 = szc + stairW / 2 + 0.03;
     const slabY = fy + SLAB / 2;
-    box(iw / 2 - hx1, SLAB, id, M.floor, 1.4, mtx((hx1 + iw / 2) / 2, slabY, 0, 0, 0, 0, B), true);
-    box(hx1 - (-iw / 2), SLAB, id / 2 - hz1, M.floor, 1.4, mtx((hx1 - iw / 2) / 2, slabY, (hz1 + id / 2) / 2, 0, 0, 0, B), true);
-    box(hx0 - (-iw / 2), SLAB, hz1 - (-id / 2), M.floor, 1.4, mtx((hx0 - iw / 2) / 2, slabY, (hz1 - id / 2) / 2, 0, 0, 0, B), true);
+    box(iw / 2 - hxb, SLAB, id, M.floor, 1.4, mtx((hxb + iw / 2) / 2, slabY, 0, 0, 0, 0, B), true);
+    box(hxb + iw / 2, SLAB, id / 2 - hz1, M.floor, 1.4, mtx((hxb - iw / 2) / 2, slabY, (hz1 + id / 2) / 2, 0, 0, 0, B), true);
+    addSolid(B, hxb, iw / 2, -id / 2, id / 2, fy, fy + SLAB); addSolid(B, -iw / 2, hxb, hz1, id / 2, fy, fy + SLAB);
     const fl = fy + SLAB;
-    addWalk(B, hx1, iw / 2, -id / 2, id / 2, fl); addWalk(B, -iw / 2, hx1, hz1, id / 2, fl); addWalk(B, -iw / 2, hx0, -id / 2, hz1, fl);
-    // vigas aparentes no teto de baixo
-    for (let i = 0; i < 4; i++) box(0.16, 0.18, id, M.timber, 1.5, mtx(-iw / 2 + iw * (i + 0.5) / 4, fy - 0.09, 0, 0, 0, 0, B), false);
-    // guarda-corpo em volta da abertura
-    box(hx1 - hx0, 0.06, 0.06, M.oldWood, 1, mtx((hx0 + hx1) / 2, fl + 0.95, hz1 + 0.03, 0, 0, 0, B)); for (let k = 0; k <= 6; k++) box(0.05, 0.95, 0.05, M.oldWood, 1, mtx(hx0 + (hx1 - hx0) * k / 6, fl + 0.47, hz1 + 0.03, 0, 0, 0, B));
-    { const c = L((hx0 + hx1) / 2, 0, hz1 + 0.03); addBox(c.x, c.z, (hx1 - hx0) / 2, 0.06, rot, y0 + fl - 0.3, y0 + fl + 1.6); }
+    addWalk(B, hxb, iw / 2, -id / 2, id / 2, fl); addWalk(B, -iw / 2, hxb, hz1, id / 2, fl);
+    // vigas aparentes no teto de baixo (sem atravessar o vão da escada)
+    for (let i = 0; i < 4; i++) { const bx = -iw / 2 + iw * (i + 0.5) / 4; if (bx > hxb + 0.1) box(0.16, 0.18, id, M.timber, 1.5, mtx(bx, fy - 0.09, 0, 0, 0, 0, B), false); else box(0.16, 0.18, id / 2 - hz1, M.timber, 1.5, mtx(bx, fy - 0.09, (hz1 + id / 2) / 2, 0, 0, 0, B), false); }
+    // guarda-corpo em volta da abertura, com a saída junto à parede (no topo da escada)
+    const gx0 = sx0 + 0.9; box(hxb - gx0, 0.06, 0.06, M.oldWood, 1, mtx((gx0 + hxb) / 2, fl + 0.95, hz1 + 0.03, 0, 0, 0, B)); for (let k = 0; k <= 5; k++) box(0.05, 0.95, 0.05, M.oldWood, 1, mtx(gx0 + (hxb - gx0) * k / 5, fl + 0.47, hz1 + 0.03, 0, 0, 0, B));
+    box(0.06, 0.06, hz1 + id / 2, M.oldWood, 1, mtx(hxb + 0.03, fl + 0.95, (hz1 - id / 2) / 2, 0, 0, 0, B)); for (let k = 0; k <= 3; k++) box(0.05, 0.95, 0.05, M.oldWood, 1, mtx(hxb + 0.03, fl + 0.47, -id / 2 + (hz1 + id / 2) * k / 3, 0, 0, 0, B));
+    { const c = L((gx0 + hxb) / 2, 0, hz1 + 0.03); addBox(c.x, c.z, (hxb - gx0) / 2, 0.06, rot, y0 + fl - 0.3, y0 + fl + 1.6); const c2 = L(hxb + 0.03, 0, (hz1 - id / 2) / 2); addBox(c2.x, c2.z, 0.06, (hz1 + id / 2) / 2, rot, y0 + fl - 0.3, y0 + fl + 1.6); }
+    // corrimão na lateral aberta da escada
+    { const a = Math.atan2(rise, stairLen); const Lr = Math.hypot(stairLen, rise); box(Lr, 0.05, 0.05, M.oldWood, 1, mtx(sx0 + stairLen / 2, prev + rise / 2 + 0.9, szc + stairW / 2 - 0.03, 0, 0, -a, B)); for (let k = 1; k < 4; k++) { const t = k / 4; box(0.04, 0.9, 0.04, M.oldWood, 1, mtx(sxB - stairLen * t, prev + rise * t + 0.45, szc + stairW / 2 - 0.03, 0, 0, 0, B)); } }
+    stair.push({ bottom: L(sxB + 0.55, prev + 0.02, szc + 0.35), foot: L(sxB - 0.15, prev + 0.02, szc), top: L(sx0 + 0.35, fl, szc), landing: L(sx0 + 0.45, fl, hz1 + 0.7), floorY: y0 + fl });
     // paredes do andar
     const ow = w + (o.jetty ? 0.4 : 0), od = d + (o.jetty ? 0.4 : 0);
     box(ow + 0.2, 0.22, od + 0.2, M.timber, 1.5, mtx(0, fy + 0.11, 0, 0, 0, 0, B));
@@ -202,26 +232,34 @@ function house(x, z, rot, o) {
   const gable = floors > 1 ? upper : lower;
   for (const s2 of [-1, 1]) put(gg, gable, mtx(s2 * (ow / 2 - T / 2), top, 0, 0, Math.PI / 2 * s2, 0, B).multiply(mtx(0, 0, -T / 2)));
   // forro do sótão (fecha o teto do último andar)
-  box(ow - 2 * T, 0.08, od - 2 * T, M.planks, 1.4, mtx(0, top + 0.04, 0, 0, 0, 0, B), false);
+  box(ow - 2 * T, 0.08, od - 2 * T, M.planks, 1.4, mtx(0, top + 0.04, 0, 0, 0, 0, B), false); addSolid(B, -ow / 2, ow / 2, -od / 2, od / 2, top, top + 3);
   for (let i = 0; i < 4; i++) box(0.16, 0.18, od - 2 * T, M.timber, 1.5, mtx(-(ow - 2 * T) / 2 + (ow - 2 * T) * (i + 0.5) / 4, top - 0.09, 0, 0, 0, 0, B), false);
-  // ---- lareira no canto do fundo à direita + chaminé ----
-  const fx = iw / 2 - 0.85, fz = -id / 2 + 0.38, fb = base;
-  box(1.5, 1.25, 0.2, M.stone, 1.4, mtx(fx, fb + 0.62, fz - 0.25, 0, 0, 0, B)); for (const s2 of [-1, 1]) box(0.32, 1.25, 0.7, M.stone, 1.4, mtx(fx + s2 * 0.59, fb + 0.62, fz, 0, 0, 0, B)); box(1.5, 0.42, 0.7, M.stone, 1.4, mtx(fx, fb + 1.04, fz, 0, 0, 0, B));
-  box(0.86, 0.82, 0.04, M.soot, 1, mtx(fx, fb + 0.41, fz - 0.14, 0, 0, 0, B), false); box(0.86, 0.04, 0.5, M.soot, 1, mtx(fx, fb + 0.02, fz + 0.08, 0, 0, 0, B), false);
-  box(1.7, 0.12, 0.85, M.timber, 1.5, mtx(fx, fb + 1.31, fz + 0.04, 0, 0, 0, B));
-  box(0.5, 0.06, 0.3, M.ember, 1, mtx(fx, fb + 0.07, fz + 0.02, 0, 0, 0, B), false);
-  for (let i = 0; i < 3; i++) cyl(0.055, 0.055, 0.5, 7, M.bark, 1, mtx(fx - 0.13 + i * 0.13, fb + 0.13, fz + 0.02, 0, 0.35 * (i - 1), Math.PI / 2, B));
-  box(1.0, top - fb - 1.37, 0.55, M.stone, 1.4, mtx(fx, fb + 1.37 + (top - fb - 1.37) / 2, fz - 0.05, 0, 0, 0, B));
-  { const c = L(fx, 0, fz); addBox(c.x, c.z, 0.8, 0.42, rot); }
-  const chimZ = -od / 2 + T + 0.3;
-  box(0.75, rh + 2.4, 0.75, M.stone, 1.6, mtx(fx, top + (rh + 2.4) / 2 - 0.2, chimZ, 0, 0, 0, B)); box(0.9, 0.12, 0.9, M.stone, 1.6, mtx(fx, top + rh + 2.2, chimZ, 0, 0, 0, B)); smokes.push(L(fx, top + rh + 2.3, chimZ));
+  // ---- lareira + chaminé ----
+  // casas térreas: no canto do fundo; casas de dois andares: na parede lateral, perto da frente
+  // (assim o pé da escada, que fica junto à parede do fundo, tem espaço livre na frente)
+  const side = floors > 1, fb = base, fyaw = side ? -Math.PI / 2 : 0;
+  const F = side ? mtx(iw / 2 - 0.38, 0, id / 2 - 1.15, 0, -Math.PI / 2, 0, B) : mtx(iw / 2 - 0.85, 0, -id / 2 + 0.38, 0, 0, 0, B);
+  const FL = (lx, ly, lz) => new THREE.Vector3(lx, ly, lz).applyMatrix4(F);
+  box(1.5, 1.25, 0.2, M.stone, 1.4, mtx(0, fb + 0.62, -0.25, 0, 0, 0, F)); for (const s2 of [-1, 1]) box(0.32, 1.25, 0.7, M.stone, 1.4, mtx(s2 * 0.59, fb + 0.62, 0, 0, 0, 0, F)); box(1.5, 0.42, 0.7, M.stone, 1.4, mtx(0, fb + 1.04, 0, 0, 0, 0, F));
+  box(0.86, 0.82, 0.04, M.soot, 1, mtx(0, fb + 0.41, -0.14, 0, 0, 0, F), false); box(0.86, 0.04, 0.5, M.soot, 1, mtx(0, fb + 0.02, 0.08, 0, 0, 0, F), false);
+  box(1.7, 0.12, 0.85, M.timber, 1.5, mtx(0, fb + 1.31, 0.04, 0, 0, 0, F));
+  box(0.5, 0.06, 0.3, M.ember, 1, mtx(0, fb + 0.07, 0.02, 0, 0, 0, F), false);
+  for (let i = 0; i < 3; i++) cyl(0.055, 0.055, 0.5, 7, M.bark, 1, mtx(-0.13 + i * 0.13, fb + 0.13, 0.02, 0, 0.35 * (i - 1), Math.PI / 2, F));
+  box(1.0, top - fb - 1.37, 0.55, M.stone, 1.4, mtx(0, fb + 1.37 + (top - fb - 1.37) / 2, -0.05, 0, 0, 0, F));
+  { const c = FL(0, 0, 0); addBox(c.x, c.z, 0.8, 0.42, rot + fyaw); }
+  // chaminé: passa um pouco acima do telhado naquele ponto (antes era alta demais na beirada)
+  { const cl = FL(0, 0, -0.08); const lz = (cl.clone().applyMatrix4(B.clone().invert())).z; const roofAt = Math.max(0, rh * (1 - Math.abs(lz) / (od / 2 + 0.55))); const H = roofAt + 1.9;
+    box(0.75, H, 0.75, M.stone, 1.6, mtx(0, top + H / 2 - 0.2, -0.08, 0, 0, 0, F)); box(0.9, 0.12, 0.9, M.stone, 1.6, mtx(0, top + H - 0.25, -0.08, 0, 0, 0, F)); smokes.push(FL(0, top + H - 0.1, -0.08)); }
   // ---- móveis ----
   const fl0 = base + 0.02; const furn = (fy) => ({ y0: y0 + fy - 0.3, y1: y0 + fy + 1.7 });
+  const hSeats = [], hBeds = [];
+  const seatAt = (M4, lx, ly, lz, lyaw, kind = 'bench') => { const p = new THREE.Vector3(lx, ly, lz).applyMatrix4(M4); const e = new THREE.Euler().setFromRotationMatrix(M4, 'YXZ'); const st = { x: p.x, y: p.y, z: p.z, yaw: e.y + lyaw, kind, exit: kind === 'bench' ? -0.5 : 0.55 }; hSeats.push(st); seats.push(st); return st; };
   const col = (lx, lz, hw, hd, r2 = 0, fy = fl0) => { const c = L(lx, 0, lz); const f = furn(fy); addBox(c.x, c.z, hw, hd, rot + r2, f.y0, f.y1); };
   const table = (tx, tz, tr, fy = fl0, items = true) => { const T2 = mtx(tx, fy, tz, 0, tr, 0, B); box(1.5, 0.07, 0.8, M.oldWood, 1, mtx(0, 0.76, 0, 0, 0, 0, T2)); for (const a of [-1, 1]) for (const b of [-1, 1]) box(0.08, 0.74, 0.08, M.oldWood, 1, mtx(a * 0.65, 0.37, b * 0.32, 0, 0, 0, T2)); for (const b of [-1, 1]) { box(1.4, 0.06, 0.3, M.oldWood, 1, mtx(0, 0.45, b * 0.7, 0, 0, 0, T2)); for (const a of [-1, 1]) box(0.06, 0.43, 0.26, M.oldWood, 1, mtx(a * 0.6, 0.22, b * 0.7, 0, 0, 0, T2)); }
-    if (items) { cyl(0.03, 0.035, 0.12, 8, M.candle, 1, mtx(0.2, 0.86, 0.05, 0, 0, 0, T2), false); cyl(0.11, 0.09, 0.04, 12, M.iron, 1, mtx(-0.3, 0.81, -0.1, 0, 0, 0, T2)); cyl(0.05, 0.04, 0.13, 10, M.clay, 1, mtx(-0.05, 0.86, -0.15, 0, 0, 0, T2)); }
+    if (items) { cyl(0.03, 0.035, 0.12, 8, M.candle, 1, mtx(0.2, 0.86, 0.05, 0, 0, 0, T2), false); cyl(0.11, 0.09, 0.04, 12, M.iron, 1, mtx(-0.3, 0.81, -0.1, 0, 0, 0, T2)); cyl(0.05, 0.04, 0.13, 10, M.clay, 1, mtx(-0.05, 0.86, -0.15, 0, 0, 0, T2)); tableware(T2); }
+    for (const b of [-1, 1]) for (const a of [-0.36, 0.36]) seatAt(T2, a, 0.48, b * 0.7, b > 0 ? Math.PI : 0, 'bench');
     col(tx, tz, 0.8, 0.85, tr, fy); return L(tx + 0.2, fy + 0.95, tz + 0.05); };
-  const bed = (bx, bz, br, fy, blanket = M.canvasRed) => { const Bd = mtx(bx, fy, bz, 0, br, 0, B); box(1.0, 0.35, 2.0, M.oldWood, 1, mtx(0, 0.2, 0, 0, 0, 0, Bd)); box(0.92, 0.16, 1.9, M.canvas, 1, mtx(0, 0.44, 0, 0, 0, 0, Bd)); box(0.96, 0.08, 1.2, blanket, 1, mtx(0, 0.54, 0.3, 0, 0, 0, Bd)); box(0.6, 0.12, 0.35, M.cloth.white, 1, mtx(0, 0.58, -0.72, 0, 0, 0, Bd)); box(1.05, 0.9, 0.08, M.oldWood, 1, mtx(0, 0.45, -1.02, 0, 0, 0, Bd)); col(bx, bz, 0.55, 1.05, br, fy); };
+  const bed = (bx, bz, br, fy, blanket = M.canvasRed) => { const Bd = mtx(bx, fy, bz, 0, br, 0, B); { const p = new THREE.Vector3(0, 0.52, 0.05).applyMatrix4(Bd); const side = new THREE.Vector3(0.95, 0, 0.1).applyMatrix4(Bd); const bd = { x: p.x, y: p.y, z: p.z, yaw: rot + br, side: { x: side.x, y: side.y, z: side.z }, kind: 'bed' }; hBeds.push(bd); beds.push(bd); } box(1.0, 0.35, 2.0, M.oldWood, 1, mtx(0, 0.2, 0, 0, 0, 0, Bd)); box(0.92, 0.16, 1.9, M.canvas, 1, mtx(0, 0.44, 0, 0, 0, 0, Bd)); box(0.96, 0.08, 1.2, blanket, 1, mtx(0, 0.54, 0.3, 0, 0, 0, Bd)); box(0.6, 0.12, 0.35, M.cloth.white, 1, mtx(0, 0.58, -0.72, 0, 0, 0, Bd)); box(1.05, 0.9, 0.08, M.oldWood, 1, mtx(0, 0.45, -1.02, 0, 0, 0, Bd)); col(bx, bz, 0.55, 1.05, br, fy); };
   const shelf = (sx, sz, sr, fy, kind = 'pots') => { const S2 = mtx(sx, fy, sz, 0, sr, 0, B); for (const hy of [0.5, 1.0, 1.5]) box(1.2, 0.04, 0.3, M.oldWood, 1, mtx(0, hy, 0, 0, 0, 0, S2)); for (const a of [-1, 1]) box(0.05, 1.7, 0.3, M.oldWood, 1, mtx(a * 0.6, 0.85, 0, 0, 0, 0, S2));
     for (let r = 0; r < 3; r++) for (let i = 0; i < 4; i++) { if (kind === 'books') { const bw2 = rr(0.05, 0.09), bh = rr(0.2, 0.3); box(bw2, bh, 0.2, M.book[(r * 4 + i) % 5], 1, mtx(-0.45 + i * 0.28 + rr(-0.03, 0.03), 0.52 + r * 0.5 + bh / 2, 0, 0, 0, rr(-0.1, 0.1), S2), false); box(bw2, bh * 0.9, 0.2, M.book[(r * 4 + i + 2) % 5], 1, mtx(-0.38 + i * 0.28, 0.52 + r * 0.5 + bh * 0.45, 0, 0, 0, 0, S2), false); }
       else if (kind === 'bread') { const sp = new THREE.SphereGeometry(0.11, 10, 6); sp.scale(1.4, 0.6, 1); put(boxUV(sp, 0.4), M.bread, mtx(-0.42 + i * 0.28, 0.56 + r * 0.5, 0, 0, rr(0, 3), 0, S2), false); }
@@ -243,7 +281,7 @@ function house(x, z, rot, o) {
     candle = L(-w * 0.1 + 0.2, fl0 + 0.95, d * 0.05);
   } else if (o.role === 'anselmo') {
     table(-w * 0.12, d * 0.08, 0); bed(-iw / 2 + 0.55, -id / 2 + 1.15, 0, fl0, M.cloth.blue); chest(-iw / 2 + 0.55, id / 2 - 0.6, fl0, Math.PI / 2);
-    { const cx2 = iw / 2 - 0.7, cz2 = id / 2 - 0.9; box(0.55, 0.06, 0.55, M.oldWood, 1, mtx(cx2, fl0 + 0.45, cz2, 0, 0, 0, B)); box(0.55, 0.7, 0.06, M.oldWood, 1, mtx(cx2, fl0 + 0.8, cz2 - 0.27, -0.12, 0, 0, B)); for (const a of [-1, 1]) for (const b of [-1, 1]) box(0.05, 0.45, 0.05, M.oldWood, 1, mtx(cx2 + a * 0.24, fl0 + 0.22, cz2 + b * 0.24, 0, 0, 0, B)); }
+    { const cx2 = iw / 2 - 0.7, cz2 = id / 2 - 0.9; box(0.55, 0.06, 0.55, M.oldWood, 1, mtx(cx2, fl0 + 0.45, cz2, 0, 0, 0, B)); box(0.55, 0.7, 0.06, M.oldWood, 1, mtx(cx2, fl0 + 0.8, cz2 - 0.27, -0.12, 0, 0, B)); for (const a of [-1, 1]) for (const b of [-1, 1]) box(0.05, 0.45, 0.05, M.oldWood, 1, mtx(cx2 + a * 0.24, fl0 + 0.22, cz2 + b * 0.24, 0, 0, 0, B)); col(cx2, cz2, 0.3, 0.3); seatAt(B, cx2, fl0 + 0.48, cz2 + 0.02, 0, 'chair'); }
     candle = L(-w * 0.12 + 0.2, fl0 + 0.95, d * 0.08);
   } else if (o.role === 'livros') {
     table(0.6, d * 0.05, 0); shelf(iw / 2 - 0.2, id / 2 - 0.85, Math.PI / 2, fl0, 'books'); shelf(-iw / 2 + 0.2, 0.8, -Math.PI / 2, fl0, 'books'); rug(0.6, d * 0.05 + 1.2, fl0, M.cloth.blue);
@@ -278,7 +316,7 @@ function house(x, z, rot, o) {
   };
   const wy = base + winY0 + WH / 2;
   for (const px of winsFront) win(px, wy, d / 2 + 0.02, 0, o.flowers);
-  if (floors === 1) win(-w * 0.2, wy, -d / 2 - 0.02, Math.PI); win(w / 2 + 0.02, wy, 0, Math.PI / 2, o.flowers && floors === 1); if (floors === 1) win(-w / 2 - 0.02, wy, 0, -Math.PI / 2);
+  if (floors === 1) win(-w * 0.2, wy, -d / 2 - 0.02, Math.PI); win(w / 2 + 0.02, wy, floors > 1 ? -id * 0.22 : 0, Math.PI / 2, o.flowers && floors === 1); if (floors === 1) win(-w / 2 - 0.02, wy, 0, -Math.PI / 2);
   for (const u of outs) { const uy = u.fl + winY0 + WH / 2; for (const op of u.ops.front) win(op.x, uy, u.od / 2 + 0.02, 0, o.flowers && u.f === 1); win(-w * 0.18, uy, -u.od / 2 - 0.02, Math.PI); win(u.ow / 2 + 0.02, uy, -0.3, Math.PI / 2); win(-u.ow / 2 - 0.02, uy, 0, -Math.PI / 2); }
   // ---- porta ----
   const dz = d / 2;
@@ -297,7 +335,12 @@ function house(x, z, rot, o) {
   if (o.sign) { const S2 = mtx(dx + DW / 2 + 0.9, base + DH + 0.55, dz + 0.55, 0, 0, 0, B); box(0.06, 0.06, 0.7, M.iron, 1, mtx(0, 0.25, -0.2, 0, 0, 0, S2), false); box(0.7, 0.5, 0.05, M.oldWood, 1, mtx(0, 0, 0.12, 0, Math.PI / 2, 0, S2)); const sp = new THREE.SphereGeometry(0.16, 12, 6); sp.scale(1.6, 0.6, 0.5); put(boxUV(sp, 0.4), M.bread, mtx(0.04, 0, 0.12, 0, Math.PI / 2, 0, S2), false); }
   // hera
   if (o.ivy) for (let i = 0; i < 40; i++) { const sp = new THREE.IcosahedronGeometry(rr(0.12, 0.26), 0); put(sp, M.leaf, mtx(-w / 2 + rr(0, 1.6), rr(0.2, 3.2), d / 2 + 0.12, rr(0, 3), rr(0, 3), 0, B), false); }
-  interiors.push({ x, z, rot, hw: w / 2 - T, hd: d / 2 - T, y: y0 + base, top: y0 + top, fire: L(fx, base + 0.2, fz + 0.02), candle, door, B, role: o.role, floors, win: L(winsFront[0], base + 1.6, d / 2 - 0.6) });
+  // cadeira junto à lareira (todas as casas)
+  { const A = F.clone().multiply(mtx(-0.4, fl0, 1.35, 0, -0.5, 0)); armchair(A); const c = new THREE.Vector3().setFromMatrixPosition(A); addBox(c.x, c.z, 0.34, 0.34, rot + fyaw - 0.5, y0 + fl0 - 0.3, y0 + fl0 + 1.7); seatAt(A, 0, 0.47, 0.03, Math.PI, 'chair'); }
+  decor(o, B, { iw, id, fl0, F, base, w, d, T, floors });
+  const hh = { x, z, rot, hw: w / 2 - T, hd: d / 2 - T, y: y0 + base, top: y0 + top, fire: FL(0, base + 0.2, 0.02), candle, door, B, role: o.role, floors, win: L(winsFront[0], base + 1.6, d / 2 - 0.6), seats: hSeats, beds: hBeds, stair, inside: L(0, fl0, d * 0.05 + 0.9), levels: [y0 + fl0, ...outs.map(u => y0 + u.fl)] };
+  for (const st of hSeats) st.house = hh; for (const b of hBeds) b.house = hh;
+  interiors.push(hh);
   return B;
 }
 export function insideHouse(px, pz) { for (const h of interiors) { const dx = px - h.x, dz = pz - h.z; const c = Math.cos(h.rot), s = Math.sin(h.rot); const lx = dx * c - dz * s, lz = dx * s + dz * c; if (Math.abs(lx) < h.hw + 0.1 && Math.abs(lz) < h.hd + 0.1) return h; } return null; }
@@ -311,12 +354,63 @@ export function fenceLine(pts, opts = {}) {
       for (const hh of [0.5, 0.95]) cyl(0.05, 0.055, Lh + 0.15, 6, M.bark, 1, mtx(mx, my + hh, mz, 0, ang, Math.PI / 2 + tilt), true); }
   }
 }
+// quadros pintados (paisagens diferentes em cada casa)
+function paintingTex(seed) {
+  const c = document.createElement('canvas'); c.width = 256; c.height = 192; const g = c.getContext('2d'); let r = seed * 9301 + 49297; const R = () => ((r = (r * 9301 + 49297) % 233280) / 233280);
+  const skies = [['#f3d29a', '#e9a06a'], ['#a9c7df', '#e8e0c8'], ['#3a4a6e', '#d98a5a'], ['#cfe0e6', '#f4ecd8'], ['#f0b98a', '#8f6a8e'], ['#9fb8c9', '#dfe6dc']];
+  const sk = skies[seed % skies.length]; const gr = g.createLinearGradient(0, 0, 0, 120); gr.addColorStop(0, sk[0]); gr.addColorStop(1, sk[1]); g.fillStyle = gr; g.fillRect(0, 0, 256, 192);
+  // montanhas e colinas em camadas (perspectiva atmosférica)
+  const layers = ['#8d9aa6', '#6c7d6e', '#4e6648', '#3a5236'];
+  layers.forEach((col, li) => { g.fillStyle = col; g.beginPath(); g.moveTo(0, 192); let y = 70 + li * 22; for (let x = 0; x <= 256; x += 8) { y += (R() - 0.5) * (li === 0 ? 14 : 7); g.lineTo(x, Math.max(40, y)); } g.lineTo(256, 192); g.fill(); });
+  if (seed % 2 === 0) { g.fillStyle = 'rgba(160,190,205,.85)'; g.beginPath(); g.ellipse(128 + (R() - 0.5) * 60, 150, 70, 12, 0, 0, 7); g.fill(); }
+  for (let i = 0; i < 14; i++) { const x = R() * 256, y = 120 + R() * 60, h = 14 + R() * 20; g.fillStyle = '#2b3d26'; g.beginPath(); g.moveTo(x, y - h); g.lineTo(x - h * 0.3, y); g.lineTo(x + h * 0.3, y); g.fill(); }
+  if (seed % 3 === 1) { g.fillStyle = '#e8dcc0'; g.fillRect(150, 128, 18, 12); g.fillStyle = '#8a3a2a'; g.beginPath(); g.moveTo(147, 129); g.lineTo(159, 120); g.lineTo(171, 129); g.fill(); }
+  // pinceladas (textura de tinta a óleo)
+  for (let i = 0; i < 900; i++) { const x = R() * 256, y = R() * 192; const d = g.getImageData(x | 0, y | 0, 1, 1).data; g.fillStyle = `rgba(${d[0] + (R() - 0.5) * 30 | 0},${d[1] + (R() - 0.5) * 30 | 0},${d[2] + (R() - 0.5) * 30 | 0},0.5)`; g.fillRect(x, y, 3 + R() * 5, 1.5); }
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return t;
+}
+function tableware(T2) {
+  for (const [a, b] of [[-0.42, 0.2], [0.42, -0.2], [0.42, 0.22]]) { cyl(0.115, 0.08, 0.018, 16, M.ceramic, 1, mtx(a, 0.805, b, 0, 0, 0, T2), false); cyl(0.04, 0.032, 0.08, 10, M.pewter, 1, mtx(a + 0.17, 0.84, b * 0.6, 0, 0, 0, T2), false); }
+  box(0.36, 0.025, 0.22, M.oldWood, 1, mtx(-0.1, 0.81, 0.18, 0, 0.2, 0, T2), false); const sp = new THREE.SphereGeometry(0.1, 12, 8); sp.scale(1.5, 0.62, 0.95); put(boxUV(sp, 0.4), M.bread, mtx(-0.1, 0.86, 0.18, 0, 0.2, 0, T2), false);
+  cyl(0.06, 0.075, 0.2, 12, M.ceramicBlue, 1, mtx(0.05, 0.9, -0.2, 0, 0, 0, T2), false);
+}
+// poltrona simples de madeira com almofada (encosto em +z)
+function armchair(A) {
+  box(0.58, 0.07, 0.56, M.oldWood, 1, mtx(0, 0.42, 0, 0, 0, 0, A)); box(0.5, 0.07, 0.5, M.wool, 0.6, mtx(0, 0.47, -0.01, 0, 0, 0, A));
+  box(0.58, 0.72, 0.07, M.oldWood, 1, mtx(0, 0.8, 0.27, -0.14, 0, 0, A)); box(0.48, 0.5, 0.06, M.wool, 0.6, mtx(0, 0.78, 0.22, -0.14, 0, 0, A));
+  for (const a of [-1, 1]) { box(0.06, 0.06, 0.56, M.oldWood, 1, mtx(a * 0.29, 0.66, 0, 0, 0, 0, A)); box(0.05, 0.22, 0.05, M.oldWood, 1, mtx(a * 0.29, 0.55, -0.24, 0, 0, 0, A)); for (const b of [-1, 1]) box(0.06, 0.42, 0.06, M.oldWood, 1, mtx(a * 0.25, 0.21, b * 0.23, 0, 0, 0, A)); }
+}
+// detalhes de casa habitada: panelas na lareira, quadro, cortinas, cesto de maçãs, vassoura, lavatório no quarto
+function decor(o, B, I) {
+  const { iw, id, fl0, F, base, w, d, T, floors } = I; if (o.role === 'vazia') return; if (location.search.includes('nodecor')) return;
+  // panela pendurada e chaleira na lareira
+  const P = F.clone().multiply(mtx(0, fl0, 0)); cyl(0.004, 0.004, 0.5, 4, M.iron, 1, mtx(0, 0.75, 0, 0, 0, 0, P), false);
+  { const pot = new THREE.SphereGeometry(0.16, 14, 10, 0, Math.PI * 2, Math.PI * 0.32, Math.PI * 0.68); pot.scale(1, 0.85, 1); put(pot, M.iron, mtx(0, 0.42, 0, 0, 0, 0, P), false); cyl(0.165, 0.165, 0.02, 14, M.iron, 1, mtx(0, 0.52, 0, 0, 0, 0, P), false); }
+  { const K = mtx(0.62, 1.43, 0.05, 0, 0.4, 0, P); const kt = new THREE.SphereGeometry(0.1, 12, 8); kt.scale(1, 0.8, 1); put(kt, M.copper, mtx(0, 0.08, 0, 0, 0, 0, K), false); cyl(0.015, 0.025, 0.12, 6, M.copper, 1, mtx(0.11, 0.1, 0, 0, 0, -0.9, K), false); }
+  for (let i = 0; i < 3; i++) cyl(0.05 + i * 0.01, 0.04, 0.14 + i * 0.05, 10, i === 1 ? M.ceramicBlue : M.clay, 1, mtx(-0.6 + i * 0.22, 1.43 + 0.07 + i * 0.025, 0.1, 0, 0, 0, P), false);
+  // quadro sobre a lareira
+  { const pi = Math.abs(Math.round(iw * 7 + id * 13 + w * 5 + d * 3)) % M.paintings.length; const Q = mtx(0, 1.98, -0.05 + 0.28, 0, 0, 0, P); box(0.74, 0.58, 0.035, M.timber, 1, mtx(0, 0, 0, 0, 0, 0, Q), false); box(0.64, 0.48, 0.01, M.paintings[pi], 1, mtx(0, 0, 0.02, 0, 0, 0, Q), false); }
+  // atiçador e pá encostados
+  cyl(0.012, 0.012, 0.85, 5, M.iron, 1, mtx(0.82, 0.42, 0.3, 0.12, 0, -0.15, P), false); box(0.12, 0.02, 0.15, M.iron, 1, mtx(0.86, 0.06, 0.32, 0, 0, 0, P), false);
+  // cortinas por dentro das janelas da frente
+  const winsFront = [-w * 0.3]; if (w > 6.3) winsFront.push(w * 0.3);
+  for (const px of winsFront) for (const sgn of [-1, 1]) { const g = new THREE.PlaneGeometry(0.34, 1.32, 4, 6); const pp = g.attributes.position; for (let k = 0; k < pp.count; k++) pp.setZ(k, Math.sin(pp.getX(k) * 26 + sgn) * 0.025); g.computeVertexNormals(); put(boxUV(g, 1), [M.linen, M.cloth.blue, M.cloth.ochre][Math.abs(Math.round(px * 3)) % 3], mtx(px + sgn * 0.52, base + 1.52, d / 2 - T - 0.07, 0, Math.PI, 0, B), false); }
+  // cesto com maçãs
+  { const bx = -iw / 2 + 0.45, bz = 0.2; cyl(0.24, 0.18, 0.22, 14, M.wicker, 0.5, mtx(bx, fl0 + 0.11, bz, 0, 0, 0, B)); for (let i = 0; i < 7; i++) { const a = i / 7 * 6.28; const ap = new THREE.SphereGeometry(0.045, 10, 8); put(ap, i % 3 === 0 ? M.appleG : M.apple, mtx(bx + Math.cos(a) * 0.1, fl0 + 0.24 + (i % 2) * 0.03, bz + Math.sin(a) * 0.1, 0, 0, 0, B), false); } const c = new THREE.Vector3(bx, 0, bz).applyMatrix4(B); addCircle(c.x, c.z, 0.26); }
+  // vassoura ao lado da porta
+  { const bx = 0.95, bz = d / 2 - T - 0.12; cyl(0.016, 0.016, 1.35, 6, M.oldWood, 1, mtx(bx, fl0 + 0.72, bz, 0.08, 0, 0.06, B), false); cyl(0.07, 0.12, 0.32, 8, M.hay, 0.5, mtx(bx + 0.02, fl0 + 0.14, bz - 0.04, 0.08, 0, 0.06, B), false); }
+  // ganchos com capa
+  { const g = new THREE.PlaneGeometry(0.42, 0.95, 3, 6); const pp = g.attributes.position; for (let k = 0; k < pp.count; k++) { const yy = pp.getY(k); pp.setZ(k, Math.sin(pp.getX(k) * 12) * 0.03 + (0.47 - yy) * 0.04); } g.computeVertexNormals(); put(g, M.cloth.green, mtx(-0.95, fl0 + 1.25, d / 2 - T - 0.06, 0, Math.PI, 0, B), false); box(0.5, 0.06, 0.05, M.oldWood, 1, mtx(-0.95, fl0 + 1.75, d / 2 - T - 0.03, 0, 0, 0, B), false); }
+  // quarto de cima: lavatório com bacia e jarro, cortinas
+  if (floors > 1) { const fy = base + FH + SLAB; const W = mtx(-iw / 2 + 0.35, fy, 0.35, 0, Math.PI / 2, 0, B); box(0.7, 0.75, 0.42, M.oldWood, 1, mtx(0, 0.375, 0, 0, 0, 0, W)); cyl(0.17, 0.11, 0.08, 16, M.ceramic, 1, mtx(-0.1, 0.79, 0, 0, 0, 0, W), false); cyl(0.05, 0.08, 0.24, 12, M.ceramic, 1, mtx(0.2, 0.87, 0.05, 0, 0, 0, W), false); const c = new THREE.Vector3(-iw / 2 + 0.35, 0, 0.35).applyMatrix4(B); addBox(c.x, c.z, 0.22, 0.36, rot0(B) + Math.PI / 2, new THREE.Vector3().setFromMatrixPosition(B).y + fy - 0.3, new THREE.Vector3().setFromMatrixPosition(B).y + fy + 1.7); }
+}
+function rot0(B) { return new THREE.Euler().setFromRotationMatrix(B, 'YXZ').y; }
 function woodpile(x, z, rot) { const B = mtx(x, groundH(x, z), z, 0, rot, 0); for (let r = 0; r < 4; r++) for (let i = 0; i < 6 - r; i++) cyl(0.16, 0.16, 1.4, 8, M.bark, 1, mtx(-1.1 + i * 0.36 + r * 0.18, 0.17 + r * 0.29, 0, Math.PI / 2, 0, 0, B)); addBox(x, z, 1.2, 0.8, rot); }
 export function barrel(x, z) { const y = groundH(x, z); const g = new THREE.CylinderGeometry(0.36, 0.36, 0.95, 16, 6); const p = g.attributes.position; for (let i = 0; i < p.count; i++) { const yy = p.getY(i); const k = 1 + 0.12 * (1 - Math.pow(yy / 0.475, 2)); p.setX(i, p.getX(i) * k); p.setZ(i, p.getZ(i) * k); } g.computeVertexNormals(); const nI = g.toNonIndexed(); const pp = nI.attributes.position; const uv = new Float32Array(pp.count * 2); for (let i = 0; i < pp.count; i++) { uv[i * 2] = Math.atan2(pp.getZ(i), pp.getX(i)) / 6.283 * 2; uv[i * 2 + 1] = pp.getY(i) / 1.2; } nI.setAttribute('uv', new THREE.BufferAttribute(uv, 2)); put(nI, M.planks, mtx(x, y + 0.48, z, 0, rand() * 6, 0)); for (const hy of [-0.32, 0.32]) cyl(0.39, 0.39, 0.05, 16, M.iron, 1, mtx(x, y + 0.48 + hy, z)); addCircle(x, z, 0.42); }
 export function crate(x, z, s = 0.85) { const y = groundH(x, z); box(s, s, s, M.planks, 0.9, mtx(x, y + s / 2, z, 0, rand() * 6, 0)); addCircle(x, z, s * 0.6); }
 function hay(x, z) { const y = groundH(x, z); cyl(0.7, 0.7, 1.2, 18, M.hay, 1.5, mtx(x, y + 0.7, z, Math.PI / 2, rand() * 6, 0)); addCircle(x, z, 0.75); }
 function cart(x, z, rot) { const y = groundH(x, z); const B = mtx(x, y, z, 0, rot, 0); box(2.6, 0.1, 1.3, M.planks, 1.2, mtx(0, 0.85, 0, 0, 0, 0, B)); for (const s of [-1, 1]) box(2.6, 0.45, 0.07, M.planks, 1.2, mtx(0, 1.1, s * 0.62, 0, 0, 0, B)); for (const s of [-1, 1]) { cyl(0.55, 0.55, 0.08, 18, M.oldWood, 1, mtx(0.3, 0.55, s * 0.75, Math.PI / 2, 0, 0, B)); cyl(0.57, 0.57, 0.05, 18, M.iron, 1, mtx(0.3, 0.55, s * 0.78, Math.PI / 2, 0, 0, B)); } for (const s of [-1, 1]) cyl(0.04, 0.05, 2.2, 6, M.oldWood, 1, mtx(-2.2, 0.55, s * 0.4, 0, 0, Math.PI / 2 - 0.25, B)); addBox(x, z, 1.5, 0.9, rot); }
-export function bench(x, z, ry) { const y = groundH(x, z); const B = mtx(x, y, z, 0, ry, 0); box(1.8, 0.1, 0.42, M.oldWood, 1, mtx(0, 0.45, 0, 0, 0, 0, B)); box(1.8, 0.35, 0.06, M.oldWood, 1, mtx(0, 0.75, -0.2, -0.15, 0, 0, B)); for (const s2 of [-1, 1]) box(0.12, 0.45, 0.38, M.oldWood, 1, mtx(s2 * 0.75, 0.22, 0, 0, 0, 0, B)); addBox(x, z, 0.9, 0.25, ry); return new THREE.Vector3(x, y, z); }
+export function bench(x, z, ry) { const y = groundH(x, z); const B = mtx(x, y, z, 0, ry, 0); for (const a of [-0.45, 0.45]) { const p = new THREE.Vector3(a, 0.5, 0.02).applyMatrix4(B); seats.push({ x: p.x, y: p.y, z: p.z, yaw: ry, kind: 'bench', outdoor: true, exit: 0.55 }); } box(1.8, 0.1, 0.42, M.oldWood, 1, mtx(0, 0.45, 0, 0, 0, 0, B)); box(1.8, 0.35, 0.06, M.oldWood, 1, mtx(0, 0.75, -0.2, -0.15, 0, 0, B)); for (const s2 of [-1, 1]) box(0.12, 0.45, 0.38, M.oldWood, 1, mtx(s2 * 0.75, 0.22, 0, 0, 0, 0, B)); addBox(x, z, 0.9, 0.25, ry); return new THREE.Vector3(x, y, z); }
 
 // --------------- moinho de vento ---------------
 export const windmills = [];
