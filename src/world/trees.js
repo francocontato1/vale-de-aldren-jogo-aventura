@@ -1,5 +1,5 @@
 import { THREE, U, Q, settings, rand, rr, clamp, renderer, GLSL_NOISE } from '../core.js';
-import { Tree } from '@dgreenheck/ez-tree';
+import { Tree, ezTexturesReady } from '@dgreenheck/ez-tree';
 
 // Species: preset, seed, target height range, weight per biome
 const SPECIES = [
@@ -35,7 +35,9 @@ const SWAY = (leaf) => `
 export class Trees {
   constructor(scene) { this.scene = scene; this.variants = []; this.items = []; this.grid = new Map(); this.nearCenter = new THREE.Vector3(1e9, 0, 1e9); }
 
-  build() {
+  async build() {
+    // as texturas das árvores são arquivos à parte (tools/build.mjs): espera chegarem antes de montar e fotografar os impostores
+    await Promise.race([ezTexturesReady, new Promise(r => setTimeout(r, 30000))]);
     for (const sp of SPECIES) {
       const t = new Tree(); t.loadPreset(sp.preset); t.options.seed = sp.seed;
       // performance-minded tweaks

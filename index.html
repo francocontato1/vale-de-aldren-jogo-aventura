@@ -1,7 +1,7 @@
 <!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Vale de Aldren</title>
 <meta name="description" content="Um jogo contemplativo no navegador: um vale tranquilo, ruínas de um povo que construía para olhar, e um mapa do que importa.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Inter:wght@400;500;600&display=swap">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Inter:wght@400;500;600&display=swap" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Inter:wght@400;500;600&display=swap"></noscript>
 <style>
 /* Interface discreta: texto de pergaminho sobre a paisagem, quase nada na tela enquanto se anda */
 :root{
@@ -46,7 +46,7 @@ html,body{height:100%;margin:0;background:#0b0a08;color:var(--ink);overflow:hidd
 #dlgOpts button{all:unset;cursor:pointer;font-size:14px;padding:7px 12px;border-radius:999px;border:1px solid var(--line);color:var(--ink);background:rgba(16,13,9,.45);backdrop-filter:blur(3px)}
 #dlgOpts button:hover,#dlgOpts button:focus-visible{border-color:var(--gold);background:rgba(16,13,9,.7)}
 #dlgOpts button b{color:var(--gold);margin-right:8px;font-variant-numeric:tabular-nums}
-.overlay{position:fixed;inset:0;display:grid;place-items:center;background:radial-gradient(ellipse at 50% 45%,rgba(10,8,6,0),rgba(8,6,4,.62));padding:16px;box-sizing:border-box;overflow:auto}
+.overlay{touch-action:pan-y;position:fixed;inset:0;display:grid;place-items:center;background:radial-gradient(ellipse at 50% 45%,rgba(10,8,6,0),rgba(8,6,4,.62));padding:16px;box-sizing:border-box;overflow:auto}
 .card{max-width:600px;width:100%;text-align:center}
 .card h1{font-family:var(--f-display);font-weight:600;font-size:clamp(52px,10vw,104px);line-height:.92;margin:0;text-shadow:0 4px 40px rgba(0,0,0,.55);letter-spacing:.01em}
 .card .eyebrow{font-size:11px;letter-spacing:.34em;text-transform:uppercase;color:var(--gold);margin-bottom:14px}
@@ -79,7 +79,7 @@ html,body{height:100%;margin:0;background:#0b0a08;color:var(--ink);overflow:hidd
 #letter .paper{max-width:560px;width:100%;background:var(--paper);color:var(--paper-ink);padding:34px 40px;box-sizing:border-box;border-radius:3px;box-shadow:0 20px 60px rgba(0,0,0,.5),inset 0 0 60px rgba(150,110,60,.25);font-family:var(--f-display);font-size:22px;line-height:1.5;transform:rotate(-1deg)}
 #letter .paper small{display:block;font-family:var(--f-ui);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:#8a6a40;margin-bottom:10px}
 #letter .paper .hint{font-family:var(--f-ui);font-size:11px;color:#8a7a60;margin-top:16px;letter-spacing:.08em}
-.jcard{max-width:720px;width:100%;max-height:86vh;overflow:auto;background:var(--paper);color:var(--paper-ink);border-radius:4px;padding:28px 34px;box-sizing:border-box;text-align:left;box-shadow:0 20px 60px rgba(0,0,0,.5),inset 0 0 80px rgba(150,110,60,.22)}
+.jcard{touch-action:pan-y;max-width:720px;width:100%;max-height:86vh;overflow:auto;background:var(--paper);color:var(--paper-ink);border-radius:4px;padding:28px 34px;box-sizing:border-box;text-align:left;box-shadow:0 20px 60px rgba(0,0,0,.5),inset 0 0 80px rgba(150,110,60,.22)}
 .jcard .eyebrow{font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:#8a6a40}
 .jcard h1{font-family:var(--f-display);font-size:38px;margin:4px 0 2px;font-weight:600}
 .jcard h2{font-family:var(--f-display);font-weight:600;font-size:26px;margin:22px 0 4px;color:#5a4128}
@@ -143,7 +143,7 @@ html,body{height:100%;margin:0;background:#0b0a08;color:var(--ink);overflow:hidd
     <button id="tbRun">Correr</button><button id="tbJump">Pular</button><button id="tbUse" class="big">Usar</button>
   </div>
 </div>
-<div class="overlay" id="menu">
+<div class="overlay" id="menu" role="dialog" aria-modal="true" aria-label="Vale de Aldren">
   <div class="card">
     <div class="eyebrow">Um mapa do que importa</div>
     <h1>Vale de Aldren</h1>
@@ -173,7 +173,7 @@ html,body{height:100%;margin:0;background:#0b0a08;color:var(--ink);overflow:hidd
     </div>
   </div>
 </div>
-<div class="overlay" id="pause" hidden>
+<div class="overlay" id="pause" role="dialog" aria-modal="true" aria-label="Pausa" hidden>
   <div class="card">
     <div class="eyebrow">Uma pausa</div>
     <h1 style="font-size:60px">Vale de Aldren</h1>
@@ -193,8 +193,8 @@ html,body{height:100%;margin:0;background:#0b0a08;color:var(--ink);overflow:hidd
   </div>
 </div>
 <div id="memory" hidden><div id="memTime"></div><div id="memName"></div><div id="memText"></div></div>
-<div class="overlay" id="journal" hidden><div class="jcard"><div class="eyebrow">Caderno de Lia</div><h1>O mapa do que importa</h1><div id="journalCount"></div><div id="journalList"></div><p class="jhint">J ou Esc para fechar</p></div></div>
-<div class="overlay" id="ending" hidden><div class="card"><div class="eyebrow">Fim, e começo</div><h1 style="font-size:64px">O vale lembra</h1><p class="lede">Os lumes subiram de todo o vale e se misturaram às estrelas. O caderno está cheio. Mas o vale, como disse Odessa, nunca fica pronto: ainda há cantos esperando alguém que olhe com calma.</p><button class="btn" id="endBtn">Continuar andando</button></div></div>
+<div class="overlay" id="journal" role="dialog" aria-modal="true" aria-label="Caderno de Lia" hidden><div class="jcard"><div class="eyebrow">Caderno de Lia</div><h1>O mapa do que importa</h1><div id="journalCount"></div><div id="journalList"></div><p class="jhint">J ou Esc para fechar</p></div></div>
+<div class="overlay" id="ending" role="dialog" aria-modal="true" aria-label="Fim, e começo" hidden><div class="card"><div class="eyebrow">Fim, e começo</div><h1 style="font-size:64px">O vale lembra</h1><p class="lede">Os lumes subiram de todo o vale e se misturaram às estrelas. O caderno está cheio. Mas o vale, como disse Odessa, nunca fica pronto: ainda há cantos esperando alguém que olhe com calma.</p><button class="btn" id="endBtn">Continuar andando</button></div></div>
 <div id="fade"></div>
-<script type="module" src="game-7fe446fd.js"></script>
+<script type="module" src="game-56e1ff9b.js"></script>
 </body></html>
