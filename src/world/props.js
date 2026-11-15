@@ -16,7 +16,7 @@ export async function buildProps(scene, { avoid, addCircle, villageExclude, zone
   const [r1, r2, r3, fw, fy, fb, tg] = await Promise.all(['rock1', 'rock2', 'rock3', 'flower_white', 'flower_yellow', 'flower_blue', 'grass'].map(n => loadGLTF('a/' + n + '.glb.wasm')));
   const out = { rockMat: null };
   // ---- rocks ----
-  const rockGeos = [r1, r2, r3].map(g => { let mesh; g.scene.traverse(o => { if (o.isMesh) mesh = o; }); mesh.updateWorldMatrix(true, false); const geo = mesh.geometry.clone(); geo.applyMatrix4(mesh.matrixWorld); geo.computeBoundingBox(); const bb = geo.boundingBox; const s = 1 / Math.max(bb.max.x - bb.min.x, bb.max.z - bb.min.z); geo.translate(0, -bb.min.y, 0); geo.scale(s, s, s); out.rockMat = mesh.material; return geo; });
+  const rockGeos = [r1, r2, r3].map(g => { let mesh; g.scene.traverse(o => { if (o.isMesh) mesh = o; }); mesh.updateWorldMatrix(true, false); const geo = mesh.geometry.clone(); geo.applyMatrix4(mesh.matrixWorld); geo.computeBoundingBox(); const bb = geo.boundingBox; const s = 1 / Math.max(bb.max.x - bb.min.x, bb.max.z - bb.min.z); geo.translate(0, -bb.min.y, 0); geo.scale(s, s, s); if (!out.rockMat) out.rockMat = mesh.material; /* as três pedras usam as mesmas texturas: só a rock1 as carrega */ return geo; });
   const rmat = out.rockMat; rmat.roughness = 1; rmat.color && rmat.color.setRGB(0.92, 0.9, 0.86);
   const rockLists = [[], [], []];
   let tries = 0, placed = 0;
