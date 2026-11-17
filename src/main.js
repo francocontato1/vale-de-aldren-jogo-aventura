@@ -1,4 +1,4 @@
-import { hash2, loadTex, THREE, renderer, scene, camera, U, Q, settings, store, clamp, lerp, smooth, rand, rr, angDiff, lerpAng, makeMacroTexture, loadGLTF, progress, isTouch, trackP } from './core.js';
+import { hash2, loadTex, THREE, renderer, scene, camera, U, Q, settings, store, clamp, lerp, smooth, rand, rr, angDiff, lerpAng, makeMacroTexture, loadGLTF, progress, isTouch, trackP, VLight, LightPool } from './core.js';
 import { computeTerrainData, buildTerrain, groundH, normalY, splatAt, sandAt, seaAt, fromUV, HARBOR, SEA_ROT, POI, PATHS, MIRANTE, TRAIL, NINHO, forestDensity, WATER, HGT, NRM, SPLAT, NV, CELL, HALF, creekDist } from './world/terrain.js';
 import { buildWater, setWaterQuality } from './world/water.js';
 import { buildOcean, updateOcean, seaSurface, depthAt, surfNear } from './world/ocean.js';
@@ -12,7 +12,7 @@ import { harbor, updateHarbor } from './world/harbor.js';
 import { FLOWER_ZONES } from './world/landmarks.js';
 import { LINES, CAST, PLACES, NOTES, FINALE, FRIENDS, ITEMS, text as lineText } from './story.js';
 import { buildGiant, buildHeadFragment, updateGiants, giants } from './world/giants.js';
-import { Lume, initSpirits, addSiteSpirits, updateSpirits, Motes, LumeRain, GLOW } from './magic.js';
+import { Lume, lumeMaterial, initSpirits, addSiteSpirits, updateSpirits, Motes, LumeRain, GLOW } from './magic.js';
 import { buildProps, updateProps, setPropRadius } from './world/props.js';
 import { loadHumanLibrary, Human } from './actors/human.js';
 import { loadAnimals, spawnAnimals, updateAnimals } from './actors/animals.js';
@@ -100,6 +100,28 @@ function load() { const raw = store.get(SAVE_KEY); if (!raw) return false; try {
 // inicialização
 // =====================================================================
 const SPOTS = {}; // onde contemplar cada lugar
+// Compila de uma vez, ainda no carregamento, todos os shaders que o jogo vai usar: o mundo, as figuras de
+// luz dos lumes, a Chuva de Lumes e o desfoque das conversas. Compila no MESMO tipo de alvo em que o jogo
+// desenha (o buffer do pós-processamento, sem tone mapping); compilar direto na tela gerava outros shaders
+// e o primeiro quadro, a lanterna e o primeiro lume recompilavam tudo de novo (era o travamento).
+async function prewarm() {
+  const extra = new THREE.Group(); scene.add(extra);
+  const lm = lumeMaterial(); for (const key of ['eco_m', 'eco_f']) { const h = new Human(key); for (const m of h.meshes) m.material = lm; extra.add(h.root); }
+  const rain = new LumeRain(V3(0, 0, 0), 8); extra.add(rain.pts);
+  // o céu cria o mapa de ambiente no primeiro update: sem ele os shaders compilados seriam outros
+  sky.setHour(hour); sky.update({ x: player.x, y: player.y, z: player.z, camPos: camera.position }, 0.016); scene.updateMatrixWorld(); LightPool.update();
+  const rt = post.composer.renderTarget1; const prevRT = renderer.getRenderTarget(); renderer.setRenderTarget(rt);
+  const comp = (s) => renderer.compileAsync ? renderer.compileAsync(s, camera) : Promise.resolve(renderer.compile(s, camera));
+  try { await comp(scene); } catch (e) { renderer.compile(scene, camera); }
+  // materiais de profundidade do desfoque (BokehPass troca todos os materiais por um só)
+  const swap = []; const dm = post.bokeh.materialDepth; scene.traverse(o => { if ((o.isMesh || o.isPoints) && o.material) { swap.push([o, o.material]); o.material = dm; } });
+  try { await comp(scene); } catch (e) { renderer.compile(scene, camera); }
+  for (const [o, m] of swap) o.material = m;
+  renderer.setRenderTarget(prevRT);
+  // um quadro de verdade (sombras, pós-processamento) com as figuras ainda presentes, longe da vista
+  extra.position.set(player.x, player.y, player.z); extra.traverse(o => { o.frustumCulled = false; });
+  post.render(0.016, 0); scene.remove(extra); rain.pts.geometry.dispose();
+}
 async function boot() {
   preloadSounds(trackP); Speech.init();
   progress.onChange = () => { const f = progress.total ? progress.done / progress.total : 0; $('loadBar').style.transform = `scaleX(${0.08 + f * 0.62})`; };
@@ -126,25 +148,34 @@ async function boot() {
   await step('Espalhando pedras e flores…', 0.48, () => buildProps(scene, { avoid: (x, z, r) => vEx(x, z) || pathDistOK(x, z, r), addCircle: addCirc, villageExclude: vEx, zones: FLOWER_ZONES() }));
   await step('Plantando a floresta…', 0.56, () => trees.scatter({ avoid: (x, z, r) => vEx(x, z) || pathDistOK(x, z, r + 1) || aqueductNear(x, z) || curioNear(x, z), forestDensity, groundH, normalY, onTree: (it) => { if (it.v.sp.type !== 'bush') addCirc(it.x, it.z, (it.v.sp.type === 'pine' ? 0.28 : 0.36) * it.s); }, extra: [[-12, -32, 'oakA', 1], [34, -12, 'oakB', 0.9], [-38, 22, 'ashA', 1], [10, 44, 'oakA', 1.1], [-52, -16, 'pineA', 1], [storySpots.treeRoot.x, storySpots.treeRoot.z, 'oakB', 1.45], [POI.shrine.x - 4, POI.shrine.z - 5, 'oakB', 1.5]] }));
   grass = new Grass(scene, { exclude: (x, z) => sandAt(x, z) > 0.45 || inFootprint(x, z, 0.1) || insideBox(x, z, 0.4) || treeHit(x, z) || Math.hypot(x - POI.observatory.x, z - POI.observatory.z) < 9.3 });
-  await step('Chamando os moradores…', 0.66, () => Promise.all([loadHumanLibrary(), loadAnimals(), loadDragon()]));
+  await step('Chamando os moradores…', 0.66, () => Promise.all([loadHumanLibrary(), loadAnimals()]));
   initSpirits(); motes = new Motes(260);
   const sTex = smokeTex(), dTex = softTex();
   smoke = new Particles(700, sTex, false); fireP = new Particles(400, dTex, true); dust = new Particles(300, sTex, false);
-  for (const f of fires) { if (f.dead) continue; const l = new THREE.PointLight(f.forge ? 0xff6a20 : 0xff8a3a, 0, f.big ? 26 : 16, 2); l.position.copy(f.p).add(V3(0, f.forge ? 0 : 0.6, 0)); scene.add(l); f.light = l; f.base = f.forge ? 5 : 9; }
+  for (const f of fires) { if (f.dead) continue; const l = new VLight(f.forge ? 0xff6a20 : 0xff8a3a, 0, f.big ? 26 : 16, 2); l.position.copy(f.p).add(V3(0, f.forge ? 0 : 0.6, 0)); f.light = l; f.base = f.forge ? 5 : 9; }
   for (const d of doors) scene.add(d.pivot);
-  hearthLights = [0, 1].map(() => { const l = new THREE.PointLight(0xff8b3d, 0, 9, 1.6); scene.add(l); return l; }); candleLight = new THREE.PointLight(0xffb060, 0, 5, 1.8); scene.add(candleLight);
-  roomLight = new THREE.PointLight(0xfff0dc, 0, 9, 1.4); scene.add(roomLight);
-  buildLamps(); buildLantern(); buildRipples();
+  hearthLights = [0, 1].map(() => new VLight(0xff8b3d, 0, 9, 1.6)); candleLight = new VLight(0xffb060, 0, 5, 1.8, 1);
+  roomLight = new VLight(0xfff0dc, 0, 9, 1.4, 2);
+  LightPool.init(Q().lights || 4); buildLamps(); buildLantern(); buildRipples();
   const had = !!store.get(SAVE_KEY);
-  await step('Últimos detalhes…', 0.9, () => { initNav(); buildPlayer(); buildBoat(); buildNPCs(); spawnAnimals(); spawnFauna(FLOWER_ZONES()); buildDragon(); buildMapBase(); });
+  await step('Últimos detalhes…', 0.9, () => { initNav(); buildPlayer(); buildBoat(); buildNPCs(); spawnAnimals(); spawnFauna(FLOWER_ZONES()); POI.ninho = { x: NINHO.x, z: NINHO.z, name: 'O Ninho da Vésper' }; buildMapBase(); });
   post = new Post(); post.setSize(innerWidth, innerHeight);
   player.y = groundH(player.x, player.z);
   for (let i = 0; i < 30; i++) grass.update(player.x, player.z, 100);
   trees.update(V3(player.x, 0, player.z), new THREE.Color(0.3, 0.35, 0.42));
-  renderer.compile(scene, camera);
+  await step('Acendendo as luzes…', 0.95, prewarm);
   state = 'menu'; $('loading').textContent = had ? 'Seu caderno continua onde você parou' : ''; $('loadBar').parentElement.hidden = true;
   $('startBtn').disabled = false; if (had) $('startBtn').textContent = 'Voltar ao vale';
   clock.start(); if (!MANUAL) requestAnimationFrame(rafFrame); else frame(0.016);
+  // a dragoa (3,6 MB) chega depois, sem segurar a entrada no vale; os shaders dela compilam em segundo plano
+  loadDragon().then(async () => { buildDragon(); await compileNew(); }).catch(e => console.warn('dragoa', e));
+}
+// compila (sem travar, quando o navegador permite) os shaders de algo que entrou na cena depois do carregamento
+async function compileNew() {
+  // a parte síncrona da compilação usa o alvo atual; o alvo volta ao normal antes de esperar
+  const prev = renderer.getRenderTarget(); renderer.setRenderTarget(post.composer.renderTarget1);
+  let p = null; try { p = renderer.compileAsync ? renderer.compileAsync(scene, camera) : (renderer.compile(scene, camera), null); } catch (e) { }
+  renderer.setRenderTarget(prev); if (p) await p.catch(() => { });
 }
 function pathDistOK(x, z, r) { for (const p of PATHS) for (let i = 0; i < p.length - 1; i++) { const [x1, z1] = p[i], [x2, z2] = p[i + 1]; const dx = x2 - x1, dz = z2 - z1; const t = clamp(((x - x1) * dx + (z - z1) * dz) / (dx * dx + dz * dz), 0, 1); if (Math.hypot(x1 + dx * t - x, z1 + dz * t - z) < 3 + r) return true; } return false; }
 const CURIO_KEYS = ['cogumelos', 'tronco', 'colmeia', 'ninhoAve', 'amoras', 'estrela', 'fonte', 'cabana', 'arvoreNomes'];
@@ -314,7 +345,7 @@ function updateSailing(dt) {
 // =====================================================================
 let alva = null; const seatTmp = {};
 function buildDragon() {
-  alva = new Dragon(); POI.ninho = { x: NINHO.x, z: NINHO.z, name: 'O Ninho da Vésper' }; alva.onFlap = (sp) => Sound.flap(alva.x, alva.z, state === 'fly' ? 1 : 0.6);
+  alva = new Dragon(); alva.onFlap = (sp) => Sound.flap(alva.x, alva.z, state === 'fly' ? 1 : 0.6);
   // ela fica onde a Lia a deixou (inclusive depois de recarregar o jogo)
   const p = S.alvaPos; if (p && Number.isFinite(p.x) && Number.isFinite(p.z) && groundH(p.x, p.z) > WATER + 0.3) { alva.x = p.x; alva.z = p.z; alva.yaw = p.yaw || 0; alva.y = groundH(p.x, p.z); alva.update(0, null); }
   alva.onLand = () => { if (!alva.rider) { S.alvaPos = { x: +alva.x.toFixed(2), z: +alva.z.toFixed(2), yaw: +alva.yaw.toFixed(3) }; save(); } };
@@ -662,7 +693,7 @@ function talkDavi() {
 }
 const met = (id) => () => { S.met[id] = 1; save(); };
 let dlgNPC = null, dlgNode = null, pendingAfterDialog = null;
-function openDialog(n) { if (n.finale) return; document.body.classList.add('cine'); dlgNPC = n; state = 'dialog'; post.bokeh.enabled = perf.level < 2; chatDaily(n.id); const node = n.talk(); Voice.prefetch([node.line]); showNode(node); }
+function openDialog(n) { if (n.finale) return; document.body.classList.add('cine'); dlgNPC = n; state = 'dialog'; post.bokeh.enabled = settings.quality !== 'baixa' && !isTouch; chatDaily(n.id); const node = n.talk(); Voice.prefetch([node.line]); showNode(node); }
 function showNode(node) {
   if (!node) { closeDialog(); return; } dlgNode = node; $('dialog').hidden = false; $('prompt').hidden = true; if (node.act) { const a = node.act; node.act = null; a(); }
   const sp = LINES[node.line] ? LINES[node.line][0] : null; const who = CAST[sp] || { name: dlgNPC.name || '', role: '' };
@@ -880,12 +911,11 @@ let lampSprites = [], lampLights = [];
 function buildLamps() {
   const mat = new THREE.SpriteMaterial({ map: GLOW, color: 0xffc27a, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false });
   for (const p of lamps) { const s = new THREE.Sprite(mat); s.position.copy(p); s.scale.setScalar(0.9); scene.add(s); lampSprites.push(s); }
-  lampLights = [0, 1, 2].map(() => { const l = new THREE.PointLight(0xffb565, 0, 9, 1.8); scene.add(l); return l; });
+  lampLights = lamps.map(() => new VLight(0xffb565, 0, 9, 1.8));
 }
 function updateLamps() {
   const on = smooth(0.25, 0.7, sky.nightF); for (const s of lampSprites) { s.visible = on > 0.02; s.material.opacity = on * (0.85 + 0.1 * Math.sin(elapsed * 9)); }
-  const near = lamps.map((p, i) => [p.distanceToSquared(camera.position), i]).sort((a, b) => a[0] - b[0]);
-  lampLights.forEach((l, k) => { const it = near[k]; if (!it || on < 0.02) { l.intensity = 0; return; } l.position.copy(lamps[it[1]]); l.intensity = 3 * on; });
+  lampLights.forEach((l, k) => { l.position.copy(lamps[k]); l.intensity = on < 0.02 ? 0 : 3 * on; });
 }
 let hearthLights = [], candleLight = null, roomLight = null;
 function updateDoors(dt) {
@@ -907,7 +937,7 @@ function buildLantern() {
   const g = new THREE.Group(); const frame = new THREE.MeshStandardMaterial({ color: 0x3a2e22, metalness: 0.7, roughness: 0.45 }); const glass = new THREE.MeshStandardMaterial({ color: 0xfff1d8, emissive: 0xffc777, emissiveIntensity: 0, transparent: true, opacity: 0.6, roughness: 0.1 });
   const body = new THREE.Mesh(new THREE.CylinderGeometry(0.055, 0.06, 0.15, 12), glass); body.position.y = -0.16; g.add(body); for (const y of [-0.245, -0.075]) { const r = new THREE.Mesh(new THREE.CylinderGeometry(0.068, 0.068, 0.022, 12), frame); r.position.y = y; g.add(r); }
   const top = new THREE.Mesh(new THREE.ConeGeometry(0.06, 0.05, 12), frame); top.position.y = -0.04; g.add(top); const ring = new THREE.Mesh(new THREE.TorusGeometry(0.03, 0.005, 6, 12), frame); ring.position.y = 0.0; g.add(ring);
-  const light = new THREE.PointLight(0xffd29a, 0, 14, 1.6); light.position.set(0, -0.16, 0); g.add(light);
+  const light = new VLight(0xffd29a, 0, 14, 1.6, 50).attach(g, V3(0, -0.16, 0));
   lantern = { g, glass, light, ang: V3(), vel: V3() }; g.visible = false; scene.add(g);
 }
 function toggleLantern() { lanternOn = !lanternOn; Sound.rustle(player.x, player.z); }
@@ -1096,6 +1126,7 @@ function frame(fixedDt) {
   const lakeD = Math.hypot(player.x - POI.lake.x, player.z - POI.lake.z); const gw = groundH(player.x, player.z);
   const ruins = state !== 'sail' && state !== 'fly' && ['tower', 'stones', 'garden', 'stairs', 'head', 'peaks', 'shrine', 'bridge'].some(k => Math.hypot(player.x - POI[k].x, player.z - POI[k].z) < 45);
   Sound.update(dt, { x: camera.position.x, z: camera.position.z, y: player.y, yaw: cam.yaw, windStr: U.windStrength.value, fire: fireNear, trees: clamp(forestDensity(player.x, player.z) * 3 + 0.3, 0, 1), day: sky.dayF, night: sky.nightF, inside: inK > 0.5, lake: clamp(1 - lakeD / 140, 0, 1), sea: surfNear(camera.position.x, camera.position.z), shore: state === 'sail' ? 0.35 + clamp(boat.speed / 4, 0, 0.5) : clamp(1 - Math.abs(gw - 0.3) / 2.5, 0, 1) * (gw < 3 ? 1 : 0) * (1 - surfNear(player.x, player.z)), village: clamp(1 - Math.hypot(player.x, player.z) / 70, 0, 1), hour, flying: state === 'fly' ? clamp(alva.speed / 25, 0.2, 1) : 0, ruins, cinematic: ['lume', 'finale', 'intro', 'menu'].includes(state) });
+  scene.updateMatrixWorld(); LightPool.update();
   if (!MANUAL || window.__renderNow) post.render(dt, elapsed);
   if (fpsAcc > 1) { window.__fps = fpsN / fpsAcc; fpsAcc = 0; fpsN = 0; }
 }

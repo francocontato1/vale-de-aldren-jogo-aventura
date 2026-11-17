@@ -39,10 +39,10 @@ export const store = {
 
 export const isTouch = matchMedia('(pointer:coarse)').matches || ('ontouchstart' in window && navigator.maxTouchPoints > 0);
 export const QUAL = {
-  ultra: { pr: Math.min(devicePixelRatio, 2), shadow: 4096, shadowR: 75, grassR: 52, grassDen: 72, msaa: 0, ao: false, bloom: true, treeNear: 170, view: 1400, fur: 16, sharpen: 0.32 },
-  alta: { pr: Math.min(devicePixelRatio, 1.5), shadow: 4096, shadowR: 62, grassR: 44, grassDen: 64, msaa: 0, ao: false, bloom: true, treeNear: 130, view: 1150, fur: 16, sharpen: 0.28 },
-  media: { sharpen: 0.2, pr: Math.min(devicePixelRatio, 1.0), shadow: 2048, shadowR: 50, grassR: 34, grassDen: 45, msaa: 0, ao: false, bloom: true, treeNear: 85, view: 850, fur: 12 },
-  baixa: { pr: 0.75, shadow: 1024, shadowR: 38, grassR: 22, grassDen: 22, msaa: 0, ao: false, bloom: false, treeNear: 55, view: 600, fur: 6 },
+  ultra: { lights: 8, pr: Math.min(devicePixelRatio, 2), shadow: 4096, shadowR: 75, grassR: 52, grassDen: 72, msaa: 0, ao: false, bloom: true, treeNear: 170, view: 1400, fur: 16, sharpen: 0.32 },
+  alta: { lights: 8, pr: Math.min(devicePixelRatio, 1.5), shadow: 4096, shadowR: 62, grassR: 44, grassDen: 64, msaa: 0, ao: false, bloom: true, treeNear: 130, view: 1150, fur: 16, sharpen: 0.28 },
+  media: { lights: 6, sharpen: 0.2, pr: Math.min(devicePixelRatio, 1.0), shadow: 2048, shadowR: 50, grassR: 34, grassDen: 45, msaa: 0, ao: false, bloom: true, treeNear: 85, view: 850, fur: 12 },
+  baixa: { lights: 4, pr: 0.75, shadow: 1024, shadowR: 38, grassR: 22, grassDen: 22, msaa: 0, ao: false, bloom: false, treeNear: 55, view: 600, fur: 6 },
 };
 export const settings = { quality: store.get('aldren2-q') || (isTouch ? 'baixa' : 'media'), grassK: 1, treeK: 1, sens: 1 };
 if (!QUAL[settings.quality]) settings.quality = 'media';
@@ -93,6 +93,39 @@ THREE.ShaderChunk.fog_fragment = `#ifdef USE_FOG
 #endif`;
 
 // ---------- loaders ----------
+// ---------- luzes pontuais "virtuais" ----------
+// As fontes de luz do mundo (fogueiras, lareiras, postes, lanterna, lumes, o espírito) não entram na cena.
+// Um conjunto FIXO de PointLights reais é repartido a cada quadro entre as fontes que mais importam perto
+// da câmera. Assim o número de luzes da cena nunca muda (acender a lanterna ou começar um lume não obriga
+// o three.js a recompilar todos os shaders, que era o travamento) e cada pixel calcula poucas luzes.
+export const vlights = new Set();
+export class VLight {
+  constructor(color, intensity = 1, distance = 0, decay = 2, prio = 0) {
+    this.color = new THREE.Color(color); this.intensity = intensity; this.distance = distance; this.decay = decay; this.prio = prio;
+    this.position = new THREE.Vector3(); this.parent = null; this.offset = null; this._w = new THREE.Vector3(); vlights.add(this);
+  }
+  attach(obj, offset) { this.parent = obj; this.offset = offset ? offset.clone() : new THREE.Vector3(); return this; }
+  dispose() { vlights.delete(this); }
+  world() { if (this.parent) { this._w.copy(this.offset); return this.parent.localToWorld(this._w); } return this._w.copy(this.position); }
+}
+export const LightPool = {
+  slots: [],
+  init(n) { for (let i = 0; i < n; i++) { const l = new THREE.PointLight(0xffffff, 0, 10, 2); scene.add(l); this.slots.push({ l, src: null }); } },
+  update() {
+    const cp = camera.position, cand = [];
+    for (const v of vlights) {
+      if (!(v.intensity > 0.01)) continue; const p = v.world(); const d = p.distanceTo(cp); const range = v.distance || 30;
+      if (d > range * 2.2 + 12) continue; const e = Math.max(0, d - range * 0.6); cand.push({ v, s: v.prio * 1000 + v.intensity * range / (e * e + range) });
+    }
+    cand.sort((a, b) => b.s - a.s); const chosen = new Set(cand.slice(0, this.slots.length).map(c => c.v));
+    // mantém cada fonte na mesma luz real de um quadro para o outro (sem piscar)
+    for (const s of this.slots) if (s.src && !chosen.has(s.src)) s.src = null;
+    const placed = new Set(this.slots.map(s => s.src).filter(Boolean));
+    for (const v of chosen) if (!placed.has(v)) { const s = this.slots.find(s => !s.src); if (s) s.src = v; }
+    for (const s of this.slots) { const l = s.l, v = s.src; if (!v) { l.intensity = 0; continue; } l.position.copy(v._w); l.color.copy(v.color); l.intensity = v.intensity; l.distance = v.distance; l.decay = v.decay; }
+  },
+};
+
 export const resolveURL = (u) => (window.__ASSET_URLS && window.__ASSET_URLS[u]) || u;
 THREE.DefaultLoadingManager.setURLModifier(resolveURL);
 export const gltfLoader = new GLTFLoader();

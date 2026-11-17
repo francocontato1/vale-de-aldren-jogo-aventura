@@ -1,5 +1,5 @@
 // Lumes (lembranças de luz), o espírito que acompanha a Lia, vaga-lumes e pólen.
-import { THREE, scene, camera, U, clamp, lerp, rand, rr } from './core.js';
+import { THREE, scene, camera, U, clamp, lerp, rand, rr, VLight } from './core.js';
 import { groundH } from './world/terrain.js';
 import { Human } from './actors/human.js';
 import { Voice } from './audio.js';
@@ -9,7 +9,7 @@ function glowTex(inner = 'rgba(255,255,255,1)', mid = 'rgba(255,236,200,0.45)', 
 export const GLOW = glowTex();
 
 // ---------- figuras da lembrança: luz dourada, translúcida ----------
-function lumeMaterial() {
+export function lumeMaterial() {
   const m = new THREE.MeshStandardMaterial({ color: 0xfff0d0, emissive: 0xffd9a0, emissiveIntensity: 0.55, roughness: 0.7, transparent: true, opacity: 0, depthWrite: false });
   m.onBeforeCompile = (s) => {
     s.uniforms.uT = U.time;
@@ -44,7 +44,7 @@ export class Lume {
     const n = 90; const geo = new THREE.BufferGeometry(); this.dp = new Float32Array(n * 3); this.ds = Array.from({ length: n }, () => [rr(-3, 3), rr(0, 2.6), rr(-3, 3), rr(0, 6)]); geo.setAttribute('position', new THREE.BufferAttribute(this.dp, 3));
     this.dust = new THREE.Points(geo, new THREE.PointsMaterial({ map: GLOW, size: 0.09, color: 0xffe2b0, transparent: true, opacity: 0, blending: THREE.AdditiveBlending, depthWrite: false })); this.dust.frustumCulled = false; scene.add(this.dust);
     this.center = new THREE.Vector3(spot.x, groundH(spot.x, spot.z), spot.z);
-    this.light = new THREE.PointLight(0xffd9a8, 0, 12, 1.6); this.light.position.copy(this.center).add(new THREE.Vector3(0, 2.2, 0)); scene.add(this.light);
+    this.light = new VLight(0xffd9a8, 0, 12, 1.6, 20); this.light.position.copy(this.center).add(new THREE.Vector3(0, 2.2, 0));
     this.sub = document.getElementById('memory'); this.sub.hidden = false; document.getElementById('memTime').textContent = place.time || '';
     document.getElementById('memName').textContent = ''; document.getElementById('memText').textContent = '';
     this.lines = place.lines.slice(); this.reflect = place.reflect;
@@ -78,7 +78,7 @@ export class Lume {
     else if (this.line >= 0 && !this.ending) { this.lineT += dt; if ((!this.speaking && this.lineT > 1.2) || this.lineT > this.lineMax + 3) this.nextLine(); }
     if (this.ending && this.fade <= 0 && !this.done) { this.done = true; this.dispose(); this.onDone && this.onDone(); }
   }
-  dispose() { for (const f of this.figs) scene.remove(f.h.root); scene.remove(this.dust); scene.remove(this.light); this.sub.classList.remove('show'); this.sub.hidden = true; Voice.stop(); }
+  dispose() { for (const f of this.figs) scene.remove(f.h.root); scene.remove(this.dust); this.light.dispose(); this.sub.classList.remove('show'); this.sub.hidden = true; Voice.stop(); }
 }
 
 // ---------- o espírito companheiro (uma luzinha curiosa) ----------
@@ -90,7 +90,7 @@ function makeSpirit(size = 1) {
 }
 export const spirits = { list: [], companion: null };
 export function initSpirits() {
-  const c = makeSpirit(0.55); scene.add(c); const l = new THREE.PointLight(0xffe2b8, 0.6, 6, 1.8); c.add(l); spirits.companion = { g: c, light: l, pos: new THREE.Vector3(), idleT: 0 };
+  const c = makeSpirit(0.55); scene.add(c); const l = new VLight(0xffe2b8, 0.6, 6, 1.8).attach(c); spirits.companion = { g: c, light: l, pos: new THREE.Vector3(), idleT: 0 };
 }
 export function addSiteSpirits(center, count = 10, radius = 8, height = 3) { for (let i = 0; i < count; i++) { const s = makeSpirit(rr(0.5, 0.9)); scene.add(s); spirits.list.push({ g: s, c: center.clone(), r: rr(radius * 0.3, radius), h: rr(0.5, height), a: rand() * 6.28, sp: rr(0.1, 0.3) * (rand() < 0.5 ? -1 : 1), born: 0 }); } }
 export function updateSpirits(dt, t, player, target, nightF, moving) {

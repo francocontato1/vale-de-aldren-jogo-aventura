@@ -34,8 +34,11 @@ export const Sound = {
     // reverberação de "vale" para efeitos e de "lembrança" para as vozes dos ecos
     this.verb = c.createConvolver(); this.verb.buffer = makeIR(c, 2.6, 3.2, 0.35); const vg = c.createGain(); vg.gain.value = 0.5; this.verb.connect(vg).connect(this.master);
     this.dream = c.createConvolver(); this.dream.buffer = makeIR(c, 4.5, 2.2, 0.6); const dg = c.createGain(); dg.gain.value = 0.85; this.dream.connect(dg).connect(this.vox);
-    await Promise.all(Object.entries(raw).map(async ([k, p]) => { try { const ab = await p; if (ab) this.buf[k] = await c.decodeAudioData(ab.slice(0)); } catch (e) { } }));
-    for (const k of ['ambDay', 'ambNight', 'ambWind', 'ambLake', 'ambRoom', 'ambLap', 'chimes']) this.loop(k);
+    // decodifica em segundo plano: o jogo começa na hora, e cada som ambiente entra assim que fica pronto
+    // (antes, entrar no vale esperava os 39 sons, o que no celular levava vários segundos)
+    const LOOPS = ['ambDay', 'ambNight', 'ambWind', 'ambLake', 'ambRoom', 'ambLap', 'chimes'];
+    const order = Object.keys(raw).sort((a, b) => (LOOPS.some(k => FILES[k][0] === b) ? 1 : 0) - (LOOPS.some(k => FILES[k][0] === a) ? 1 : 0));
+    (async () => { for (const k of order) { try { const ab = await raw[k]; if (ab) this.buf[k] = await c.decodeAudioData(ab.slice(0)); } catch (e) { } const lk = LOOPS.find(l => FILES[l][0] === k); if (lk && !this.loops[lk]) this.loop(lk); } })();
     // estalos da lareira/fogueira (ruído filtrado)
     const n = c.sampleRate * 2; const wb = c.createBuffer(1, n, c.sampleRate); const wd = wb.getChannelData(0); for (let i = 0; i < n; i++) wd[i] = Math.random() < 0.002 ? (Math.random() * 2 - 1) : (Math.random() * 2 - 1) * 0.08; this.white = wb;
     const fs = c.createBufferSource(); fs.buffer = wb; fs.loop = true; const ff = c.createBiquadFilter(); ff.type = 'bandpass'; ff.frequency.value = 1800; ff.Q.value = 0.6; this.fireG = c.createGain(); this.fireG.gain.value = 0; fs.connect(ff).connect(this.fireG).connect(this.amb); fs.start();
