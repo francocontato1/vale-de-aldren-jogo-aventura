@@ -187,7 +187,7 @@ export const LINES = {
   lago5: ['teo_m', 'Sete! Viu? Eu falei!', 'excited'],
   lago6: ['ilsa_m', 'E afundou do mesmo jeito.', 'happy'],
   lago7: ['teo_m', 'Mas antes ela voou. Isso conta.', 'happy'],
-  lago8: ['avo', 'Ilsaaa! O pão!', 'neutral'],
+  lago8: ['avo', 'Ilsa! O pão! Vem!', 'neutral'],
   lago9: ['ilsa_m', 'Já vou! ... Me dá uma pedra. Não, essa não. Aquela ali, a furada.', 'happy'],
   lago10: ['teo_m', 'Essa é feia. Não pula.', 'neutral'],
   lago11: ['ilsa_m', 'Não é pra jogar. É pra guardar.', 'tender'],

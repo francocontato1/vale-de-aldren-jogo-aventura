@@ -449,3 +449,6 @@
 2026-11-14 05:12:29,735 done: 8 lines, 395s CPU wall for 71s audio rendered (rtf 5.57 incl. ASR/retries)
 2026-11-14 05:14:57,632 manifest updated (0 todo)
 2026-11-14 05:17:06,944 manifest updated (0 todo)
+2026-11-17 12:43:54,841 rendering 238/313 lines -> ../../a/vox (shard 0/1)
+2026-11-17 12:44:09,364 input frame rate=25
+2026-11-17 12:44:13,753 Initializing the model ...
