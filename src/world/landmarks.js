@@ -25,6 +25,7 @@ function observatory() {
   { const T = mtx(-3.4, 0.13, 1.6, 0, 0.4, 0, B); box(1.4, 0.07, 0.75, M.oldWood, 1, mtx(0, 0.76, 0, 0, 0, 0, T)); for (const a of [-1, 1]) for (const b of [-1, 1]) box(0.07, 0.74, 0.07, M.oldWood, 1, mtx(a * 0.6, 0.37, b * 0.3, 0, 0, 0, T));
     for (let i = 0; i < 4; i++) box(0.32, 0.06, 0.24, M.book[i % 5], 1, mtx(-0.35, 0.83 + i * 0.06, 0, 0, rr(-0.3, 0.3), 0, T), false); cyl(0.045, 0.04, 0.08, 10, M.lime, 1, mtx(0.3, 0.84, 0.1, 0, 0, 0, T), false);
     const c = new THREE.Vector3(-3.4, 0, 1.6).applyMatrix4(B); addCircle(c.x, c.z, 0.75); }
+  storySpots.obsTop = new THREE.Vector3(0, H + R + 0.5, -3.2).applyMatrix4(B); // a luz que pisca para o farol
   storySpots.odessa = new THREE.Vector3(2.0, 0.13, 3.2).applyMatrix4(B);
   storySpots.finale = new THREE.Vector3(0, 0.13, 5.0).applyMatrix4(B);
   storySpots.obsBench1 = bench(...[new THREE.Vector3(-4.6, 0, 5.4).applyMatrix4(B)].map(v => [v.x, v.z])[0], ry + Math.PI);
@@ -88,7 +89,7 @@ function aqueduct() {
 // Ponte de arco de pedra dos Veladores sobre o riacho seco. O fecho do arco caiu há trezentos anos: o
 // vão do meio desabou e as aduelas estão espalhadas no leito. O Bastião montou embaixo um cimbre de
 // madeira (a armação em arco que serve de molde para reassentar as pedras) e uma passarela de tábuas.
-function bridge() {
+function bridge(scene) {
   const { x, z } = POI.bridge; const i = 3; const cdx = CREEK[i][0] - CREEK[i - 1][0], cdz = CREEK[i][1] - CREEK[i - 1][1]; const ry = Math.atan2(cdx, cdz) + Math.PI / 2; // eixo da ponte atravessa o riacho
   const ax = Math.sin(ry), az = Math.cos(ry);
   // altura do tabuleiro e comprimento de cada lado: a ponte vai até onde o barranco alcança o tabuleiro
@@ -100,14 +101,16 @@ function bridge() {
   // arco: intradorso circular, nascentes em z=±S
   const S = 7.4, bed = Math.min(groundH(x, z), groundH(x + ax * 3, z + az * 3), groundH(x - ax * 3, z - az * 3)) - deck; const ys = Math.max(bed + 0.6, -4.9), rise = Math.min(3.6, -ys - 1.0);
   const R = (S * S + rise * rise) / (2 * rise), cy = ys + rise - R, phi = Math.asin(S / R), ring = 0.62;
+  const done = new THREE.Group(); done.visible = false; done.matrixAutoUpdate = false; storySpots.bridgeDone = done; if (scene) scene.add(done);
   const broken = (zz, yy) => Math.abs(zz) < gap + (yy > -0.9 ? 0.55 * hash(zz * 3.1) : 0) + Math.max(0, (yy + 2.2)) * 0.18;
   function hash(v) { const t = Math.sin(v * 91.7) * 43758.5; return t - Math.floor(t); }
   // aduelas (pedras do arco), cada uma um pouco diferente, com junta de argamassa
   const nV = 31;
   for (let k = 0; k < nV; k++) {
     const a = -phi + (k + 0.5) / nV * 2 * phi; const zz = Math.sin(a) * (R + ring / 2), yy = cy + Math.cos(a) * (R + ring / 2);
-    if (broken(zz, yy)) continue;
     const len = 2 * phi / nV * R * 0.96;
+    // as aduelas que caíram: o Bastião recoloca no fim (pedra nova, mais clara), escondidas até lá
+    if (broken(zz, yy)) { for (const sx of [-1, 0, 1]) { const m = new THREE.Mesh(boxUV(new THREE.BoxGeometry(W / 3 - 0.04, ring, len), 0.9), M.block); m.applyMatrix4(mtx(sx * W / 3, yy, zz, a, 0, 0, B)); m.castShadow = true; m.receiveShadow = true; done.add(m); } continue; }
     for (const sx of [-1, 0, 1]) { const g = boxUV(new THREE.BoxGeometry(W / 3 - 0.04, ring * rr(0.96, 1.05), len), 0.9); put(g, M.ruin, mtx(sx * W / 3, yy + rr(-0.02, 0.02), zz, a + rr(-0.012, 0.012), 0, 0, B)); }
   }
   // tímpanos (paredes de pedra entre o arco e o tabuleiro) e encontros enterrados no barranco
@@ -159,6 +162,12 @@ function bridge() {
     addBox(w.x, w.z, 0.95, 0.4, ry); storySpots.bastiao = toW(1.6, 0, hL + 1.4); storySpots.bastiao.y = groundH(storySpots.bastiao.x, storySpots.bastiao.z); storySpots.bastiaoYaw = ry; }
   { const w = toW(-2.6, 0, hL + 2.4); const gy = groundH(w.x, w.z); for (let k = 0; k < 6; k++) { const g = boxUV(new THREE.BoxGeometry(0.7, 0.42, 0.55), 0.9); put(g, M.block, mtx(w.x + (k % 3) * 0.06 * Math.cos(ry), gy + 0.21 + Math.floor(k / 3) * 0.43, w.z, 0, ry + (k % 3) * 0.6 - 0.6, 0)); } addCircle(w.x, w.z, 0.8); }
   storySpots.ponte = toW(-1.4, 0, hL + 2.5); storySpots.ponte.y = groundH(storySpots.ponte.x, storySpots.ponte.z);
+  // o vão fechado: enchimento, calçamento e parapeitos novos sobre o arco recolocado
+  { const add = (g, mat, m4) => { const m = new THREE.Mesh(g, mat); m.applyMatrix4(m4); m.castShadow = true; m.receiveShadow = true; done.add(m); };
+    add(boxUV(new THREE.BoxGeometry(W - 1.1, 0.5, gap * 2 + 0.8), 1.3), M.block, mtx(0, -0.3, 0, 0, 0, 0, B));
+    add(boxUV(new THREE.BoxGeometry(W - 0.9, 0.12, gap * 2 + 0.8), 1.1), M.cobble, mtx(0, 0.06, 0, 0, 0, 0, B));
+    for (const side of [-1, 1]) add(boxUV(new THREE.BoxGeometry(0.36, 0.62, gap * 2 + 0.8), 1.2), M.block, mtx(side * (W / 2 - 0.3), 0.26, 0, 0, 0, 0, B));
+    done.updateMatrixWorld(true); }
 }
 
 function shrine() {
@@ -183,5 +192,5 @@ function trailMarks() {
     let y = gy; for (let k = 0; k < 5; k++) { const sz = 0.42 - k * 0.07; const g = new THREE.DodecahedronGeometry(sz, 0); g.scale(1.2, 0.55, 1); put(boxUV(g, 0.8), k % 2 ? M.ruinMoss : M.ruin, mtx(px + rr(-0.05, 0.05), y + sz * 0.45, pz + rr(-0.05, 0.05), rr(-0.1, 0.1), rand() * 6, 0)); y += sz * 0.8; } addCircle(px, pz, 0.45); }
   { const [x, z] = TRAIL[1]; const px = x + 2.2, pz = z + 1; const gy = groundH(px, pz); cyl(0.07, 0.08, 1.8, 7, M.oldWood, 1, mtx(px, gy + 0.9, pz)); box(0.9, 0.32, 0.05, M.oldWood, 1, mtx(px + 0.3, gy + 1.55, pz, 0, -0.6, -0.08)); addCircle(px, pz, 0.15); storySpots.placaMonte = new THREE.Vector3(px, gy, pz); }
 }
-export function buildLandmarks() { observatory(); garden(); stairs(); aqueduct(); bridge(); shrine(); trailMarks(); }
+export function buildLandmarks(scene) { observatory(); garden(); stairs(); aqueduct(); bridge(scene); shrine(); trailMarks(); }
 export const FLOWER_ZONES = () => [[POI.garden.x, POI.garden.z, 14, 900], [POI.head.x, POI.head.z, 16, 700], [POI.observatory.x, POI.observatory.z + 12, 8, 120], [-42, 27, 6, 80]];

@@ -3,7 +3,7 @@ import { THREE, scene, camera, U, clamp, lerp, rand, rr, VLight } from './core.j
 import { groundH } from './world/terrain.js';
 import { Human } from './actors/human.js';
 import { Voice } from './audio.js';
-import { LINES } from './story.js';
+import { LINES, CAST } from './story.js';
 
 function glowTex(inner = 'rgba(255,255,255,1)', mid = 'rgba(255,236,200,0.45)', outer = 'rgba(255,220,170,0)') { const c = document.createElement('canvas'); c.width = c.height = 128; const g = c.getContext('2d'); const gr = g.createRadialGradient(64, 64, 0, 64, 64, 64); gr.addColorStop(0, inner); gr.addColorStop(0.2, mid); gr.addColorStop(1, outer); g.fillStyle = gr; g.fillRect(0, 0, 128, 128); const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return t; }
 export const GLOW = glowTex();
@@ -32,7 +32,7 @@ export class Lume {
     this.mat = lumeMaterial(); this.figs = [];
     const yaw0 = opts.yaw ?? 0;
     for (const f of place.figures) {
-      const key = (MODEL[place.id] && MODEL[place.id][f.who]) || f.who; const h = new Human(key);
+      const key = f.model || (MODEL[place.id] && MODEL[place.id][f.who]) || f.who; const h = new Human(key);
       for (const m of h.meshes) { m.material = this.mat; m.castShadow = false; m.receiveShadow = false; }
       const c = Math.cos(yaw0), s = Math.sin(yaw0); let x = spot.x + f.dx * c + f.dz * s, z = spot.z - f.dx * s + f.dz * c; let y = groundH(x, z);
       if (f.top && opts.top) { x = opts.top.x; z = opts.top.z; y = opts.top.y; }
@@ -47,7 +47,7 @@ export class Lume {
     this.light = new VLight(0xffd9a8, 0, 12, 1.6, 20); this.light.position.copy(this.center).add(new THREE.Vector3(0, 2.2, 0));
     this.sub = document.getElementById('memory'); this.sub.hidden = false; document.getElementById('memTime').textContent = place.time || '';
     document.getElementById('memName').textContent = ''; document.getElementById('memText').textContent = '';
-    this.lines = place.lines.slice(); this.reflect = place.reflect;
+    this.lines = place.lines.slice(); this.reflect = opts.reflect || place.reflect; this.onPeak = opts.onPeak; this.peaked = false;
     Voice.prefetch([...this.lines, this.reflect]);
   }
   skip() { Voice.stop(); this.speaking = false; this.lineT = 99; }
@@ -56,7 +56,7 @@ export class Lume {
     const id = this.line < this.lines.length ? this.lines[this.line] : (this.line === this.lines.length ? this.reflect : null);
     if (!id) { this.ending = true; return; }
     const [who, text] = LINES[id]; const isLia = who === 'lia';
-    document.getElementById('memName').textContent = isLia ? 'Lia, em pensamento' : (who === 'eco_f' ? 'Uma Veladora' : 'Um Velador');
+    document.getElementById('memName').textContent = isLia ? 'Lia, em pensamento' : (CAST[who] ? CAST[who].name : 'Um Velador');
     document.getElementById('memText').textContent = text; this.sub.classList.toggle('thought', isLia); this.sub.classList.remove('show'); void this.sub.offsetWidth; this.sub.classList.add('show');
     this.speaking = true; this.lineT = 0; this.lineMax = 2.5 + text.length * 0.075; this.who = who;
     if (isLia) this.fadeOut = true;
@@ -70,10 +70,12 @@ export class Lume {
     for (const f of this.figs) {
       f.t += dt; f.h.talking = (this.speaking && f.who === this.who) ? lvl : 0;
       if ((f.anim === 'throw' || f.anim === 'interact') && f.h.done() && f.t > 3) { f.t = 0; f.h.current.reset().play(); }
-      f.h.update(dt); f.h.lookAtPoint(this.figs.length > 1 ? this.figs.find(o => o !== f).h.headPos : lookAt, 0.8);
+      f.h.update(dt); const sp = this.figs.find(o => o !== f && o.who === this.who), other = sp || this.figs.find(o => o !== f); f.h.lookAtPoint(other ? other.h.headPos : lookAt, 0.8);
     }
     for (let i = 0; i < this.ds.length; i++) { const s = this.ds[i]; this.dp[i * 3] = this.center.x + s[0] + Math.sin(this.t * 0.3 + s[3]) * 0.4; this.dp[i * 3 + 1] = this.center.y + ((s[1] + this.t * 0.18) % 2.8); this.dp[i * 3 + 2] = this.center.z + s[2] + Math.cos(this.t * 0.27 + s[3]) * 0.4; }
     this.dust.geometry.attributes.position.needsUpdate = true;
+    // o esboço do caderno é tirado no auge da lembrança, com as figuras bem visíveis
+    if (!this.peaked && this.onPeak && this.fade > 0.97 && this.line >= Math.floor(this.lines.length * 0.55)) { this.peaked = true; this.onPeak(); }
     if (this.t > 1.6 && this.line < 0) this.nextLine();
     else if (this.line >= 0 && !this.ending) { this.lineT += dt; if ((!this.speaking && this.lineT > 1.2) || this.lineT > this.lineMax + 3) this.nextLine(); }
     if (this.ending && this.fade <= 0 && !this.done) { this.done = true; this.dispose(); this.onDone && this.onDone(); }

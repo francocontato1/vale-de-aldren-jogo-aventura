@@ -1,6 +1,6 @@
 // Som ambiente, passos, música (faixas gravadas com silêncios entre elas) e vozes dubladas.
 import { clamp, lerp, rr, angDiff, resolveURL } from './core.js';
-import { LINES, speaker } from './story.js';
+import { LINES, speaker, voiceOf } from './story.js';
 
 const P = 'a/snd/';
 const N = (base, n) => Array.from({ length: n }, (_, i) => base + '0' + (i + 1));
@@ -97,6 +97,11 @@ export const Sound = {
     o.start(t); lfo.start(t); o.stop(t + 1.45); lfo.stop(t + 1.45);
   },
   flap(x, z, vol = 1) { if (!this.ctx || !this.white) return; const c = this.ctx, t = c.currentTime; const src = c.createBufferSource(); src.buffer = this.white; const f = c.createBiquadFilter(); f.type = 'lowpass'; f.frequency.setValueAtTime(900, t); f.frequency.exponentialRampToValueAtTime(140, t + 0.6); const g = c.createGain(); g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.9 * vol, t + 0.12); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.75); src.connect(f).connect(g); this.out(g, x, z, 0.3); src.start(t, Math.random()); src.stop(t + 0.8); },
+  // pedra quicando na água: "plic" curto e agudo (sobe de tom a cada pulo, fica mais fraco) e o "ploc" de afundar
+  plip(x, z, n = 1) { if (!this.ctx) return; const f = 900 + n * 120 + rr(-60, 60); this.tone(f, f * 2.2, 0.07, 0.05 / (1 + n * 0.25), 'sine', { a: 0.003 }); this.splash(x, z, 0.35 / (1 + n * 0.3), 3800); },
+  plop(x, z, big = 1) { if (!this.ctx) return; this.tone(420 / big, 160 / big, 0.18, 0.08, 'sine', { a: 0.004 }); this.splash(x, z, 0.5 * big, 1800); },
+  splash(x, z, vol, f0) { if (!this.white) return; const c = this.ctx, t = c.currentTime; const s = c.createBufferSource(); s.buffer = this.white; const bp = c.createBiquadFilter(); bp.type = 'bandpass'; bp.frequency.setValueAtTime(f0, t); bp.frequency.exponentialRampToValueAtTime(f0 * 0.4, t + 0.25); bp.Q.value = 0.9; const g = c.createGain(); g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(vol * 0.5, t + 0.01); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.3); s.connect(bp).connect(g); this.out(g, x, z, 0.2); s.start(t, Math.random()); s.stop(t + 0.35); },
+  knot() { this.play('cloth', { vol: 0.3, rate: 0.8 }); this.tone(300, 260, 0.05, 0.01, 'triangle', { delay: 0.25 }); },
   door(open, x, z) { this.play(open ? 'doorOpen' : 'doorClose', { x, z, vol: 0.35 }); },
   clang(x, z) { this.play('anvil', { x, z, vol: 0.25, verb: 0.3 }); },
   rustle(x, z) { this.play('cloth', { x, z, vol: 0.18, rate: rr(0.9, 1.1) }); },
@@ -163,8 +168,15 @@ export const Voice = {
   async init(c, bus, dream) { this.ctx = c; this.bus = bus; this.dream = dream; this.analyser = c.createAnalyser(); this.analyser.fftSize = 512; this.data = new Uint8Array(this.analyser.fftSize); try { const r = await fetch(resolveURL('a/vox/manifest.json')); if (r.ok) this.man = await r.json(); } catch (e) { } },
   load(id) {
     if (this.cache.has(id)) return this.cache.get(id);
-    const p = (this.man && !this.man[id]) ? Promise.resolve(null) : fetch(resolveURL('a/vox/' + id + '.mp3')).then(r => r.ok ? r.arrayBuffer() : null).then(ab => ab && this.ctx ? this.ctx.decodeAudioData(ab) : null).catch(() => null);
+    const p = !this.dubbed(id) ? Promise.resolve(null) : fetch(resolveURL('a/vox/' + id + '.mp3')).then(r => r.ok ? r.arrayBuffer() : null).then(ab => ab && this.ctx ? this.ctx.decodeAudioData(ab) : null).catch(() => null);
     this.cache.set(id, p); return p;
+  },
+  // só toca a gravação se ela ainda corresponde à fala: mesmo texto e mesmo timbre (uma fala reescrita
+  // ou trocada de personagem fica só na legenda até ser dublada de novo, em vez de tocar a voz antiga)
+  dubbed(id) {
+    if (!this.man) return true; const m = this.man[id]; if (!m || !LINES[id]) return false;
+    const norm = (t) => String(t).replace(/\s+/g, ' ').trim();
+    return norm(m.text) === norm(LINES[id][1]) && (!m.speaker || m.speaker === voiceOf(LINES[id][0]));
   },
   prefetch(ids) { if (!this.ctx) return; for (const id of ids) this.load(id); },
   // parar uma fala também conta como terminar (antes a legenda e o final ficavam presos esperando um fim que nunca vinha)
@@ -175,7 +187,7 @@ export const Voice = {
     const text = LINES[id] ? LINES[id][1] : id; const who = speaker(id);
     const buf = this.enabled && this.ctx ? await this.load(id) : null; if (token !== this.token) return;
     // falas novas ainda sem dublagem: só legenda (a voz sintética do navegador destoaria das vozes gravadas)
-    if (!buf) { const silent = this.man && !this.man[id]; Speech.speak(text, who, onStart, onEnd, this.enabled && !silent); return; }
+    if (!buf) { const silent = this.man && !this.dubbed(id); Speech.speak(text, who, onStart, onEnd, this.enabled && !silent); return; }
     const c = this.ctx; const src = c.createBufferSource(); src.buffer = buf; const g = c.createGain(); g.gain.value = eco ? 0.85 : 1;
     src.connect(g); g.connect(this.analyser);
     if (eco) { const lp = c.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 5200; const hp = c.createBiquadFilter(); hp.type = 'highpass'; hp.frequency.value = 160; g.connect(hp).connect(lp).connect(this.bus); const send = c.createGain(); send.gain.value = 0.7; g.connect(send).connect(this.dream); }

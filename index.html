@@ -1,7 +1,7 @@
 <!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Vale de Aldren</title>
 <meta name="description" content="Um jogo contemplativo no navegador: um vale tranquilo, ruínas de um povo que construía para olhar, e um mapa do que importa.">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Inter:wght@400;500;600&display=swap" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Inter:wght@400;500;600&display=swap"></noscript>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=IM+Fell+English:ital@1&family=Inter:wght@400;500;600&family=Italianno&display=swap" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=IM+Fell+English:ital@1&family=Inter:wght@400;500;600&family=Italianno&display=swap"></noscript>
 <style>
 /* Interface discreta: texto de pergaminho sobre a paisagem, quase nada na tela enquanto se anda */
 :root{
@@ -46,6 +46,42 @@ html,body{height:100%;margin:0;background:#0b0a08;color:var(--ink);overflow:hidd
 #dlgOpts button{all:unset;cursor:pointer;font-size:14px;padding:7px 12px;border-radius:999px;border:1px solid var(--line);color:var(--ink);background:rgba(16,13,9,.45);backdrop-filter:blur(3px)}
 #dlgOpts button:hover,#dlgOpts button:focus-visible{border-color:var(--gold);background:rgba(16,13,9,.7)}
 #dlgOpts button b{color:var(--gold);margin-right:8px;font-variant-numeric:tabular-nums}
+/* a árvore das fitas: cada fita com tecido, idade e letra próprios */
+#ribbons{position:fixed;inset:0;display:grid;place-items:end center;padding:0 16px calc(16px + env(safe-area-inset-bottom,0px));box-sizing:border-box;background:linear-gradient(to top,rgba(8,6,4,.78),rgba(8,6,4,.25) 55%,rgba(8,6,4,0));touch-action:pan-y}
+.ribbox{width:min(900px,100%);display:grid;gap:12px}
+.ribrow{position:relative;display:flex;gap:clamp(6px,1.6vw,18px);justify-content:center;align-items:flex-start;padding-top:14px;overflow-x:auto;overflow-y:visible;scrollbar-width:none;min-height:min(34vh,260px)}
+.ribrow::before{content:"";position:absolute;left:4%;right:4%;top:4px;height:12px;border-radius:8px;background:linear-gradient(#6b4d33,#3e2a1b);box-shadow:0 3px 8px rgba(0,0,0,.5)}
+.ribw{all:unset;flex:0 0 auto;cursor:pointer;position:relative;padding:6px 3px 34px;transform-origin:top center;animation:ribsway 3.8s ease-in-out infinite alternate;animation-delay:var(--d,0s);transition:transform .3s}
+.ribw.sel{transform:translateY(6px) scale(1.06)}.ribw.sel::after{content:'';position:absolute;left:50%;top:-6px;width:10px;height:10px;margin-left:-5px;border-radius:50%;background:var(--gold);box-shadow:0 0 12px var(--glow)}
+.ribw:focus-visible{outline:none}.ribw:focus-visible .rib{filter:brightness(1.2)}
+.rib{display:block;position:relative;width:clamp(26px,4.4vw,40px);height:calc(120px + var(--len,1) * 90px);
+  background:repeating-linear-gradient(90deg,rgba(255,255,255,.07) 0 1px,transparent 1px 3px),repeating-linear-gradient(0deg,rgba(0,0,0,.07) 0 1px,transparent 1px 4px),linear-gradient(90deg,rgba(0,0,0,.18),transparent 30%,transparent 70%,rgba(0,0,0,.22)),var(--c);
+  filter:saturate(calc(1 - var(--age) * .65)) brightness(calc(1 - var(--age) * .18)) contrast(calc(1 - var(--age) * .15));
+  clip-path:polygon(0 0,100% 0,100% calc(100% - 14px),82% 100%,64% calc(100% - 9px),46% 100%,28% calc(100% - 12px),12% 100%,0 calc(100% - 6px));box-shadow:inset 0 10px 6px -6px rgba(0,0,0,.45)}
+.rib::before{content:"";position:absolute;left:-4px;right:-4px;top:-2px;height:12px;border-radius:5px;background:inherit;filter:brightness(.8)}
+.ribw .stone{position:absolute;left:50%;bottom:6px;width:30px;height:22px;margin-left:-15px;border-radius:50%;background:radial-gradient(circle at 50% 50%,rgba(0,0,0,.6) 0 4px,#c9c4b8 5px,#9a958a 70%,#7d786e 100%);box-shadow:0 2px 6px rgba(0,0,0,.5)}
+@keyframes ribsway{from{transform:rotate(-2.2deg)}to{transform:rotate(2.4deg)}}
+.ribcard{background:var(--paper);color:var(--paper-ink);border-radius:4px;padding:14px 20px 12px;box-shadow:0 14px 40px rgba(0,0,0,.45),inset 0 0 60px rgba(150,110,60,.2)}
+.ribcard h3{margin:0;font-family:var(--f-display);font-size:22px;font-weight:600}
+.ribcard .who{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#8a6a40;margin:2px 0 6px}
+.ribcard .txt{font-size:22px;line-height:1.35;margin:4px 0 8px;color:var(--ink-c,#3b2e20)}
+.h-old{font-family:"IM Fell English",Georgia,serif;font-style:italic}.h-elf,.h-fine{font-family:Italianno,cursive;font-size:34px!important;line-height:1.1!important}.h-kid,.h-round{font-family:Caveat,cursive;font-size:28px!important}.h-block{font-family:var(--f-ui);text-transform:uppercase;letter-spacing:.06em;font-weight:600;font-size:17px!important}.h-none{font-family:var(--f-display);font-style:italic}
+.ribacts{display:flex;flex-wrap:wrap;gap:8px}
+.ribacts button{all:unset;cursor:pointer;font-size:14px;padding:8px 14px;border-radius:999px;border:1px solid rgba(80,60,30,.3);background:rgba(255,250,240,.5);color:var(--paper-ink)}
+.ribacts button b{color:#8a5a20;margin-right:8px}
+.ribacts button:hover,.ribacts button:focus-visible{border-color:#8a6a40;background:#fff8ea}
+.ribhint{font-size:12px;color:var(--ink-dim);text-align:center;letter-spacing:.06em;text-shadow:0 1px 4px #000}
+/* pedras no lago */
+#skipHud{position:absolute;left:50%;bottom:calc(22px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);text-align:center;width:min(560px,calc(100vw - 32px))}
+#skipHud .stones{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+#skipHud button{all:unset;pointer-events:auto;cursor:pointer;padding:9px 14px;border-radius:12px;border:1px solid var(--line);background:rgba(16,13,9,.6);font-size:14px;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
+#skipHud button b{color:var(--gold);margin-right:8px}#skipHud button small{display:block;color:var(--ink-dim);font-size:11px;margin-top:2px}
+#skipMeter{height:8px;border-radius:6px;background:rgba(255,255,255,.12);margin:10px auto 6px;width:min(320px,80vw);position:relative;overflow:hidden}
+#skipMeter i{position:absolute;left:0;top:0;bottom:0;background:linear-gradient(90deg,#c9b38a,#ffe2b0);border-radius:6px}
+#skipMeter u{position:absolute;top:-2px;bottom:-2px;left:72%;width:12%;border:1px solid rgba(255,226,176,.8);border-radius:4px}
+#skipCount{font-family:var(--f-display);font-size:30px;text-shadow:0 2px 10px #000;min-height:36px}
+#skipTip{font-size:12px;color:var(--ink-dim);letter-spacing:.05em;text-shadow:0 1px 4px #000}
+
 .overlay{touch-action:pan-y;position:fixed;inset:0;display:grid;place-items:center;background:radial-gradient(ellipse at 50% 45%,rgba(10,8,6,0),rgba(8,6,4,.62));padding:16px;box-sizing:border-box;overflow:auto}
 .card{max-width:600px;width:100%;text-align:center}
 .card h1{font-family:var(--f-display);font-weight:600;font-size:clamp(52px,10vw,104px);line-height:.92;margin:0;text-shadow:0 4px 40px rgba(0,0,0,.55);letter-spacing:.01em}
@@ -89,6 +125,7 @@ html,body{height:100%;margin:0;background:#0b0a08;color:var(--ink);overflow:hidd
 .jcard article h3{font-family:var(--f-display);font-size:23px;margin:0 0 4px;font-weight:600}
 .jcard article h3.unk{color:#9a8a70;font-style:italic;font-weight:500}
 .jcard article p{font-family:var(--f-display);font-size:19px;line-height:1.5;margin:0}
+.jcard .era{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#8a6a40;margin-bottom:6px}.jcard article h3.q{font-size:20px}.jcard article h3.q.done{color:#5a4128}.jcard article h3.q:not(.done){color:#8a7458;font-style:italic}.jcard article.about p{font-style:italic}
 .jcard article p.cap{font-size:16px;font-style:italic;color:#6a5236;margin-bottom:6px}
 .jhint{font-size:12px;color:#8a7a60;margin-top:14px}
 #ending{opacity:0;transition:opacity 4s}
@@ -129,6 +166,8 @@ html,body{height:100%;margin:0;background:#0b0a08;color:var(--ink);overflow:hidd
   <div id="sailHud" hidden><div id="sailInfo"></div><div id="sailKeys"></div></div>
   <div id="lapseHint" hidden>T · deixar o tempo passar · mova-se para levantar</div>
   <div id="toasts"></div>
+<div id="skipHud" hidden><div id="skipCount"></div><div class="stones" id="skipStones"></div><div id="skipMeter" hidden><u></u><i></i></div><div id="skipTip"></div></div>
+
 </div>
 <div id="dialog" hidden><div><span id="dlgName"></span><span id="dlgRole"></span></div><div id="dlgText"></div><div id="dlgOpts"></div></div>
 <div id="thought" hidden></div>
@@ -147,7 +186,7 @@ html,body{height:100%;margin:0;background:#0b0a08;color:var(--ink);overflow:hidd
   <div class="card">
     <div class="eyebrow">Um mapa do que importa</div>
     <h1>Vale de Aldren</h1>
-    <p class="lede">Um povo que construía para olhar foi embora há muito tempo. Ficaram as pedras, os gigantes sentados na paisagem, e uma maga que não lembra mais o que veio procurar.</p>
+    <p class="lede">Um povo que construía para olhar foi embora há muito tempo. Ficaram as pedras, os gigantes sentados na paisagem, e uma maga que ainda espera por eles.</p>
     <button class="btn" id="startBtn" disabled>Entrar no vale</button>
     <div class="loadwrap"><div id="loadBar"></div></div>
     <div id="loading">Preparando…</div>
@@ -192,6 +231,7 @@ html,body{height:100%;margin:0;background:#0b0a08;color:var(--ink);overflow:hidd
     <div class="quality"><button id="resetBtn">Começar um caderno novo</button><span id="resetConfirm" hidden>Clique de novo para confirmar</span></div>
   </div>
 </div>
+<div id="ribbons" hidden><div class="ribbox"><div class="ribrow" id="ribRow"></div><div class="ribcard" id="ribCard"></div><div class="ribhint" id="ribHint"></div></div></div>
 <div id="memory" hidden><div id="memTime"></div><div id="memName"></div><div id="memText"></div></div>
 <div class="overlay" id="journal" role="dialog" aria-modal="true" aria-label="Caderno de Lia" hidden><div class="jcard"><div class="eyebrow">Caderno de Lia</div><h1>O mapa do que importa</h1><div id="journalCount"></div><div id="journalList"></div><p class="jhint">J ou Esc para fechar</p></div></div>
 <div class="overlay" id="ending" role="dialog" aria-modal="true" aria-label="Fim, e começo" hidden><div class="card"><div class="eyebrow">Fim, e começo</div><h1 style="font-size:64px">O vale lembra</h1><p class="lede">Os lumes subiram de todo o vale e se misturaram às estrelas. O caderno está cheio. Mas o vale, como disse Odessa, nunca fica pronto: ainda há cantos esperando alguém que olhe com calma.</p><button class="btn" id="endBtn">Continuar andando</button></div></div>

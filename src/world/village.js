@@ -5,6 +5,7 @@ import { buildHarbor } from './harbor.js';
 import { buildCuriosities, buildForestFloor } from './curiosities.js';
 
 // ---------------- materiais ----------------
+import { buildRibbonTree } from './ribbons.js';
 export const M = {};
 export async function loadVillageMaterials(barkMat) {
   const L = (n, srgb = true) => loadTex('a/tex/' + n, { srgb });
@@ -514,7 +515,7 @@ export function buildVillage(scene) {
   // varal com roupas coloridas
   { const a = [12, -30], b = [17, -31.5]; for (const p of [a, b]) cyl(0.05, 0.06, 2.2, 6, M.oldWood, 1, mtx(p[0], groundH(p[0], p[1]) + 1.1, p[1])); const n = 6; for (let i = 0; i < n; i++) { const t = (i + 0.5) / n; const px = a[0] + (b[0] - a[0]) * t, pz = a[1] + (b[1] - a[1]) * t; const cm = [M.cloth.blue, M.cloth.white, M.cloth.ochre, M.cloth.green][i % 4]; const g = new THREE.PlaneGeometry(0.5, 0.65, 2, 3); put(boxUV(g, 1), cm, mtx(px, groundH(px, pz) + 1.7, pz, 0, -Math.atan2(b[1] - a[1], b[0] - a[0]), 0), false); } }
   windmill(-74, -34, 0.9);
-  buildTower(); buildStones(); buildStoryProps(); buildLandmarks(); buildHarbor();
+  buildTower(); buildStones(); buildStoryProps(scene); buildLandmarks(scene); buildHarbor();
   { const [hx, hz] = fromUV(HARBOR.u, HARBOR.v); const av = (x, z, r = 2) => inFootprint(x, z, r) || Math.hypot(x - hx, z - hz) < 60 || Math.hypot(x - POI.observatory.x, z - POI.observatory.z) < 25; buildCuriosities(av); buildForestFloor(av); }
   return bake(scene);
 }
@@ -527,7 +528,7 @@ function buildTower() {
   for (let i = 0; i < 26; i++) { const a = i / 26 * 6.283; if (a < 0.3) continue; addCircle(x + Math.cos(a) * 3.5, z - Math.sin(a) * 3.5, 0.7); }
   storySpots.tower = new THREE.Vector3(x + 5.5, groundH(x + 5.5, z + 6), z + 6);
 }
-function buildStoryProps() {
+function buildStoryProps(scene) {
   // banco virado para o poente
   { const cx = 22, cz = -58; storySpots.banco = bench(cx, cz, -Math.PI / 2); }
   // o balanço
@@ -540,7 +541,7 @@ function buildStoryProps() {
     box(0.06, 1.1, 0.012, M.iron, 1, mtx(wx, wy + 0.95, wz, 0.08, 0.3, 0.06)); box(0.34, 0.05, 0.06, M.iron, 1, mtx(wx - 0.04, wy + 1.5, wz, 0.08, 0.3, 0.06)); cyl(0.022, 0.022, 0.24, 6, M.timber, 1, mtx(wx - 0.05, wy + 1.66, wz, 0.08, 0.3, 0.06)); }
   // a árvore das fitas
   { const tx = -152, tz = -80, ty = groundH(tx, tz); storySpots.tree = new THREE.Vector3(tx + 2.4, ty, tz + 1.6); storySpots.treeRoot = new THREE.Vector3(tx, ty, tz);
-    const cols = [M.canvasRed, M.cloth.white, M.cloth.blue, M.cloth.ochre, M.cloth.green]; for (let i = 0; i < 46; i++) { const a = rr(0, 6.28), r = rr(1.6, 3.8), h = rr(2.4, 4.4); const rb = new THREE.PlaneGeometry(0.05, rr(0.35, 0.8)); put(boxUV(rb, 1), cols[i % 5], mtx(tx + Math.cos(a) * r, ty + h, tz + Math.sin(a) * r, rr(-0.2, 0.2), rand() * 6, rr(-0.15, 0.15)), false); } }
+    storySpots.ribbonTree = buildRibbonTree(scene, storySpots.treeRoot, Math.atan2(1.6, 2.4) + 1.7); } // o galho baixo sai de lado, à vista do banco }
   storySpots.head = new THREE.Vector3(POI.head.x - 3.5, groundH(POI.head.x - 3.5, POI.head.z + 4), POI.head.z + 4);
 }
 function buildStones() {
