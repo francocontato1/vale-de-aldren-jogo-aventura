@@ -4,7 +4,9 @@ Um jogo contemplativo que roda direto no navegador (three.js). Sem combate, sem 
 
 Há muito tempo, um povo chamado Veladores viveu neste vale. Construíam para olhar: torres, escadas que não levam a lugar nenhum, círculos de pedra, relógios de sol. Um dia foram embora, sem guerra e sem despedida. Ficaram as pedras e os gigantes, que, dizem, são Veladores que sentaram para ver algo bonito e esqueceram de levantar.
 
-Você é Lia, uma jovem cartógrafa chamada por Odessa, uma maga elfa que mora no observatório do vale há seiscentos anos. Ela não quer um mapa de estradas: quer um mapa do que importa. Quando você senta num dos oito lugares dos Veladores e olha com calma, o lugar lembra: um lume, uma lembrança de luz, aparece por alguns instantes. Você desenha o que viu no caderno.
+Você é Lia, uma jovem cartógrafa de Ancoradouro, no litoral, chamada por Odessa, uma maga elfa que mora no observatório do vale há seiscentos anos. Ela não quer um mapa de estradas: quer um mapa do que importa. Quando você senta num dos oito lugares dos Veladores, na hora certa, e olha com calma, o lugar lembra: um lume, uma lembrança de luz. Você desenha o que viu no caderno.
+
+As oito lembranças contam, fora de ordem, uma história só: Teo e Ilsa, que se conheceram jogando pedras no lago; Sela, a irmã que partiu; o mestre Auren, que ensinava a olhar; e uma menina elfa chamada Dessa. Cabe a você montar. A Lia também tem a sua história (o pai que desenhava estradas, a bússola que puxa para o leste, a carta que ela deve à mãe), e quem fica amigo dela vai sabendo aos poucos.
 
 ## Como jogar
 
@@ -29,7 +31,10 @@ No celular, há um joystick e botões na tela.
 ## O que há no vale
 
 - **A vila de Aldren:** padaria da Celeste (com forno de pão), oficina do Bastião, casa da Irene com ervas secando, casa-torre, casa dos livros, pasto do Seu Anselmo, moinho de vento, poço e fogueira. Cada casa é diferente, e as de dois andares têm escada e quartos de verdade.
-- **Os lugares dos Veladores:** o gigante no lago, o círculo das estrelas (só à noite), a torre partida, a gigante sentada no monte, a árvore das fitas, o jardim dos relógios de sol, a escada para o céu e o rosto entre as flores.
+- **Os lugares dos Veladores:** o gigante no lago (de manhã), a árvore das fitas (à tarde), o círculo das estrelas (à noite), a torre partida (no fim da tarde), o jardim dos relógios de sol (às quatro e meia), a escada para o céu (ao entardecer), a gigante sentada no monte (de manhã) e o rosto entre as flores (de dia). Fora de hora, sente e deixe o tempo passar (T).
+- **A árvore das fitas:** leia os pedidos (cada fita com tecido, idade e letra próprios), amarre o seu e refaça o nó da fita mais antiga.
+- **Pedras no lago:** de qualquer ponto da margem, escolha uma pedra e lance no tempo certo. Sem placar; o Teo fez sete.
+- **O caderno:** a linha do tempo dos Veladores, as pessoas das lembranças, perguntas que se respondem com as descobertas, as fitas lidas e uma página sobre a própria Lia.
 - **Pequenas descobertas:** a espada na pedra, o aqueduto, a ponte partida sobre o riacho seco, o santuário da floresta, o balanço, o banco virado para o poente.
 - **A Vila da Maré:** uma vila de pescadores na enseada a sudeste, com praia de areia, mar com ondas, píer, taberna, galpão do barqueiro e um farol no promontório. Moram lá a Dona Marta, o Joca, o Tião, a Nina e o Seu Davi.
 - **Amizades e favores:** conversar todo dia e levar coisas de uma vila para a outra (o pão da Celeste, o desenho do Tomé, a carta do Seu Davi) aumenta a amizade; os corações aparecem no diálogo e no caderno.
@@ -52,7 +57,15 @@ No celular, há um joystick e botões na tela.
 
 ## Falas novas sem dublagem
 
-As falas dos moradores da Vila da Maré, dos favores e da Vésper ainda não têm voz gravada: aparecem só como legenda (o jogo não usa a voz sintética do navegador para elas, para não destoar das vozes gravadas). Para dublar, exporte as falas com `node tools/voice/export_lines.mjs` e rode o pipeline descrito em `tools/voice/README.md` (precisa de GPU); os timbres dos personagens novos precisam ser criados em `tools/voice/voices.json`.
+Uma fala só toca a gravação se o texto e o timbre ainda forem os mesmos de quando foi gravada; as falas novas ou reescritas aparecem só como legenda até serem dubladas (o jogo não usa a voz sintética do navegador, para não destoar). `node tools/voice/export_lines.mjs` gera `tools/voice/lines.json` (com o timbre de cada fala) e `tools/voice/redub_ids.txt` (as que faltam). Os timbres de todo o elenco, inclusive a Vila da Maré e as pessoas das lembranças, já estão em `tools/voice/voices.json`; o pipeline está em `tools/voice/README.md`:
+
+```bash
+python make_refs.py --kokoro-dir $KOKORO_DIR
+```
+
+```bash
+PY=$W/venv/bin/python ./run_all.sh lines.json --out ../../a/vox --ckpt-dir $CHATTERBOX_DIR --asr-model $W/ggml-small.bin --force --ids "$(cat redub_ids.txt)"
+```
 
 ## Compilar
 

@@ -17,10 +17,32 @@ export async function loadDragon() {
   G = await loadGLTF('a/dragon/dragon.glb.wasm');
 }
 
+// O modelo vem com texturas realistas (escamas finas, relevo detalhado) que destoavam dos personagens
+// estilizados. Aqui a cor é reduzida a 256 px e "pintada" em poucos tons (posterizada, um pouco mais quente e
+// saturada), o relevo fino quase some e a superfície fica fosca: a dragoa passa a parecer do mesmo mundo.
+// (De quebra, usa bem menos memória de vídeo.)
+function stylize(m) {
+  const img = m.map && m.map.image; if (img && img.width) {
+    const N = 256, c = document.createElement('canvas'); c.width = c.height = N; const g = c.getContext('2d', { willReadFrequently: true }); g.drawImage(img, 0, 0, N, N);
+    const d = g.getImageData(0, 0, N, N), px = d.data, L = 6;
+    for (let i = 0; i < px.length; i += 4) {
+      let r = px[i] / 255, gg = px[i + 1] / 255, b = px[i + 2] / 255; const l = (r + gg + b) / 3;
+      r = l + (r - l) * 1.25; gg = l + (gg - l) * 1.2; b = l + (b - l) * 1.1; r *= 1.06; b *= 0.95; // um pouco mais de cor, mais quente
+      const q = (v) => Math.round(Math.min(1, Math.max(0, v)) * L) / L; // poucos tons, como pintado à mão
+      px[i] = q(r * 0.85 + 0.08) * 255; px[i + 1] = q(gg * 0.85 + 0.07) * 255; px[i + 2] = q(b * 0.85 + 0.06) * 255;
+    }
+    g.putImageData(d, 0, 0); g.globalAlpha = 0.5; g.filter = 'blur(1px)'; g.drawImage(c, 0, 0); // suaviza as bordas entre os tons
+    const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.flipY = m.map.flipY; t.wrapS = m.map.wrapS; t.wrapT = m.map.wrapT; t.anisotropy = 4;
+    m.map.dispose(); m.map = t;
+  }
+  if (m.normalMap) m.normalScale.set(0.22, 0.22);
+  m.roughness = 0.88; m.metalness = 0; if (m.roughnessMap) { m.roughnessMap = null; } if (m.metalnessMap) m.metalnessMap = null; m.needsUpdate = true;
+}
+
 export class Dragon {
   constructor() {
     this.root = new THREE.Group(); this.model = G.scene; this.model.scale.setScalar(S); this.root.add(this.model); scene.add(this.root);
-    this.model.traverse(o => { if (o.isMesh) { o.castShadow = true; o.receiveShadow = true; o.frustumCulled = false; if (o.material) o.material.envMapIntensity = 0.9; } });
+    this.model.traverse(o => { if (o.isMesh) { o.castShadow = true; o.receiveShadow = true; o.frustumCulled = false; if (o.material) { stylize(o.material); o.material.envMapIntensity = 0.7; } } });
     this.mixer = new THREE.AnimationMixer(this.model); this.act = {}; for (const c of G.animations) { const a = this.mixer.clipAction(c); if (['takeoff', 'land', 'roar'].includes(c.name)) { a.setLoop(THREE.LoopOnce, 1); a.clampWhenFinished = true; } this.act[c.name] = a; }
     this.bones = {}; this.model.traverse(o => { if (o.isBone) this.bones[o.name] = o; });
     this.head = this.bones['Bip001-Head_011']; this.neck = this.bones['Bip001-Neck1_09']; this.saddle = this.bones['Bip001-Spine2_07'] || this.bones['Dummy002_0114'];
