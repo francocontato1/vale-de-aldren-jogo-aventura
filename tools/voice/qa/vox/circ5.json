@@ -1,0 +1,31 @@
+{
+ "id": "circ5",
+ "speaker": "auren",
+ "emotion": "tender",
+ "text": "Olhem aquela. A vermelha, baixinha. Se cada estrela é um sol, alguém lá também está deitado na grama, olhando pra cá.",
+ "dur": 8.68,
+ "cps": 13.5,
+ "cer": 0.009,
+ "wer": 0.048,
+ "asr": "Olhem aquela, a vermelha baixinha, se cada estrela é um sol, alguém lá também está deitado na grama, olhando para cá.",
+ "attempt": 0,
+ "gen_s": 61.5,
+ "rtf": 7.08,
+ "max_pause": 0.51,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.35,
+  "cfg_weight": 0.2,
+  "temperature": 0.65
+ },
+ "seed": 600423552,
+ "lufs_in": -23.1,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 34.9,
+  "flow": 24.1,
+  "hift": 2.3
+ },
+ "tokens": 233,
+ "final_problems": []
+}

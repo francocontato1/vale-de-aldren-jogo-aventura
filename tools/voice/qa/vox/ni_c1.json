@@ -1,0 +1,31 @@
+{
+ "id": "ni_c1",
+ "speaker": "nina",
+ "emotion": "happy",
+ "text": "Sabia que areia é pedra que ficou muito tempo no mar? Então daqui a mil anos o gigante do lago vira praia? E aí dá pra sentar nele?",
+ "dur": 7.77,
+ "cps": 16.9,
+ "cer": 0.016,
+ "wer": 0.036,
+ "asr": "Sabia que a areia é pedra que ficou muito tempo no mar? Então daqui a mil anos o gigante do lago vira praia? E aí dá pra sentar nele?",
+ "attempt": 0,
+ "gen_s": 44.1,
+ "rtf": 5.67,
+ "max_pause": 0.51,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.8,
+  "cfg_weight": 0.45,
+  "temperature": 0.85
+ },
+ "seed": 2731332298,
+ "lufs_in": -22.6,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 27.8,
+  "flow": 14.3,
+  "hift": 1.5
+ },
+ "tokens": 197,
+ "final_problems": []
+}

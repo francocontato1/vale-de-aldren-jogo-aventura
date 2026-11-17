@@ -2,16 +2,16 @@
  "id": "ba_c1",
  "speaker": "bastiao",
  "emotion": "neutral",
- "text": "Madeira boa avisa antes de quebrar. Range. Gente também.",
- "dur": 3.62,
+ "text": "Serrote. Martelo. Paciência. Nessa ordem.",
+ "dur": 2.65,
  "cps": 15.5,
- "cer": 0.019,
- "wer": 0.111,
- "asr": "Madeira boa visa antes de quebrar. RANGE, gente também.",
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Serrote, martelo, paciência nessa ordem.",
  "attempt": 0,
- "gen_s": 29.0,
- "rtf": 8.02,
- "max_pause": 0.19,
+ "gen_s": 27.4,
+ "rtf": 10.36,
+ "max_pause": 0.15,
  "problems": [],
  "params": {
   "exaggeration": 0.45,
@@ -19,13 +19,13 @@
   "temperature": 0.75
  },
  "seed": 1473568836,
- "lufs_in": -23.5,
+ "lufs_in": -26.2,
  "tp_limited": true,
  "stage_s": {
-  "t3": 14.7,
-  "flow": 13.3,
+  "t3": 11.0,
+  "flow": 14.4,
   "hift": 0.9
  },
- "tokens": 120,
+ "tokens": 80,
  "final_problems": []
 }

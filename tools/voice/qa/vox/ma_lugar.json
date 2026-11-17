@@ -1,0 +1,31 @@
+{
+ "id": "ma_lugar",
+ "speaker": "marta",
+ "emotion": "tender",
+ "text": "É, né? A gente reclama do vento, do sal, do frio, do Joca, da sopa... Mas ninguém vai embora.",
+ "dur": 10.0,
+ "cps": 9.3,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "É, né? A gente reclama do vento, do sal, do frio, do joca, da sopa. Mas ninguém vai embora.",
+ "attempt": 0,
+ "gen_s": 65.4,
+ "rtf": 6.54,
+ "max_pause": 0.76,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.6,
+  "cfg_weight": 0.45,
+  "temperature": 0.75
+ },
+ "seed": 2221995046,
+ "lufs_in": -22.3,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 31.8,
+  "flow": 30.9,
+  "hift": 2.3
+ },
+ "tokens": 255,
+ "final_problems": []
+}

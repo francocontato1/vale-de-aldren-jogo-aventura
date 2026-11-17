@@ -1,0 +1,31 @@
+{
+ "id": "od_r_lago",
+ "speaker": "odessa",
+ "emotion": "tender",
+ "text": "Dois meninos jogando pedra no lago... O Teo e a Ilsa. Eu conheci os dois. Não me olhe assim. Eu sou velha, não sou mentirosa.",
+ "dur": 12.23,
+ "cps": 10.2,
+ "cer": 0.017,
+ "wer": 0.04,
+ "asr": "Dois meninos, jogando pedra no lago. O Dél e a Ilsa, eu conheci os dois. Não me olhe assim. Eu sou velha, não sou mentirosa.",
+ "attempt": 0,
+ "gen_s": 83.1,
+ "rtf": 6.8,
+ "max_pause": 0.73,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.35,
+  "cfg_weight": 0.2,
+  "temperature": 0.65
+ },
+ "seed": 2835468512,
+ "lufs_in": -21.1,
+ "tp_limited": false,
+ "stage_s": {
+  "t3": 42.1,
+  "flow": 38.0,
+  "hift": 2.7
+ },
+ "tokens": 317,
+ "final_problems": []
+}

@@ -1,0 +1,35 @@
+{
+ "id": "escada10",
+ "speaker": "eco_f",
+ "emotion": "tender",
+ "text": "Faz, sim. Só que daqui de cima.",
+ "dur": 3.98,
+ "cps": 7.8,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Faz sim, só que daqui de cima.",
+ "attempt": 0,
+ "gen_s": 32.5,
+ "rtf": 8.16,
+ "max_pause": 0.47,
+ "problems": [
+  "cps=7.8"
+ ],
+ "params": {
+  "exaggeration": 0.45,
+  "cfg_weight": 0.4,
+  "temperature": 0.75
+ },
+ "seed": 3571699752,
+ "lufs_in": -23.5,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 14.8,
+  "flow": 16.4,
+  "hift": 1.1
+ },
+ "tokens": 103,
+ "final_problems": [
+  "cps=7.8"
+ ]
+}

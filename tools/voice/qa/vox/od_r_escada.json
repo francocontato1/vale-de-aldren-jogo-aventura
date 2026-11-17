@@ -1,0 +1,31 @@
+{
+ "id": "od_r_escada",
+ "speaker": "odessa",
+ "emotion": "sad",
+ "text": "A Ilsa passou a noite no último degrau. O Teo, no primeiro. Eu vi os dois daqui, com a luneta. Não fiz nada. Tinha nove anos de elfa, o que eu ia fazer? ... Às vezes ainda acho que devia ter feito.",
+ "dur": 16.1,
+ "cps": 12.2,
+ "cer": 0.033,
+ "wer": 0.098,
+ "asr": "Aí o sapo passou a noite no último degrau, o teu, no primeiro. Eu vi os dois daqui com a luneta. Não fiz nada. Tinha nove anos de elfa, o que eu ia fazer? Às vezes ainda acho que devia ter feito.",
+ "attempt": 0,
+ "gen_s": 103.6,
+ "rtf": 6.44,
+ "max_pause": 0.52,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.35,
+  "cfg_weight": 0.2,
+  "temperature": 0.65
+ },
+ "seed": 474502298,
+ "lufs_in": -21.2,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 56.0,
+  "flow": 43.5,
+  "hift": 3.6
+ },
+ "tokens": 419,
+ "final_problems": []
+}

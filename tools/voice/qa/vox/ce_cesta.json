@@ -1,0 +1,31 @@
+{
+ "id": "ce_cesta",
+ "speaker": "celeste",
+ "emotion": "happy",
+ "text": "Você vai pros lados do mar? Então leva este pão pra Marta, da taberna da Maré. A gente troca pão por peixe desde antes de você nascer.",
+ "dur": 7.14,
+ "cps": 18.8,
+ "cer": 0.046,
+ "wer": 0.148,
+ "asr": "Você vai para os lados do mar, então leva este pão para a Marta da Taberna da Maré. A gente troca pão por peixe desde antes de você nascer.",
+ "attempt": 0,
+ "gen_s": 51.1,
+ "rtf": 7.16,
+ "max_pause": 0.35,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.75,
+  "cfg_weight": 0.45,
+  "temperature": 0.85
+ },
+ "seed": 4127103507,
+ "lufs_in": -20.2,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 29.9,
+  "flow": 18.8,
+  "hift": 2.2
+ },
+ "tokens": 209,
+ "final_problems": []
+}

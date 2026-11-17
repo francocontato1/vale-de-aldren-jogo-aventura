@@ -1,0 +1,31 @@
+{
+ "id": "li_mar",
+ "speaker": "lia",
+ "emotion": "tender",
+ "text": "O mar. Daqui de cima, o vale parecia um mundo inteiro. Ele termina aqui, na areia, e começa outra coisa.",
+ "dur": 7.41,
+ "cps": 14.0,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "O mar, daqui de cima, o vale parecia um mundo inteiro. Ele termina aqui, na areia, e começa outra coisa.",
+ "attempt": 0,
+ "gen_s": 52.1,
+ "rtf": 7.02,
+ "max_pause": 0.59,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.45,
+  "cfg_weight": 0.35,
+  "temperature": 0.7
+ },
+ "seed": 1999761916,
+ "lufs_in": -20.5,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 29.5,
+  "flow": 20.2,
+  "hift": 2.1
+ },
+ "tokens": 204,
+ "final_problems": []
+}

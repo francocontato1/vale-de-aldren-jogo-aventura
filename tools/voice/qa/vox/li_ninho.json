@@ -1,0 +1,31 @@
+{
+ "id": "li_ninho",
+ "speaker": "lia",
+ "emotion": "tender",
+ "text": "Três ovos azulados. A mãe deve estar por perto, me olhando de algum galho. Já estou indo, já estou indo.",
+ "dur": 7.48,
+ "cps": 13.9,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Três ovos azulados. A mãe deve estar por perto, me olhando de algum galho. Já estou indo, já estou indo.",
+ "attempt": 0,
+ "gen_s": 48.4,
+ "rtf": 6.47,
+ "max_pause": 0.35,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.45,
+  "cfg_weight": 0.35,
+  "temperature": 0.7
+ },
+ "seed": 2559402126,
+ "lufs_in": -20.0,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 26.5,
+  "flow": 19.9,
+  "hift": 1.7
+ },
+ "tokens": 190,
+ "final_problems": []
+}

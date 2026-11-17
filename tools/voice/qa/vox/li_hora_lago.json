@@ -1,0 +1,31 @@
+{
+ "id": "li_hora_lago",
+ "speaker": "lia",
+ "emotion": "neutral",
+ "text": "A névoa já foi embora. Acho que este lugar lembra melhor de manhã cedo.",
+ "dur": 4.87,
+ "cps": 14.6,
+ "cer": 0.014,
+ "wer": 0.071,
+ "asr": "A nevo já foi embora. Acho que este lugar lembra melhor de manhã cedo.",
+ "attempt": 0,
+ "gen_s": 34.4,
+ "rtf": 7.06,
+ "max_pause": 0.4,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.5,
+  "cfg_weight": 0.45,
+  "temperature": 0.75
+ },
+ "seed": 2467612771,
+ "lufs_in": -20.0,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 18.2,
+  "flow": 14.9,
+  "hift": 1.1
+ },
+ "tokens": 137,
+ "final_problems": []
+}

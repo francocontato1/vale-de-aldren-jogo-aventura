@@ -1,0 +1,31 @@
+{
+ "id": "ir_c4",
+ "speaker": "irene",
+ "emotion": "happy",
+ "text": "Tentei pintar o mar uma vez. Usei todo o azul que eu tinha e ainda faltou.",
+ "dur": 5.45,
+ "cps": 13.6,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Tentei pintar o mar uma vez. Usei todo o azul que eu tinha e ainda faltou.",
+ "attempt": 0,
+ "gen_s": 36.2,
+ "rtf": 6.65,
+ "max_pause": 0.24,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.6,
+  "cfg_weight": 0.35,
+  "temperature": 0.8
+ },
+ "seed": 2875494830,
+ "lufs_in": -20.5,
+ "tp_limited": false,
+ "stage_s": {
+  "t3": 18.7,
+  "flow": 15.5,
+  "hift": 1.0
+ },
+ "tokens": 143,
+ "final_problems": []
+}

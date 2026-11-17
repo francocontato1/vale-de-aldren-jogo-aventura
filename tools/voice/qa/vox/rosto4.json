@@ -1,31 +1,31 @@
 {
  "id": "rosto4",
- "speaker": "eco_m",
- "emotion": "tender",
- "text": "Então vai ser só um rosto sorrindo no meio das flores. Também não é um jeito ruim de ser lembrado.",
- "dur": 6.78,
- "cps": 14.5,
+ "speaker": "teo_v",
+ "emotion": "happy",
+ "text": "Estão bem. Longe, olhando outras coisas. Mandaram lembranças. ... Mentira, não mandaram. Mas iam mandar.",
+ "dur": 8.07,
+ "cps": 12.9,
  "cer": 0.0,
  "wer": 0.0,
- "asr": "Então vai ser só um rosto sorrindo no meio das flores. Também não é um jeito ruim de ser lembrado.",
+ "asr": "Estão bem, longe olhando outras coisas, mandaram lembranças. Mentira, não mandaram, mas iam mandar.",
  "attempt": 0,
- "gen_s": 38.2,
- "rtf": 5.63,
- "max_pause": 0.51,
+ "gen_s": 59.5,
+ "rtf": 7.37,
+ "max_pause": 0.52,
  "problems": [],
  "params": {
-  "exaggeration": 0.45,
-  "cfg_weight": 0.4,
+  "exaggeration": 0.6,
+  "cfg_weight": 0.3,
   "temperature": 0.75
  },
  "seed": 51748012,
- "lufs_in": -23.0,
- "tp_limited": false,
+ "lufs_in": -23.1,
+ "tp_limited": true,
  "stage_s": {
-  "t3": 21.3,
-  "flow": 15.9,
-  "hift": 0.9
+  "t3": 26.5,
+  "flow": 30.9,
+  "hift": 1.7
  },
- "tokens": 172,
+ "tokens": 198,
  "final_problems": []
 }

@@ -4,12 +4,12 @@ intro2	narrador	neutral	8.51	15.4	0.0	0.0	1	8.35		Há muito tempo viveu aqui um 
 intro3	narrador	tender	7.72	12.4	0.0	0.0	1	14.52		Um dia foram embora. Ninguém sabe para onde. Deixaram as pedras os gigantes. E uma pergunta.
 carta	odessa	tired	16.99	13.2	0.07	0.154	1	12.17		Catógrafa, que bom que aceitou. Não precisa de um mapa de estradas, essas eu já conheço. Precise de um mapa do que importa. Me procure no observatório, no alto da colina, depois da vila, e traga sapatos confortáveis. Odessa, era, que iti.
 chegada	lia	tender	6.1	13.0	0.013	0.059	1	6.39		Então este é o Vale de Aldrin. É mais quieto do que eu imaginava. Do jeito bom.
+li_bussola	lia	tender	7.5	14.9	0.0	0.0	1	7.82		A bússola do meu pai continua puxando pro leste. Ele dizia que era defeito. Eu acho que é teimosia. Igual a ele.
 od_first	odessa	tired	9.37	12.3	0.0	0.0	1	5.6		Ah, você veio à pé, eu tinha certeza de que ia chegar amanhã, ou daqui a 10 anos, eu me confundo com essas coisas.
 od_quem	odessa	neutral	9.11	11.0	0.0	0.0	1	6.07		Sou, faz 600 anos que moro neste vale e ainda não entendi ele direito, por isso chamei você.
 od_mapa	odessa	tender	14.36	11.6	0.037	0.1	1	5.88		A sé em mapa dos lugares onde alguém foi feliz. Os veladores deixaram oito. Eu sinto eles, mas já não consigo ver. Meus olhos ficaram cansados de tanto olhar a mesma coisa.
 od_como	odessa	neutral	12.84	13.7	0.012	0.03	1	5.71		"Va até eles e fique. Sente, espere, olhe." Quando o lugar percebe que está sendo olhado com calma, ele lembra. Nós chamamos isso de lume. Desenhe no seu caderno o que você vir.
 od_depois	odessa	happy	8.81	10.0	0.0	0.0	1	5.51		Depois volte e me conte, sem pressa. A pressa espanta os lumes, espanta os gatos também.
-od_n1	odessa	tender	14.17	12.8	0.023	0.062	1	5.58		Um lume, então, fazia tempo que ninguém via um. Eu dei nomes aos gigantes, sabia? Os veladores nunca disseram como chamavam eles, talvez o nome seja a coisa de quem tem medo de esquecer.
 od_n2	odessa	happy	16.69	11.8	0.0	0.0	1	5.56		Nos meus primeiros 100 anos aqui, eu colecionava feitiços inúteis. Um que deixa o chá sempre morno, um que acha botões perdidos. Todo mundo achava bobagem. Eu também. Mas eram os que eu mais usava.
 od_n3	odessa	sad	16.04	10.6	0.0	0.0	1	6.03		Pensei uma coisa ontem, olhando o céu. Para mim, vocês humanos são como estrelas cadentes. Passam rápido demais, e eu passei séculos, olhando para o chão, estudando pedra.
 od_n4	odessa	tired	11.16	11.5	0.0	0.0	1	6.39		Está quase, engraçado. E se o mapa ficar pronto e eu não sentir nada, 600 anos é muito tempo para esperar uma resposta.
@@ -56,6 +56,11 @@ lago2	eco_f	happy	2.65	13.2	0.03	0.143	2	18.42		Vi. A pedra fundou do mesmo jeit
 lago3	eco_m	happy	2.33	13.3	0.0	0.0	1	12.38		Mas antes ela voou. Isso conta.
 lago4	eco_f	tender	4.86	8.6	0.0	0.0	1	6.57		Joga outra. Eu quero ver ela voar de novo.
 lago_r	lia	tender	7.31	13.7	0.0	0.0	1	5.7		Talvez seja isso que o gigante segura com a mão erguida, não o céu, uma pedra que ainda não afundou.
+arvore1	eco_m	happy	0.93	18.3	0.0	0.0	2	17.17		O que você pediu?
+arvore2	eco_f	happy	3.1	9.4	0.037	0.333	2	7.18		Não se conta. Se não, não vale.
+arvore3	eco_m	tender	3.44	16.3	0.0	0.0	1	7.64		Então eu conto o meu. Pedi que a gente lembre deste dia.
+arvore4	eco_f	tender	1.87	13.4	0.0	0.0	1	21.81		Bobo, era o mesmo pedido.
+arvore_r	lia	tender	7.49	14.8	0.0	0.0	1	5.79		Centenas de fitas, centenas de pedidos que ninguém mais lembra. E a árvore guardou todos sem saber ler nenhum.
 circ1	eco_f	tender	4.9	14.9	0.0	0.0	1	6.05		Se cada estrela é um sol, será que alguém lá também está olhando para cá?
 circ2	eco_m	neutral	2.53	16.2	0.0	0.0	1	9.22		Talvez, e deve achar a gente tão pequeno.
 circ3	eco_f	tender	3.27	15.0	0.0	0.0	1	6.93		ou tão bonito. Depende de quanto tempo ele olhar.
@@ -69,11 +74,6 @@ monte1	eco_f	tender	3.83	15.9	0.035	0.167	1	8.0		Daqui eu vejo a vila inteira, a
 monte2	eco_f	sad	4.42	15.6	0.0	0.0	1	6.93		Amanhã, eles vão me chamar para ir embora junto. Eu vou dizer que sim.
 monte3	eco_f	tender	4.51	13.7	0.0	0.0	1	6.45		Mas hoje, hoje eu vou ficar mais um pouco, só mais um pouco.
 monte_r	lia	tender	6.66	14.4	0.0	0.0	1	5.68		Só mais um pouco. Talvez seja assim que alguém vira pedra. Não de tristeza, de vontade de ficar.
-arvore1	eco_m	happy	0.93	18.3	0.0	0.0	2	17.17		O que você pediu?
-arvore2	eco_f	happy	3.1	9.4	0.037	0.333	2	7.18		Não se conta. Se não, não vale.
-arvore3	eco_m	tender	3.44	16.3	0.0	0.0	1	7.64		Então eu conto o meu. Pedi que a gente lembre deste dia.
-arvore4	eco_f	tender	1.87	13.4	0.0	0.0	1	21.81		Bobo, era o mesmo pedido.
-arvore_r	lia	tender	7.49	14.8	0.0	0.0	1	5.79		Centenas de fitas, centenas de pedidos que ninguém mais lembra. E a árvore guardou todos sem saber ler nenhum.
 rel1	eco_m	neutral	6.26	14.2	0.0	0.0	1	5.72		Cada relógio deste jardim marca uma hora diferente. As pessoas acham que estão quebrados.
 rel2	eco_m	tender	6.99	13.7	0.054	0.095	1	5.7		Não estão. Cada um marca a hora mais feliz de alguém. Este aqui é o meu. 4h30 da tarde.
 rel3	eco_m	tender	3.26	17.2	0.0	0.0	1	9.6		Foi quando ela riu pela primeira vez ali perto do poço.
@@ -88,10 +88,10 @@ rosto2	eco_m	tender	0.98	17.3	0.0	0.0	1	17.79		Ele sorria muito.
 rosto3	eco_f	sad	2.45	18.4	0.0	0.0	1	8.66		E se um dia ninguém mais souber quem ele era.
 rosto4	eco_m	tender	6.78	14.5	0.0	0.0	1	5.63		Então vai ser só um rosto sorrindo no meio das flores. Também não é um jeito ruim de ser lembrado.
 rosto_r	lia	tender	7.04	14.8	0.01	0.05	1	6.01		Ninguém sabe de quem é este rosto. Mesmo assim, ele faz a gente sorri de volta. Talvez seja o bastante.
+li_circ_dia	lia	neutral	5.07	12.2	0.0	0.0	1	6.23		Acho que este lugar precisa das estrelas. Vou esperar a noite.
 fim1	odessa	tender	2.19	10.5	0.0	0.0	1	9.51		Chegou, olhe para cima.
 fim2	odessa	tender	14.57	13.0	0.0	0.0	1	5.61		Seiscentos anos, eu procurei os veladores nas pedras, e eles estavam nas coisas pequenas, numa pedra que pula na água, num pedido amarrado numa fita, numa escada que não leva a lugar nenhum.
 fim3	lia	tender	3.24	15.1	0.0	0.0	1	7.34		Você acha que eles ainda existem em algum lugar?
-fim4	odessa	tender	9.75	10.9	0.0	0.0	1	6.32		Acho que fizeram o que todo mundo faz. Olharam o mundo com carinho. E depois foram ver outra parte dele.
 fim5	odessa	happy	9.1	11.5	0.0	0.0	1	5.66		Vou mostrar um feitiço, o único que eles me ensinaram sem querer. Não serve para nada, é o meu preferido.
 fim6	odessa	tender	6.13	8.0	0.043	0.222	2	13.09	cps=8.0	Pronto! Agora o valenteiro sabe que foi olhado.
 fim7	anselmo	happy	4.38	12.8	0.0	0.0	1	8.27		Faz 80 anos que eu não fico acordado até tão tarde.
@@ -107,7 +107,6 @@ li_santuario	lia	surprised	6.56	13.9	0.0	0.0	1	5.78		Estatuetas no meio da flore
 li_banco	lia	tender	5.82	14.9	0.0	0.0	1	6.31		Um banco virado para o oeste. Quem colocou ele aqui sabia exatamente onde o sol se põe.
 li_poco	lia	neutral	5.61	16.2	0.0	0.0	1	7.07		Dizem que, numa noite sem vento, dá para ver as estrelas no fundo deste poço, mesmo de dia.
 li_noite	lia	neutral	2.55	15.7	0.0	0.0	1	8.57		Já escureceu, melhor acender a lanterna.
-li_circ_dia	lia	neutral	5.07	12.2	0.0	0.0	1	6.23		Acho que este lugar precisa das estrelas. Vou esperar a noite.
 li_sentar1	lia	tender	3.54	16.9	0.0	0.0	1	7.41		Daqui dá para ouvir o vento passando na grama. Parece o mar.
 li_sentar2	lia	tender	3.08	20.1	0.0	0.0	1	9.04		Vou ficar mais um pouco. Ninguém está me esperando com pressa.
 li_sentar3	lia	tender	7.02	8.5	0.0	0.0	1	5.55		As nuvens andam tão devagar. Ou sou eu que finalmente parei.

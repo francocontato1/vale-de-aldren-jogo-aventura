@@ -1,31 +1,31 @@
 {
  "id": "rosto1",
- "speaker": "eco_f",
- "emotion": "tender",
- "text": "Você esculpiu o rosto dele sorrindo.",
- "dur": 3.27,
- "cps": 11.0,
- "cer": 0.029,
- "wer": 0.167,
- "asr": "Você escupiu o rosto dele sorrindo.",
- "attempt": 0,
- "gen_s": 23.8,
- "rtf": 7.29,
- "max_pause": 1.3,
+ "speaker": "dessa",
+ "emotion": "surprised",
+ "text": "Você voltou.",
+ "dur": 0.89,
+ "cps": 13.5,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Você voltou.",
+ "attempt": 1,
+ "gen_s": 16.5,
+ "rtf": 18.5,
+ "max_pause": 0.05,
  "problems": [],
  "params": {
-  "exaggeration": 0.45,
-  "cfg_weight": 0.4,
-  "temperature": 0.75
+  "exaggeration": 0.75,
+  "cfg_weight": 0.55,
+  "temperature": 0.73
  },
- "seed": 1837856994,
- "lufs_in": -23.4,
- "tp_limited": true,
+ "seed": 2287519925,
+ "lufs_in": -28.6,
+ "tp_limited": false,
  "stage_s": {
-  "t3": 10.9,
-  "flow": 11.9,
-  "hift": 0.9
+  "t3": 4.8,
+  "flow": 11.2,
+  "hift": 0.3
  },
- "tokens": 88,
+ "tokens": 36,
  "final_problems": []
 }

@@ -1,0 +1,31 @@
+{
+ "id": "to_concha",
+ "speaker": "tome",
+ "emotion": "excited",
+ "text": "Dá pra ouvir o mar mesmo! Ou é o meu ouvido? Tanto faz. Vou guardar debaixo do travesseiro.",
+ "dur": 5.02,
+ "cps": 18.1,
+ "cer": 0.011,
+ "wer": 0.056,
+ "asr": "Dá pra ouvir o mar mesmo, ou é o meu ouvido, tanto faz, vou guardar debaixo do cravesseiro.",
+ "attempt": 0,
+ "gen_s": 37.4,
+ "rtf": 7.45,
+ "max_pause": 0.14,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.95,
+  "cfg_weight": 0.45,
+  "temperature": 0.85
+ },
+ "seed": 90928059,
+ "lufs_in": -24.3,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 22.0,
+  "flow": 13.5,
+  "hift": 1.6
+ },
+ "tokens": 157,
+ "final_problems": []
+}

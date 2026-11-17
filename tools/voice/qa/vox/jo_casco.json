@@ -1,0 +1,31 @@
+{
+ "id": "jo_casco",
+ "speaker": "joca",
+ "emotion": "neutral",
+ "text": "Um barco pro Tião. O dele já é mais remendo do que barco. Este aqui fica pronto na primavera. Ou na outra.",
+ "dur": 6.76,
+ "cps": 15.7,
+ "cer": 0.039,
+ "wer": 0.136,
+ "asr": "Um barco pruteão. O dele já é mais remendo do que barco. Este aqui fica pronto na pimavera ou na outra.",
+ "attempt": 0,
+ "gen_s": 40.5,
+ "rtf": 5.99,
+ "max_pause": 0.32,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.55,
+  "cfg_weight": 0.5,
+  "temperature": 0.8
+ },
+ "seed": 2440124171,
+ "lufs_in": -21.0,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 22.4,
+  "flow": 17.0,
+  "hift": 0.9
+ },
+ "tokens": 180,
+ "final_problems": []
+}

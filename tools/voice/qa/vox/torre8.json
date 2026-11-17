@@ -1,0 +1,31 @@
+{
+ "id": "torre8",
+ "speaker": "auren",
+ "emotion": "tender",
+ "text": "Então ela é a melhor aluna que eu já tive. ... Me ajuda a subir? Daqui a pouco o sol encosta na montanha.",
+ "dur": 8.18,
+ "cps": 12.8,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Então, ela é a melhor aluna que eu já tive. Me ajuda a subir daqui a pouco o sol encosta na montanha.",
+ "attempt": 0,
+ "gen_s": 69.1,
+ "rtf": 8.44,
+ "max_pause": 0.5,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.35,
+  "cfg_weight": 0.2,
+  "temperature": 0.65
+ },
+ "seed": 3120484078,
+ "lufs_in": -22.3,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 31.2,
+  "flow": 35.3,
+  "hift": 2.3
+ },
+ "tokens": 215,
+ "final_problems": []
+}

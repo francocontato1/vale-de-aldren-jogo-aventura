@@ -1,0 +1,31 @@
+{
+ "id": "od_lia3",
+ "speaker": "odessa",
+ "emotion": "tender",
+ "text": "Então desenhe devagar. Ele ia gostar de ver.",
+ "dur": 3.81,
+ "cps": 11.5,
+ "cer": 0.048,
+ "wer": 0.125,
+ "asr": "Então desenhe e devagar. Ele ia gostar de ver.",
+ "attempt": 0,
+ "gen_s": 33.3,
+ "rtf": 8.74,
+ "max_pause": 0.62,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.35,
+  "cfg_weight": 0.2,
+  "temperature": 0.65
+ },
+ "seed": 1670321712,
+ "lufs_in": -20.0,
+ "tp_limited": false,
+ "stage_s": {
+  "t3": 15.2,
+  "flow": 17.3,
+  "hift": 0.7
+ },
+ "tokens": 103,
+ "final_problems": []
+}

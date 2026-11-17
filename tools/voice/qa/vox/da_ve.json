@@ -1,0 +1,31 @@
+{
+ "id": "da_ve",
+ "speaker": "davi",
+ "emotion": "happy",
+ "text": "O mar inteiro, o vale inteiro. E às vezes uma sombra enorme passando na frente da lua. A Odessa diz que é nuvem. Ela mente muito mal.",
+ "dur": 9.66,
+ "cps": 13.8,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "O mar inteiro, o vale inteiro, e às vezes uma sombra enorme passando na frente da lua. A Odessa diz que é nuvem, ela mente muito mal.",
+ "attempt": 0,
+ "gen_s": 59.4,
+ "rtf": 6.15,
+ "max_pause": 0.5,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.6,
+  "cfg_weight": 0.3,
+  "temperature": 0.75
+ },
+ "seed": 2877946291,
+ "lufs_in": -24.1,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 34.5,
+  "flow": 22.4,
+  "hift": 2.0
+ },
+ "tokens": 244,
+ "final_problems": []
+}

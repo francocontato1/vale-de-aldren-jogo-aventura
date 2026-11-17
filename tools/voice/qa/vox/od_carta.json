@@ -1,0 +1,31 @@
+{
+ "id": "od_carta",
+ "speaker": "odessa",
+ "emotion": "tender",
+ "text": "Do Davi? Ele ainda escreve à mão. Bom. Diga a ele que... Não. Espere aqui um instante.",
+ "dur": 9.3,
+ "cps": 9.2,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Do Davi, ele ainda escreve a mão. Bom, diga a ele que? Não espere aqui um instante.",
+ "attempt": 0,
+ "gen_s": 71.8,
+ "rtf": 7.72,
+ "max_pause": 0.54,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.35,
+  "cfg_weight": 0.2,
+  "temperature": 0.65
+ },
+ "seed": 3424043542,
+ "lufs_in": -21.5,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 33.9,
+  "flow": 35.1,
+  "hift": 2.5
+ },
+ "tokens": 229,
+ "final_problems": []
+}

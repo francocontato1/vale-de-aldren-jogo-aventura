@@ -1,0 +1,31 @@
+{
+ "id": "ni_dragao",
+ "speaker": "nina",
+ "emotion": "excited",
+ "text": "Tem?! Grande? Maior que o farol? Será que ela me dá carona se eu pedir com educação?",
+ "dur": 6.28,
+ "cps": 13.4,
+ "cer": 0.051,
+ "wer": 0.118,
+ "asr": "Tem. Grande? Maior te farol? Será que ela me dá carona se eu pedir com educação?",
+ "attempt": 0,
+ "gen_s": 35.1,
+ "rtf": 5.59,
+ "max_pause": 0.29,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.95,
+  "cfg_weight": 0.45,
+  "temperature": 0.85
+ },
+ "seed": 376073884,
+ "lufs_in": -23.3,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 20.9,
+  "flow": 12.1,
+  "hift": 1.7
+ },
+ "tokens": 158,
+ "final_problems": []
+}

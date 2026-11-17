@@ -1,0 +1,31 @@
+{
+ "id": "li_hora_escada",
+ "speaker": "lia",
+ "emotion": "neutral",
+ "text": "Esta escada pede o entardecer. Vou ficar aqui até lá.",
+ "dur": 4.08,
+ "cps": 13.0,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Esta escada pede o entardecer. Vou ficar aqui até lá.",
+ "attempt": 0,
+ "gen_s": 34.2,
+ "rtf": 8.38,
+ "max_pause": 0.5,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.5,
+  "cfg_weight": 0.45,
+  "temperature": 0.75
+ },
+ "seed": 2208725004,
+ "lufs_in": -21.2,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 15.7,
+  "flow": 17.2,
+  "hift": 1.1
+ },
+ "tokens": 116,
+ "final_problems": []
+}

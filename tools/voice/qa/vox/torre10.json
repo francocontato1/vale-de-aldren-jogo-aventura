@@ -1,0 +1,31 @@
+{
+ "id": "torre10",
+ "speaker": "auren",
+ "emotion": "tender",
+ "text": "Eu sento no chão e olho daqui. O céu não muda por causa de uma torre.",
+ "dur": 5.52,
+ "cps": 12.5,
+ "cer": 0.015,
+ "wer": 0.062,
+ "asr": "Eu sinto no chão e olho daqui, o céu não muda por causa de uma torre.",
+ "attempt": 0,
+ "gen_s": 43.4,
+ "rtf": 7.86,
+ "max_pause": 0.4,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.35,
+  "cfg_weight": 0.2,
+  "temperature": 0.65
+ },
+ "seed": 2640081927,
+ "lufs_in": -22.6,
+ "tp_limited": false,
+ "stage_s": {
+  "t3": 22.8,
+  "flow": 19.3,
+  "hift": 1.2
+ },
+ "tokens": 154,
+ "final_problems": []
+}

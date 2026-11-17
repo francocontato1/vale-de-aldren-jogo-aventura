@@ -1,0 +1,31 @@
+{
+ "id": "li_to1",
+ "speaker": "lia",
+ "emotion": "tender",
+ "text": "Tinha. Ele desenhava mapas. Foi ele que me ensinou.",
+ "dur": 3.68,
+ "cps": 13.9,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Tinha, ele desenhava mapas. Foi ele que me ensinou.",
+ "attempt": 0,
+ "gen_s": 32.1,
+ "rtf": 8.73,
+ "max_pause": 0.28,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.45,
+  "cfg_weight": 0.35,
+  "temperature": 0.7
+ },
+ "seed": 3895772696,
+ "lufs_in": -20.9,
+ "tp_limited": false,
+ "stage_s": {
+  "t3": 14.7,
+  "flow": 16.3,
+  "hift": 1.1
+ },
+ "tokens": 108,
+ "final_problems": []
+}

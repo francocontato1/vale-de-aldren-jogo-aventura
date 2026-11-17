@@ -1,0 +1,31 @@
+{
+ "id": "ti_first",
+ "speaker": "tiao",
+ "emotion": "happy",
+ "text": "Psiu. Fala baixinho que os peixes escutam. Brincadeira, peixe não escuta nada. Mas eu gosto do silêncio.",
+ "dur": 7.62,
+ "cps": 13.6,
+ "cer": 0.02,
+ "wer": 0.059,
+ "asr": "Psyl, fala baixinho que os peixes escutam. Brincadeira, peixe não escuta nada, mas eu gosto do silêncio.",
+ "attempt": 0,
+ "gen_s": 43.7,
+ "rtf": 5.74,
+ "max_pause": 0.48,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.55,
+  "cfg_weight": 0.3,
+  "temperature": 0.75
+ },
+ "seed": 2443933252,
+ "lufs_in": -23.8,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 26.2,
+  "flow": 14.8,
+  "hift": 1.9
+ },
+ "tokens": 206,
+ "final_problems": []
+}

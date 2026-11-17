@@ -1,0 +1,31 @@
+{
+ "id": "ce_r_relogios",
+ "speaker": "celeste",
+ "emotion": "tender",
+ "text": "Um relógio pra hora mais feliz? O meu marcava cinco da manhã. Forno quente, vila dormindo, o Elias roncando lá dentro. ... Não conta pra ninguém que eu disse isso.",
+ "dur": 12.0,
+ "cps": 13.6,
+ "cer": 0.039,
+ "wer": 0.172,
+ "asr": "Um relógio para a hora mais feliz? O meu marcava cinco da manhã, Fou no quente, vila dormindo, o Elias roncando lá dentro. Não conta para ninguém que eu disse isso.",
+ "attempt": 0,
+ "gen_s": 78.2,
+ "rtf": 6.51,
+ "max_pause": 0.57,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.55,
+  "cfg_weight": 0.4,
+  "temperature": 0.75
+ },
+ "seed": 1699605270,
+ "lufs_in": -19.6,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 43.7,
+  "flow": 31.3,
+  "hift": 2.8
+ },
+ "tokens": 302,
+ "final_problems": []
+}

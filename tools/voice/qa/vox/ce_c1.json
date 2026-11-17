@@ -1,31 +1,31 @@
 {
  "id": "ce_c1",
  "speaker": "celeste",
- "emotion": "tender",
- "text": "Pão bom é igual conversa boa. Precisa de tempo, de calor, e de alguém para dividir.",
- "dur": 5.98,
+ "emotion": "happy",
+ "text": "Prova esse. Não, esse não, esse queimou. Esse aqui. ... Viu? Leva dois. A subida pro observatório é comprida e a Odessa só oferece chá morno.",
+ "dur": 10.11,
  "cps": 13.9,
- "cer": 0.038,
- "wer": 0.062,
- "asr": "Bom bom é igual conversa boa. Precisa de tempo, de calor e de alguém para dividir.",
+ "cer": 0.031,
+ "wer": 0.16,
+ "asr": "Prova esse, não, esse, não, esse queimou. Esse aqui. Viu? Leva dois. A subida para o observatório é comprida e a odessa só oferece chamorno.",
  "attempt": 0,
- "gen_s": 31.8,
- "rtf": 5.32,
- "max_pause": 0.42,
+ "gen_s": 77.4,
+ "rtf": 7.65,
+ "max_pause": 0.56,
  "problems": [],
  "params": {
-  "exaggeration": 0.55,
-  "cfg_weight": 0.4,
-  "temperature": 0.75
+  "exaggeration": 0.75,
+  "cfg_weight": 0.45,
+  "temperature": 0.85
  },
  "seed": 4268440624,
- "lufs_in": -21.5,
+ "lufs_in": -19.5,
  "tp_limited": true,
  "stage_s": {
-  "t3": 18.8,
-  "flow": 11.7,
-  "hift": 1.1
+  "t3": 40.4,
+  "flow": 33.1,
+  "hift": 2.7
  },
- "tokens": 151,
+ "tokens": 294,
  "final_problems": []
 }

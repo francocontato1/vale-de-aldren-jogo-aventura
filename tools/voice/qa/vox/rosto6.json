@@ -1,0 +1,31 @@
+{
+ "id": "rosto6",
+ "speaker": "teo_v",
+ "emotion": "tender",
+ "text": "Ela sorria muito. Quer dizer... depois dos dez anos.",
+ "dur": 4.16,
+ "cps": 12.5,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Ela sorria muito, quer dizer, depois dos 10 anos.",
+ "attempt": 0,
+ "gen_s": 46.9,
+ "rtf": 11.28,
+ "max_pause": 0.58,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.4,
+  "cfg_weight": 0.25,
+  "temperature": 0.65
+ },
+ "seed": 3573961594,
+ "lufs_in": -24.2,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 17.8,
+  "flow": 27.2,
+  "hift": 1.5
+ },
+ "tokens": 138,
+ "final_problems": []
+}

@@ -1,0 +1,31 @@
+{
+ "id": "rosto5",
+ "speaker": "dessa",
+ "emotion": "tender",
+ "text": "Você esculpiu ela sorrindo.",
+ "dur": 1.99,
+ "cps": 13.6,
+ "cer": 0.038,
+ "wer": 0.25,
+ "asr": "Você escupiu ela sorrindo.",
+ "attempt": 0,
+ "gen_s": 22.2,
+ "rtf": 11.15,
+ "max_pause": 0.08,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.5,
+  "cfg_weight": 0.4,
+  "temperature": 0.7
+ },
+ "seed": 1904454704,
+ "lufs_in": -25.4,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 8.7,
+  "flow": 12.7,
+  "hift": 0.6
+ },
+ "tokens": 62,
+ "final_problems": []
+}

@@ -1,0 +1,31 @@
+{
+ "id": "da_noite",
+ "speaker": "davi",
+ "emotion": "tender",
+ "text": "Boa noite, cartógrafa. Fica aí embaixo e olha para cima. Daqui a pouco eu pisco para você.",
+ "dur": 5.79,
+ "cps": 15.5,
+ "cer": 0.012,
+ "wer": 0.059,
+ "asr": "Boa noite, cartógrafa. Fica aí embaixo e olhe para cima. Daqui a pouco eu pisco para você.",
+ "attempt": 0,
+ "gen_s": 40.3,
+ "rtf": 6.96,
+ "max_pause": 0.36,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.4,
+  "cfg_weight": 0.25,
+  "temperature": 0.65
+ },
+ "seed": 709668855,
+ "lufs_in": -23.0,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 21.8,
+  "flow": 16.8,
+  "hift": 1.4
+ },
+ "tokens": 160,
+ "final_problems": []
+}

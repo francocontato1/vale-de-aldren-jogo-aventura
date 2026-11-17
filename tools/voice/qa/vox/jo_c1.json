@@ -1,0 +1,31 @@
+{
+ "id": "jo_c1",
+ "speaker": "joca",
+ "emotion": "happy",
+ "text": "Ó, essa tábua aqui: tô curvando ela faz três dias. Ela não quer. Eu também não quero desistir. Vamos ver quem cansa primeiro.",
+ "dur": 7.79,
+ "cps": 16.0,
+ "cer": 0.008,
+ "wer": 0.043,
+ "asr": "Ó, essa tabu aqui, tô curvando ela faz três dias. Ela não quer, eu também não quero desistir, vamos ver quem cansa primeiro.",
+ "attempt": 0,
+ "gen_s": 50.4,
+ "rtf": 6.47,
+ "max_pause": 0.24,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.7,
+  "cfg_weight": 0.45,
+  "temperature": 0.85
+ },
+ "seed": 3044419964,
+ "lufs_in": -19.8,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 28.7,
+  "flow": 19.5,
+  "hift": 1.9
+ },
+ "tokens": 205,
+ "final_problems": []
+}

@@ -1,0 +1,31 @@
+{
+ "id": "li_od_longe",
+ "speaker": "lia",
+ "emotion": "sad",
+ "text": "Porque era longe. Desde que o meu pai morreu, eu aceito tudo o que fica longe.",
+ "dur": 4.72,
+ "cps": 16.5,
+ "cer": 0.027,
+ "wer": 0.062,
+ "asr": "Porque era longe. Desde que o meu pai morreu, eu aceito tudo que fica longe.",
+ "attempt": 0,
+ "gen_s": 36.0,
+ "rtf": 7.63,
+ "max_pause": 0.44,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.45,
+  "cfg_weight": 0.35,
+  "temperature": 0.7
+ },
+ "seed": 1371149938,
+ "lufs_in": -21.3,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 18.3,
+  "flow": 16.2,
+  "hift": 1.4
+ },
+ "tokens": 140,
+ "final_problems": []
+}

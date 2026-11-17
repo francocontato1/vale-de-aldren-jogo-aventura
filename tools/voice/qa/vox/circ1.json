@@ -1,31 +1,31 @@
 {
  "id": "circ1",
- "speaker": "eco_f",
+ "speaker": "auren",
  "emotion": "tender",
- "text": "Se cada estrela é um sol, será que alguém lá também está olhando para cá?",
- "dur": 4.9,
- "cps": 14.9,
+ "text": "Deitem. Todo mundo. Dessa, você também.",
+ "dur": 4.11,
+ "cps": 9.5,
  "cer": 0.0,
  "wer": 0.0,
- "asr": "Se cada estrela é um sol, será que alguém lá também está olhando para cá?",
+ "asr": "Deitem todo mundo dessa, você também.",
  "attempt": 0,
- "gen_s": 29.6,
- "rtf": 6.05,
- "max_pause": 0.55,
+ "gen_s": 37.4,
+ "rtf": 9.11,
+ "max_pause": 0.41,
  "problems": [],
  "params": {
-  "exaggeration": 0.45,
-  "cfg_weight": 0.4,
-  "temperature": 0.75
+  "exaggeration": 0.35,
+  "cfg_weight": 0.2,
+  "temperature": 0.65
  },
  "seed": 4009196613,
- "lufs_in": -19.1,
+ "lufs_in": -23.5,
  "tp_limited": true,
  "stage_s": {
-  "t3": 15.2,
-  "flow": 13.3,
-  "hift": 1.0
+  "t3": 17.0,
+  "flow": 18.2,
+  "hift": 1.1
  },
- "tokens": 124,
+ "tokens": 112,
  "final_problems": []
 }

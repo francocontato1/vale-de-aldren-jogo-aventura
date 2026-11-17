@@ -1,31 +1,31 @@
 {
  "id": "rosto3",
- "speaker": "eco_f",
- "emotion": "sad",
- "text": "E se um dia ninguém mais souber quem ele era?",
- "dur": 2.45,
- "cps": 18.4,
+ "speaker": "dessa",
+ "emotion": "neutral",
+ "text": "E os outros?",
+ "dur": 1.03,
+ "cps": 11.7,
  "cer": 0.0,
  "wer": 0.0,
- "asr": "E se um dia ninguém mais souber quem ele era.",
- "attempt": 0,
- "gen_s": 21.2,
- "rtf": 8.66,
- "max_pause": 0.04,
+ "asr": "E os outros.",
+ "attempt": 1,
+ "gen_s": 19.6,
+ "rtf": 19.02,
+ "max_pause": 0.05,
  "problems": [],
  "params": {
-  "exaggeration": 0.45,
-  "cfg_weight": 0.4,
-  "temperature": 0.75
+  "exaggeration": 0.55,
+  "cfg_weight": 0.55,
+  "temperature": 0.68
  },
- "seed": 1294084115,
- "lufs_in": -20.7,
+ "seed": 2921632481,
+ "lufs_in": -27.1,
  "tp_limited": false,
  "stage_s": {
-  "t3": 9.5,
-  "flow": 10.8,
-  "hift": 0.8
+  "t3": 6.4,
+  "flow": 12.7,
+  "hift": 0.4
  },
- "tokens": 77,
+ "tokens": 45,
  "final_problems": []
 }

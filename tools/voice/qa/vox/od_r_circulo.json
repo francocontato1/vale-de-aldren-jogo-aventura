@@ -1,0 +1,31 @@
+{
+ "id": "od_r_circulo",
+ "speaker": "odessa",
+ "emotion": "sad",
+ "text": "Então você me viu. A menina emburrada que queria feitiço de verdade. ... É. Era eu. O mestre Auren me chamava de Dessa. Ninguém mais chama.",
+ "dur": 12.52,
+ "cps": 11.1,
+ "cer": 0.008,
+ "wer": 0.04,
+ "asr": "Então você me viu, a menina emburrada que queria feitiço de verdade. É, era eu. O mestre Aurem me chamava de dessa. Ninguém mais chama.",
+ "attempt": 0,
+ "gen_s": 82.9,
+ "rtf": 6.62,
+ "max_pause": 0.51,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.35,
+  "cfg_weight": 0.2,
+  "temperature": 0.65
+ },
+ "seed": 1237617725,
+ "lufs_in": -20.9,
+ "tp_limited": false,
+ "stage_s": {
+  "t3": 46.0,
+  "flow": 33.6,
+  "hift": 3.1
+ },
+ "tokens": 354,
+ "final_problems": []
+}

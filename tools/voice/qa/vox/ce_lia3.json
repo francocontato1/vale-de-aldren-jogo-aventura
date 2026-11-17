@@ -1,0 +1,31 @@
+{
+ "id": "ce_lia3",
+ "speaker": "celeste",
+ "emotion": "tender",
+ "text": "Tá bom, tá bom, não pergunto mais. Mas da próxima vez que for pra casa, leva um pão. Pão fala por você.",
+ "dur": 6.74,
+ "cps": 15.3,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Tá bom, tá bom, não pergunto mais, mas da próxima vez que for pra casa, leva um pão. Pão fala por você.",
+ "attempt": 0,
+ "gen_s": 43.5,
+ "rtf": 6.46,
+ "max_pause": 0.14,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.55,
+  "cfg_weight": 0.4,
+  "temperature": 0.75
+ },
+ "seed": 663682601,
+ "lufs_in": -21.9,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 24.5,
+  "flow": 16.0,
+  "hift": 1.6
+ },
+ "tokens": 180,
+ "final_problems": []
+}

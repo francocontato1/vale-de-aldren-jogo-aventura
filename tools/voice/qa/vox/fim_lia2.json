@@ -1,0 +1,31 @@
+{
+ "id": "fim_lia2",
+ "speaker": "odessa",
+ "emotion": "tender",
+ "text": "Qual?",
+ "dur": 0.49,
+ "cps": 10.2,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Qual?",
+ "attempt": 0,
+ "gen_s": 13.1,
+ "rtf": 26.74,
+ "max_pause": 0.04,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.35,
+  "cfg_weight": 0.2,
+  "temperature": 0.65
+ },
+ "seed": 46653060,
+ "lufs_in": -24.4,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 2.0,
+  "flow": 10.0,
+  "hift": 0.3
+ },
+ "tokens": 15,
+ "final_problems": []
+}

@@ -1,0 +1,31 @@
+{
+ "id": "li_od_mapa",
+ "speaker": "lia",
+ "emotion": "tender",
+ "text": "Meu pai desenhava estradas. Eu queria desenhar uma coisa que ele nunca desenhou.",
+ "dur": 5.61,
+ "cps": 14.3,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Meu pai desenhava estradas. Eu queria desenhar uma coisa que ele nunca desenhou.",
+ "attempt": 0,
+ "gen_s": 39.0,
+ "rtf": 6.95,
+ "max_pause": 0.45,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.45,
+  "cfg_weight": 0.35,
+  "temperature": 0.7
+ },
+ "seed": 4137515985,
+ "lufs_in": -21.0,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 20.7,
+  "flow": 17.0,
+  "hift": 1.1
+ },
+ "tokens": 151,
+ "final_problems": []
+}

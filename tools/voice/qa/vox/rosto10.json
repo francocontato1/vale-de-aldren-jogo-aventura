@@ -1,0 +1,31 @@
+{
+ "id": "rosto10",
+ "speaker": "dessa",
+ "emotion": "tender",
+ "text": "Volta pro jantar.",
+ "dur": 1.31,
+ "cps": 13.0,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Volta pro Jantar",
+ "attempt": 0,
+ "gen_s": 24.2,
+ "rtf": 18.48,
+ "max_pause": 0.11,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.5,
+  "cfg_weight": 0.4,
+  "temperature": 0.7
+ },
+ "seed": 1840650806,
+ "lufs_in": -25.4,
+ "tp_limited": false,
+ "stage_s": {
+  "t3": 9.4,
+  "flow": 14.0,
+  "hift": 0.7
+ },
+ "tokens": 68,
+ "final_problems": []
+}

@@ -1,0 +1,31 @@
+{
+ "id": "li_hora_rel",
+ "speaker": "lia",
+ "emotion": "neutral",
+ "text": "Relógio de sol fora de hora não marca nada. Vou esperar a tarde.",
+ "dur": 4.4,
+ "cps": 14.5,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Relógio de sol fora de hora não marca nada. Vou esperar a tarde.",
+ "attempt": 0,
+ "gen_s": 38.6,
+ "rtf": 8.78,
+ "max_pause": 0.43,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.5,
+  "cfg_weight": 0.45,
+  "temperature": 0.75
+ },
+ "seed": 2571979435,
+ "lufs_in": -19.3,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 18.0,
+  "flow": 19.1,
+  "hift": 1.4
+ },
+ "tokens": 126,
+ "final_problems": []
+}

@@ -2,16 +2,16 @@
  "id": "arvore_r",
  "speaker": "lia",
  "emotion": "tender",
- "text": "Centenas de fitas. Centenas de pedidos que ninguém mais lembra. E a árvore guardou todos, sem saber ler nenhum.",
- "dur": 7.49,
- "cps": 14.8,
- "cer": 0.0,
- "wer": 0.0,
- "asr": "Centenas de fitas, centenas de pedidos que ninguém mais lembra. E a árvore guardou todos sem saber ler nenhum.",
+ "text": "Uma fita com uma pedra furada. Ainda está lá, no galho mais baixo.",
+ "dur": 5.22,
+ "cps": 12.6,
+ "cer": 0.032,
+ "wer": 0.077,
+ "asr": "Uma fita com uma pedra furada. Ainda está lá, no gado mais baixo.",
  "attempt": 0,
- "gen_s": 43.4,
- "rtf": 5.79,
- "max_pause": 0.39,
+ "gen_s": 42.2,
+ "rtf": 8.08,
+ "max_pause": 0.47,
  "problems": [],
  "params": {
   "exaggeration": 0.45,
@@ -19,13 +19,13 @@
   "temperature": 0.7
  },
  "seed": 2377562429,
- "lufs_in": -20.4,
+ "lufs_in": -21.6,
  "tp_limited": true,
  "stage_s": {
-  "t3": 24.4,
-  "flow": 17.0,
-  "hift": 1.8
+  "t3": 21.4,
+  "flow": 19.1,
+  "hift": 1.5
  },
- "tokens": 198,
+ "tokens": 144,
  "final_problems": []
 }

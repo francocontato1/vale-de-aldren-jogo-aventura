@@ -1,31 +1,31 @@
 {
  "id": "arvore4",
  "speaker": "eco_f",
- "emotion": "tender",
- "text": "Bobo. Era o mesmo pedido.",
- "dur": 1.87,
- "cps": 13.4,
+ "emotion": "happy",
+ "text": "Porque eu vou amarrar a pedra junto, e você vai rir.",
+ "dur": 2.74,
+ "cps": 19.0,
  "cer": 0.0,
  "wer": 0.0,
- "asr": "Bobo, era o mesmo pedido.",
+ "asr": "porque eu vou amarrar a pedra junto e você vai rir.",
  "attempt": 0,
- "gen_s": 40.8,
- "rtf": 21.81,
- "max_pause": 0.35,
+ "gen_s": 27.7,
+ "rtf": 10.1,
+ "max_pause": 0.21,
  "problems": [],
  "params": {
-  "exaggeration": 0.45,
-  "cfg_weight": 0.4,
-  "temperature": 0.75
+  "exaggeration": 0.65,
+  "cfg_weight": 0.45,
+  "temperature": 0.85
  },
- "seed": 79412551,
- "lufs_in": -20.6,
- "tp_limited": false,
+ "seed": 4207512701,
+ "lufs_in": -20.1,
+ "tp_limited": true,
  "stage_s": {
-  "t3": 12.4,
-  "flow": 27.3,
+  "t3": 12.3,
+  "flow": 14.3,
   "hift": 0.9
  },
- "tokens": 62,
+ "tokens": 84,
  "final_problems": []
 }

@@ -1,0 +1,31 @@
+{
+ "id": "ma_c2",
+ "speaker": "marta",
+ "emotion": "happy",
+ "text": "O Tião pesca, a Nina canta, o Joca martela. E eu conto tudo para todo mundo. Cada um com o seu talento.",
+ "dur": 7.22,
+ "cps": 14.3,
+ "cer": 0.082,
+ "wer": 0.273,
+ "asr": "O tia um péssica, a Nina canta, o Jocamartela. E eu conto tudo para todo mundo, cada um com seu talento.",
+ "attempt": 0,
+ "gen_s": 43.4,
+ "rtf": 6.01,
+ "max_pause": 0.25,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.8,
+  "cfg_weight": 0.5,
+  "temperature": 0.85
+ },
+ "seed": 1942195441,
+ "lufs_in": -21.2,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 24.3,
+  "flow": 17.3,
+  "hift": 1.6
+ },
+ "tokens": 183,
+ "final_problems": []
+}

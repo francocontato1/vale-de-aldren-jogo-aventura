@@ -1,0 +1,31 @@
+{
+ "id": "da_tempo",
+ "speaker": "davi",
+ "emotion": "tender",
+ "text": "Quarenta e dois anos. Nunca vi um navio passar. Mas acendo toda noite. Vai que um dia alguém se perde.",
+ "dur": 7.59,
+ "cps": 13.4,
+ "cer": 0.02,
+ "wer": 0.05,
+ "asr": "42 anos. Nunca vi um navio passar, mas acendo toda a noite, vai que um dia alguém se perde.",
+ "attempt": 0,
+ "gen_s": 48.1,
+ "rtf": 6.34,
+ "max_pause": 0.51,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.4,
+  "cfg_weight": 0.25,
+  "temperature": 0.65
+ },
+ "seed": 1939085448,
+ "lufs_in": -23.8,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 25.5,
+  "flow": 18.7,
+  "hift": 1.7
+ },
+ "tokens": 192,
+ "final_problems": []
+}

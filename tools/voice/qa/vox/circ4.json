@@ -1,0 +1,31 @@
+{
+ "id": "circ4",
+ "speaker": "dessa",
+ "emotion": "surprised",
+ "text": "Não tô!",
+ "dur": 0.63,
+ "cps": 11.1,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Não tô.",
+ "attempt": 1,
+ "gen_s": 19.0,
+ "rtf": 30.11,
+ "max_pause": 0.07,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.75,
+  "cfg_weight": 0.55,
+  "temperature": 0.73
+ },
+ "seed": 1248896019,
+ "lufs_in": -25.8,
+ "tp_limited": false,
+ "stage_s": {
+  "t3": 5.2,
+  "flow": 13.2,
+  "hift": 0.5
+ },
+ "tokens": 37,
+ "final_problems": []
+}

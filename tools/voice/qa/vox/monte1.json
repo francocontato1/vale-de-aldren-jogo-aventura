@@ -2,16 +2,16 @@
  "id": "monte1",
  "speaker": "eco_f",
  "emotion": "tender",
- "text": "Daqui eu vejo a vila inteira. As chaminés, o lago, a estrada.",
- "dur": 3.83,
- "cps": 15.9,
- "cer": 0.035,
- "wer": 0.167,
- "asr": "Daqui eu vejo a vila inteira, a Chamineis, o Lago, a Estrada.",
+ "text": "Daqui eu vejo a estrada inteira. As carroças parecem formiga.",
+ "dur": 5.14,
+ "cps": 11.9,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Daqui eu vejo a estrada inteira. As carroças parecem formiga.",
  "attempt": 0,
- "gen_s": 30.6,
- "rtf": 8.0,
- "max_pause": 0.2,
+ "gen_s": 33.7,
+ "rtf": 6.56,
+ "max_pause": 0.36,
  "problems": [],
  "params": {
   "exaggeration": 0.45,
@@ -19,13 +19,13 @@
   "temperature": 0.75
  },
  "seed": 78643840,
- "lufs_in": -20.0,
+ "lufs_in": -21.1,
  "tp_limited": true,
  "stage_s": {
-  "t3": 15.9,
-  "flow": 13.8,
-  "hift": 0.8
+  "t3": 17.1,
+  "flow": 15.1,
+  "hift": 1.3
  },
- "tokens": 123,
+ "tokens": 131,
  "final_problems": []
 }

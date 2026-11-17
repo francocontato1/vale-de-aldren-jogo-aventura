@@ -1,0 +1,31 @@
+{
+ "id": "od_r_torre",
+ "speaker": "odessa",
+ "emotion": "happy",
+ "text": "O Auren subia naquela torre toda tarde, com rachadura e tudo. Eu achava teimosia. Hoje eu subo esta colina toda noite. Como é que chama, quando é a gente?",
+ "dur": 12.98,
+ "cps": 11.9,
+ "cer": 0.014,
+ "wer": 0.069,
+ "asr": "O Auryn subia naquela torre toda tarde com rachadura e tudo. Eu achava temosia. Hoje eu subo esta colina toda noite. Como é que chama quando é a gente?",
+ "attempt": 0,
+ "gen_s": 76.9,
+ "rtf": 5.92,
+ "max_pause": 0.63,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.55,
+  "cfg_weight": 0.25,
+  "temperature": 0.75
+ },
+ "seed": 3608318294,
+ "lufs_in": -20.6,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 48.5,
+  "flow": 25.5,
+  "hift": 2.5
+ },
+ "tokens": 352,
+ "final_problems": []
+}

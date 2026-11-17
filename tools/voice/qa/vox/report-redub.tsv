@@ -1,0 +1,239 @@
+id	speaker	emotion	dur	cps	cer	wer	tries	rtf	problems	asr
+li_bussola	lia	tender	7.5	14.9	0.0	0.0	1	7.82		A bússola do meu pai continua puxando pro leste. Ele dizia que era defeito. Eu acho que é teimosia. Igual a ele.
+od_hora	odessa	happy	16.03	11.7	0.006	0.025	1	6.58		A e cada lugar tem a sua hora. O lago gosta de manhã cedo, a escada gosta do fim do dia. O jardim dos relógios, então, é um chato. Se chegar fora de hora, sente e deixe o tempo passar.
+od_r_lago	odessa	tender	12.23	10.2	0.017	0.04	1	6.8		Dois meninos, jogando pedra no lago. O Dél e a Ilsa, eu conheci os dois. Não me olhe assim. Eu sou velha, não sou mentirosa.
+od_r_arvore	odessa	tender	13.92	12.0	0.032	0.129	1	7.16		A fita com a pedra furada ainda está lá. Um, eu vivia dizendo para a Ilsa que pedra furada não dá sorte nenhuma. Ela respondia que dava sim, para quem tem paciência.
+od_r_circulo	odessa	sad	12.52	11.1	0.008	0.04	1	6.62		Então você me viu, a menina emburrada que queria feitiço de verdade. É, era eu. O mestre Aurem me chamava de dessa. Ninguém mais chama.
+od_r_torre	odessa	happy	12.98	11.9	0.014	0.069	1	5.92		O Auryn subia naquela torre toda tarde com rachadura e tudo. Eu achava temosia. Hoje eu subo esta colina toda noite. Como é que chama quando é a gente?
+od_r_relogios	odessa	tender	16.09	12.2	0.021	0.111	1	6.77		4 e meia. O teu me pediu para cuidar do jardim até eles voltarem. Eu achei que era até a primavera. Já faz 600 primaveras. Eu tiro o musco das sombras até hoje. Ninguém nunca repara.
+od_r_escada	odessa	sad	16.1	12.2	0.033	0.098	1	6.44		Aí o sapo passou a noite no último degrau, o teu, no primeiro. Eu vi os dois daqui com a luneta. Não fiz nada. Tinha nove anos de elfa, o que eu ia fazer? Às vezes ainda acho que devia ter feito.
+od_r_monte	odessa	tender	12.01	11.7	0.008	0.037	1	6.46		A gigante do monte. Os mais velhos da vila chamam de a moça. Eu nunca contei o nome dela para ninguém. Parecia uma coisa dela, não minha.
+od_r_rosto	odessa	sad	14.35	12.0	0.0	0.0	1	6.76		Ele voltou, sim, velho, sozinho, com um cinzel e um saco de pão duro. Esculpiu o rosto dela e disse que ia até o lago jogar uma pedra. Eu esquentei o jantar duas vezes.
+od_lia1	odessa	neutral	9.9	13.5	0.008	0.08	1	6.81		Posso perguntar uma coisa? É curiosidade de gente velha? Porque uma cartógrafa tão nova aceita a carta de uma maga que ela nunca viu?
+li_od_longe	lia	sad	4.72	16.5	0.027	0.062	1	7.63		Porque era longe. Desde que o meu pai morreu, eu aceito tudo que fica longe.
+od_lia2	odessa	tender	7.51	11.3	0.025	0.059	1	6.94		Eu, eu fiz isso por uns 200 anos, funciona, até o dia em que não funciona mais.
+li_od_mapa	lia	tender	5.61	14.3	0.0	0.0	1	6.95		Meu pai desenhava estradas. Eu queria desenhar uma coisa que ele nunca desenhou.
+od_lia3	odessa	tender	3.81	11.5	0.048	0.125	1	8.74		Então desenhe e devagar. Ele ia gostar de ver.
+od_carta	odessa	tender	9.3	9.2	0.0	0.0	1	7.72		Do Davi, ele ainda escreve a mão. Bom, diga a ele que? Não espere aqui um instante.
+od_resposta	odessa	happy	8.59	9.4	0.014	0.059	1	7.36		Pronto, leve isto para ele e diga que hoje à noite. Não diga nada, ele vai ver.
+od_alva	odessa	tender	20.16	12.4	0.013	0.02	1	6.91		A sombra no céu é a Vésper, a última dragoa dos veladores. Tenho o nome da estrela da tarde. Mora lá no alto, perto da gigante do monte. Se você chegar devagar, ela deixa você chegar perto. Se chegar correndo, ela vai embora e só volta daqui a um ano.
+od_fita	odessa	tender	7.52	11.4	0.013	0.062	1	7.73		Você refeiz o nó da fita da ilsa? Obrigada. Eu nunca tive coragem de encostar nela.
+an_c3	anselmo	happy	13.9	12.7	0.024	0.097	1	6.95		Meu avô tinha uma cabra chamada doquesa, ou era minha avó que chamava doquesa. Enfim, a cabra subia no gigante do lago todo verão. Ninguém nunca descobriu como ela descia.
+an_c4	anselmo	happy	5.1	15.1	0.027	0.059	1	8.15		Você foi até maré? A Marta fala por três, mas o peixe dela vale por quatro.
+an_c5	anselmo	tender	9.15	12.6	0.0	0.0	1	6.96		Quando eu era moço, desci até o mar com as ovelhas. Elas olharam a água um tempão e voltaram. Ovelha é bicho sábio.
+an_r_monte	anselmo	tender	12.12	13.2	0.0	0.0	1	6.18		Subiu no monte, foi? A gente chama aquela lá de "a moça". Minha avó deixava um pão no pé dela todo dia de colheita. Dizia que moça que fica pra trás sente fome.
+an_r_lago	anselmo	happy	8.74	13.4	0.019	0.045	1	7.64		Pedra pulando no lago? Hum, meu recorde é 11. Tá, 9. Tá bom? Eram 6. Mas o lago estava agitado naquele dia.
+an_lia1	anselmo	neutral	6.69	12.4	0.0	0.0	1	6.51		E você, moça, é de onde tem cara de quem veio de longe e ainda não chegou direito.
+li_an1	lia	neutral	8.37	14.0	0.009	0.053	1	5.84		De ancoradouro no litoral. Minha mãe tem uma papelaria lá. Meu pai desenhava estradas para coroa. Passava meses fora.
+an_lia2	anselmo	tender	12.55	11.1	0.016	0.069	1	6.58		Um mestrada é coisa boa, mas tem gente que conhece todas e não acha a de casa. Não falo do seu pai, não. Falo de mim, quando era moço.
+ce_c1	celeste	happy	10.11	13.9	0.031	0.16	1	7.65		Prova esse, não, esse, não, esse queimou. Esse aqui. Viu? Leva dois. A subida para o observatório é comprida e a odessa só oferece chamorno.
+ce_cesta	celeste	happy	7.14	18.8	0.046	0.148	1	7.16		Você vai para os lados do mar, então leva este pão para a Marta da Taberna da Maré. A gente troca pão por peixe desde antes de você nascer.
+ce_peixe	celeste	excited	9.58	16.1	0.0	0.0	1	5.91		Peixe da Marta, ela sempre manda o melhor. Sabia que foi ela que me ensinou a fazer pão de sal? Obrigada querida, volta amanhã que eu guardo um pra você.
+ce_barco	celeste	sad	6.87	15.6	0.08	0.136	1	6.94		Você velejou o barco do Elias? Onde? Ele ia gostar de saber que alguém ainda leva ele para ver o mar.
+ce_c4	celeste	happy	10.27	17.3	0.0	0.0	1	6.22		A Marta e eu trocamos pão por peixe faz 30 anos. Nunca anotamos nada. Ela jura que eu devo dois peixes. Eu juro que ela me deve um pedido de desculpas desde o casamento dela.
+ce_r_relogios	celeste	tender	12.0	13.6	0.039	0.172	1	6.51		Um relógio para a hora mais feliz? O meu marcava cinco da manhã, Fou no quente, vila dormindo, o Elias roncando lá dentro. Não conta para ninguém que eu disse isso.
+ce_lia1	celeste	neutral	4.77	17.6	0.05	0.111	1	7.8		Você está comendo direito menina e a sua mãe sabe que você está aqui no fim do mundo?
+li_ce1	lia	sad	7.99	12.3	0.011	0.045	2	5.91		mais ou menos. Faz um ano que eu não escrevo para ela, toda vez que eu começo, não sei o que dizer.
+ce_lia2	celeste	tender	4.91	17.3	0.0	0.0	1	8.25		Ah, querida, escreve o que você comeu. Mãe só quer saber disso. O resto ela adivinha.
+ce_lia3	celeste	tender	6.74	15.3	0.0	0.0	1	6.46		Tá bom, tá bom, não pergunto mais, mas da próxima vez que for pra casa, leva um pão. Pão fala por você.
+to_nina	tome	excited	8.56	20.7	0.047	0.108	1	5.78		Você vai pro mar? Lá mora Nina. Ela disse que já viu uma baleia. Eu acho que é mentira. Entrega-te desenho pra ela. É um gigante. Pra ela vê que aqui também tem coisa grande.
+to_concha	tome	excited	5.02	18.1	0.011	0.056	1	7.45		Dá pra ouvir o mar mesmo, ou é o meu ouvido, tanto faz, vou guardar debaixo do cravesseiro.
+to_c4	tome	happy	3.78	12.7	0.044	0.2	1	6.45		A nina viu uma baleia. Eu vi um gigante em Pat.
+to_r_lago	tome	excited	8.54	13.7	0.009	0.048	1	5.5		Você viu os veladores jogando pedra no lago? Me ensina, eu só consigo fazer a pedra afundar com estilo mais afundar.
+to_r_pulos	tome	excited	8.78	16.2	0.036	0.065	1	6.65		A tia Celeste falou que você fez a pedra pular montão de vezes. Amanhã eu vou lá e bato seu recorde. Ou empato. Ou pelo menos molho o pé.
+to_lia1	tome	happy	6.25	14.6	0.0	0.0	1	7.09		Você tem pai, o meu foi pro mar e voltou com uma tatuagem de peixe. Era pra ser uma baleia.
+li_to1	lia	tender	3.68	13.9	0.0	0.0	1	8.73		Tinha, ele desenhava mapas. Foi ele que me ensinou.
+to_lia2	tome	tender	9.06	13.8	0.0	0.0	1	5.94		Ah, desculpa! Quer ver a minha pedra de estrela? Não, eu não vou mostrar, mas você pode imaginar ela, ela é muito bonita.
+ir_c4	irene	happy	5.45	13.6	0.0	0.0	1	6.65		Tentei pintar o mar uma vez. Usei todo o azul que eu tinha e ainda faltou.
+ir_r_lago	irene	tender	11.5	14.6	0.0	0.0	1	7.84		Você viu alguma coisa no lago? Não viu? Dá pra ver na sua cara. Eu pinto ali faz três anos e nunca vi nada. Acho que eu. Falo demais com a tela. Ou de menos. Não sei.
+ir_lia1	irene	neutral	8.24	11.3	0.0	0.0	1	7.75		Você desenha, né? Quer dizer? Claro que desenha. Você é cartógrafa, que pergunta, desculpa.
+li_ir1	lia	tender	10.71	13.9	0.0	0.0	1	6.26		Quando eu era pequena, meu pai fazia os mapas e eu desenhava nas margens. Bichos, gente pequenininha, casas com fumaça. Ele deixava. Depois, eu parei.
+ir_lia2	irene	tender	11.03	12.2	0.0	0.0	1	6.16		"Por que?" "Não, desculpa, não precisa responder. É que as margens são a melhor parte. Eu acho." "Talvez." Enfim, volta a desenhar nelas.
+ba_c1	bastiao	neutral	2.65	15.5	0.0	0.0	1	10.36		Serrote, martelo, paciência nessa ordem.
+ba_c4	bastiao	neutral	4.16	13.5	0.019	0.111	1	7.99		Simbre montado, falta pedra, tempo e coragem. Pedra tem.
+ba_c5	bastiao	neutral	5.86	13.8	0.108	0.333	2	8.95		O Jócap de Carvalho. Para barco. Barco e ponte. Levam para o outro lado. Só isso.
+ba_r_escada	bastiao	neutral	4.74	17.3	0.0	0.0	1	8.12		Você foi na escada? Viu os degraus? Gastos no meio. Alguém subiu muito ali? Muito.
+ba_quase	bastiao	neutral	5.21	15.5	0.0	0.0	1	7.73		Faltam 3 pedras. Quando você terminar esse seu mapa, eu termino a minha frase.
+ba_pronta	bastiao	happy	3.39	13.3	0.026	0.143	1	12.41		Pronta! Não serve para nada! Ficou bonita!
+ba_lia1	bastiao	neutral	2.28	13.6	0.0	0.0	1	18.1		Cartógrafa. Seu pai também?
+li_ba1	lia	tender	4.74	14.1	0.0	0.0	1	7.91		Ele desenhava estradas e sabia de cor onde cada ponte tinha caído.
+ba_lia2	bastiao	tender	2.31	14.7	0.031	0.143	2	10.68		1. Então ele ia gostar da minha.
+lago1	teo_m	excited	3.17	10.1	0.0	0.0	1	8.18		Ilsa! Olha essa! Essa vai longe!
+lago2	ilsa_m	happy	3.88	8.5	0.0	0.0	1	7.69		Você disse isso das últimas nove.
+lago3	teo_m	excited	3.19	7.8	0.0	0.0	1	8.35	cps=7.8	conta, conta em voz alta
+lago4	ilsa_m	excited	4.79	12.7	0.091	0.222	1	9.96		2, 3, 4, 5, 6, 7, 7, teu!
+lago5	teo_m	excited	2.48	8.1	0.0	0.0	2	7.94		7. Viu. Eu falei.
+lago6	ilsa_m	happy	4.14	6.0	0.0	0.0	1	7.12	cps=6.0	E afundou do mesmo jeito.
+lago7	teo_m	happy	4.14	7.5	0.0	0.0	1	6.63	cps=7.5	Mas antes ela voou. Isso conta.
+lago8	avo	neutral	1.66	10.2	0.0	0.0	2	10.36		Ilsa, o pão vem!
+lago9	ilsa_m	happy	6.52	10.0	0.018	0.154	1	7.46		Já vou? Me dá uma pedra? Não, essa não. Aquela ali, afurada.
+lago10	teo_m	neutral	2.73	8.1	0.0	0.0	2	8.26		Essa é feia, não pula.
+lago11	ilsa_m	tender	3.12	9.9	0.069	0.286	1	9.56		Não é para jogar, é para guardar.
+lago_r2	lia	tender	4.02	17.2	0.0	0.0	1	9.45		O gigante do lago está de mão erguida, como quem vai jogar uma pedra.
+arvore1	eco_m	happy	2.68	13.4	0.0	0.0	1	11.03		Pronto! Amarrei a minha, agora você!
+arvore2	eco_f	neutral	0.8	15.0	0.091	0.333	1	26.89		Vira para lá!
+arvore3	eco_m	surprised	0.49	16.3	0.0	0.0	1	34.73		Por que?
+arvore4	eco_f	happy	2.74	19.0	0.0	0.0	1	10.1		porque eu vou amarrar a pedra junto e você vai rir.
+arvore5	eco_m	surprised	2.6	14.6	0.0	0.0	1	10.66		A Pedra Furada? Você ainda tem aquilo?
+arvore6	eco_f	happy	1.22	11.5	0.083	0.333	1	18.34		Tá vendo, Rio?
+arvore7	eco_m	happy	2.61	17.6	0.0	0.0	3	9.83		Não ri, tá, ri um pouco. O que você pediu?
+arvore8	eco_f	happy	2.17	13.4	0.0	0.0	1	10.82		Não se conta, senão não vale.
+arvore9	eco_m	tender	4.44	16.4	0.0	0.0	2	8.73		Então eu conto o meu, e o meu não vale, pedi pra gente lembrar deste dia.
+arvore10	eco_f	tender	2.6	9.6	0.0	0.0	1	10.6		Bobo! Era o mesmo pedido.
+arvore_r	lia	tender	5.22	12.6	0.032	0.077	1	8.08		Uma fita com uma pedra furada. Ainda está lá, no gado mais baixo.
+circ1	auren	tender	4.11	9.5	0.0	0.0	1	9.11		Deitem todo mundo dessa, você também.
+circ2	dessa	neutral	5.9	11.0	0.0	0.0	1	7.88		Eu vim aprender feitiço, feitiço de verdade, não deitar na grama.
+circ3	sela_m	happy	1.86	14.5	0.077	0.167	1	15.54		Ela está com medo de formiga.
+circ4	dessa	surprised	0.63	11.1	0.0	0.0	2	30.11		Não tô.
+circ5	auren	tender	8.68	13.5	0.009	0.048	1	7.08		Olhem aquela, a vermelha baixinha, se cada estrela é um sol, alguém lá também está deitado na grama, olhando para cá.
+circ6	dessa	neutral	3.03	9.6	0.0	0.0	1	8.72		e deve achar a gente pequeno.
+circ7	auren	tender	7.49	12.8	0.0	0.0	1	8.23		Ou bonito, depende de quanto tempo ele olhar. Agora estendam a mão, assim, e soprem devagar.
+circ8	sela_m	excited	2.16	10.6	0.0	0.0	1	10.87		Subiu? A luzinha subiu.
+circ9	dessa	neutral	1.26	15.1	0.056	0.25	1	16.54		Para que serve isso?
+circ10	auren	happy	2.88	13.9	0.026	0.111	1	10.97		Para nada, é o melhor feitiço que eu sei.
+circ_r	lia	surprised	1.62	17.9	0.0	0.0	1	14.79		Ele chamou a menina de dessa.
+torre1	sela	sad	5.83	12.2	0.015	0.071	1	7.24		Mestre, a rachadura cresceu de novo. Já dá para passar a mão por dentro.
+torre2	auren	tired	4.95	12.5	0.0	0.0	1	8.11		Eu sei. Eu passo a mão todo dia. É como cumprimentar um amigo.
+torre3	sela	sad	1.92	17.7	0.0	0.0	1	12.09		A torre não aguenta outro inverno.
+torre4	auren	happy	3.69	11.1	0.0	0.0	1	8.52		Eu também não, provavelmente somos dois.
+torre5	sela	sad	5.42	16.6	0.012	0.062	1	9.38		Não brinca com isso. A partida é na pimavera. Todo mundo já está arrumando as coisas.
+torre6	auren	neutral	0.89	14.6	0.0	0.0	2	23.6		E a sua irmã?
+torre7	sela	sad	4.22	14.2	0.017	0.077	1	8.52		A Iusa diz que não vai. Diz que ainda não terminou de olhar.
+torre8	auren	tender	8.18	12.8	0.0	0.0	1	8.44		Então, ela é a melhor aluna que eu já tive. Me ajuda a subir daqui a pouco o sol encosta na montanha.
+torre9	sela	surprised	1.18	18.6	0.048	0.2	1	15.53		E quando a torre cai.
+torre10	auren	tender	5.52	12.5	0.015	0.062	1	7.86		Eu sinto no chão e olho daqui, o céu não muda por causa de uma torre.
+torre_r	lia	tender	4.69	8.7	0.103	0.3	1	7.45		Aí, o satinha uma irmã e não foi com ela.
+monte1	eco_f	tender	5.14	11.9	0.0	0.0	1	6.56		Daqui eu vejo a estrada inteira. As carroças parecem formiga.
+monte2	eco_f	sad	9.03	13.6	0.018	0.077	1	7.6		A cela vai na terceira. Dá pra vir o lenço amarelo. Ela não olhou pra trás. Ela nunca olha. Eu é que olho por nós duas.
+monte3	eco_f	tender	5.78	13.1	0.028	0.059	1	6.75		E o Théu vai a pé, atrás de todo mundo. Devagar. Eu sabia que ia ser devagar.
+monte4	eco_f	surprised	5.35	6.2	0.111	0.333	1	6.49	cps=6.2	Ele parou. Está olhando para cá.
+monte5	eco_f	sad	4.4	15.5	0.095	0.133	1	7.48		Eu não vou assinar. Se eu assinar, ele volta. E se ele voltar, eu vou.
+monte6	eco_f	tender	4.47	10.1	0.0	0.0	1	7.17		Hoje eu fico mais um pouco, só mais um pouco.
+rel1	dessa	neutral	6.91	15.1	0.01	0.059	1	7.33		Esses relógios estão todos erradas. Aquele marca 9, aquele marca meio dia, aquele ali nem tem sombra.
+rel2	eco_m	tender	3.79	16.1	0.0	0.0	1	9.09		Não estão errados. Cada um marca a hora mais feliz de alguém.
+rel3	dessa	neutral	3.89	15.7	0.034	0.083	1	9.05		Então isso não é um relógio. Há uma lembrança presa num prego.
+rel4	eco_m	happy	1.92	13.0	0.0	0.0	1	12.6		É, é exatamente isso.
+rel5	dessa	neutral	1.34	6.0	0.0	0.0	1	13.97	cps=6.0	E o seu?
+rel6	eco_m	tender	10.66	15.5	0.032	0.061	1	7.94		Este aqui, 4h30 da tarde, a gente voltava do lago, ela tropeçou na beira do poço, molhou o vestido inteiro e riu. Foi a primeira vez que eu ouvi ela rir.
+rel7	dessa	surprised	2.58	8.9	0.095	0.333	1	11.59		Ai, Ulsa. Ela ri de tudo?
+rel8	eco_m	tender	7.32	14.2	0.0	0.0	1	7.28		Agora ri, dessa, quando a gente for embora, você cuida do jardim? Tira o musgo das sombras, só isso.
+rel9	dessa	neutral	2.14	5.1	0.0	0.0	1	10.43	cps=5.1	Até quando!
+rel10	eco_m	tender	1.08	17.6	0.0	0.0	1	18.81		Até a gente voltar.
+escada1	eco_m	sad	3.41	14.7	0.0	0.0	1	9.21		Desce Ilsa, por favor. A gente precisa conversar.
+escada2	eco_f	tender	3.8	12.9	0.021	0.111	1	8.48		Sobe você. Daqui de cima dá para conversar melhor.
+escada3	eco_m	neutral	4.21	12.4	0.0	0.0	2	8.55		Ela não leva a lugar nenhum, essa escada, você sabe.
+escada4	eco_f	happy	3.74	6.7	0.0	0.0	1	8.24	cps=6.7	Leva até o último degrau.
+escada5	eco_m	surprised	0.75	12.0	0.0	0.0	1	24.75		E depois?
+escada6	eco_f	tender	3.94	12.2	0.022	0.1	1	7.93		Depois eu olho. É para isso que serve uma escada.
+escada7	eco_m	sad	4.47	17.9	0.0	0.0	1	8.7		Vem com a gente amanhã. Eu carrego as suas coisas. Eu carrego você se precisar.
+escada8	eco_f	sad	3.38	15.1	0.0	0.0	1	8.12		Eu sei que carrega. É por isso que eu não posso ir.
+escada9	eco_m	sad	1.71	16.4	0.0	0.0	1	14.01		Isso não faz sentido nenhum.
+escada10	eco_f	tender	3.98	7.8	0.0	0.0	1	8.16	cps=7.8	Faz sim, só que daqui de cima.
+escada_r	lia	sad	1.01	13.9	0.0	0.0	2	25.2		Ele não subiu.
+rosto1	dessa	surprised	0.89	13.5	0.0	0.0	2	18.5		Você voltou.
+rosto2	teo_v	happy	2.55	13.7	0.0	0.0	1	10.98		Voltei. Os joelhos não, mas eu sim.
+rosto3	dessa	neutral	1.03	11.7	0.0	0.0	2	19.02		E os outros.
+rosto4	teo_v	happy	8.07	12.9	0.0	0.0	1	7.37		Estão bem, longe olhando outras coisas, mandaram lembranças. Mentira, não mandaram, mas iam mandar.
+rosto5	dessa	tender	1.99	13.6	0.038	0.25	1	11.15		Você escupiu ela sorrindo.
+rosto6	teo_v	tender	4.16	12.5	0.0	0.0	1	11.28		Ela sorria muito, quer dizer, depois dos 10 anos.
+rosto7	dessa	sad	2.32	19.4	0.0	0.0	1	10.51		E se um dia ninguém mais souber quem ela era?
+rosto8	teo_v	tender	7.45	13.2	0.0	0.0	1	6.37		Então vai ser só um rosto sorrindo no meio das flores. Também não é um jeito ruim de ser lembrada.
+rosto9	teo_v	tender	3.95	8.1	0.0	0.0	1	7.96		Vou até o lago jogar uma pedra.
+rosto10	dessa	tender	1.31	13.0	0.0	0.0	1	18.48		Volta pro Jantar
+rosto_r2	lia	tender	4.13	7.3	0.0	0.0	1	8.05	cps=7.3	É a ilsa. Ele esculpiu a ilsa.
+li_hora_lago	lia	neutral	4.87	14.6	0.014	0.071	1	7.06		A nevo já foi embora. Acho que este lugar lembra melhor de manhã cedo.
+li_hora_torre	lia	neutral	4.04	16.1	0.0	0.0	1	8.42		Este lugar parece pedir o fim da tarde. Vou esperar o sol baixar.
+li_hora_monte	lia	neutral	4.24	14.2	0.0	0.0	1	8.84		Daqui de cima, a vista é de manhã. Vou esperar o dia nascer.
+li_hora_arvore	lia	neutral	4.07	16.5	0.0	0.0	1	9.67		As fitas ficam mais bonitas com sol da tarde. Vou esperar um pouco.
+li_hora_rel	lia	neutral	4.4	14.5	0.0	0.0	1	8.78		Relógio de sol fora de hora não marca nada. Vou esperar a tarde.
+li_hora_escada	lia	neutral	4.08	13.0	0.0	0.0	1	8.38		Esta escada pede o entardecer. Vou ficar aqui até lá.
+li_hora_rosto	lia	neutral	3.13	15.0	0.0	0.0	1	11.06		As flores estão fechadas. Melhor esperar o dia.
+fim_dessa	odessa	tender	10.34	10.9	0.027	0.13	1	6.53		O Teu me pediu para cuidar do jardim até eles voltarem. Eu tinha 9 anos de alfa. Achei que era até a primavera.
+fim3	lia	tender	2.63	16.0	0.0	0.0	1	10.61		Você ficou esperando eles esse tempo todo.
+fim4b	odessa	happy	9.6	11.4	0.01	0.062	1	6.05		No começo, fiquei esperando. Depois fiquei porque gostava. Levei uns 300 anos para perceber a diferença.
+fim_marta	marta	excited	7.03	14.8	0.03	0.095	1	6.57		Fechei a taberna cedo, olha só, a primeira vez em 30 anos, o tia um quase chorou, ele ia pedir a sopa.
+fim_nina	nina	excited	4.38	16.4	0.044	0.176	1	6.53		Isso abaleia cantando? Não. E se for, como é que você sabe que não é?
+fim_davi	davi	tender	7.85	13.1	0.0	0.0	1	6.45		Lá embaixo, o farol está aceso. Hoje eu deixei ele sozinho. Ele que me desculpe, daqui eu vejo os dois.
+fim_lia	lia	tender	4.52	17.0	0.013	0.067	1	7.97		Lembra do Jardim dos Relogios? Acho que agora eu sei que ora o meu marcaria.
+fim_lia2	odessa	tender	0.49	10.2	0.0	0.0	1	26.74		Qual?
+fim_lia3	lia	tender	0.58	8.6	0.0	0.0	1	24.01		Esta.
+li_carta_mae	lia	tender	11.94	14.4	0.0	0.0	1	6.4		Mãe, hoje eu comi pão de mel, peixe defumado e um bolo que a Celeste jurou que não queimou. Achei um lugar onde as coisas não se perdem. Vou ficar até a primavera. Vem ver!
+li_ponte2	lia	happy	6.39	17.2	0.028	0.143	1	7.25		A ponte está inteira. Não leva a lugar nenhum que já não desce para ir. Atravessei duas vezes, só para garantir.
+li_poco2	lia	tender	6.69	13.3	0.0	0.0	1	7.67		O poço, onde a Ilsa tropeçou e riu pela primeira vez. A borda ainda está gasta deste lado.
+li_sentar4	lia	tender	6.04	18.2	0.0	0.0	1	7.58		Meu pai nunca sentava em lugar nenhum, dizia que mapa não se faz sentado. Acho que ele estava um pouco errado.
+ma_first	marta	excited	15.71	15.6	0.022	0.061	3	6.06		Olha só, gente nova na maré, senta, senta, não repare a bagunça. O joca deixa a serragem até no meu pão. Você é moça do mapa. A Odessa mandou avisar que você vinha. Quer dizer, mandou avisar há 3 anos. Mas veio, né? Tá com fome? Claro que tá.
+ma_odessa	marta	happy	9.01	17.4	0.0	0.0	1	6.22		Todo mundo conhece. Ela desce aqui uma vez por década, compra sal e pergunta se o mar continua no mesmo lugar. Continua, eu digo, ela sempre parece aliviada.
+ma_lugar	marta	tender	10.0	9.3	0.0	0.0	1	6.54		É, né? A gente reclama do vento, do sal, do frio, do joca, da sopa. Mas ninguém vai embora.
+ma_c1	marta	happy	11.98	16.8	0.016	0.049	1	5.93		Sabia que o tia um pede a mesma sopa faz 20 anos, 20. E toda Santa vez pergunta o que tem de sopa. Eu digo a mesma. Ele diz, então eu quero. É o nosso casamento aquilo. Não conta pra mulher dele.
+ma_c2	marta	happy	7.22	14.3	0.082	0.273	1	6.01		O tia um péssica, a Nina canta, o Jocamartela. E eu conto tudo para todo mundo, cada um com seu talento.
+ma_c3	marta	tender	5.24	17.2	0.034	0.167	1	7.61		Quando o farol acende, eu fecho a taberna. Eu dava dizendo boa noite para a vila inteira.
+ma_noite	marta	tired	3.73	18.0	0.0	0.0	1	8.82		A taberna já fechou, querida, mas a porta fica sempre só encostada.
+ma_pao	marta	excited	11.1	18.1	0.01	0.047	1	6.19		Pão da celeste, ainda morno como é que ela consegue. Toma, leve este peixe defumado para ela. E diz que o sal é por minha conta, como sempre. E diz que eu não devo dois peixes. Diz que é um, um e meio.
+ma_amiga	marta	tender	5.96	16.8	0.0	0.0	1	6.9		Você já é de casa, sabia? Aqui a gente não pergunta de onde a pessoa veio, pergunta se ela já comeu.
+ma_voo	marta	excited	11.92	11.5	0.023	0.037	1	6.99		Era você montada naquele bicho? Eu vi, a vila inteira viu. A Nina não para de falar nisso. Muito obrigada viu. Agora é que não durmo.
+ma_lia1	marta	happy	8.9	16.2	0.007	0.038	1	6.35		E você, hein? Tem namorado? Namorada? Mãe viva? Come direito? Desculpa? Eu pergunto tudo de uma vez. O David diz que eu faço inventário de gente.
+li_ma1	lia	neutral	5.04	8.5	0.0	0.0	1	7.34		Mãe viva, longe. A gente não se fala muito.
+ma_lia2	marta	tender	10.16	16.1	0.038	0.091	1	5.79		Longe é relativo, querida. A Celeste mora meio dia daqui e a gente se viu uma vez por mês, trocando pão por peixe reclamando. Isso é perto. Longe é não escrever.
+jo_first	joca	happy	9.0	16.2	0.021	0.071	1	5.79		Opa cuidado com a serragem. Você é cartógrafa, então desenhe aí no mapa, aqui mora o melhor construtor de barcos do Vale, que também é o único.
+jo_casco	joca	neutral	6.76	15.7	0.039	0.136	1	5.99		Um barco pruteão. O dele já é mais remendo do que barco. Este aqui fica pronto na pimavera ou na outra.
+jo_barco	joca	tender	10.32	16.1	0.032	0.1	1	6.21		Aquele no fim do Pierre era do mestre Elias, marido da celeste. Ele dizia que barco parado apodrece por dentro. Se quiser leva para passear, só atrás de volta inteiro.
+jo_c1	joca	happy	7.79	16.0	0.008	0.043	1	6.47		Ó, essa tabu aqui, tô curvando ela faz três dias. Ela não quer, eu também não quero desistir, vamos ver quem cansa primeiro.
+jo_c2	joca	tender	7.76	13.8	0.0	0.0	1	6.74		Aprendi tudo com o mestre Elias. Ele conversava com os barcos. Eu achava doideira. Hoje eu converso também.
+jo_c3	joca	neutral	9.79	13.5	0.039	0.069	1	6.15		Vento pelo lado é o melhor. Vento de frente, nem tente. O barco para e a vela fica batendo. Aí é virar um pouco e ir em zigzag.
+jo_depois	joca	happy	5.43	15.1	0.039	0.125	1	6.87		E aí, velejou? Ela puxa um pouco para a esquerda, né? O mestre dizia que era saudade.
+ti_first	tiao	happy	7.62	13.6	0.02	0.059	1	5.74		Psyl, fala baixinho que os peixes escutam. Brincadeira, peixe não escuta nada, mas eu gosto do silêncio.
+ti_pesca	tiao	happy	4.76	13.7	0.049	0.167	1	8.14		Hoje, nada, ontem também nada, mas ontem ou nada estava mais bonito.
+ti_nina	tiao	tender	7.9	14.7	0.0	0.0	1	5.8		É sim, ela coleciona conchas, histórias e perguntas. As perguntas eu não sei responder. As conchas eu ajudo a achar.
+ti_c1	tiao	happy	6.9	15.2	0.0	0.0	1	6.41		"Tem dia que o peixe não vem, aí eu converso com a boia, ela não responde, mas também não reclama da sopa."
+ti_c2	tiao	tender	6.19	13.9	0.0	0.0	1	6.5		Quando o mar fica liso assim, feito espelho, minha avó dizia que era o céu se olhando.
+ti_c3	tiao	happy	8.03	13.7	0.019	0.045	1	6.48		Se for velejar, volte antes do farol a acender. Não é perigo não. É que a Marta fica preocupada e fala o dobro.
+ni_first	nina	excited	5.71	17.0	0.022	0.05	1	6.27		Oi, você vê das montanhas? Lá tem dragão? É verdade que lá em cima neva? Neve tem gosto de quê?
+ni_dragao	nina	excited	6.28	13.4	0.051	0.118	1	5.59		Tem. Grande? Maior te farol? Será que ela me dá carona se eu pedir com educação?
+ni_baleia	nina	excited	8.99	16.8	0.035	0.071	1	6.12		Você acredita? Uma vez eu ouvi de noite deitada no pier, um som comprido assim, o "u". O papai disse que era o vento. Vento tem saudade, por acaso.
+ni_c1	nina	happy	7.77	16.9	0.016	0.036	1	5.67		Sabia que a areia é pedra que ficou muito tempo no mar? Então daqui a mil anos o gigante do lago vira praia? E aí dá pra sentar nele?
+ni_c2	nina	happy	4.92	19.9	0.011	0.1	1	6.36		Quer conhecer a dona Concha? É a minha favorita, porque todo mundo ri quando eu falo o nome dela.
+ni_c3	nina	tender	6.15	18.5	0.081	0.217	1	6.1		Você já deitou na areia de óleo fechado? Senti o até respirando? Será que ela sabe que a gente está em cima dela?
+ni_desenho	nina	excited	8.37	16.6	0.068	0.185	1	5.36		Um gigante! Foi o Tomac desenhou? Ele desenha bem, né? Você leva essa concha pra ele? Sabia quem costando no ouvido dá pra ouvir o mar?
+ni_noite	nina	tender	8.33	9.8	0.0	0.0	1	5.58		Eu devia estar dormindo, né? Mas a lua tá tão grande hoje. Você conta pro papai?
+ni_voo	nina	excited	28.36	5.6	0.816	0.871	4	5.89	cer=0.82 cps=5.6	Você voou nela? De verdade? Ela é quente ou gelada? Você ficou com medo? Por que não me levou junto? Da próxima vez você pergunta pra ela se eu posso? Promete! Que este é ela é é conte? Que tinte ou gelada? De seus malto ou firo? Desapresenta por esse e diz as camarobos se pôr com meta.
+ni_lia1	nina	neutral	2.58	15.5	0.053	0.111	1	6.98		Você tem mãe? Ela sabe que você está aqui?
+li_ni1	lia	neutral	3.89	5.7	0.0	0.0	1	8.84	cps=5.7	Sabe, mais ou menos.
+ni_lia2	nina	surprised	5.06	18.2	0.022	0.158	3	5.69		Mais ou menos? Como é que alguém sabe mais ou menos? Porque você não conta para ela direito.
+da_first	davi	tender	10.95	12.6	0.008	0.037	1	5.77		Boa tarde ou boa noite. Daqui a pouco. Sou o Davi, cuido do farol. Quer dizer, o farol se cuida sozinho. Eu só sugo para fazer companhia.
+da_tempo	davi	tender	7.59	13.4	0.02	0.05	1	6.34		42 anos. Nunca vi um navio passar, mas acendo toda a noite, vai que um dia alguém se perde.
+da_ve	davi	happy	9.66	13.8	0.0	0.0	1	6.15		O mar inteiro, o vale inteiro, e às vezes uma sombra enorme passando na frente da lua. A Odessa diz que é nuvem, ela mente muito mal.
+da_c1	davi	happy	8.13	16.1	0.008	0.042	1	6.5		Sabe o pior de um farol? Ninguém agradece quando dá certo, o barco chega e pronto. Ninguém sobe aqui para dizer obrigado à Lâmpada.
+da_c2	davi	tender	8.55	14.7	0.041	0.16	1	7.18		Daqui de noite dá para ver o observatório, sabia? Uma luzinha lá no alto, e o pisco farol para ela. Ela nunca pica de volta.
+da_c3	davi	tender	6.42	12.0	0.014	0.133	1	7.41		O mar ensina uma coisa, tudo volta. A mar é os barcos, as pessoas. Só demora.
+da_carta	davi	happy	9.76	16.6	0.019	0.1	1	6.52		Você conheceu dessa, velha amiga? Faz 40 anos que a gente se escreve e ela leva uns 10 para responder. Leva esta carta. Quem sabe ela responde em 5.
+da_noite	davi	tender	5.79	15.5	0.012	0.059	1	6.96		Boa noite, cartógrafa. Fica aí embaixo e olhe para cima. Daqui a pouco eu pisco para você.
+da_resposta	davi	surprised	8.84	14.0	0.0	0.0	1	5.51		Dela, já? Não em cinco anos, em cinco dias, com licença, cartógrafa. Eu vou ler lá em cima, sozinho, como um velho bobo.
+da_piscou	davi	tender	9.519	14.2	0.0	0.0	1	5.68		Você viu ontem à noite a luzinha do observatório, piscou três vezes, 40 anos cartógrafa, 40 anos e ela piscou de volta.
+da_lia1	davi	neutral	2.26	14.2	0.0	0.0	1	8.86		Você escreve cartas, cartógrafa.
+li_da1	lia	sad	2.78	12.6	0.03	0.125	1	12.68		Devo uma para minha mãe, faz um ano.
+da_lia2	davi	tender	12.38	12.8	0.014	0.111	1	6.18		Carta de vida é a pior dívida. Crece em silêncio. Tome. Papel bom do meu. Escreva quando quiser. Não precisa ser hoje. Mas não deixe virar 40 anos.
+li_alva_corre	lia	surprised	4.54	15.6	0.0	0.0	1	8.43		Ela levantou a cabeça. Acho que eu cheguei rápido demais. Devagar, lia.
+li_alva1	lia	tender	6.98	12.6	0.0	0.0	1	6.68		Ela é enorme e está me olhando como quem decide se eu sou uma pergunta ou uma resposta.
+li_alva2	lia	tender	3.43	16.0	0.019	0.083	1	9.36		Ela baixou a cabeça até o chão. Acho que é um convite.
+li_voo	lia	excited	3.86	10.9	0.0	0.0	1	8.36		O vale inteiro cabe debaixo das asas dela.
+li_voo_fim	lia	tender	4.53	15.5	0.0	0.0	1	8.17		Obrigada, Vesper. Eu nunca mais vou olhar para um mapa do mesmo jeito.
+li_mar	lia	tender	7.41	14.0	0.0	0.0	1	7.02		O mar, daqui de cima, o vale parecia um mundo inteiro. Ele termina aqui, na areia, e começa outra coisa.
+li_barco0	lia	neutral	5.34	14.8	0.0	0.0	1	8.09		Um barco bonito, bem cuidado. Melhor perguntar de quem é antes de sair com ele.
+li_barco	lia	tender	5.15	15.5	0.0	0.0	1	7.88		O barco do mestre Elias puxa um pouco para a esquerda mesmo. Deve ser saudade.
+li_cogumelos	lia	tender	7.78	14.9	0.036	0.136	1	6.51		Um círculo perfeito de cogumelos. Anina diria que é uma porta. O anciamo diria que choveu. Os dois devem ter razão.
+li_tronco	lia	neutral	7.72	14.2	0.0	0.0	1	6.7		Um tronco oco, cheio de folhas secas. Alguma raposa dorme aqui, dá para sentir o cheiro. Melhor não incomodar.
+li_colmeia	lia	happy	6.73	14.1	0.0	0.0	1	6.77		Uma colmeia num toco velho. As abelhas nem ligam para mim. Estão ocupadas demais sendo abelhas.
+li_ninho	lia	tender	7.48	13.9	0.0	0.0	1	6.47		Três ovos azulados. A mãe deve estar por perto, me olhando de algum galho. Já estou indo, já estou indo.
+li_amoras	lia	happy	6.32	14.2	0.035	0.188	1	7.39		Amor as maduras, doces, quentes de sol. Agora as minhas mãos estão rochas, mas valeu a pena.
+li_estrela_pedra	lia	surprised	7.95	16.1	0.016	0.043	1	7.23		Uma estrela gravada na pedra é quase apagada pelo musgo, igual a do Tomé. Os veladores marcavam os caminhos que davam para o céu.
+li_fonte	lia	tender	9.62	15.5	0.035	0.115	1	6.81		Água brotando da pedra, gelada. Alguém colocou um cano de ferro aqui há muito tempo para quem passar se concede. Obrigada quem quer que tenha sido.
+li_cabana	lia	neutral	8.11	14.8	0.017	0.048	2	6.5		Uma cabana de caçador. A lanterna está apagada há anos, mas a lene está empilhada. Pronta! Como se alguém fosse voltar.
+li_arvore_nomes	lia	tender	9.72	14.1	0.0	0.0	1	6.61		Nomes gravados na casca, uns por cima dos outros. Os mais antigos a árvore já engoliu. Ela guarda todo mundo crescendo devagar por cima.
+li_farol	lia	tender	7.61	15.5	0.0	0.0	1	6.49		O farol do seu Davi, 42 anos acendendo uma luz para ninguém, ou para todo mundo depende de como se olha.
+li_dormindo	lia	tender	4.9	12.0	0.0	0.0	1	7.26		Está dormindo? Melhor não acordar. Amanhã a gente conversa.
+li_fitas	lia	tender	7.32	11.9	0.025	0.133	1	6.58		Centenas de fitas, Linho, Lan, Coro, Seda, umas novas outras que já viraram quase fio.
+li_fita_no	lia	tender	6.44	11.0	0.0	0.0	1	7.0		Pronto, nó duplo do jeito que estava. Agora aguenta mais uns 100 anos.
+li_fita_minha	lia	happy	6.29	16.4	0.0	0.0	1	7.31		Amarrei a minha no galho de baixo. Perto da pedra furada. Não vou contar o que eu pedi, senão não vale.
+li_pedra_achar	lia	neutral	4.6	13.7	0.068	0.333	1	8.39		Uma pedra é boa para jogar. A chatada, lisa, cabe na curva do dedo.
+li_pulos_bom	lia	happy	3.65	11.2	0.0	0.0	1	9.63		Olha só isso. Acho que até o gigante viu.
+li_pulos_zero	lia	happy	2.61	14.2	0.0	0.0	1	9.94		Afundou com estilo. O Tomé ia gostar.

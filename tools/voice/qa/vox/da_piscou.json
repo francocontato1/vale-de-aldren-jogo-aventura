@@ -1,0 +1,31 @@
+{
+ "id": "da_piscou",
+ "speaker": "davi",
+ "emotion": "tender",
+ "text": "Você viu? Ontem à noite. A luzinha do observatório. Piscou três vezes. Quarenta anos, cartógrafa. Quarenta anos, e ela piscou de volta.",
+ "dur": 9.519,
+ "cps": 14.2,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Você viu ontem à noite a luzinha do observatório, piscou três vezes, 40 anos cartógrafa, 40 anos e ela piscou de volta.",
+ "attempt": 0,
+ "gen_s": 54.0,
+ "rtf": 5.68,
+ "max_pause": 0.31,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.4,
+  "cfg_weight": 0.25,
+  "temperature": 0.65
+ },
+ "seed": 3738171642,
+ "lufs_in": -24.2,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 32.5,
+  "flow": 19.0,
+  "hift": 2.1
+ },
+ "tokens": 265,
+ "final_problems": []
+}

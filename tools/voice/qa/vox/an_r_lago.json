@@ -1,0 +1,31 @@
+{
+ "id": "an_r_lago",
+ "speaker": "anselmo",
+ "emotion": "happy",
+ "text": "Pedra pulando no lago? Hum. Meu recorde é onze. ... Tá, nove. Tá bom, eram seis. Mas o lago tava agitado naquele dia.",
+ "dur": 8.74,
+ "cps": 13.4,
+ "cer": 0.019,
+ "wer": 0.045,
+ "asr": "Pedra pulando no lago? Hum, meu recorde é 11. Tá, 9. Tá bom? Eram 6. Mas o lago estava agitado naquele dia.",
+ "attempt": 0,
+ "gen_s": 66.7,
+ "rtf": 7.64,
+ "max_pause": 0.5,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.6,
+  "cfg_weight": 0.25,
+  "temperature": 0.75
+ },
+ "seed": 3590812110,
+ "lufs_in": -23.5,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 34.7,
+  "flow": 29.8,
+  "hift": 1.9
+ },
+ "tokens": 254,
+ "final_problems": []
+}

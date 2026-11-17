@@ -1,0 +1,31 @@
+{
+ "id": "od_lia1",
+ "speaker": "odessa",
+ "emotion": "neutral",
+ "text": "Posso perguntar uma coisa? É curiosidade de gente velha. Por que uma cartógrafa tão nova aceita a carta de uma maga que ela nunca viu?",
+ "dur": 9.9,
+ "cps": 13.5,
+ "cer": 0.008,
+ "wer": 0.08,
+ "asr": "Posso perguntar uma coisa? É curiosidade de gente velha? Porque uma cartógrafa tão nova aceita a carta de uma maga que ela nunca viu?",
+ "attempt": 0,
+ "gen_s": 67.4,
+ "rtf": 6.81,
+ "max_pause": 0.48,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.4,
+  "cfg_weight": 0.3,
+  "temperature": 0.7
+ },
+ "seed": 2763323571,
+ "lufs_in": -20.9,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 39.2,
+  "flow": 25.2,
+  "hift": 2.7
+ },
+ "tokens": 258,
+ "final_problems": []
+}

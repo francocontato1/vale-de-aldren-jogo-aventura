@@ -1,0 +1,31 @@
+{
+ "id": "fim_dessa",
+ "speaker": "odessa",
+ "emotion": "tender",
+ "text": "O Teo me pediu pra cuidar do jardim até eles voltarem. Eu tinha nove anos de elfa. Achei que era até a primavera.",
+ "dur": 10.34,
+ "cps": 10.9,
+ "cer": 0.027,
+ "wer": 0.13,
+ "asr": "O Teu me pediu para cuidar do jardim até eles voltarem. Eu tinha 9 anos de alfa. Achei que era até a primavera.",
+ "attempt": 0,
+ "gen_s": 67.5,
+ "rtf": 6.53,
+ "max_pause": 0.67,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.35,
+  "cfg_weight": 0.2,
+  "temperature": 0.65
+ },
+ "seed": 1048098912,
+ "lufs_in": -21.1,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 38.3,
+  "flow": 25.1,
+  "hift": 2.9
+ },
+ "tokens": 261,
+ "final_problems": []
+}

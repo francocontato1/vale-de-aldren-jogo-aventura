@@ -1,0 +1,31 @@
+{
+ "id": "circ10",
+ "speaker": "auren",
+ "emotion": "happy",
+ "text": "Pra nada. É o melhor feitiço que eu sei.",
+ "dur": 2.88,
+ "cps": 13.9,
+ "cer": 0.026,
+ "wer": 0.111,
+ "asr": "Para nada, é o melhor feitiço que eu sei.",
+ "attempt": 0,
+ "gen_s": 31.6,
+ "rtf": 10.97,
+ "max_pause": 0.54,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.55,
+  "cfg_weight": 0.25,
+  "temperature": 0.75
+ },
+ "seed": 3090125061,
+ "lufs_in": -22.4,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 13.4,
+  "flow": 17.1,
+  "hift": 1.0
+ },
+ "tokens": 96,
+ "final_problems": []
+}

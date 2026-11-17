@@ -1,0 +1,31 @@
+{
+ "id": "rel6",
+ "speaker": "eco_m",
+ "emotion": "tender",
+ "text": "Este aqui. Quatro e meia da tarde. A gente voltava do lago, ela tropeçou na beira do poço, molhou o vestido inteiro... e riu. Foi a primeira vez que eu ouvi ela rir.",
+ "dur": 10.66,
+ "cps": 15.5,
+ "cer": 0.032,
+ "wer": 0.061,
+ "asr": "Este aqui, 4h30 da tarde, a gente voltava do lago, ela tropeçou na beira do poço, molhou o vestido inteiro e riu. Foi a primeira vez que eu ouvi ela rir.",
+ "attempt": 0,
+ "gen_s": 84.7,
+ "rtf": 7.94,
+ "max_pause": 0.53,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.45,
+  "cfg_weight": 0.4,
+  "temperature": 0.75
+ },
+ "seed": 1408502157,
+ "lufs_in": -23.0,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 42.1,
+  "flow": 39.6,
+  "hift": 2.6
+ },
+ "tokens": 283,
+ "final_problems": []
+}

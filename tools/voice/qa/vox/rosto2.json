@@ -1,31 +1,31 @@
 {
  "id": "rosto2",
- "speaker": "eco_m",
- "emotion": "tender",
- "text": "Ele sorria muito.",
- "dur": 0.98,
- "cps": 17.3,
+ "speaker": "teo_v",
+ "emotion": "happy",
+ "text": "Voltei. Os joelhos não, mas eu sim.",
+ "dur": 2.55,
+ "cps": 13.7,
  "cer": 0.0,
  "wer": 0.0,
- "asr": "Ele sorria muito.",
+ "asr": "Voltei. Os joelhos não, mas eu sim.",
  "attempt": 0,
- "gen_s": 17.4,
- "rtf": 17.79,
- "max_pause": 0.05,
+ "gen_s": 28.0,
+ "rtf": 10.98,
+ "max_pause": 0.27,
  "problems": [],
  "params": {
-  "exaggeration": 0.45,
-  "cfg_weight": 0.4,
+  "exaggeration": 0.6,
+  "cfg_weight": 0.3,
   "temperature": 0.75
  },
  "seed": 3600890152,
- "lufs_in": -27.5,
- "tp_limited": false,
+ "lufs_in": -25.2,
+ "tp_limited": true,
  "stage_s": {
-  "t3": 6.2,
-  "flow": 10.7,
-  "hift": 0.5
+  "t3": 10.9,
+  "flow": 15.0,
+  "hift": 0.9
  },
- "tokens": 52,
+ "tokens": 83,
  "final_problems": []
 }

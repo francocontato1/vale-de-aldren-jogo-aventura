@@ -1,0 +1,31 @@
+{
+ "id": "to_nina",
+ "speaker": "tome",
+ "emotion": "excited",
+ "text": "Você vai pro mar? Lá mora a Nina. Ela diz que já viu uma baleia. Eu acho que é mentira. Entrega este desenho pra ela? É um gigante. Pra ela ver que aqui também tem coisa grande.",
+ "dur": 8.56,
+ "cps": 20.7,
+ "cer": 0.047,
+ "wer": 0.108,
+ "asr": "Você vai pro mar? Lá mora Nina. Ela disse que já viu uma baleia. Eu acho que é mentira. Entrega-te desenho pra ela. É um gigante. Pra ela vê que aqui também tem coisa grande.",
+ "attempt": 0,
+ "gen_s": 49.5,
+ "rtf": 5.78,
+ "max_pause": 0.2,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.95,
+  "cfg_weight": 0.45,
+  "temperature": 0.85
+ },
+ "seed": 4112612401,
+ "lufs_in": -23.7,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 30.3,
+  "flow": 16.1,
+  "hift": 2.0
+ },
+ "tokens": 225,
+ "final_problems": []
+}

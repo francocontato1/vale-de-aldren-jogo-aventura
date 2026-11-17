@@ -1,0 +1,31 @@
+{
+ "id": "li_fita_no",
+ "speaker": "lia",
+ "emotion": "tender",
+ "text": "Pronto. Nó duplo, do jeito que estava. Agora aguenta mais uns cem anos.",
+ "dur": 6.44,
+ "cps": 11.0,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Pronto, nó duplo do jeito que estava. Agora aguenta mais uns 100 anos.",
+ "attempt": 0,
+ "gen_s": 45.1,
+ "rtf": 7.0,
+ "max_pause": 0.31,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.45,
+  "cfg_weight": 0.35,
+  "temperature": 0.7
+ },
+ "seed": 3007126165,
+ "lufs_in": -20.3,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 23.6,
+  "flow": 19.7,
+  "hift": 1.6
+ },
+ "tokens": 162,
+ "final_problems": []
+}

@@ -1,0 +1,31 @@
+{
+ "id": "li_hora_arvore",
+ "speaker": "lia",
+ "emotion": "neutral",
+ "text": "As fitas ficam mais bonitas com sol da tarde. Vou esperar um pouco.",
+ "dur": 4.07,
+ "cps": 16.5,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "As fitas ficam mais bonitas com sol da tarde. Vou esperar um pouco.",
+ "attempt": 0,
+ "gen_s": 39.3,
+ "rtf": 9.67,
+ "max_pause": 0.29,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.5,
+  "cfg_weight": 0.45,
+  "temperature": 0.75
+ },
+ "seed": 2338355270,
+ "lufs_in": -21.5,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 19.7,
+  "flow": 18.5,
+  "hift": 1.0
+ },
+ "tokens": 137,
+ "final_problems": []
+}

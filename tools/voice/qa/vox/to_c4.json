@@ -1,0 +1,31 @@
+{
+ "id": "to_c4",
+ "speaker": "tome",
+ "emotion": "happy",
+ "text": "A Nina viu uma baleia. Eu vi um gigante. Empate.",
+ "dur": 3.78,
+ "cps": 12.7,
+ "cer": 0.044,
+ "wer": 0.2,
+ "asr": "A nina viu uma baleia. Eu vi um gigante em Pat.",
+ "attempt": 0,
+ "gen_s": 24.4,
+ "rtf": 6.45,
+ "max_pause": 0.44,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.8,
+  "cfg_weight": 0.45,
+  "temperature": 0.85
+ },
+ "seed": 2372750324,
+ "lufs_in": -24.0,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 12.9,
+  "flow": 10.3,
+  "hift": 0.9
+ },
+ "tokens": 97,
+ "final_problems": []
+}

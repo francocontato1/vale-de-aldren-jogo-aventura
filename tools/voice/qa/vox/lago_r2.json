@@ -1,0 +1,31 @@
+{
+ "id": "lago_r2",
+ "speaker": "lia",
+ "emotion": "tender",
+ "text": "O gigante do lago está de mão erguida. Como quem vai jogar uma pedra.",
+ "dur": 4.02,
+ "cps": 17.2,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "O gigante do lago está de mão erguida, como quem vai jogar uma pedra.",
+ "attempt": 0,
+ "gen_s": 38.0,
+ "rtf": 9.45,
+ "max_pause": 0.36,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.45,
+  "cfg_weight": 0.35,
+  "temperature": 0.7
+ },
+ "seed": 3194382269,
+ "lufs_in": -19.6,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 17.0,
+  "flow": 18.5,
+  "hift": 1.1
+ },
+ "tokens": 115,
+ "final_problems": []
+}

@@ -1,0 +1,31 @@
+{
+ "id": "monte5",
+ "speaker": "eco_f",
+ "emotion": "sad",
+ "text": "Eu não vou acenar. Se eu acenar, ele volta. E se ele voltar, eu vou.",
+ "dur": 4.4,
+ "cps": 15.5,
+ "cer": 0.095,
+ "wer": 0.133,
+ "asr": "Eu não vou assinar. Se eu assinar, ele volta. E se ele voltar, eu vou.",
+ "attempt": 0,
+ "gen_s": 32.9,
+ "rtf": 7.48,
+ "max_pause": 0.3,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.45,
+  "cfg_weight": 0.4,
+  "temperature": 0.75
+ },
+ "seed": 1752423480,
+ "lufs_in": -20.5,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 17.2,
+  "flow": 14.8,
+  "hift": 0.7
+ },
+ "tokens": 121,
+ "final_problems": []
+}

@@ -1,0 +1,31 @@
+{
+ "id": "ti_c1",
+ "speaker": "tiao",
+ "emotion": "happy",
+ "text": "Tem dia que o peixe não vem. Aí eu converso com a boia. Ela não responde. Mas também não reclama da sopa.",
+ "dur": 6.9,
+ "cps": 15.2,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "\"Tem dia que o peixe não vem, aí eu converso com a boia, ela não responde, mas também não reclama da sopa.\"",
+ "attempt": 0,
+ "gen_s": 44.3,
+ "rtf": 6.41,
+ "max_pause": 0.28,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.55,
+  "cfg_weight": 0.3,
+  "temperature": 0.75
+ },
+ "seed": 2783362858,
+ "lufs_in": -24.4,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 26.8,
+  "flow": 15.3,
+  "hift": 1.9
+ },
+ "tokens": 198,
+ "final_problems": []
+}

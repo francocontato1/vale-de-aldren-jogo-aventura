@@ -1,0 +1,31 @@
+{
+ "id": "arvore9",
+ "speaker": "eco_m",
+ "emotion": "tender",
+ "text": "Então eu conto o meu, e o meu não vale. Pedi pra gente lembrar deste dia.",
+ "dur": 4.44,
+ "cps": 16.4,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Então eu conto o meu, e o meu não vale, pedi pra gente lembrar deste dia.",
+ "attempt": 1,
+ "gen_s": 38.7,
+ "rtf": 8.73,
+ "max_pause": 0.34,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.45,
+  "cfg_weight": 0.45,
+  "temperature": 0.68
+ },
+ "seed": 3073560979,
+ "lufs_in": -23.3,
+ "tp_limited": false,
+ "stage_s": {
+  "t3": 19.1,
+  "flow": 18.7,
+  "hift": 0.9
+ },
+ "tokens": 128,
+ "final_problems": []
+}

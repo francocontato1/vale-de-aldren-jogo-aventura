@@ -1,0 +1,31 @@
+{
+ "id": "li_estrela_pedra",
+ "speaker": "lia",
+ "emotion": "surprised",
+ "text": "Uma estrela gravada na pedra, quase apagada pelo musgo. Igual à do Tomé. Os Veladores marcavam os caminhos que davam para o céu.",
+ "dur": 7.95,
+ "cps": 16.1,
+ "cer": 0.016,
+ "wer": 0.043,
+ "asr": "Uma estrela gravada na pedra é quase apagada pelo musgo, igual a do Tomé. Os veladores marcavam os caminhos que davam para o céu.",
+ "attempt": 0,
+ "gen_s": 57.5,
+ "rtf": 7.23,
+ "max_pause": 0.56,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.7,
+  "cfg_weight": 0.45,
+  "temperature": 0.8
+ },
+ "seed": 3632432668,
+ "lufs_in": -18.9,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 31.6,
+  "flow": 23.7,
+  "hift": 1.9
+ },
+ "tokens": 214,
+ "final_problems": []
+}

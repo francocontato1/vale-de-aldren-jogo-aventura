@@ -1,0 +1,31 @@
+{
+ "id": "da_lia2",
+ "speaker": "davi",
+ "emotion": "tender",
+ "text": "Carta devida é a pior dívida. Cresce em silêncio. ... Tome. Papel bom, do meu. Escreva quando quiser. Não precisa ser hoje. Mas não deixe virar quarenta anos.",
+ "dur": 12.38,
+ "cps": 12.8,
+ "cer": 0.014,
+ "wer": 0.111,
+ "asr": "Carta de vida é a pior dívida. Crece em silêncio. Tome. Papel bom do meu. Escreva quando quiser. Não precisa ser hoje. Mas não deixe virar 40 anos.",
+ "attempt": 0,
+ "gen_s": 76.5,
+ "rtf": 6.18,
+ "max_pause": 0.53,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.4,
+  "cfg_weight": 0.25,
+  "temperature": 0.65
+ },
+ "seed": 253835026,
+ "lufs_in": -24.0,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 41.7,
+  "flow": 31.3,
+  "hift": 2.9
+ },
+ "tokens": 349,
+ "final_problems": []
+}

@@ -1,0 +1,31 @@
+{
+ "id": "fim4b",
+ "speaker": "odessa",
+ "emotion": "happy",
+ "text": "No começo, fiquei esperando. Depois fiquei porque gostava. Levei uns trezentos anos pra perceber a diferença.",
+ "dur": 9.6,
+ "cps": 11.4,
+ "cer": 0.01,
+ "wer": 0.062,
+ "asr": "No começo, fiquei esperando. Depois fiquei porque gostava. Levei uns 300 anos para perceber a diferença.",
+ "attempt": 0,
+ "gen_s": 58.1,
+ "rtf": 6.05,
+ "max_pause": 0.86,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.55,
+  "cfg_weight": 0.25,
+  "temperature": 0.75
+ },
+ "seed": 1912585049,
+ "lufs_in": -21.9,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 32.6,
+  "flow": 22.1,
+  "hift": 2.4
+ },
+ "tokens": 243,
+ "final_problems": []
+}

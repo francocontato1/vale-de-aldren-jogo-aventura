@@ -1,0 +1,35 @@
+{
+ "id": "monte4",
+ "speaker": "eco_f",
+ "emotion": "surprised",
+ "text": "... Ele parou. Tá olhando pra cá.",
+ "dur": 5.35,
+ "cps": 6.2,
+ "cer": 0.111,
+ "wer": 0.333,
+ "asr": "Ele parou. Está olhando para cá.",
+ "attempt": 0,
+ "gen_s": 34.7,
+ "rtf": 6.49,
+ "max_pause": 0.44,
+ "problems": [
+  "cps=6.2"
+ ],
+ "params": {
+  "exaggeration": 0.7,
+  "cfg_weight": 0.5,
+  "temperature": 0.85
+ },
+ "seed": 642233369,
+ "lufs_in": -20.6,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 17.9,
+  "flow": 15.7,
+  "hift": 0.8
+ },
+ "tokens": 136,
+ "final_problems": [
+  "cps=6.2"
+ ]
+}

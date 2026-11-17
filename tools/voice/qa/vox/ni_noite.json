@@ -1,0 +1,31 @@
+{
+ "id": "ni_noite",
+ "speaker": "nina",
+ "emotion": "tender",
+ "text": "Eu devia estar dormindo, né? Mas a lua tá tão grande hoje... Você conta pro papai?",
+ "dur": 8.33,
+ "cps": 9.8,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Eu devia estar dormindo, né? Mas a lua tá tão grande hoje. Você conta pro papai?",
+ "attempt": 0,
+ "gen_s": 46.5,
+ "rtf": 5.58,
+ "max_pause": 0.51,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.6,
+  "cfg_weight": 0.4,
+  "temperature": 0.75
+ },
+ "seed": 1172165315,
+ "lufs_in": -25.0,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 25.8,
+  "flow": 17.9,
+  "hift": 2.0
+ },
+ "tokens": 209,
+ "final_problems": []
+}

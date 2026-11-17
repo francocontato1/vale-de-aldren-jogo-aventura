@@ -1,0 +1,31 @@
+{
+ "id": "escada8",
+ "speaker": "eco_f",
+ "emotion": "sad",
+ "text": "Eu sei que carrega. É por isso que eu não posso ir.",
+ "dur": 3.38,
+ "cps": 15.1,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Eu sei que carrega. É por isso que eu não posso ir.",
+ "attempt": 0,
+ "gen_s": 27.4,
+ "rtf": 8.12,
+ "max_pause": 0.28,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.45,
+  "cfg_weight": 0.4,
+  "temperature": 0.75
+ },
+ "seed": 2995600207,
+ "lufs_in": -22.7,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 12.3,
+  "flow": 13.8,
+  "hift": 1.1
+ },
+ "tokens": 86,
+ "final_problems": []
+}

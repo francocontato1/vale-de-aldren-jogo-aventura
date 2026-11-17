@@ -2,16 +2,16 @@
  "id": "monte3",
  "speaker": "eco_f",
  "emotion": "tender",
- "text": "Mas hoje... hoje eu vou ficar mais um pouco. Só mais um pouco.",
- "dur": 4.51,
- "cps": 13.7,
- "cer": 0.0,
- "wer": 0.0,
- "asr": "Mas hoje, hoje eu vou ficar mais um pouco, só mais um pouco.",
+ "text": "E o Teo vai a pé, atrás de todo mundo. Devagar. Eu sabia que ia ser devagar.",
+ "dur": 5.78,
+ "cps": 13.1,
+ "cer": 0.028,
+ "wer": 0.059,
+ "asr": "E o Théu vai a pé, atrás de todo mundo. Devagar. Eu sabia que ia ser devagar.",
  "attempt": 0,
- "gen_s": 29.1,
- "rtf": 6.45,
- "max_pause": 0.95,
+ "gen_s": 39.0,
+ "rtf": 6.75,
+ "max_pause": 0.27,
  "problems": [],
  "params": {
   "exaggeration": 0.45,
@@ -19,13 +19,13 @@
   "temperature": 0.75
  },
  "seed": 1052513579,
- "lufs_in": -20.5,
+ "lufs_in": -18.8,
  "tp_limited": true,
  "stage_s": {
-  "t3": 14.5,
-  "flow": 13.4,
-  "hift": 1.1
+  "t3": 20.9,
+  "flow": 17.1,
+  "hift": 0.8
  },
- "tokens": 115,
+ "tokens": 148,
  "final_problems": []
 }

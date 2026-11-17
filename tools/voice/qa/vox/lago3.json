@@ -1,31 +1,35 @@
 {
  "id": "lago3",
- "speaker": "eco_m",
- "emotion": "happy",
- "text": "Mas antes ela voou. Isso conta.",
- "dur": 2.33,
- "cps": 13.3,
+ "speaker": "teo_m",
+ "emotion": "excited",
+ "text": "Conta. Conta em voz alta.",
+ "dur": 3.19,
+ "cps": 7.8,
  "cer": 0.0,
  "wer": 0.0,
- "asr": "Mas antes ela voou. Isso conta.",
+ "asr": "conta, conta em voz alta",
  "attempt": 0,
- "gen_s": 28.8,
- "rtf": 12.38,
- "max_pause": 0.45,
- "problems": [],
+ "gen_s": 26.6,
+ "rtf": 8.35,
+ "max_pause": 0.5,
+ "problems": [
+  "cps=7.8"
+ ],
  "params": {
-  "exaggeration": 0.65,
+  "exaggeration": 0.95,
   "cfg_weight": 0.45,
   "temperature": 0.85
  },
  "seed": 1233137244,
- "lufs_in": -24.2,
+ "lufs_in": -23.0,
  "tp_limited": true,
  "stage_s": {
-  "t3": 13.2,
-  "flow": 14.6,
-  "hift": 0.9
+  "t3": 14.5,
+  "flow": 10.9,
+  "hift": 1.0
  },
- "tokens": 106,
- "final_problems": []
+ "tokens": 102,
+ "final_problems": [
+  "cps=7.8"
+ ]
 }

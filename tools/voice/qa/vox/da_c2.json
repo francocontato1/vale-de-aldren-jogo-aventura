@@ -1,0 +1,31 @@
+{
+ "id": "da_c2",
+ "speaker": "davi",
+ "emotion": "tender",
+ "text": "Daqui de noite dá para ver o observatório, sabia? Uma luzinha lá no alto. Eu pisco o farol para ela. Ela nunca pisca de volta.",
+ "dur": 8.55,
+ "cps": 14.7,
+ "cer": 0.041,
+ "wer": 0.16,
+ "asr": "Daqui de noite dá para ver o observatório, sabia? Uma luzinha lá no alto, e o pisco farol para ela. Ela nunca pica de volta.",
+ "attempt": 0,
+ "gen_s": 61.4,
+ "rtf": 7.18,
+ "max_pause": 0.33,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.4,
+  "cfg_weight": 0.25,
+  "temperature": 0.65
+ },
+ "seed": 844775291,
+ "lufs_in": -23.3,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 35.0,
+  "flow": 23.6,
+  "hift": 2.4
+ },
+ "tokens": 237,
+ "final_problems": []
+}

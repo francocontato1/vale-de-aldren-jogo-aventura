@@ -1,0 +1,31 @@
+{
+ "id": "li_ce1",
+ "speaker": "lia",
+ "emotion": "sad",
+ "text": "Mais ou menos. Faz um ano que eu não escrevo pra ela. Toda vez que eu começo, não sei o que dizer.",
+ "dur": 7.99,
+ "cps": 12.3,
+ "cer": 0.011,
+ "wer": 0.045,
+ "asr": "mais ou menos. Faz um ano que eu não escrevo para ela, toda vez que eu começo, não sei o que dizer.",
+ "attempt": 1,
+ "gen_s": 47.3,
+ "rtf": 5.91,
+ "max_pause": 0.64,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.45,
+  "cfg_weight": 0.4,
+  "temperature": 0.63
+ },
+ "seed": 3878851378,
+ "lufs_in": -20.1,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 26.8,
+  "flow": 18.4,
+  "hift": 1.8
+ },
+ "tokens": 209,
+ "final_problems": []
+}

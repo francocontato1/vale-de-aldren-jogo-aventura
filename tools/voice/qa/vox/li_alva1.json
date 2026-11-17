@@ -1,0 +1,31 @@
+{
+ "id": "li_alva1",
+ "speaker": "lia",
+ "emotion": "tender",
+ "text": "Ela é enorme. E está me olhando como quem decide se eu sou uma pergunta ou uma resposta.",
+ "dur": 6.98,
+ "cps": 12.6,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Ela é enorme e está me olhando como quem decide se eu sou uma pergunta ou uma resposta.",
+ "attempt": 0,
+ "gen_s": 46.6,
+ "rtf": 6.68,
+ "max_pause": 0.4,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.45,
+  "cfg_weight": 0.35,
+  "temperature": 0.7
+ },
+ "seed": 2918219943,
+ "lufs_in": -21.1,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 25.1,
+  "flow": 19.9,
+  "hift": 1.4
+ },
+ "tokens": 177,
+ "final_problems": []
+}

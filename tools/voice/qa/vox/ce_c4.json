@@ -1,0 +1,31 @@
+{
+ "id": "ce_c4",
+ "speaker": "celeste",
+ "emotion": "happy",
+ "text": "A Marta e eu trocamos pão por peixe faz trinta anos. Nunca anotamos nada. Ela jura que eu devo dois peixes. Eu juro que ela me deve um pedido de desculpas desde o casamento dela.",
+ "dur": 10.27,
+ "cps": 17.3,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "A Marta e eu trocamos pão por peixe faz 30 anos. Nunca anotamos nada. Ela jura que eu devo dois peixes. Eu juro que ela me deve um pedido de desculpas desde o casamento dela.",
+ "attempt": 0,
+ "gen_s": 63.9,
+ "rtf": 6.22,
+ "max_pause": 0.33,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.75,
+  "cfg_weight": 0.45,
+  "temperature": 0.85
+ },
+ "seed": 50238478,
+ "lufs_in": -18.6,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 39.8,
+  "flow": 21.0,
+  "hift": 2.8
+ },
+ "tokens": 277,
+ "final_problems": []
+}

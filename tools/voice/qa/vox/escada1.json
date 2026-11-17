@@ -1,31 +1,31 @@
 {
  "id": "escada1",
  "speaker": "eco_m",
- "emotion": "neutral",
- "text": "Você sabe que ela não leva a lugar nenhum.",
- "dur": 2.29,
- "cps": 18.3,
+ "emotion": "sad",
+ "text": "Desce, Ilsa. Por favor. A gente precisa conversar.",
+ "dur": 3.41,
+ "cps": 14.7,
  "cer": 0.0,
  "wer": 0.0,
- "asr": "Você sabe que ela não leva a lugar nenhum?",
+ "asr": "Desce Ilsa, por favor. A gente precisa conversar.",
  "attempt": 0,
- "gen_s": 20.7,
- "rtf": 9.05,
- "max_pause": 0.04,
+ "gen_s": 31.4,
+ "rtf": 9.21,
+ "max_pause": 0.34,
  "problems": [],
  "params": {
-  "exaggeration": 0.5,
-  "cfg_weight": 0.5,
-  "temperature": 0.8
+  "exaggeration": 0.45,
+  "cfg_weight": 0.4,
+  "temperature": 0.75
  },
  "seed": 2564930019,
- "lufs_in": -24.1,
+ "lufs_in": -24.3,
  "tp_limited": true,
  "stage_s": {
-  "t3": 8.6,
-  "flow": 11.3,
-  "hift": 0.7
+  "t3": 13.7,
+  "flow": 16.5,
+  "hift": 1.0
  },
- "tokens": 74,
+ "tokens": 101,
  "final_problems": []
 }

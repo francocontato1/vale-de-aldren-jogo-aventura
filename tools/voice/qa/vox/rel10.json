@@ -1,0 +1,31 @@
+{
+ "id": "rel10",
+ "speaker": "eco_m",
+ "emotion": "tender",
+ "text": "Até a gente voltar.",
+ "dur": 1.08,
+ "cps": 17.6,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Até a gente voltar.",
+ "attempt": 0,
+ "gen_s": 20.3,
+ "rtf": 18.81,
+ "max_pause": 0.04,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.45,
+  "cfg_weight": 0.4,
+  "temperature": 0.75
+ },
+ "seed": 4126900304,
+ "lufs_in": -25.5,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 6.1,
+  "flow": 13.5,
+  "hift": 0.6
+ },
+ "tokens": 42,
+ "final_problems": []
+}

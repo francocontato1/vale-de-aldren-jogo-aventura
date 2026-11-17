@@ -1,0 +1,31 @@
+{
+ "id": "rosto7",
+ "speaker": "dessa",
+ "emotion": "sad",
+ "text": "E se um dia ninguém mais souber quem ela era?",
+ "dur": 2.32,
+ "cps": 19.4,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "E se um dia ninguém mais souber quem ela era?",
+ "attempt": 0,
+ "gen_s": 24.4,
+ "rtf": 10.51,
+ "max_pause": 0.05,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.5,
+  "cfg_weight": 0.4,
+  "temperature": 0.7
+ },
+ "seed": 2926649177,
+ "lufs_in": -23.5,
+ "tp_limited": false,
+ "stage_s": {
+  "t3": 9.4,
+  "flow": 14.1,
+  "hift": 0.8
+ },
+ "tokens": 70,
+ "final_problems": []
+}

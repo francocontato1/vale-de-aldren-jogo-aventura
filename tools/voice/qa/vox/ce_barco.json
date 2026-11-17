@@ -1,0 +1,31 @@
+{
+ "id": "ce_barco",
+ "speaker": "celeste",
+ "emotion": "sad",
+ "text": "Você velejou o barco do Elias? ... Que bom. Ele ia gostar de saber que alguém ainda leva ele pra ver o mar.",
+ "dur": 6.87,
+ "cps": 15.6,
+ "cer": 0.08,
+ "wer": 0.136,
+ "asr": "Você velejou o barco do Elias? Onde? Ele ia gostar de saber que alguém ainda leva ele para ver o mar.",
+ "attempt": 0,
+ "gen_s": 47.7,
+ "rtf": 6.94,
+ "max_pause": 0.51,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.55,
+  "cfg_weight": 0.4,
+  "temperature": 0.75
+ },
+ "seed": 2141967278,
+ "lufs_in": -20.6,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 21.6,
+  "flow": 24.2,
+  "hift": 1.5
+ },
+ "tokens": 174,
+ "final_problems": []
+}

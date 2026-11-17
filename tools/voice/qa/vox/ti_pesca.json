@@ -1,0 +1,31 @@
+{
+ "id": "ti_pesca",
+ "speaker": "tiao",
+ "emotion": "happy",
+ "text": "Hoje? Nada. Ontem também nada. Mas ontem o nada tava mais bonito.",
+ "dur": 4.76,
+ "cps": 13.7,
+ "cer": 0.049,
+ "wer": 0.167,
+ "asr": "Hoje, nada, ontem também nada, mas ontem ou nada estava mais bonito.",
+ "attempt": 0,
+ "gen_s": 38.8,
+ "rtf": 8.14,
+ "max_pause": 0.23,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.55,
+  "cfg_weight": 0.3,
+  "temperature": 0.75
+ },
+ "seed": 2117333547,
+ "lufs_in": -24.5,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 22.5,
+  "flow": 14.4,
+  "hift": 1.7
+ },
+ "tokens": 182,
+ "final_problems": []
+}

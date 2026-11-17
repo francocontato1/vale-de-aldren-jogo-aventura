@@ -1,0 +1,35 @@
+{
+ "id": "lago6",
+ "speaker": "ilsa_m",
+ "emotion": "happy",
+ "text": "E afundou do mesmo jeito.",
+ "dur": 4.14,
+ "cps": 6.0,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "E afundou do mesmo jeito.",
+ "attempt": 0,
+ "gen_s": 29.5,
+ "rtf": 7.12,
+ "max_pause": 0.62,
+ "problems": [
+  "cps=6.0"
+ ],
+ "params": {
+  "exaggeration": 0.75,
+  "cfg_weight": 0.45,
+  "temperature": 0.85
+ },
+ "seed": 459998642,
+ "lufs_in": -24.2,
+ "tp_limited": false,
+ "stage_s": {
+  "t3": 14.6,
+  "flow": 13.6,
+  "hift": 1.0
+ },
+ "tokens": 105,
+ "final_problems": [
+  "cps=6.0"
+ ]
+}

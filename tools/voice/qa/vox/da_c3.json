@@ -1,0 +1,31 @@
+{
+ "id": "da_c3",
+ "speaker": "davi",
+ "emotion": "tender",
+ "text": "O mar ensina uma coisa: tudo volta. A maré, os barcos, as pessoas. Só demora.",
+ "dur": 6.42,
+ "cps": 12.0,
+ "cer": 0.014,
+ "wer": 0.133,
+ "asr": "O mar ensina uma coisa, tudo volta. A mar é os barcos, as pessoas. Só demora.",
+ "attempt": 0,
+ "gen_s": 47.5,
+ "rtf": 7.41,
+ "max_pause": 0.34,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.4,
+  "cfg_weight": 0.25,
+  "temperature": 0.65
+ },
+ "seed": 929649512,
+ "lufs_in": -24.6,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 26.5,
+  "flow": 19.2,
+  "hift": 1.5
+ },
+ "tokens": 190,
+ "final_problems": []
+}

@@ -1,0 +1,31 @@
+{
+ "id": "li_alva2",
+ "speaker": "lia",
+ "emotion": "tender",
+ "text": "Ela abaixou a cabeça até o chão. Acho que é um convite.",
+ "dur": 3.43,
+ "cps": 16.0,
+ "cer": 0.019,
+ "wer": 0.083,
+ "asr": "Ela baixou a cabeça até o chão. Acho que é um convite.",
+ "attempt": 0,
+ "gen_s": 32.1,
+ "rtf": 9.36,
+ "max_pause": 0.39,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.45,
+  "cfg_weight": 0.35,
+  "temperature": 0.7
+ },
+ "seed": 1320171514,
+ "lufs_in": -20.2,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 13.7,
+  "flow": 17.2,
+  "hift": 1.0
+ },
+ "tokens": 99,
+ "final_problems": []
+}

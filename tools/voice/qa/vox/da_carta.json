@@ -1,0 +1,31 @@
+{
+ "id": "da_carta",
+ "speaker": "davi",
+ "emotion": "happy",
+ "text": "Você conhece a Odessa? Velha amiga. Faz quarenta anos que a gente se escreve, e ela leva uns dez para responder. Leva esta carta? Quem sabe ela responde em cinco.",
+ "dur": 9.76,
+ "cps": 16.6,
+ "cer": 0.019,
+ "wer": 0.1,
+ "asr": "Você conheceu dessa, velha amiga? Faz 40 anos que a gente se escreve e ela leva uns 10 para responder. Leva esta carta. Quem sabe ela responde em 5.",
+ "attempt": 0,
+ "gen_s": 63.7,
+ "rtf": 6.52,
+ "max_pause": 0.28,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.6,
+  "cfg_weight": 0.3,
+  "temperature": 0.75
+ },
+ "seed": 1920740359,
+ "lufs_in": -23.8,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 37.2,
+  "flow": 23.6,
+  "hift": 2.4
+ },
+ "tokens": 260,
+ "final_problems": []
+}

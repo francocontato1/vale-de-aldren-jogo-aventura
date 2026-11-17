@@ -1,0 +1,31 @@
+{
+ "id": "circ7",
+ "speaker": "auren",
+ "emotion": "tender",
+ "text": "Ou bonito. Depende de quanto tempo ele olhar. ... Agora estendam a mão. Assim. E soprem devagar.",
+ "dur": 7.49,
+ "cps": 12.8,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Ou bonito, depende de quanto tempo ele olhar. Agora estendam a mão, assim, e soprem devagar.",
+ "attempt": 0,
+ "gen_s": 61.7,
+ "rtf": 8.23,
+ "max_pause": 0.52,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.35,
+  "cfg_weight": 0.2,
+  "temperature": 0.65
+ },
+ "seed": 3733032479,
+ "lufs_in": -22.7,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 26.0,
+  "flow": 33.6,
+  "hift": 1.8
+ },
+ "tokens": 184,
+ "final_problems": []
+}

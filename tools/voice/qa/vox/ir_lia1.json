@@ -1,0 +1,31 @@
+{
+ "id": "ir_lia1",
+ "speaker": "irene",
+ "emotion": "neutral",
+ "text": "Você desenha, né? Quer dizer... claro que desenha, você é cartógrafa. Que pergunta. Desculpa.",
+ "dur": 8.24,
+ "cps": 11.3,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Você desenha, né? Quer dizer? Claro que desenha. Você é cartógrafa, que pergunta, desculpa.",
+ "attempt": 0,
+ "gen_s": 63.9,
+ "rtf": 7.75,
+ "max_pause": 0.54,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.45,
+  "cfg_weight": 0.4,
+  "temperature": 0.75
+ },
+ "seed": 3790877158,
+ "lufs_in": -22.2,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 28.5,
+  "flow": 33.0,
+  "hift": 2.0
+ },
+ "tokens": 207,
+ "final_problems": []
+}

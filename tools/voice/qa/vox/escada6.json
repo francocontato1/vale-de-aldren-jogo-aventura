@@ -1,0 +1,31 @@
+{
+ "id": "escada6",
+ "speaker": "eco_f",
+ "emotion": "tender",
+ "text": "Depois eu olho. É pra isso que serve uma escada.",
+ "dur": 3.94,
+ "cps": 12.2,
+ "cer": 0.022,
+ "wer": 0.1,
+ "asr": "Depois eu olho. É para isso que serve uma escada.",
+ "attempt": 0,
+ "gen_s": 31.2,
+ "rtf": 7.93,
+ "max_pause": 0.62,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.45,
+  "cfg_weight": 0.4,
+  "temperature": 0.75
+ },
+ "seed": 1937158148,
+ "lufs_in": -20.7,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 14.9,
+  "flow": 15.2,
+  "hift": 1.0
+ },
+ "tokens": 101,
+ "final_problems": []
+}

@@ -1,0 +1,31 @@
+{
+ "id": "li_ponte2",
+ "speaker": "lia",
+ "emotion": "happy",
+ "text": "A ponte está inteira. Não leva a lugar nenhum que já não desse pra ir. Atravessei duas vezes, só pra garantir.",
+ "dur": 6.39,
+ "cps": 17.2,
+ "cer": 0.028,
+ "wer": 0.143,
+ "asr": "A ponte está inteira. Não leva a lugar nenhum que já não desce para ir. Atravessei duas vezes, só para garantir.",
+ "attempt": 0,
+ "gen_s": 46.3,
+ "rtf": 7.25,
+ "max_pause": 0.33,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.65,
+  "cfg_weight": 0.4,
+  "temperature": 0.8
+ },
+ "seed": 3575657574,
+ "lufs_in": -21.1,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 25.5,
+  "flow": 18.9,
+  "hift": 1.6
+ },
+ "tokens": 175,
+ "final_problems": []
+}

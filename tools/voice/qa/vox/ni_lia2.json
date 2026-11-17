@@ -1,0 +1,31 @@
+{
+ "id": "ni_lia2",
+ "speaker": "nina",
+ "emotion": "surprised",
+ "text": "Mais ou menos? Como é que alguém sabe mais ou menos? Por que você não conta pra ela direito?",
+ "dur": 5.06,
+ "cps": 18.2,
+ "cer": 0.022,
+ "wer": 0.158,
+ "asr": "Mais ou menos? Como é que alguém sabe mais ou menos? Porque você não conta para ela direito.",
+ "attempt": 2,
+ "gen_s": 28.8,
+ "rtf": 5.69,
+ "max_pause": 0.36,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.85,
+  "cfg_weight": 0.6,
+  "temperature": 0.71
+ },
+ "seed": 2678296874,
+ "lufs_in": -24.1,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 17.2,
+  "flow": 10.0,
+  "hift": 1.2
+ },
+ "tokens": 141,
+ "final_problems": []
+}

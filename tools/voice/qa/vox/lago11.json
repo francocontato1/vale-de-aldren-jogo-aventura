@@ -1,0 +1,31 @@
+{
+ "id": "lago11",
+ "speaker": "ilsa_m",
+ "emotion": "tender",
+ "text": "Não é pra jogar. É pra guardar.",
+ "dur": 3.12,
+ "cps": 9.9,
+ "cer": 0.069,
+ "wer": 0.286,
+ "asr": "Não é para jogar, é para guardar.",
+ "attempt": 0,
+ "gen_s": 29.8,
+ "rtf": 9.56,
+ "max_pause": 0.58,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.55,
+  "cfg_weight": 0.4,
+  "temperature": 0.75
+ },
+ "seed": 3320469653,
+ "lufs_in": -23.5,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 15.1,
+  "flow": 13.6,
+  "hift": 1.0
+ },
+ "tokens": 102,
+ "final_problems": []
+}

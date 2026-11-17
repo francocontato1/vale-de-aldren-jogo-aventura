@@ -1,0 +1,31 @@
+{
+ "id": "circ9",
+ "speaker": "dessa",
+ "emotion": "neutral",
+ "text": "Pra que serve isso?",
+ "dur": 1.26,
+ "cps": 15.1,
+ "cer": 0.056,
+ "wer": 0.25,
+ "asr": "Para que serve isso?",
+ "attempt": 0,
+ "gen_s": 20.8,
+ "rtf": 16.54,
+ "max_pause": 0.03,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.55,
+  "cfg_weight": 0.5,
+  "temperature": 0.75
+ },
+ "seed": 3834488987,
+ "lufs_in": -27.0,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 6.6,
+  "flow": 13.4,
+  "hift": 0.6
+ },
+ "tokens": 45,
+ "final_problems": []
+}

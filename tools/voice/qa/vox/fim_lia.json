@@ -1,0 +1,31 @@
+{
+ "id": "fim_lia",
+ "speaker": "lia",
+ "emotion": "tender",
+ "text": "Lembra do jardim dos relógios? Acho que agora eu sei que hora o meu marcaria.",
+ "dur": 4.52,
+ "cps": 17.0,
+ "cer": 0.013,
+ "wer": 0.067,
+ "asr": "Lembra do Jardim dos Relogios? Acho que agora eu sei que ora o meu marcaria.",
+ "attempt": 0,
+ "gen_s": 36.0,
+ "rtf": 7.97,
+ "max_pause": 0.48,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.45,
+  "cfg_weight": 0.35,
+  "temperature": 0.7
+ },
+ "seed": 1371404914,
+ "lufs_in": -20.3,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 16.9,
+  "flow": 17.7,
+  "hift": 1.2
+ },
+ "tokens": 128,
+ "final_problems": []
+}

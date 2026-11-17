@@ -1,0 +1,31 @@
+{
+ "id": "od_resposta",
+ "speaker": "odessa",
+ "emotion": "happy",
+ "text": "Pronto. Leve isto pra ele. E diga que hoje à noite... Não diga nada. Ele vai ver.",
+ "dur": 8.59,
+ "cps": 9.4,
+ "cer": 0.014,
+ "wer": 0.059,
+ "asr": "Pronto, leve isto para ele e diga que hoje à noite. Não diga nada, ele vai ver.",
+ "attempt": 0,
+ "gen_s": 63.2,
+ "rtf": 7.36,
+ "max_pause": 0.55,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.55,
+  "cfg_weight": 0.25,
+  "temperature": 0.75
+ },
+ "seed": 131824180,
+ "lufs_in": -20.9,
+ "tp_limited": false,
+ "stage_s": {
+  "t3": 30.3,
+  "flow": 30.5,
+  "hift": 2.2
+ },
+ "tokens": 210,
+ "final_problems": []
+}

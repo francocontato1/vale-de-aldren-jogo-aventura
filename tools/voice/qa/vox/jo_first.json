@@ -1,0 +1,31 @@
+{
+ "id": "jo_first",
+ "speaker": "joca",
+ "emotion": "happy",
+ "text": "Opa. Cuidado com a serragem. Você é a cartógrafa? Então desenha aí no mapa: aqui mora o melhor construtor de barcos do vale. Que também é o único.",
+ "dur": 9.0,
+ "cps": 16.2,
+ "cer": 0.021,
+ "wer": 0.071,
+ "asr": "Opa cuidado com a serragem. Você é cartógrafa, então desenhe aí no mapa, aqui mora o melhor construtor de barcos do Vale, que também é o único.",
+ "attempt": 0,
+ "gen_s": 52.1,
+ "rtf": 5.79,
+ "max_pause": 0.49,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.7,
+  "cfg_weight": 0.45,
+  "temperature": 0.85
+ },
+ "seed": 1627210149,
+ "lufs_in": -20.0,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 31.9,
+  "flow": 17.5,
+  "hift": 1.4
+ },
+ "tokens": 228,
+ "final_problems": []
+}

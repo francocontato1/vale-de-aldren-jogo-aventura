@@ -1,0 +1,31 @@
+{
+ "id": "li_hora_torre",
+ "speaker": "lia",
+ "emotion": "neutral",
+ "text": "Este lugar parece pedir o fim da tarde. Vou esperar o sol baixar.",
+ "dur": 4.04,
+ "cps": 16.1,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Este lugar parece pedir o fim da tarde. Vou esperar o sol baixar.",
+ "attempt": 0,
+ "gen_s": 34.0,
+ "rtf": 8.42,
+ "max_pause": 0.34,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.5,
+  "cfg_weight": 0.45,
+  "temperature": 0.75
+ },
+ "seed": 1075356037,
+ "lufs_in": -20.4,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 16.3,
+  "flow": 16.7,
+  "hift": 0.8
+ },
+ "tokens": 118,
+ "final_problems": []
+}

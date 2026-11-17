@@ -1,0 +1,31 @@
+{
+ "id": "ma_lia2",
+ "speaker": "marta",
+ "emotion": "tender",
+ "text": "Longe é relativo, querida. A Celeste mora a meio dia daqui e a gente se vê uma vez por mês, trocando pão por peixe e reclamando. Isso é perto. Longe é não escrever.",
+ "dur": 10.16,
+ "cps": 16.1,
+ "cer": 0.038,
+ "wer": 0.091,
+ "asr": "Longe é relativo, querida. A Celeste mora meio dia daqui e a gente se viu uma vez por mês, trocando pão por peixe reclamando. Isso é perto. Longe é não escrever.",
+ "attempt": 0,
+ "gen_s": 58.9,
+ "rtf": 5.79,
+ "max_pause": 0.37,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.6,
+  "cfg_weight": 0.45,
+  "temperature": 0.75
+ },
+ "seed": 3371185452,
+ "lufs_in": -21.0,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 36.8,
+  "flow": 19.6,
+  "hift": 2.1
+ },
+ "tokens": 258,
+ "final_problems": []
+}

@@ -1,0 +1,31 @@
+{
+ "id": "arvore8",
+ "speaker": "eco_f",
+ "emotion": "happy",
+ "text": "Não se conta. Senão não vale.",
+ "dur": 2.17,
+ "cps": 13.4,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Não se conta, senão não vale.",
+ "attempt": 0,
+ "gen_s": 23.5,
+ "rtf": 10.82,
+ "max_pause": 0.31,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.65,
+  "cfg_weight": 0.45,
+  "temperature": 0.85
+ },
+ "seed": 3370886112,
+ "lufs_in": -20.7,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 9.2,
+  "flow": 13.3,
+  "hift": 0.8
+ },
+ "tokens": 69,
+ "final_problems": []
+}

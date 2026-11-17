@@ -1,0 +1,31 @@
+{
+ "id": "ni_c2",
+ "speaker": "nina",
+ "emotion": "happy",
+ "text": "Quer conhecer a Dona Concha? É a minha favorita. Por que todo mundo ri quando eu falo o nome dela?",
+ "dur": 4.92,
+ "cps": 19.9,
+ "cer": 0.011,
+ "wer": 0.1,
+ "asr": "Quer conhecer a dona Concha? É a minha favorita, porque todo mundo ri quando eu falo o nome dela.",
+ "attempt": 0,
+ "gen_s": 31.3,
+ "rtf": 6.36,
+ "max_pause": 0.14,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.8,
+  "cfg_weight": 0.45,
+  "temperature": 0.85
+ },
+ "seed": 2816621218,
+ "lufs_in": -24.8,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 19.3,
+  "flow": 10.4,
+  "hift": 1.2
+ },
+ "tokens": 148,
+ "final_problems": []
+}

@@ -1,0 +1,31 @@
+{
+ "id": "od_r_relogios",
+ "speaker": "odessa",
+ "emotion": "tender",
+ "text": "Quatro e meia. ... O Teo me pediu pra cuidar do jardim até eles voltarem. Eu achei que era até a primavera. Já faz seiscentas primaveras. Eu tiro o musgo das sombras até hoje. Ninguém nunca repara.",
+ "dur": 16.09,
+ "cps": 12.2,
+ "cer": 0.021,
+ "wer": 0.111,
+ "asr": "4 e meia. O teu me pediu para cuidar do jardim até eles voltarem. Eu achei que era até a primavera. Já faz 600 primaveras. Eu tiro o musco das sombras até hoje. Ninguém nunca repara.",
+ "attempt": 0,
+ "gen_s": 108.9,
+ "rtf": 6.77,
+ "max_pause": 0.48,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.35,
+  "cfg_weight": 0.2,
+  "temperature": 0.65
+ },
+ "seed": 1568994342,
+ "lufs_in": -21.7,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 62.1,
+  "flow": 42.2,
+  "hift": 4.1
+ },
+ "tokens": 429,
+ "final_problems": []
+}

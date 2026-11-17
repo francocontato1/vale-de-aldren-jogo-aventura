@@ -1,0 +1,31 @@
+{
+ "id": "od_fita",
+ "speaker": "odessa",
+ "emotion": "tender",
+ "text": "Você refez o nó da fita da Ilsa? ... Obrigada. Eu nunca tive coragem de encostar nela.",
+ "dur": 7.52,
+ "cps": 11.4,
+ "cer": 0.013,
+ "wer": 0.062,
+ "asr": "Você refeiz o nó da fita da ilsa? Obrigada. Eu nunca tive coragem de encostar nela.",
+ "attempt": 0,
+ "gen_s": 58.1,
+ "rtf": 7.73,
+ "max_pause": 0.68,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.35,
+  "cfg_weight": 0.2,
+  "temperature": 0.65
+ },
+ "seed": 1187758383,
+ "lufs_in": -21.5,
+ "tp_limited": false,
+ "stage_s": {
+  "t3": 26.4,
+  "flow": 29.6,
+  "hift": 1.9
+ },
+ "tokens": 196,
+ "final_problems": []
+}

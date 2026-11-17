@@ -1,0 +1,31 @@
+{
+ "id": "od_r_arvore",
+ "speaker": "odessa",
+ "emotion": "tender",
+ "text": "A fita com a pedra furada ainda está lá? ... Hum. Eu vivia dizendo pra Ilsa que pedra furada não dá sorte nenhuma. Ela respondia que dava, sim. Pra quem tem paciência.",
+ "dur": 13.92,
+ "cps": 12.0,
+ "cer": 0.032,
+ "wer": 0.129,
+ "asr": "A fita com a pedra furada ainda está lá. Um, eu vivia dizendo para a Ilsa que pedra furada não dá sorte nenhuma. Ela respondia que dava sim, para quem tem paciência.",
+ "attempt": 0,
+ "gen_s": 99.7,
+ "rtf": 7.16,
+ "max_pause": 0.54,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.35,
+  "cfg_weight": 0.2,
+  "temperature": 0.65
+ },
+ "seed": 1802587684,
+ "lufs_in": -21.6,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 55.6,
+  "flow": 39.9,
+  "hift": 3.8
+ },
+ "tokens": 389,
+ "final_problems": []
+}

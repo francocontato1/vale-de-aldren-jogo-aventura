@@ -1,0 +1,31 @@
+{
+ "id": "li_ba1",
+ "speaker": "lia",
+ "emotion": "tender",
+ "text": "Ele desenhava estradas. E sabia de cor onde cada ponte tinha caído.",
+ "dur": 4.74,
+ "cps": 14.1,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Ele desenhava estradas e sabia de cor onde cada ponte tinha caído.",
+ "attempt": 0,
+ "gen_s": 37.5,
+ "rtf": 7.91,
+ "max_pause": 0.31,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.45,
+  "cfg_weight": 0.35,
+  "temperature": 0.7
+ },
+ "seed": 3723097288,
+ "lufs_in": -20.7,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 18.7,
+  "flow": 17.4,
+  "hift": 1.2
+ },
+ "tokens": 134,
+ "final_problems": []
+}

@@ -1,0 +1,31 @@
+{
+ "id": "rel7",
+ "speaker": "dessa",
+ "emotion": "surprised",
+ "text": "A Ilsa? Ela ri de tudo.",
+ "dur": 2.58,
+ "cps": 8.9,
+ "cer": 0.095,
+ "wer": 0.333,
+ "asr": "Ai, Ulsa. Ela ri de tudo?",
+ "attempt": 0,
+ "gen_s": 29.9,
+ "rtf": 11.59,
+ "max_pause": 0.42,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.75,
+  "cfg_weight": 0.5,
+  "temperature": 0.8
+ },
+ "seed": 2027127065,
+ "lufs_in": -21.7,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 12.1,
+  "flow": 16.8,
+  "hift": 0.7
+ },
+ "tokens": 80,
+ "final_problems": []
+}

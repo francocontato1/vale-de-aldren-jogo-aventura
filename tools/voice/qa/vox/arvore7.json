@@ -1,0 +1,31 @@
+{
+ "id": "arvore7",
+ "speaker": "eco_m",
+ "emotion": "happy",
+ "text": "Não ri. ... Tá, ri um pouco. O que você pediu?",
+ "dur": 2.61,
+ "cps": 17.6,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Não ri, tá, ri um pouco. O que você pediu?",
+ "attempt": 2,
+ "gen_s": 25.7,
+ "rtf": 9.83,
+ "max_pause": 0.19,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.65,
+  "cfg_weight": 0.55,
+  "temperature": 0.71
+ },
+ "seed": 3846044519,
+ "lufs_in": -23.3,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 10.6,
+  "flow": 14.1,
+  "hift": 0.8
+ },
+ "tokens": 78,
+ "final_problems": []
+}

@@ -1,0 +1,31 @@
+{
+ "id": "jo_barco",
+ "speaker": "joca",
+ "emotion": "tender",
+ "text": "Aquele, no fim do píer? Era do mestre Elias, marido da Celeste. Ele dizia que barco parado apodrece por dentro. Se quiser, leva pra passear. Só traz de volta inteiro.",
+ "dur": 10.32,
+ "cps": 16.1,
+ "cer": 0.032,
+ "wer": 0.1,
+ "asr": "Aquele no fim do Pierre era do mestre Elias, marido da celeste. Ele dizia que barco parado apodrece por dentro. Se quiser leva para passear, só atrás de volta inteiro.",
+ "attempt": 0,
+ "gen_s": 64.1,
+ "rtf": 6.21,
+ "max_pause": 0.4,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.5,
+  "cfg_weight": 0.4,
+  "temperature": 0.75
+ },
+ "seed": 3160495296,
+ "lufs_in": -21.5,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 37.9,
+  "flow": 23.7,
+  "hift": 2.3
+ },
+ "tokens": 290,
+ "final_problems": []
+}

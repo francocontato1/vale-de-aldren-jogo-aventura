@@ -1,0 +1,31 @@
+{
+ "id": "ce_peixe",
+ "speaker": "celeste",
+ "emotion": "excited",
+ "text": "Peixe da Marta! Ela sempre manda o melhor. Sabia que foi ela que me ensinou a fazer pão de sal? Obrigada, querida. Volta amanhã que eu guardo um pra você.",
+ "dur": 9.58,
+ "cps": 16.1,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Peixe da Marta, ela sempre manda o melhor. Sabia que foi ela que me ensinou a fazer pão de sal? Obrigada querida, volta amanhã que eu guardo um pra você.",
+ "attempt": 0,
+ "gen_s": 56.6,
+ "rtf": 5.91,
+ "max_pause": 0.44,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.9,
+  "cfg_weight": 0.45,
+  "temperature": 0.85
+ },
+ "seed": 3929555006,
+ "lufs_in": -19.5,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 35.3,
+  "flow": 19.0,
+  "hift": 2.1
+ },
+ "tokens": 242,
+ "final_problems": []
+}

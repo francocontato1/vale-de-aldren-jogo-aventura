@@ -1,0 +1,31 @@
+{
+ "id": "an_c4",
+ "speaker": "anselmo",
+ "emotion": "happy",
+ "text": "Você foi até a Maré? A Marta fala por três, mas o peixe dela vale por quatro.",
+ "dur": 5.1,
+ "cps": 15.1,
+ "cer": 0.027,
+ "wer": 0.059,
+ "asr": "Você foi até maré? A Marta fala por três, mas o peixe dela vale por quatro.",
+ "attempt": 0,
+ "gen_s": 41.6,
+ "rtf": 8.15,
+ "max_pause": 0.31,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.6,
+  "cfg_weight": 0.25,
+  "temperature": 0.75
+ },
+ "seed": 3437169527,
+ "lufs_in": -23.2,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 21.8,
+  "flow": 18.5,
+  "hift": 1.0
+ },
+ "tokens": 162,
+ "final_problems": []
+}

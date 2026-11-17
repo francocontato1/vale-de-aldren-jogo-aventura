@@ -1,0 +1,31 @@
+{
+ "id": "li_pulos_bom",
+ "speaker": "lia",
+ "emotion": "happy",
+ "text": "Olha só isso. Acho que até o gigante viu.",
+ "dur": 3.65,
+ "cps": 11.2,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Olha só isso. Acho que até o gigante viu.",
+ "attempt": 0,
+ "gen_s": 35.2,
+ "rtf": 9.63,
+ "max_pause": 0.61,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.65,
+  "cfg_weight": 0.4,
+  "temperature": 0.8
+ },
+ "seed": 2293729543,
+ "lufs_in": -20.7,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 16.1,
+  "flow": 17.9,
+  "hift": 1.0
+ },
+ "tokens": 114,
+ "final_problems": []
+}

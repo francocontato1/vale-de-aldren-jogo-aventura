@@ -1,31 +1,31 @@
 {
  "id": "arvore3",
  "speaker": "eco_m",
- "emotion": "tender",
- "text": "Então eu conto o meu. Pedi que a gente lembre deste dia.",
- "dur": 3.44,
+ "emotion": "surprised",
+ "text": "Por quê?",
+ "dur": 0.49,
  "cps": 16.3,
  "cer": 0.0,
  "wer": 0.0,
- "asr": "Então eu conto o meu. Pedi que a gente lembre deste dia.",
+ "asr": "Por que?",
  "attempt": 0,
- "gen_s": 26.3,
- "rtf": 7.64,
- "max_pause": 0.55,
+ "gen_s": 17.0,
+ "rtf": 34.73,
+ "max_pause": 0.05,
  "problems": [],
  "params": {
-  "exaggeration": 0.45,
-  "cfg_weight": 0.4,
-  "temperature": 0.75
+  "exaggeration": 0.7,
+  "cfg_weight": 0.5,
+  "temperature": 0.85
  },
  "seed": 2628307418,
- "lufs_in": -23.4,
- "tp_limited": false,
+ "lufs_in": -32.2,
+ "tp_limited": true,
  "stage_s": {
-  "t3": 12.1,
-  "flow": 13.3,
-  "hift": 0.8
+  "t3": 3.8,
+  "flow": 12.5,
+  "hift": 0.5
  },
- "tokens": 102,
+ "tokens": 26,
  "final_problems": []
 }

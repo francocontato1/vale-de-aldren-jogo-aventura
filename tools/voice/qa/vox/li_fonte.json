@@ -1,0 +1,31 @@
+{
+ "id": "li_fonte",
+ "speaker": "lia",
+ "emotion": "tender",
+ "text": "Água brotando da pedra, gelada. Alguém colocou um cano de ferro aqui há muito tempo, para quem passasse com sede. Obrigada, quem quer que tenha sido.",
+ "dur": 9.62,
+ "cps": 15.5,
+ "cer": 0.035,
+ "wer": 0.115,
+ "asr": "Água brotando da pedra, gelada. Alguém colocou um cano de ferro aqui há muito tempo para quem passar se concede. Obrigada quem quer que tenha sido.",
+ "attempt": 0,
+ "gen_s": 65.5,
+ "rtf": 6.81,
+ "max_pause": 0.67,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.45,
+  "cfg_weight": 0.35,
+  "temperature": 0.7
+ },
+ "seed": 2561947869,
+ "lufs_in": -20.8,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 38.0,
+  "flow": 25.0,
+  "hift": 2.3
+ },
+ "tokens": 246,
+ "final_problems": []
+}

@@ -1,0 +1,31 @@
+{
+ "id": "li_an1",
+ "speaker": "lia",
+ "emotion": "neutral",
+ "text": "De Ancoradouro, no litoral. Minha mãe tem uma papelaria lá. Meu pai desenhava estradas pra Coroa. Passava meses fora.",
+ "dur": 8.37,
+ "cps": 14.0,
+ "cer": 0.009,
+ "wer": 0.053,
+ "asr": "De ancoradouro no litoral. Minha mãe tem uma papelaria lá. Meu pai desenhava estradas para coroa. Passava meses fora.",
+ "attempt": 0,
+ "gen_s": 48.9,
+ "rtf": 5.84,
+ "max_pause": 0.51,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.5,
+  "cfg_weight": 0.45,
+  "temperature": 0.75
+ },
+ "seed": 3172888766,
+ "lufs_in": -19.8,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 27.8,
+  "flow": 18.9,
+  "hift": 2.0
+ },
+ "tokens": 213,
+ "final_problems": []
+}

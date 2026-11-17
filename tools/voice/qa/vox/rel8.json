@@ -1,0 +1,31 @@
+{
+ "id": "rel8",
+ "speaker": "eco_m",
+ "emotion": "tender",
+ "text": "Agora ri. ... Dessa, quando a gente for embora, você cuida do jardim? Tira o musgo das sombras. Só isso.",
+ "dur": 7.32,
+ "cps": 14.2,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Agora ri, dessa, quando a gente for embora, você cuida do jardim? Tira o musgo das sombras, só isso.",
+ "attempt": 0,
+ "gen_s": 53.3,
+ "rtf": 7.28,
+ "max_pause": 0.32,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.45,
+  "cfg_weight": 0.4,
+  "temperature": 0.75
+ },
+ "seed": 4148427929,
+ "lufs_in": -22.9,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 29.7,
+  "flow": 21.4,
+  "hift": 1.9
+ },
+ "tokens": 196,
+ "final_problems": []
+}

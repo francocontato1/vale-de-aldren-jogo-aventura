@@ -1,0 +1,31 @@
+{
+ "id": "da_c1",
+ "speaker": "davi",
+ "emotion": "happy",
+ "text": "Sabe o pior de um farol? Ninguém agradece quando dá certo. O barco chega, e pronto. Ninguém sobe aqui pra dizer obrigado à lâmpada.",
+ "dur": 8.13,
+ "cps": 16.1,
+ "cer": 0.008,
+ "wer": 0.042,
+ "asr": "Sabe o pior de um farol? Ninguém agradece quando dá certo, o barco chega e pronto. Ninguém sobe aqui para dizer obrigado à Lâmpada.",
+ "attempt": 0,
+ "gen_s": 52.9,
+ "rtf": 6.5,
+ "max_pause": 0.43,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.6,
+  "cfg_weight": 0.3,
+  "temperature": 0.75
+ },
+ "seed": 4227490284,
+ "lufs_in": -23.8,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 29.0,
+  "flow": 21.3,
+  "hift": 2.2
+ },
+ "tokens": 215,
+ "final_problems": []
+}

@@ -1,0 +1,31 @@
+{
+ "id": "circ6",
+ "speaker": "dessa",
+ "emotion": "neutral",
+ "text": "E deve achar a gente pequeno.",
+ "dur": 3.03,
+ "cps": 9.6,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "e deve achar a gente pequeno.",
+ "attempt": 0,
+ "gen_s": 26.4,
+ "rtf": 8.72,
+ "max_pause": 0.24,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.55,
+  "cfg_weight": 0.5,
+  "temperature": 0.75
+ },
+ "seed": 1033265276,
+ "lufs_in": -24.1,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 11.2,
+  "flow": 14.2,
+  "hift": 0.7
+ },
+ "tokens": 81,
+ "final_problems": []
+}

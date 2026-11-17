@@ -1,0 +1,31 @@
+{
+ "id": "od_hora",
+ "speaker": "odessa",
+ "emotion": "happy",
+ "text": "Ah, e cada lugar tem a sua hora. O lago gosta de manhã cedo, a escada gosta do fim do dia... O jardim dos relógios, então, é um chato. Se chegar fora de hora, sente e deixe o tempo passar.",
+ "dur": 16.03,
+ "cps": 11.7,
+ "cer": 0.006,
+ "wer": 0.025,
+ "asr": "A e cada lugar tem a sua hora. O lago gosta de manhã cedo, a escada gosta do fim do dia. O jardim dos relógios, então, é um chato. Se chegar fora de hora, sente e deixe o tempo passar.",
+ "attempt": 0,
+ "gen_s": 105.4,
+ "rtf": 6.58,
+ "max_pause": 0.52,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.55,
+  "cfg_weight": 0.25,
+  "temperature": 0.75
+ },
+ "seed": 2429748811,
+ "lufs_in": -21.4,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 58.7,
+  "flow": 42.4,
+  "hift": 3.9
+ },
+ "tokens": 414,
+ "final_problems": []
+}

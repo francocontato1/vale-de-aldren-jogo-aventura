@@ -1,31 +1,31 @@
 {
  "id": "torre1",
- "speaker": "eco_f",
+ "speaker": "sela",
  "emotion": "sad",
- "text": "A torre não vai aguentar outro inverno, mestre.",
- "dur": 2.83,
- "cps": 16.6,
- "cer": 0.0,
- "wer": 0.0,
- "asr": "A torre não vai aguentar outro inverno, mestre.",
+ "text": "Mestre. A rachadura cresceu de novo. Já dá pra passar a mão por dentro.",
+ "dur": 5.83,
+ "cps": 12.2,
+ "cer": 0.015,
+ "wer": 0.071,
+ "asr": "Mestre, a rachadura cresceu de novo. Já dá para passar a mão por dentro.",
  "attempt": 0,
- "gen_s": 23.7,
- "rtf": 8.38,
- "max_pause": 0.16,
+ "gen_s": 42.2,
+ "rtf": 7.24,
+ "max_pause": 0.48,
  "problems": [],
  "params": {
   "exaggeration": 0.45,
   "cfg_weight": 0.4,
-  "temperature": 0.75
+  "temperature": 0.7
  },
  "seed": 1233784636,
- "lufs_in": -21.2,
+ "lufs_in": -24.7,
  "tp_limited": true,
  "stage_s": {
-  "t3": 10.6,
-  "flow": 12.3,
-  "hift": 0.8
+  "t3": 21.7,
+  "flow": 17.8,
+  "hift": 1.5
  },
- "tokens": 84,
+ "tokens": 148,
  "final_problems": []
 }

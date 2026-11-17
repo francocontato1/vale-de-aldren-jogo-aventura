@@ -1,0 +1,35 @@
+{
+ "id": "lago7",
+ "speaker": "teo_m",
+ "emotion": "happy",
+ "text": "Mas antes ela voou. Isso conta.",
+ "dur": 4.14,
+ "cps": 7.5,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Mas antes ela voou. Isso conta.",
+ "attempt": 0,
+ "gen_s": 27.5,
+ "rtf": 6.63,
+ "max_pause": 0.91,
+ "problems": [
+  "cps=7.5"
+ ],
+ "params": {
+  "exaggeration": 0.8,
+  "cfg_weight": 0.45,
+  "temperature": 0.85
+ },
+ "seed": 365718739,
+ "lufs_in": -23.7,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 14.8,
+  "flow": 11.3,
+  "hift": 1.1
+ },
+ "tokens": 106,
+ "final_problems": [
+  "cps=7.5"
+ ]
+}

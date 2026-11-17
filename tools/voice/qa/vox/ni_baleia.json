@@ -1,0 +1,31 @@
+{
+ "id": "ni_baleia",
+ "speaker": "nina",
+ "emotion": "excited",
+ "text": "Você acredita? Uma vez eu ouvi, de noite, deitada no píer. Um som comprido, assim: uuuuuu. O papai disse que era o vento. Vento tem saudade, por acaso?",
+ "dur": 8.99,
+ "cps": 16.8,
+ "cer": 0.035,
+ "wer": 0.071,
+ "asr": "Você acredita? Uma vez eu ouvi de noite deitada no pier, um som comprido assim, o \"u\". O papai disse que era o vento. Vento tem saudade, por acaso.",
+ "attempt": 0,
+ "gen_s": 55.0,
+ "rtf": 6.12,
+ "max_pause": 0.29,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.95,
+  "cfg_weight": 0.45,
+  "temperature": 0.85
+ },
+ "seed": 3393696832,
+ "lufs_in": -20.5,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 35.7,
+  "flow": 16.5,
+  "hift": 2.3
+ },
+ "tokens": 251,
+ "final_problems": []
+}

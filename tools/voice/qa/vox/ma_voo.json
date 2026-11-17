@@ -1,0 +1,31 @@
+{
+ "id": "ma_voo",
+ "speaker": "marta",
+ "emotion": "excited",
+ "text": "Era você montada naquele bicho? Eu vi! A vila inteira viu! A Nina não para de falar nisso. Muito obrigada, viu? Agora eu é que não durmo.",
+ "dur": 11.92,
+ "cps": 11.5,
+ "cer": 0.023,
+ "wer": 0.037,
+ "asr": "Era você montada naquele bicho? Eu vi, a vila inteira viu. A Nina não para de falar nisso. Muito obrigada viu. Agora é que não durmo.",
+ "attempt": 0,
+ "gen_s": 83.3,
+ "rtf": 6.99,
+ "max_pause": 0.65,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.95,
+  "cfg_weight": 0.5,
+  "temperature": 0.85
+ },
+ "seed": 817182990,
+ "lufs_in": -21.0,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 49.6,
+  "flow": 30.1,
+  "hift": 3.3
+ },
+ "tokens": 358,
+ "final_problems": []
+}

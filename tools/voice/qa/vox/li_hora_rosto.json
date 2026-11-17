@@ -1,0 +1,31 @@
+{
+ "id": "li_hora_rosto",
+ "speaker": "lia",
+ "emotion": "neutral",
+ "text": "As flores estão fechadas. Melhor esperar o dia.",
+ "dur": 3.13,
+ "cps": 15.0,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "As flores estão fechadas. Melhor esperar o dia.",
+ "attempt": 0,
+ "gen_s": 34.6,
+ "rtf": 11.06,
+ "max_pause": 0.35,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.5,
+  "cfg_weight": 0.45,
+  "temperature": 0.75
+ },
+ "seed": 1876843909,
+ "lufs_in": -21.0,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 15.2,
+  "flow": 18.1,
+  "hift": 1.1
+ },
+ "tokens": 113,
+ "final_problems": []
+}

@@ -1,0 +1,31 @@
+{
+ "id": "li_ir1",
+ "speaker": "lia",
+ "emotion": "tender",
+ "text": "Quando eu era pequena, meu pai fazia os mapas e eu desenhava nas margens. Bichos, gente pequenininha, casas com fumaça. Ele deixava. Depois eu parei.",
+ "dur": 10.71,
+ "cps": 13.9,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Quando eu era pequena, meu pai fazia os mapas e eu desenhava nas margens. Bichos, gente pequenininha, casas com fumaça. Ele deixava. Depois, eu parei.",
+ "attempt": 0,
+ "gen_s": 67.0,
+ "rtf": 6.26,
+ "max_pause": 0.43,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.45,
+  "cfg_weight": 0.35,
+  "temperature": 0.7
+ },
+ "seed": 669145764,
+ "lufs_in": -20.6,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 39.6,
+  "flow": 24.9,
+  "hift": 2.3
+ },
+ "tokens": 274,
+ "final_problems": []
+}

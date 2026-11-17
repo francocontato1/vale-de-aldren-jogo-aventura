@@ -1,0 +1,31 @@
+{
+ "id": "fim_nina",
+ "speaker": "nina",
+ "emotion": "excited",
+ "text": "Isso é a baleia cantando? Não? E se for? Como é que você sabe que não é?",
+ "dur": 4.38,
+ "cps": 16.4,
+ "cer": 0.044,
+ "wer": 0.176,
+ "asr": "Isso abaleia cantando? Não. E se for, como é que você sabe que não é?",
+ "attempt": 0,
+ "gen_s": 28.6,
+ "rtf": 6.53,
+ "max_pause": 0.19,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.95,
+  "cfg_weight": 0.45,
+  "temperature": 0.85
+ },
+ "seed": 3563234288,
+ "lufs_in": -22.1,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 17.3,
+  "flow": 9.2,
+  "hift": 1.1
+ },
+ "tokens": 127,
+ "final_problems": []
+}

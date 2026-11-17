@@ -1,0 +1,31 @@
+{
+ "id": "ma_pao",
+ "speaker": "marta",
+ "emotion": "excited",
+ "text": "Pão da Celeste! Ainda morno, como é que ela consegue? Toma, leva este peixe defumado pra ela. E diz que o sal é por minha conta, como sempre. E diz que eu não devo dois peixes. Diz que é um. Um e meio.",
+ "dur": 11.1,
+ "cps": 18.1,
+ "cer": 0.01,
+ "wer": 0.047,
+ "asr": "Pão da celeste, ainda morno como é que ela consegue. Toma, leve este peixe defumado para ela. E diz que o sal é por minha conta, como sempre. E diz que eu não devo dois peixes. Diz que é um, um e meio.",
+ "attempt": 0,
+ "gen_s": 68.7,
+ "rtf": 6.19,
+ "max_pause": 0.31,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.95,
+  "cfg_weight": 0.5,
+  "temperature": 0.85
+ },
+ "seed": 678416426,
+ "lufs_in": -19.5,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 40.6,
+  "flow": 25.1,
+  "hift": 2.8
+ },
+ "tokens": 280,
+ "final_problems": []
+}

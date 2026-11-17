@@ -1,0 +1,31 @@
+{
+ "id": "to_lia2",
+ "speaker": "tome",
+ "emotion": "tender",
+ "text": "Ah. ... Desculpa. Quer ver a minha pedra de estrela? Não, eu não vou mostrar. Mas você pode imaginar ela. Ela é muito bonita.",
+ "dur": 9.06,
+ "cps": 13.8,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Ah, desculpa! Quer ver a minha pedra de estrela? Não, eu não vou mostrar, mas você pode imaginar ela, ela é muito bonita.",
+ "attempt": 0,
+ "gen_s": 53.8,
+ "rtf": 5.94,
+ "max_pause": 0.21,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.6,
+  "cfg_weight": 0.4,
+  "temperature": 0.75
+ },
+ "seed": 3236485253,
+ "lufs_in": -23.5,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 33.8,
+  "flow": 17.6,
+  "hift": 2.0
+ },
+ "tokens": 228,
+ "final_problems": []
+}

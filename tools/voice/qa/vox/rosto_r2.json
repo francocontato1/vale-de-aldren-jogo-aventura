@@ -1,0 +1,35 @@
+{
+ "id": "rosto_r2",
+ "speaker": "lia",
+ "emotion": "tender",
+ "text": "É a Ilsa. Ele esculpiu a Ilsa.",
+ "dur": 4.13,
+ "cps": 7.3,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "É a ilsa. Ele esculpiu a ilsa.",
+ "attempt": 0,
+ "gen_s": 33.3,
+ "rtf": 8.05,
+ "max_pause": 0.51,
+ "problems": [
+  "cps=7.3"
+ ],
+ "params": {
+  "exaggeration": 0.45,
+  "cfg_weight": 0.35,
+  "temperature": 0.7
+ },
+ "seed": 3081024254,
+ "lufs_in": -20.3,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 15.5,
+  "flow": 16.5,
+  "hift": 1.0
+ },
+ "tokens": 121,
+ "final_problems": [
+  "cps=7.3"
+ ]
+}

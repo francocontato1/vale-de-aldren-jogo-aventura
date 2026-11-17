@@ -1,0 +1,31 @@
+{
+ "id": "ma_amiga",
+ "speaker": "marta",
+ "emotion": "tender",
+ "text": "Você já é de casa, sabia? Aqui a gente não pergunta de onde a pessoa veio. Pergunta se ela já comeu.",
+ "dur": 5.96,
+ "cps": 16.8,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Você já é de casa, sabia? Aqui a gente não pergunta de onde a pessoa veio, pergunta se ela já comeu.",
+ "attempt": 0,
+ "gen_s": 41.1,
+ "rtf": 6.9,
+ "max_pause": 0.4,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.6,
+  "cfg_weight": 0.45,
+  "temperature": 0.75
+ },
+ "seed": 867131071,
+ "lufs_in": -22.3,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 22.7,
+  "flow": 17.2,
+  "hift": 1.0
+ },
+ "tokens": 157,
+ "final_problems": []
+}

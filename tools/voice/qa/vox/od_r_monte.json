@@ -1,0 +1,31 @@
+{
+ "id": "od_r_monte",
+ "speaker": "odessa",
+ "emotion": "tender",
+ "text": "A gigante do monte... Os mais velhos da vila chamam de \"a Moça\". Eu nunca contei o nome dela pra ninguém. Parecia uma coisa dela, não minha.",
+ "dur": 12.01,
+ "cps": 11.7,
+ "cer": 0.008,
+ "wer": 0.037,
+ "asr": "A gigante do monte. Os mais velhos da vila chamam de a moça. Eu nunca contei o nome dela para ninguém. Parecia uma coisa dela, não minha.",
+ "attempt": 0,
+ "gen_s": 77.6,
+ "rtf": 6.46,
+ "max_pause": 0.68,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.35,
+  "cfg_weight": 0.2,
+  "temperature": 0.65
+ },
+ "seed": 605538236,
+ "lufs_in": -19.7,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 39.3,
+  "flow": 35.0,
+  "hift": 3.0
+ },
+ "tokens": 296,
+ "final_problems": []
+}

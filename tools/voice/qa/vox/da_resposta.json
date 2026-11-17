@@ -1,0 +1,31 @@
+{
+ "id": "da_resposta",
+ "speaker": "davi",
+ "emotion": "surprised",
+ "text": "Dela? Já? ... Não em cinco anos. Em cinco dias. Com licença, cartógrafa. Eu vou ler lá em cima, sozinho, como um velho bobo.",
+ "dur": 8.84,
+ "cps": 14.0,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Dela, já? Não em cinco anos, em cinco dias, com licença, cartógrafa. Eu vou ler lá em cima, sozinho, como um velho bobo.",
+ "attempt": 0,
+ "gen_s": 48.7,
+ "rtf": 5.51,
+ "max_pause": 0.32,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.65,
+  "cfg_weight": 0.35,
+  "temperature": 0.75
+ },
+ "seed": 593302020,
+ "lufs_in": -24.2,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 28.0,
+  "flow": 18.5,
+  "hift": 1.8
+ },
+ "tokens": 224,
+ "final_problems": []
+}

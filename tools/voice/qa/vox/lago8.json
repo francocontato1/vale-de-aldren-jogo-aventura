@@ -1,0 +1,31 @@
+{
+ "id": "lago8",
+ "speaker": "avo",
+ "emotion": "neutral",
+ "text": "Ilsa! O pão! Vem!",
+ "dur": 1.66,
+ "cps": 10.2,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Ilsa, o pão vem!",
+ "attempt": 1,
+ "gen_s": 17.2,
+ "rtf": 10.36,
+ "max_pause": 0.11,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.55,
+  "cfg_weight": 0.45,
+  "temperature": 0.68
+ },
+ "seed": 562169942,
+ "lufs_in": -20.1,
+ "tp_limited": false,
+ "stage_s": {
+  "t3": 8.5,
+  "flow": 7.9,
+  "hift": 0.7
+ },
+ "tokens": 55,
+ "final_problems": []
+}

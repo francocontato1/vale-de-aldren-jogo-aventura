@@ -1,31 +1,31 @@
 {
  "id": "escada_r",
  "speaker": "lia",
- "emotion": "tender",
- "text": "Talvez o lugar nunca tenha sido lá em cima. Talvez o lugar fosse a subida.",
- "dur": 5.06,
- "cps": 14.6,
+ "emotion": "sad",
+ "text": "Ele não subiu.",
+ "dur": 1.01,
+ "cps": 13.9,
  "cer": 0.0,
  "wer": 0.0,
- "asr": "Talvez o lugar nunca tenha sido lá em cima. Talvez o lugar fosse a subida.",
- "attempt": 0,
- "gen_s": 35.9,
- "rtf": 7.1,
- "max_pause": 0.44,
+ "asr": "Ele não subiu.",
+ "attempt": 1,
+ "gen_s": 25.5,
+ "rtf": 25.2,
+ "max_pause": 0.04,
  "problems": [],
  "params": {
   "exaggeration": 0.45,
-  "cfg_weight": 0.35,
-  "temperature": 0.7
+  "cfg_weight": 0.4,
+  "temperature": 0.63
  },
- "seed": 1097365413,
- "lufs_in": -20.7,
- "tp_limited": true,
+ "seed": 1682676287,
+ "lufs_in": -19.9,
+ "tp_limited": false,
  "stage_s": {
-  "t3": 19.0,
-  "flow": 15.4,
-  "hift": 1.4
+  "t3": 10.4,
+  "flow": 14.2,
+  "hift": 0.8
  },
- "tokens": 153,
+ "tokens": 75,
  "final_problems": []
 }

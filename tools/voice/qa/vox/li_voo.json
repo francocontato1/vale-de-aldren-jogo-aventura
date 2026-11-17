@@ -1,0 +1,31 @@
+{
+ "id": "li_voo",
+ "speaker": "lia",
+ "emotion": "excited",
+ "text": "O vale inteiro cabe debaixo das asas dela.",
+ "dur": 3.86,
+ "cps": 10.9,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "O vale inteiro cabe debaixo das asas dela.",
+ "attempt": 0,
+ "gen_s": 32.3,
+ "rtf": 8.36,
+ "max_pause": 0.5,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.8,
+  "cfg_weight": 0.4,
+  "temperature": 0.8
+ },
+ "seed": 772118069,
+ "lufs_in": -20.7,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 14.0,
+  "flow": 17.5,
+  "hift": 0.7
+ },
+ "tokens": 99,
+ "final_problems": []
+}

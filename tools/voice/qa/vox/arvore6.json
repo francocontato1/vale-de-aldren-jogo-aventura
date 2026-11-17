@@ -1,0 +1,31 @@
+{
+ "id": "arvore6",
+ "speaker": "eco_f",
+ "emotion": "happy",
+ "text": "Tá vendo? Riu.",
+ "dur": 1.22,
+ "cps": 11.5,
+ "cer": 0.083,
+ "wer": 0.333,
+ "asr": "Tá vendo, Rio?",
+ "attempt": 0,
+ "gen_s": 22.4,
+ "rtf": 18.34,
+ "max_pause": 0.17,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.65,
+  "cfg_weight": 0.45,
+  "temperature": 0.85
+ },
+ "seed": 4289885597,
+ "lufs_in": -22.4,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 7.7,
+  "flow": 13.8,
+  "hift": 0.7
+ },
+ "tokens": 47,
+ "final_problems": []
+}

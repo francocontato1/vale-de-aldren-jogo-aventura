@@ -1,0 +1,31 @@
+{
+ "id": "ba_r_escada",
+ "speaker": "bastiao",
+ "emotion": "neutral",
+ "text": "Você foi na escada. Viu os degraus? Gastos no meio. Alguém subiu muito ali. Muito.",
+ "dur": 4.74,
+ "cps": 17.3,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Você foi na escada? Viu os degraus? Gastos no meio. Alguém subiu muito ali? Muito.",
+ "attempt": 0,
+ "gen_s": 38.5,
+ "rtf": 8.12,
+ "max_pause": 0.2,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.45,
+  "cfg_weight": 0.5,
+  "temperature": 0.75
+ },
+ "seed": 32236164,
+ "lufs_in": -20.3,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 18.7,
+  "flow": 18.2,
+  "hift": 1.4
+ },
+ "tokens": 134,
+ "final_problems": []
+}

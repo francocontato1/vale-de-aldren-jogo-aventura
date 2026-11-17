@@ -1,31 +1,31 @@
 {
  "id": "lago2",
- "speaker": "eco_f",
+ "speaker": "ilsa_m",
  "emotion": "happy",
- "text": "Vi. A pedra afundou do mesmo jeito.",
- "dur": 2.65,
- "cps": 13.2,
- "cer": 0.03,
- "wer": 0.143,
- "asr": "Vi. A pedra fundou do mesmo jeito.",
- "attempt": 1,
- "gen_s": 48.8,
- "rtf": 18.42,
- "max_pause": 0.27,
+ "text": "Você disse isso das últimas nove.",
+ "dur": 3.88,
+ "cps": 8.5,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Você disse isso das últimas nove.",
+ "attempt": 0,
+ "gen_s": 29.8,
+ "rtf": 7.69,
+ "max_pause": 0.21,
  "problems": [],
  "params": {
-  "exaggeration": 0.65,
-  "cfg_weight": 0.5,
-  "temperature": 0.78
+  "exaggeration": 0.75,
+  "cfg_weight": 0.45,
+  "temperature": 0.85
  },
- "seed": 2549984072,
- "lufs_in": -20.3,
+ "seed": 220012623,
+ "lufs_in": -25.8,
  "tp_limited": true,
  "stage_s": {
-  "t3": 16.9,
-  "flow": 30.7,
-  "hift": 1.1
+  "t3": 14.2,
+  "flow": 13.5,
+  "hift": 1.0
  },
- "tokens": 81,
+ "tokens": 98,
  "final_problems": []
 }

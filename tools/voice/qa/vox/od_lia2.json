@@ -1,0 +1,31 @@
+{
+ "id": "od_lia2",
+ "speaker": "odessa",
+ "emotion": "tender",
+ "text": "Hum. Eu fiz isso por uns duzentos anos. Funciona. Até o dia em que não funciona mais.",
+ "dur": 7.51,
+ "cps": 11.3,
+ "cer": 0.025,
+ "wer": 0.059,
+ "asr": "Eu, eu fiz isso por uns 200 anos, funciona, até o dia em que não funciona mais.",
+ "attempt": 0,
+ "gen_s": 52.1,
+ "rtf": 6.94,
+ "max_pause": 0.51,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.35,
+  "cfg_weight": 0.2,
+  "temperature": 0.65
+ },
+ "seed": 1049481881,
+ "lufs_in": -21.3,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 29.2,
+  "flow": 20.8,
+  "hift": 1.9
+ },
+ "tokens": 191,
+ "final_problems": []
+}

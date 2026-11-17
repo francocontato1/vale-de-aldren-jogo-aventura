@@ -1,0 +1,31 @@
+{
+ "id": "lago5",
+ "speaker": "teo_m",
+ "emotion": "excited",
+ "text": "Sete! Viu? Eu falei!",
+ "dur": 2.48,
+ "cps": 8.1,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "7. Viu. Eu falei.",
+ "attempt": 1,
+ "gen_s": 19.7,
+ "rtf": 7.94,
+ "max_pause": 0.29,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.95,
+  "cfg_weight": 0.5,
+  "temperature": 0.78
+ },
+ "seed": 3533155368,
+ "lufs_in": -17.8,
+ "tp_limited": false,
+ "stage_s": {
+  "t3": 10.7,
+  "flow": 8.0,
+  "hift": 0.8
+ },
+ "tokens": 75,
+ "final_problems": []
+}

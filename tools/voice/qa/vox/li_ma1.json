@@ -1,0 +1,31 @@
+{
+ "id": "li_ma1",
+ "speaker": "lia",
+ "emotion": "neutral",
+ "text": "Mãe viva. Longe. A gente não se fala muito.",
+ "dur": 5.04,
+ "cps": 8.5,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Mãe viva, longe. A gente não se fala muito.",
+ "attempt": 0,
+ "gen_s": 37.0,
+ "rtf": 7.34,
+ "max_pause": 0.31,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.5,
+  "cfg_weight": 0.45,
+  "temperature": 0.75
+ },
+ "seed": 3296320633,
+ "lufs_in": -21.3,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 17.2,
+  "flow": 18.6,
+  "hift": 0.9
+ },
+ "tokens": 127,
+ "final_problems": []
+}

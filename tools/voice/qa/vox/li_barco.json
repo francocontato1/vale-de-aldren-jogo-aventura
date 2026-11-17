@@ -1,0 +1,31 @@
+{
+ "id": "li_barco",
+ "speaker": "lia",
+ "emotion": "tender",
+ "text": "O barco do mestre Elias. Puxa um pouco para a esquerda, mesmo. Deve ser saudade.",
+ "dur": 5.15,
+ "cps": 15.5,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "O barco do mestre Elias puxa um pouco para a esquerda mesmo. Deve ser saudade.",
+ "attempt": 0,
+ "gen_s": 40.6,
+ "rtf": 7.88,
+ "max_pause": 0.35,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.45,
+  "cfg_weight": 0.35,
+  "temperature": 0.7
+ },
+ "seed": 1663472731,
+ "lufs_in": -21.1,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 20.9,
+  "flow": 18.0,
+  "hift": 1.5
+ },
+ "tokens": 150,
+ "final_problems": []
+}

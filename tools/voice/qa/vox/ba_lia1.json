@@ -1,0 +1,31 @@
+{
+ "id": "ba_lia1",
+ "speaker": "bastiao",
+ "emotion": "neutral",
+ "text": "Cartógrafa. ... Seu pai também?",
+ "dur": 2.28,
+ "cps": 13.6,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Cartógrafa. Seu pai também?",
+ "attempt": 0,
+ "gen_s": 41.3,
+ "rtf": 18.1,
+ "max_pause": 0.52,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.45,
+  "cfg_weight": 0.5,
+  "temperature": 0.75
+ },
+ "seed": 1083305228,
+ "lufs_in": -23.0,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 15.1,
+  "flow": 24.8,
+  "hift": 1.2
+ },
+ "tokens": 113,
+ "final_problems": []
+}

@@ -1,0 +1,31 @@
+{
+ "id": "jo_c2",
+ "speaker": "joca",
+ "emotion": "tender",
+ "text": "Aprendi tudo com o mestre Elias. Ele conversava com os barcos. Eu achava doideira. Hoje eu converso também.",
+ "dur": 7.76,
+ "cps": 13.8,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Aprendi tudo com o mestre Elias. Ele conversava com os barcos. Eu achava doideira. Hoje eu converso também.",
+ "attempt": 0,
+ "gen_s": 52.3,
+ "rtf": 6.74,
+ "max_pause": 0.5,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.5,
+  "cfg_weight": 0.4,
+  "temperature": 0.75
+ },
+ "seed": 1015072547,
+ "lufs_in": -20.7,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 29.6,
+  "flow": 20.5,
+  "hift": 1.9
+ },
+ "tokens": 206,
+ "final_problems": []
+}

@@ -1,0 +1,31 @@
+{
+ "id": "li_pulos_zero",
+ "speaker": "lia",
+ "emotion": "happy",
+ "text": "Afundou com estilo. O Tomé ia gostar.",
+ "dur": 2.61,
+ "cps": 14.2,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Afundou com estilo. O Tomé ia gostar.",
+ "attempt": 0,
+ "gen_s": 26.0,
+ "rtf": 9.94,
+ "max_pause": 0.41,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.65,
+  "cfg_weight": 0.4,
+  "temperature": 0.8
+ },
+ "seed": 1246976920,
+ "lufs_in": -19.4,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 9.8,
+  "flow": 15.1,
+  "hift": 0.8
+ },
+ "tokens": 70,
+ "final_problems": []
+}

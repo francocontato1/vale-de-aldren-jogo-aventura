@@ -1,0 +1,31 @@
+{
+ "id": "li_barco0",
+ "speaker": "lia",
+ "emotion": "neutral",
+ "text": "Um barco bonito, bem cuidado. Melhor perguntar de quem é antes de sair com ele.",
+ "dur": 5.34,
+ "cps": 14.8,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Um barco bonito, bem cuidado. Melhor perguntar de quem é antes de sair com ele.",
+ "attempt": 0,
+ "gen_s": 43.2,
+ "rtf": 8.09,
+ "max_pause": 0.29,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.5,
+  "cfg_weight": 0.45,
+  "temperature": 0.75
+ },
+ "seed": 3712421627,
+ "lufs_in": -21.3,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 21.9,
+  "flow": 19.5,
+  "hift": 1.7
+ },
+ "tokens": 159,
+ "final_problems": []
+}

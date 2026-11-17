@@ -1,0 +1,31 @@
+{
+ "id": "li_sentar4",
+ "speaker": "lia",
+ "emotion": "tender",
+ "text": "Meu pai nunca sentava em lugar nenhum. Dizia que mapa não se faz sentado. Acho que ele estava um pouco errado.",
+ "dur": 6.04,
+ "cps": 18.2,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Meu pai nunca sentava em lugar nenhum, dizia que mapa não se faz sentado. Acho que ele estava um pouco errado.",
+ "attempt": 0,
+ "gen_s": 45.8,
+ "rtf": 7.58,
+ "max_pause": 0.3,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.45,
+  "cfg_weight": 0.35,
+  "temperature": 0.7
+ },
+ "seed": 2328344337,
+ "lufs_in": -21.2,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 24.1,
+  "flow": 20.1,
+  "hift": 1.4
+ },
+ "tokens": 166,
+ "final_problems": []
+}

@@ -1,0 +1,31 @@
+{
+ "id": "escada7",
+ "speaker": "eco_m",
+ "emotion": "sad",
+ "text": "Vem com a gente amanhã. Eu carrego as suas coisas. Eu carrego você, se precisar.",
+ "dur": 4.47,
+ "cps": 17.9,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Vem com a gente amanhã. Eu carrego as suas coisas. Eu carrego você se precisar.",
+ "attempt": 0,
+ "gen_s": 38.9,
+ "rtf": 8.7,
+ "max_pause": 0.46,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.45,
+  "cfg_weight": 0.4,
+  "temperature": 0.75
+ },
+ "seed": 828662498,
+ "lufs_in": -24.2,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 18.9,
+  "flow": 18.9,
+  "hift": 0.9
+ },
+ "tokens": 127,
+ "final_problems": []
+}

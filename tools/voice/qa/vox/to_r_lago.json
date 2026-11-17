@@ -1,0 +1,31 @@
+{
+ "id": "to_r_lago",
+ "speaker": "tome",
+ "emotion": "excited",
+ "text": "Você viu os Veladores jogando pedra no lago? Me ensina! Eu só consigo fazer a pedra afundar. Com estilo, mas afundar.",
+ "dur": 8.54,
+ "cps": 13.7,
+ "cer": 0.009,
+ "wer": 0.048,
+ "asr": "Você viu os veladores jogando pedra no lago? Me ensina, eu só consigo fazer a pedra afundar com estilo mais afundar.",
+ "attempt": 0,
+ "gen_s": 47.0,
+ "rtf": 5.5,
+ "max_pause": 0.23,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.95,
+  "cfg_weight": 0.45,
+  "temperature": 0.85
+ },
+ "seed": 3166476191,
+ "lufs_in": -24.4,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 28.5,
+  "flow": 16.6,
+  "hift": 1.5
+ },
+ "tokens": 215,
+ "final_problems": []
+}

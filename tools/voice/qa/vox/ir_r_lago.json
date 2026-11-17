@@ -1,0 +1,31 @@
+{
+ "id": "ir_r_lago",
+ "speaker": "irene",
+ "emotion": "tender",
+ "text": "Você viu alguma coisa no lago, não viu? Dá pra ver na sua cara. Eu pinto ali faz três anos e nunca vi nada. Acho que eu... falo demais com a tela. Ou de menos. Não sei.",
+ "dur": 11.5,
+ "cps": 14.6,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Você viu alguma coisa no lago? Não viu? Dá pra ver na sua cara. Eu pinto ali faz três anos e nunca vi nada. Acho que eu. Falo demais com a tela. Ou de menos. Não sei.",
+ "attempt": 0,
+ "gen_s": 90.2,
+ "rtf": 7.84,
+ "max_pause": 0.52,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.4,
+  "cfg_weight": 0.3,
+  "temperature": 0.7
+ },
+ "seed": 3139800694,
+ "lufs_in": -21.6,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 47.5,
+  "flow": 39.3,
+  "hift": 2.9
+ },
+ "tokens": 347,
+ "final_problems": []
+}

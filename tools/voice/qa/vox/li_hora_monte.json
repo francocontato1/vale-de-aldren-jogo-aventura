@@ -1,0 +1,31 @@
+{
+ "id": "li_hora_monte",
+ "speaker": "lia",
+ "emotion": "neutral",
+ "text": "Daqui de cima, a vista é de manhã. Vou esperar o dia nascer.",
+ "dur": 4.24,
+ "cps": 14.2,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Daqui de cima, a vista é de manhã. Vou esperar o dia nascer.",
+ "attempt": 0,
+ "gen_s": 37.5,
+ "rtf": 8.84,
+ "max_pause": 0.35,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.5,
+  "cfg_weight": 0.45,
+  "temperature": 0.75
+ },
+ "seed": 2845225288,
+ "lufs_in": -20.5,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 17.7,
+  "flow": 18.2,
+  "hift": 1.4
+ },
+ "tokens": 125,
+ "final_problems": []
+}

@@ -1,0 +1,31 @@
+{
+ "id": "lago9",
+ "speaker": "ilsa_m",
+ "emotion": "happy",
+ "text": "Já vou! ... Me dá uma pedra. Não, essa não. Aquela ali, a furada.",
+ "dur": 6.52,
+ "cps": 10.0,
+ "cer": 0.018,
+ "wer": 0.154,
+ "asr": "Já vou? Me dá uma pedra? Não, essa não. Aquela ali, afurada.",
+ "attempt": 0,
+ "gen_s": 48.6,
+ "rtf": 7.46,
+ "max_pause": 0.47,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.75,
+  "cfg_weight": 0.45,
+  "temperature": 0.85
+ },
+ "seed": 2662323888,
+ "lufs_in": -23.5,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 26.5,
+  "flow": 19.8,
+  "hift": 2.0
+ },
+ "tokens": 164,
+ "final_problems": []
+}

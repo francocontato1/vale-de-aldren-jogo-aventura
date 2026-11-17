@@ -1,0 +1,31 @@
+{
+ "id": "li_farol",
+ "speaker": "lia",
+ "emotion": "tender",
+ "text": "O farol do Seu Davi. Quarenta e dois anos acendendo uma luz para ninguém. Ou para todo mundo, depende de como se olha.",
+ "dur": 7.61,
+ "cps": 15.5,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "O farol do seu Davi, 42 anos acendendo uma luz para ninguém, ou para todo mundo depende de como se olha.",
+ "attempt": 0,
+ "gen_s": 49.4,
+ "rtf": 6.49,
+ "max_pause": 0.38,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.45,
+  "cfg_weight": 0.35,
+  "temperature": 0.7
+ },
+ "seed": 2279660797,
+ "lufs_in": -20.1,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 27.0,
+  "flow": 20.6,
+  "hift": 1.6
+ },
+ "tokens": 193,
+ "final_problems": []
+}

@@ -1,0 +1,31 @@
+{
+ "id": "an_lia2",
+ "speaker": "anselmo",
+ "emotion": "tender",
+ "text": "Hum. Estrada é coisa boa. Mas tem gente que conhece todas e não acha a de casa. ... Não falo do seu pai, não. Falo de mim, quando era moço.",
+ "dur": 12.55,
+ "cps": 11.1,
+ "cer": 0.016,
+ "wer": 0.069,
+ "asr": "Um mestrada é coisa boa, mas tem gente que conhece todas e não acha a de casa. Não falo do seu pai, não. Falo de mim, quando era moço.",
+ "attempt": 0,
+ "gen_s": 82.6,
+ "rtf": 6.58,
+ "max_pause": 0.51,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.4,
+  "cfg_weight": 0.2,
+  "temperature": 0.65
+ },
+ "seed": 3958613134,
+ "lufs_in": -23.4,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 42.1,
+  "flow": 37.1,
+  "hift": 3.0
+ },
+ "tokens": 321,
+ "final_problems": []
+}

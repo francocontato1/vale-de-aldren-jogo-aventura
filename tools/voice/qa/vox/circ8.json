@@ -1,0 +1,31 @@
+{
+ "id": "circ8",
+ "speaker": "sela_m",
+ "emotion": "excited",
+ "text": "Subiu! A luzinha subiu!",
+ "dur": 2.16,
+ "cps": 10.6,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Subiu? A luzinha subiu.",
+ "attempt": 0,
+ "gen_s": 23.5,
+ "rtf": 10.87,
+ "max_pause": 0.15,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.95,
+  "cfg_weight": 0.45,
+  "temperature": 0.85
+ },
+ "seed": 3325830263,
+ "lufs_in": -27.1,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 12.7,
+  "flow": 9.6,
+  "hift": 0.9
+ },
+ "tokens": 92,
+ "final_problems": []
+}

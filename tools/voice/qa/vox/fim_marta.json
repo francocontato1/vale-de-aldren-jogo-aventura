@@ -1,0 +1,31 @@
+{
+ "id": "fim_marta",
+ "speaker": "marta",
+ "emotion": "excited",
+ "text": "Fechei a taberna cedo, olha só. A primeira vez em trinta anos! O Tião quase chorou. Ele ia pedir a sopa.",
+ "dur": 7.03,
+ "cps": 14.8,
+ "cer": 0.03,
+ "wer": 0.095,
+ "asr": "Fechei a taberna cedo, olha só, a primeira vez em 30 anos, o tia um quase chorou, ele ia pedir a sopa.",
+ "attempt": 0,
+ "gen_s": 46.2,
+ "rtf": 6.57,
+ "max_pause": 0.7,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.95,
+  "cfg_weight": 0.5,
+  "temperature": 0.85
+ },
+ "seed": 3844468350,
+ "lufs_in": -20.1,
+ "tp_limited": false,
+ "stage_s": {
+  "t3": 26.4,
+  "flow": 16.9,
+  "hift": 1.9
+ },
+ "tokens": 190,
+ "final_problems": []
+}

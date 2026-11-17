@@ -1,0 +1,31 @@
+{
+ "id": "li_colmeia",
+ "speaker": "lia",
+ "emotion": "happy",
+ "text": "Uma colmeia num toco velho. As abelhas nem ligam para mim. Estão ocupadas demais sendo abelhas.",
+ "dur": 6.73,
+ "cps": 14.1,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Uma colmeia num toco velho. As abelhas nem ligam para mim. Estão ocupadas demais sendo abelhas.",
+ "attempt": 0,
+ "gen_s": 45.5,
+ "rtf": 6.77,
+ "max_pause": 0.45,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.65,
+  "cfg_weight": 0.4,
+  "temperature": 0.8
+ },
+ "seed": 799792577,
+ "lufs_in": -20.3,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 24.3,
+  "flow": 19.8,
+  "hift": 1.2
+ },
+ "tokens": 177,
+ "final_problems": []
+}

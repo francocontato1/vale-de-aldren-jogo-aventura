@@ -1,0 +1,31 @@
+{
+ "id": "li_poco2",
+ "speaker": "lia",
+ "emotion": "tender",
+ "text": "O poço onde a Ilsa tropeçou e riu pela primeira vez. A borda ainda está gasta deste lado.",
+ "dur": 6.69,
+ "cps": 13.3,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "O poço, onde a Ilsa tropeçou e riu pela primeira vez. A borda ainda está gasta deste lado.",
+ "attempt": 0,
+ "gen_s": 51.3,
+ "rtf": 7.67,
+ "max_pause": 0.41,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.45,
+  "cfg_weight": 0.35,
+  "temperature": 0.7
+ },
+ "seed": 3142638377,
+ "lufs_in": -20.8,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 27.9,
+  "flow": 21.6,
+  "hift": 1.6
+ },
+ "tokens": 187,
+ "final_problems": []
+}

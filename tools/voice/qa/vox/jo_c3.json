@@ -1,0 +1,31 @@
+{
+ "id": "jo_c3",
+ "speaker": "joca",
+ "emotion": "neutral",
+ "text": "Vento pelo lado é o melhor. Vento de frente, nem tente: o barco para e a vela fica batendo. Aí é virar um pouco e ir em zigue-zague.",
+ "dur": 9.79,
+ "cps": 13.5,
+ "cer": 0.039,
+ "wer": 0.069,
+ "asr": "Vento pelo lado é o melhor. Vento de frente, nem tente. O barco para e a vela fica batendo. Aí é virar um pouco e ir em zigzag.",
+ "attempt": 0,
+ "gen_s": 60.2,
+ "rtf": 6.15,
+ "max_pause": 0.36,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.55,
+  "cfg_weight": 0.5,
+  "temperature": 0.8
+ },
+ "seed": 3624942202,
+ "lufs_in": -21.3,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 36.1,
+  "flow": 21.8,
+  "hift": 2.0
+ },
+ "tokens": 257,
+ "final_problems": []
+}

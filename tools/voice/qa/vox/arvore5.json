@@ -1,0 +1,31 @@
+{
+ "id": "arvore5",
+ "speaker": "eco_m",
+ "emotion": "surprised",
+ "text": "A pedra furada? Você ainda tem aquilo?",
+ "dur": 2.6,
+ "cps": 14.6,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "A Pedra Furada? Você ainda tem aquilo?",
+ "attempt": 0,
+ "gen_s": 27.7,
+ "rtf": 10.66,
+ "max_pause": 0.42,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.7,
+  "cfg_weight": 0.5,
+  "temperature": 0.85
+ },
+ "seed": 2594699887,
+ "lufs_in": -24.2,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 11.4,
+  "flow": 15.5,
+  "hift": 0.7
+ },
+ "tokens": 80,
+ "final_problems": []
+}

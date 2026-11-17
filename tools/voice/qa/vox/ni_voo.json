@@ -1,0 +1,35 @@
+{
+ "id": "ni_voo",
+ "speaker": "nina",
+ "emotion": "excited",
+ "text": "Você voou nela? De verdade? Ela é quente ou gelada? Você ficou com medo? Por que não me levou junto? Da próxima vez você pergunta pra ela se eu posso? Promete?",
+ "dur": 9.216,
+ "cps": 17.3,
+ "cer": 0.0,
+ "wer": 0.871,
+ "asr": "Você voou nela? De verdade? Ela é quente ou gelada? Você ficou com medo? Por que não me levou junto? Da próxima vez você pergunta pra ela se eu posso? Promete!",
+ "attempt": 3,
+ "gen_s": 167.1,
+ "rtf": 5.89,
+ "max_pause": 0.45,
+ "problems": [
+  "cer=0.82",
+  "cps=5.6"
+ ],
+ "params": {
+  "exaggeration": 0.95,
+  "cfg_weight": 0.6,
+  "temperature": 0.64
+ },
+ "seed": 3620038179,
+ "lufs_in": -20.2,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 111.6,
+  "flow": 46.9,
+  "hift": 7.5
+ },
+ "tokens": 767,
+ "final_problems": [],
+ "note": "take trimmed at 9.15s: model rambled after the last word"
+}

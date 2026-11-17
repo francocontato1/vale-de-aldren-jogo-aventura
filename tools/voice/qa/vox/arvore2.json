@@ -1,31 +1,31 @@
 {
  "id": "arvore2",
  "speaker": "eco_f",
- "emotion": "happy",
- "text": "Não se conta. Senão não vale.",
- "dur": 3.1,
- "cps": 9.4,
- "cer": 0.037,
+ "emotion": "neutral",
+ "text": "Vira pra lá.",
+ "dur": 0.8,
+ "cps": 15.0,
+ "cer": 0.091,
  "wer": 0.333,
- "asr": "Não se conta. Se não, não vale.",
- "attempt": 1,
- "gen_s": 22.3,
- "rtf": 7.18,
- "max_pause": 0.48,
+ "asr": "Vira para lá!",
+ "attempt": 0,
+ "gen_s": 21.5,
+ "rtf": 26.89,
+ "max_pause": 0.05,
  "problems": [],
  "params": {
-  "exaggeration": 0.65,
+  "exaggeration": 0.5,
   "cfg_weight": 0.5,
-  "temperature": 0.78
+  "temperature": 0.8
  },
- "seed": 1278916907,
- "lufs_in": -22.6,
+ "seed": 3364106352,
+ "lufs_in": -22.2,
  "tp_limited": true,
  "stage_s": {
-  "t3": 9.9,
-  "flow": 11.6,
-  "hift": 0.7
+  "t3": 7.3,
+  "flow": 12.5,
+  "hift": 0.5
  },
- "tokens": 80,
+ "tokens": 51,
  "final_problems": []
 }

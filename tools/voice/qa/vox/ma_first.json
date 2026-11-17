@@ -1,0 +1,31 @@
+{
+ "id": "ma_first",
+ "speaker": "marta",
+ "emotion": "excited",
+ "text": "Olha só, gente nova na Maré! Senta, senta, não repara a bagunça, o Joca deixa serragem até no meu pão. Você é a moça do mapa? A Odessa mandou avisar que você vinha. Quer dizer, mandou avisar há três anos. Mas veio, né? Tá com fome? Claro que tá.",
+ "dur": 15.71,
+ "cps": 15.6,
+ "cer": 0.022,
+ "wer": 0.061,
+ "asr": "Olha só, gente nova na maré, senta, senta, não repare a bagunça. O joca deixa a serragem até no meu pão. Você é moça do mapa. A Odessa mandou avisar que você vinha. Quer dizer, mandou avisar há 3 anos. Mas veio, né? Tá com fome? Claro que tá.",
+ "attempt": 2,
+ "gen_s": 95.2,
+ "rtf": 6.06,
+ "max_pause": 0.76,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.95,
+  "cfg_weight": 0.6,
+  "temperature": 0.71
+ },
+ "seed": 3244682749,
+ "lufs_in": -21.0,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 54.3,
+  "flow": 36.4,
+  "hift": 4.0
+ },
+ "tokens": 396,
+ "final_problems": []
+}

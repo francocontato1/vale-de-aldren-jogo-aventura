@@ -2,30 +2,30 @@
  "id": "arvore1",
  "speaker": "eco_m",
  "emotion": "happy",
- "text": "O que você pediu?",
- "dur": 0.93,
- "cps": 18.3,
+ "text": "Pronto. Amarrei a minha. Agora você.",
+ "dur": 2.68,
+ "cps": 13.4,
  "cer": 0.0,
  "wer": 0.0,
- "asr": "O que você pediu?",
- "attempt": 1,
- "gen_s": 16.0,
- "rtf": 17.17,
- "max_pause": 0.04,
+ "asr": "Pronto! Amarrei a minha, agora você!",
+ "attempt": 0,
+ "gen_s": 29.6,
+ "rtf": 11.03,
+ "max_pause": 0.42,
  "problems": [],
  "params": {
   "exaggeration": 0.65,
-  "cfg_weight": 0.5,
-  "temperature": 0.78
+  "cfg_weight": 0.45,
+  "temperature": 0.85
  },
- "seed": 2163767596,
- "lufs_in": -26.8,
- "tp_limited": false,
+ "seed": 1384488269,
+ "lufs_in": -22.7,
+ "tp_limited": true,
  "stage_s": {
-  "t3": 4.8,
-  "flow": 10.7,
-  "hift": 0.5
+  "t3": 11.9,
+  "flow": 15.6,
+  "hift": 0.8
  },
- "tokens": 38,
+ "tokens": 82,
  "final_problems": []
 }

@@ -1,0 +1,31 @@
+{
+ "id": "ni_first",
+ "speaker": "nina",
+ "emotion": "excited",
+ "text": "Oi! Você veio das montanhas? Lá tem dragão? É verdade que lá em cima neva? Neve tem gosto de quê?",
+ "dur": 5.71,
+ "cps": 17.0,
+ "cer": 0.022,
+ "wer": 0.05,
+ "asr": "Oi, você vê das montanhas? Lá tem dragão? É verdade que lá em cima neva? Neve tem gosto de quê?",
+ "attempt": 0,
+ "gen_s": 35.8,
+ "rtf": 6.27,
+ "max_pause": 0.27,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.95,
+  "cfg_weight": 0.45,
+  "temperature": 0.85
+ },
+ "seed": 621883176,
+ "lufs_in": -23.7,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 21.2,
+  "flow": 12.1,
+  "hift": 1.5
+ },
+ "tokens": 152,
+ "final_problems": []
+}

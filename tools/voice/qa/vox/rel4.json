@@ -1,0 +1,31 @@
+{
+ "id": "rel4",
+ "speaker": "eco_m",
+ "emotion": "happy",
+ "text": "... É. É exatamente isso.",
+ "dur": 1.92,
+ "cps": 13.0,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "É, é exatamente isso.",
+ "attempt": 0,
+ "gen_s": 24.2,
+ "rtf": 12.6,
+ "max_pause": 0.21,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.65,
+  "cfg_weight": 0.45,
+  "temperature": 0.85
+ },
+ "seed": 3433268135,
+ "lufs_in": -23.4,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 8.9,
+  "flow": 14.5,
+  "hift": 0.6
+ },
+ "tokens": 63,
+ "final_problems": []
+}

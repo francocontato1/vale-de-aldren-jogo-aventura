@@ -1,0 +1,31 @@
+{
+ "id": "ni_lia1",
+ "speaker": "nina",
+ "emotion": "neutral",
+ "text": "Você tem mãe? Ela sabe que você tá aqui?",
+ "dur": 2.58,
+ "cps": 15.5,
+ "cer": 0.053,
+ "wer": 0.111,
+ "asr": "Você tem mãe? Ela sabe que você está aqui?",
+ "attempt": 0,
+ "gen_s": 18.0,
+ "rtf": 6.98,
+ "max_pause": 0.45,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.65,
+  "cfg_weight": 0.5,
+  "temperature": 0.8
+ },
+ "seed": 2911892578,
+ "lufs_in": -24.8,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 9.7,
+  "flow": 7.1,
+  "hift": 0.9
+ },
+ "tokens": 88,
+ "final_problems": []
+}

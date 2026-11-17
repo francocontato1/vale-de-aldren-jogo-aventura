@@ -1,0 +1,31 @@
+{
+ "id": "li_fita_minha",
+ "speaker": "lia",
+ "emotion": "happy",
+ "text": "Amarrei a minha no galho de baixo, perto da pedra furada. Não vou contar o que eu pedi. Senão não vale.",
+ "dur": 6.29,
+ "cps": 16.4,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Amarrei a minha no galho de baixo. Perto da pedra furada. Não vou contar o que eu pedi, senão não vale.",
+ "attempt": 0,
+ "gen_s": 46.0,
+ "rtf": 7.31,
+ "max_pause": 0.44,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.65,
+  "cfg_weight": 0.4,
+  "temperature": 0.8
+ },
+ "seed": 3717645237,
+ "lufs_in": -20.7,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 25.1,
+  "flow": 19.5,
+  "hift": 1.1
+ },
+ "tokens": 173,
+ "final_problems": []
+}

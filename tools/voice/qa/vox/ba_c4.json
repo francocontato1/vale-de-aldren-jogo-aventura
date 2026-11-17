@@ -1,0 +1,31 @@
+{
+ "id": "ba_c4",
+ "speaker": "bastiao",
+ "emotion": "neutral",
+ "text": "Cimbre montado. Falta pedra, tempo e coragem. Pedra tem.",
+ "dur": 4.16,
+ "cps": 13.5,
+ "cer": 0.019,
+ "wer": 0.111,
+ "asr": "Simbre montado, falta pedra, tempo e coragem. Pedra tem.",
+ "attempt": 0,
+ "gen_s": 33.2,
+ "rtf": 7.99,
+ "max_pause": 0.37,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.45,
+  "cfg_weight": 0.5,
+  "temperature": 0.75
+ },
+ "seed": 3772983166,
+ "lufs_in": -23.6,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 15.6,
+  "flow": 16.3,
+  "hift": 1.1
+ },
+ "tokens": 109,
+ "final_problems": []
+}

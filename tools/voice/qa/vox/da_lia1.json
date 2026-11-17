@@ -1,0 +1,31 @@
+{
+ "id": "da_lia1",
+ "speaker": "davi",
+ "emotion": "neutral",
+ "text": "Você escreve cartas, cartógrafa?",
+ "dur": 2.26,
+ "cps": 14.2,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Você escreve cartas, cartógrafa.",
+ "attempt": 0,
+ "gen_s": 20.0,
+ "rtf": 8.86,
+ "max_pause": 0.13,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.45,
+  "cfg_weight": 0.35,
+  "temperature": 0.7
+ },
+ "seed": 654519159,
+ "lufs_in": -25.5,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 7.6,
+  "flow": 11.4,
+  "hift": 0.7
+ },
+ "tokens": 71,
+ "final_problems": []
+}

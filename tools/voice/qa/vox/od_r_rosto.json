@@ -1,0 +1,31 @@
+{
+ "id": "od_r_rosto",
+ "speaker": "odessa",
+ "emotion": "sad",
+ "text": "Ele voltou, sim. Velho, sozinho, com um cinzel e um saco de pão duro. Esculpiu o rosto dela e disse que ia até o lago jogar uma pedra. ... Eu esquentei o jantar duas vezes.",
+ "dur": 14.35,
+ "cps": 12.0,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Ele voltou, sim, velho, sozinho, com um cinzel e um saco de pão duro. Esculpiu o rosto dela e disse que ia até o lago jogar uma pedra. Eu esquentei o jantar duas vezes.",
+ "attempt": 0,
+ "gen_s": 97.0,
+ "rtf": 6.76,
+ "max_pause": 0.51,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.35,
+  "cfg_weight": 0.2,
+  "temperature": 0.65
+ },
+ "seed": 698517200,
+ "lufs_in": -21.2,
+ "tp_limited": false,
+ "stage_s": {
+  "t3": 52.1,
+  "flow": 41.5,
+  "hift": 3.2
+ },
+ "tokens": 353,
+ "final_problems": []
+}

@@ -1,31 +1,31 @@
 {
  "id": "lago1",
- "speaker": "eco_m",
+ "speaker": "teo_m",
  "emotion": "excited",
- "text": "Sete pulos! Você viu? Sete!",
- "dur": 2.32,
- "cps": 11.6,
+ "text": "Ilsa! Olha essa. Essa vai longe.",
+ "dur": 3.17,
+ "cps": 10.1,
  "cer": 0.0,
  "wer": 0.0,
- "asr": "7 pulos. Você viu? 7.",
+ "asr": "Ilsa! Olha essa! Essa vai longe!",
  "attempt": 0,
- "gen_s": 21.2,
- "rtf": 9.13,
- "max_pause": 0.28,
+ "gen_s": 25.9,
+ "rtf": 8.18,
+ "max_pause": 0.36,
  "problems": [],
  "params": {
-  "exaggeration": 0.8,
+  "exaggeration": 0.95,
   "cfg_weight": 0.45,
   "temperature": 0.85
  },
  "seed": 3372508056,
- "lufs_in": -25.0,
+ "lufs_in": -22.2,
  "tp_limited": true,
  "stage_s": {
-  "t3": 8.0,
-  "flow": 11.7,
-  "hift": 0.6
+  "t3": 13.0,
+  "flow": 10.3,
+  "hift": 1.0
  },
- "tokens": 59,
+ "tokens": 89,
  "final_problems": []
 }

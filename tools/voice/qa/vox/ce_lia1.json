@@ -1,0 +1,31 @@
+{
+ "id": "ce_lia1",
+ "speaker": "celeste",
+ "emotion": "neutral",
+ "text": "Você tá comendo direito, menina? E a sua mãe, sabe que você tá aqui no fim do mundo?",
+ "dur": 4.77,
+ "cps": 17.6,
+ "cer": 0.05,
+ "wer": 0.111,
+ "asr": "Você está comendo direito menina e a sua mãe sabe que você está aqui no fim do mundo?",
+ "attempt": 0,
+ "gen_s": 37.2,
+ "rtf": 7.8,
+ "max_pause": 0.32,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.6,
+  "cfg_weight": 0.5,
+  "temperature": 0.8
+ },
+ "seed": 3289977337,
+ "lufs_in": -20.1,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 19.9,
+  "flow": 15.9,
+  "hift": 1.3
+ },
+ "tokens": 141,
+ "final_problems": []
+}

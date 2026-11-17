@@ -2,16 +2,16 @@
  "id": "fim3",
  "speaker": "lia",
  "emotion": "tender",
- "text": "Você acha que eles ainda existem? Em algum lugar?",
- "dur": 3.24,
- "cps": 15.1,
+ "text": "Você ficou esperando eles esse tempo todo?",
+ "dur": 2.63,
+ "cps": 16.0,
  "cer": 0.0,
  "wer": 0.0,
- "asr": "Você acha que eles ainda existem em algum lugar?",
+ "asr": "Você ficou esperando eles esse tempo todo.",
  "attempt": 0,
- "gen_s": 23.8,
- "rtf": 7.34,
- "max_pause": 0.35,
+ "gen_s": 27.9,
+ "rtf": 10.61,
+ "max_pause": 0.1,
  "problems": [],
  "params": {
   "exaggeration": 0.45,
@@ -19,13 +19,13 @@
   "temperature": 0.7
  },
  "seed": 2303635598,
- "lufs_in": -20.6,
- "tp_limited": true,
+ "lufs_in": -21.5,
+ "tp_limited": false,
  "stage_s": {
-  "t3": 10.2,
-  "flow": 12.8,
-  "hift": 0.7
+  "t3": 10.8,
+  "flow": 14.4,
+  "hift": 0.9
  },
- "tokens": 84,
+ "tokens": 79,
  "final_problems": []
 }

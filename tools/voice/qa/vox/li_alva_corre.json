@@ -1,0 +1,31 @@
+{
+ "id": "li_alva_corre",
+ "speaker": "lia",
+ "emotion": "surprised",
+ "text": "Ela levantou a cabeça. Acho que eu cheguei rápido demais. Devagar, Lia.",
+ "dur": 4.54,
+ "cps": 15.6,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Ela levantou a cabeça. Acho que eu cheguei rápido demais. Devagar, lia.",
+ "attempt": 0,
+ "gen_s": 38.3,
+ "rtf": 8.43,
+ "max_pause": 0.35,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.7,
+  "cfg_weight": 0.45,
+  "temperature": 0.8
+ },
+ "seed": 2762177139,
+ "lufs_in": -20.9,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 18.1,
+  "flow": 18.8,
+  "hift": 1.2
+ },
+ "tokens": 130,
+ "final_problems": []
+}

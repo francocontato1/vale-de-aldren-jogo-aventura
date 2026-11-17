@@ -1,0 +1,35 @@
+{
+ "id": "li_ni1",
+ "speaker": "lia",
+ "emotion": "neutral",
+ "text": "Sabe... mais ou menos.",
+ "dur": 3.89,
+ "cps": 5.7,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Sabe, mais ou menos.",
+ "attempt": 0,
+ "gen_s": 34.4,
+ "rtf": 8.84,
+ "max_pause": 0.49,
+ "problems": [
+  "cps=5.7"
+ ],
+ "params": {
+  "exaggeration": 0.5,
+  "cfg_weight": 0.45,
+  "temperature": 0.75
+ },
+ "seed": 1208707195,
+ "lufs_in": -19.8,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 15.8,
+  "flow": 17.6,
+  "hift": 0.8
+ },
+ "tokens": 116,
+ "final_problems": [
+  "cps=5.7"
+ ]
+}

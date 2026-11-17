@@ -1,31 +1,31 @@
 {
  "id": "lago4",
- "speaker": "eco_f",
- "emotion": "tender",
- "text": "Joga outra. Eu quero ver ela voar de novo.",
- "dur": 4.86,
- "cps": 8.6,
- "cer": 0.0,
- "wer": 0.0,
- "asr": "Joga outra. Eu quero ver ela voar de novo.",
+ "speaker": "ilsa_m",
+ "emotion": "excited",
+ "text": "Um... dois... três, quatro, cinco... seis... sete! Sete, Teo!",
+ "dur": 4.79,
+ "cps": 12.7,
+ "cer": 0.091,
+ "wer": 0.222,
+ "asr": "2, 3, 4, 5, 6, 7, 7, teu!",
  "attempt": 0,
- "gen_s": 31.9,
- "rtf": 6.57,
- "max_pause": 0.47,
+ "gen_s": 47.7,
+ "rtf": 9.96,
+ "max_pause": 0.51,
  "problems": [],
  "params": {
-  "exaggeration": 0.45,
-  "cfg_weight": 0.4,
-  "temperature": 0.75
+  "exaggeration": 0.9,
+  "cfg_weight": 0.45,
+  "temperature": 0.85
  },
  "seed": 90150845,
- "lufs_in": -19.4,
+ "lufs_in": -25.7,
  "tp_limited": true,
  "stage_s": {
-  "t3": 15.9,
-  "flow": 14.8,
-  "hift": 1.1
+  "t3": 20.3,
+  "flow": 25.5,
+  "hift": 1.6
  },
- "tokens": 129,
+ "tokens": 141,
  "final_problems": []
 }

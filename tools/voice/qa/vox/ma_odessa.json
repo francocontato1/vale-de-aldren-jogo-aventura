@@ -1,0 +1,31 @@
+{
+ "id": "ma_odessa",
+ "speaker": "marta",
+ "emotion": "happy",
+ "text": "Todo mundo conhece. Ela desce aqui uma vez por década, compra sal e pergunta se o mar continua no mesmo lugar. Continua, eu digo. Ela sempre parece aliviada.",
+ "dur": 9.01,
+ "cps": 17.4,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Todo mundo conhece. Ela desce aqui uma vez por década, compra sal e pergunta se o mar continua no mesmo lugar. Continua, eu digo, ela sempre parece aliviada.",
+ "attempt": 0,
+ "gen_s": 56.0,
+ "rtf": 6.22,
+ "max_pause": 0.5,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.8,
+  "cfg_weight": 0.5,
+  "temperature": 0.85
+ },
+ "seed": 2241898675,
+ "lufs_in": -21.0,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 33.2,
+  "flow": 20.5,
+  "hift": 2.1
+ },
+ "tokens": 246,
+ "final_problems": []
+}

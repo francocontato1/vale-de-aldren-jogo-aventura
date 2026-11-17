@@ -1,0 +1,31 @@
+{
+ "id": "an_c5",
+ "speaker": "anselmo",
+ "emotion": "tender",
+ "text": "Quando eu era moço, desci até o mar com as ovelhas. Elas olharam a água um tempão e voltaram. Ovelha é bicho sábio.",
+ "dur": 9.15,
+ "cps": 12.6,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Quando eu era moço, desci até o mar com as ovelhas. Elas olharam a água um tempão e voltaram. Ovelha é bicho sábio.",
+ "attempt": 0,
+ "gen_s": 63.7,
+ "rtf": 6.96,
+ "max_pause": 0.63,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.4,
+  "cfg_weight": 0.2,
+  "temperature": 0.65
+ },
+ "seed": 4063282915,
+ "lufs_in": -22.4,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 36.0,
+  "flow": 24.8,
+  "hift": 2.5
+ },
+ "tokens": 252,
+ "final_problems": []
+}

@@ -1,31 +1,31 @@
 {
  "id": "an_c3",
  "speaker": "anselmo",
- "emotion": "tender",
- "text": "Na minha idade a gente para de perguntar para onde as coisas vão. Começa a perguntar onde elas estão agora.",
- "dur": 7.42,
- "cps": 14.4,
- "cer": 0.0,
- "wer": 0.0,
- "asr": "Na minha idade, a gente para de perguntar para onde as coisas vão. Começa a perguntar onde elas estão agora.",
+ "emotion": "happy",
+ "text": "Meu avô tinha uma cabra chamada Duquesa. Ou era a minha avó que chamava Duquesa? ... Enfim. A cabra subia no gigante do lago todo verão. Ninguém nunca descobriu como ela descia.",
+ "dur": 13.9,
+ "cps": 12.7,
+ "cer": 0.024,
+ "wer": 0.097,
+ "asr": "Meu avô tinha uma cabra chamada doquesa, ou era minha avó que chamava doquesa. Enfim, a cabra subia no gigante do lago todo verão. Ninguém nunca descobriu como ela descia.",
  "attempt": 0,
- "gen_s": 43.4,
- "rtf": 5.85,
- "max_pause": 0.54,
+ "gen_s": 96.6,
+ "rtf": 6.95,
+ "max_pause": 0.52,
  "problems": [],
  "params": {
-  "exaggeration": 0.4,
-  "cfg_weight": 0.2,
-  "temperature": 0.65
+  "exaggeration": 0.6,
+  "cfg_weight": 0.25,
+  "temperature": 0.75
  },
  "seed": 868089021,
  "lufs_in": -22.5,
  "tp_limited": true,
  "stage_s": {
-  "t3": 25.6,
-  "flow": 15.9,
-  "hift": 1.8
+  "t3": 52.2,
+  "flow": 39.7,
+  "hift": 3.3
  },
- "tokens": 201,
+ "tokens": 385,
  "final_problems": []
 }

@@ -1,0 +1,35 @@
+{
+ "id": "rel9",
+ "speaker": "dessa",
+ "emotion": "neutral",
+ "text": "Até quando?",
+ "dur": 2.14,
+ "cps": 5.1,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Até quando!",
+ "attempt": 0,
+ "gen_s": 22.3,
+ "rtf": 10.43,
+ "max_pause": 0.08,
+ "problems": [
+  "cps=5.1"
+ ],
+ "params": {
+  "exaggeration": 0.55,
+  "cfg_weight": 0.5,
+  "temperature": 0.75
+ },
+ "seed": 2015809091,
+ "lufs_in": -25.1,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 7.2,
+  "flow": 14.2,
+  "hift": 0.7
+ },
+ "tokens": 56,
+ "final_problems": [
+  "cps=5.1"
+ ]
+}

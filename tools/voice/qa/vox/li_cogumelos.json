@@ -1,0 +1,31 @@
+{
+ "id": "li_cogumelos",
+ "speaker": "lia",
+ "emotion": "tender",
+ "text": "Um círculo perfeito de cogumelos. A Nina diria que é uma porta. O Anselmo diria que choveu. Os dois devem ter razão.",
+ "dur": 7.78,
+ "cps": 14.9,
+ "cer": 0.036,
+ "wer": 0.136,
+ "asr": "Um círculo perfeito de cogumelos. Anina diria que é uma porta. O anciamo diria que choveu. Os dois devem ter razão.",
+ "attempt": 0,
+ "gen_s": 50.7,
+ "rtf": 6.51,
+ "max_pause": 0.37,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.45,
+  "cfg_weight": 0.35,
+  "temperature": 0.7
+ },
+ "seed": 2343997806,
+ "lufs_in": -21.0,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 27.5,
+  "flow": 20.9,
+  "hift": 2.0
+ },
+ "tokens": 200,
+ "final_problems": []
+}

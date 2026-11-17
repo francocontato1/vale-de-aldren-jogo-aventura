@@ -1,0 +1,31 @@
+{
+ "id": "ba_quase",
+ "speaker": "bastiao",
+ "emotion": "neutral",
+ "text": "Faltam três pedras. Quando você terminar esse seu mapa, eu termino a minha frase.",
+ "dur": 5.21,
+ "cps": 15.5,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Faltam 3 pedras. Quando você terminar esse seu mapa, eu termino a minha frase.",
+ "attempt": 0,
+ "gen_s": 40.3,
+ "rtf": 7.73,
+ "max_pause": 0.39,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.45,
+  "cfg_weight": 0.5,
+  "temperature": 0.75
+ },
+ "seed": 1831300972,
+ "lufs_in": -23.1,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 21.2,
+  "flow": 17.3,
+  "hift": 1.6
+ },
+ "tokens": 148,
+ "final_problems": []
+}

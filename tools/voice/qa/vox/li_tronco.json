@@ -1,0 +1,31 @@
+{
+ "id": "li_tronco",
+ "speaker": "lia",
+ "emotion": "neutral",
+ "text": "Um tronco oco, cheio de folhas secas. Alguma raposa dorme aqui, dá para sentir o cheiro. Melhor não incomodar.",
+ "dur": 7.72,
+ "cps": 14.2,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Um tronco oco, cheio de folhas secas. Alguma raposa dorme aqui, dá para sentir o cheiro. Melhor não incomodar.",
+ "attempt": 0,
+ "gen_s": 51.7,
+ "rtf": 6.7,
+ "max_pause": 0.31,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.5,
+  "cfg_weight": 0.45,
+  "temperature": 0.75
+ },
+ "seed": 3844018590,
+ "lufs_in": -21.1,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 28.7,
+  "flow": 21.2,
+  "hift": 1.6
+ },
+ "tokens": 196,
+ "final_problems": []
+}

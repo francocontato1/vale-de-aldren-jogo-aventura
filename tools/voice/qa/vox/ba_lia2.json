@@ -1,0 +1,31 @@
+{
+ "id": "ba_lia2",
+ "speaker": "bastiao",
+ "emotion": "tender",
+ "text": "Hum. Então ele ia gostar da minha.",
+ "dur": 2.31,
+ "cps": 14.7,
+ "cer": 0.031,
+ "wer": 0.143,
+ "asr": "1. Então ele ia gostar da minha.",
+ "attempt": 1,
+ "gen_s": 24.7,
+ "rtf": 10.68,
+ "max_pause": 0.43,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.4,
+  "cfg_weight": 0.45,
+  "temperature": 0.63
+ },
+ "seed": 3095205186,
+ "lufs_in": -21.0,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 10.1,
+  "flow": 13.3,
+  "hift": 1.1
+ },
+ "tokens": 74,
+ "final_problems": []
+}

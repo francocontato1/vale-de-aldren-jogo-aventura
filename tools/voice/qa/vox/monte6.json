@@ -1,0 +1,31 @@
+{
+ "id": "monte6",
+ "speaker": "eco_f",
+ "emotion": "tender",
+ "text": "Hoje eu fico mais um pouco. Só mais um pouco.",
+ "dur": 4.47,
+ "cps": 10.1,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Hoje eu fico mais um pouco, só mais um pouco.",
+ "attempt": 0,
+ "gen_s": 32.1,
+ "rtf": 7.17,
+ "max_pause": 0.28,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.45,
+  "cfg_weight": 0.4,
+  "temperature": 0.75
+ },
+ "seed": 1699264377,
+ "lufs_in": -21.8,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 15.8,
+  "flow": 15.2,
+  "hift": 1.0
+ },
+ "tokens": 114,
+ "final_problems": []
+}

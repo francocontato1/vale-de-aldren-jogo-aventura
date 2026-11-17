@@ -1,0 +1,31 @@
+{
+ "id": "to_lia1",
+ "speaker": "tome",
+ "emotion": "happy",
+ "text": "Você tem pai? O meu foi pro mar e voltou com uma tatuagem de peixe. Era pra ser uma baleia.",
+ "dur": 6.25,
+ "cps": 14.6,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Você tem pai, o meu foi pro mar e voltou com uma tatuagem de peixe. Era pra ser uma baleia.",
+ "attempt": 0,
+ "gen_s": 44.3,
+ "rtf": 7.09,
+ "max_pause": 0.39,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.8,
+  "cfg_weight": 0.45,
+  "temperature": 0.85
+ },
+ "seed": 602909528,
+ "lufs_in": -25.2,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 25.4,
+  "flow": 16.8,
+  "hift": 1.8
+ },
+ "tokens": 171,
+ "final_problems": []
+}

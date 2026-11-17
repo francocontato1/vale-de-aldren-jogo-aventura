@@ -1,0 +1,35 @@
+{
+ "id": "rel5",
+ "speaker": "dessa",
+ "emotion": "neutral",
+ "text": "E o seu?",
+ "dur": 1.34,
+ "cps": 6.0,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "E o seu?",
+ "attempt": 0,
+ "gen_s": 18.7,
+ "rtf": 13.97,
+ "max_pause": 0.23,
+ "problems": [
+  "cps=6.0"
+ ],
+ "params": {
+  "exaggeration": 0.55,
+  "cfg_weight": 0.5,
+  "temperature": 0.75
+ },
+ "seed": 4268671182,
+ "lufs_in": -29.1,
+ "tp_limited": false,
+ "stage_s": {
+  "t3": 5.0,
+  "flow": 13.2,
+  "hift": 0.5
+ },
+ "tokens": 36,
+ "final_problems": [
+  "cps=6.0"
+ ]
+}

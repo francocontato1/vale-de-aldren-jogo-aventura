@@ -1,31 +1,31 @@
 {
  "id": "escada2",
  "speaker": "eco_f",
- "emotion": "happy",
- "text": "Leva até o último degrau.",
- "dur": 1.78,
- "cps": 14.0,
- "cer": 0.0,
- "wer": 0.0,
- "asr": "Leva até o último degrau.",
- "attempt": 1,
- "gen_s": 18.5,
- "rtf": 10.38,
- "max_pause": 0.1,
+ "emotion": "tender",
+ "text": "Sobe você. Daqui de cima dá pra conversar melhor.",
+ "dur": 3.8,
+ "cps": 12.9,
+ "cer": 0.021,
+ "wer": 0.111,
+ "asr": "Sobe você. Daqui de cima dá para conversar melhor.",
+ "attempt": 0,
+ "gen_s": 32.2,
+ "rtf": 8.48,
+ "max_pause": 0.4,
  "problems": [],
  "params": {
-  "exaggeration": 0.65,
-  "cfg_weight": 0.5,
-  "temperature": 0.78
+  "exaggeration": 0.45,
+  "cfg_weight": 0.4,
+  "temperature": 0.75
  },
- "seed": 3169861410,
- "lufs_in": -20.7,
+ "seed": 623020406,
+ "lufs_in": -20.1,
  "tp_limited": true,
  "stage_s": {
-  "t3": 7.2,
-  "flow": 10.7,
-  "hift": 0.5
+  "t3": 15.6,
+  "flow": 15.6,
+  "hift": 0.8
  },
- "tokens": 60,
+ "tokens": 111,
  "final_problems": []
 }

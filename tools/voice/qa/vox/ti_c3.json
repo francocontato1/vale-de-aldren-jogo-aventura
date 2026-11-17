@@ -1,0 +1,31 @@
+{
+ "id": "ti_c3",
+ "speaker": "tiao",
+ "emotion": "happy",
+ "text": "Se for velejar, volte antes do farol acender. Não é perigo, não. É que a Marta fica preocupada e fala o dobro.",
+ "dur": 8.03,
+ "cps": 13.7,
+ "cer": 0.019,
+ "wer": 0.045,
+ "asr": "Se for velejar, volte antes do farol a acender. Não é perigo não. É que a Marta fica preocupada e fala o dobro.",
+ "attempt": 0,
+ "gen_s": 52.1,
+ "rtf": 6.48,
+ "max_pause": 0.33,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.55,
+  "cfg_weight": 0.3,
+  "temperature": 0.75
+ },
+ "seed": 599244634,
+ "lufs_in": -24.5,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 30.6,
+  "flow": 19.2,
+  "hift": 2.1
+ },
+ "tokens": 216,
+ "final_problems": []
+}

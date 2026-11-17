@@ -1,0 +1,31 @@
+{
+ "id": "jo_depois",
+ "speaker": "joca",
+ "emotion": "happy",
+ "text": "E aí, velejou? Ela puxa um pouco pra esquerda, né? O mestre dizia que era saudade.",
+ "dur": 5.43,
+ "cps": 15.1,
+ "cer": 0.039,
+ "wer": 0.125,
+ "asr": "E aí, velejou? Ela puxa um pouco para a esquerda, né? O mestre dizia que era saudade.",
+ "attempt": 0,
+ "gen_s": 37.3,
+ "rtf": 6.87,
+ "max_pause": 0.38,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.7,
+  "cfg_weight": 0.45,
+  "temperature": 0.85
+ },
+ "seed": 843112231,
+ "lufs_in": -21.0,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 19.7,
+  "flow": 16.0,
+  "hift": 1.5
+ },
+ "tokens": 146,
+ "final_problems": []
+}

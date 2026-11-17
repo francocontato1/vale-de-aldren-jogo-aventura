@@ -1,0 +1,31 @@
+{
+ "id": "li_fitas",
+ "speaker": "lia",
+ "emotion": "tender",
+ "text": "Centenas de fitas. Linho, lã, couro, seda. Umas novas, outras que já viraram quase fio.",
+ "dur": 7.32,
+ "cps": 11.9,
+ "cer": 0.025,
+ "wer": 0.133,
+ "asr": "Centenas de fitas, Linho, Lan, Coro, Seda, umas novas outras que já viraram quase fio.",
+ "attempt": 0,
+ "gen_s": 48.1,
+ "rtf": 6.58,
+ "max_pause": 0.7,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.45,
+  "cfg_weight": 0.35,
+  "temperature": 0.7
+ },
+ "seed": 1031761110,
+ "lufs_in": -20.4,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 26.2,
+  "flow": 20.1,
+  "hift": 1.6
+ },
+ "tokens": 184,
+ "final_problems": []
+}

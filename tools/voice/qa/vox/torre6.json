@@ -1,0 +1,31 @@
+{
+ "id": "torre6",
+ "speaker": "auren",
+ "emotion": "neutral",
+ "text": "E a sua irmã?",
+ "dur": 0.89,
+ "cps": 14.6,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "E a sua irmã?",
+ "attempt": 1,
+ "gen_s": 21.0,
+ "rtf": 23.6,
+ "max_pause": 0.03,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.4,
+  "cfg_weight": 0.35,
+  "temperature": 0.63
+ },
+ "seed": 1907893667,
+ "lufs_in": -24.0,
+ "tp_limited": false,
+ "stage_s": {
+  "t3": 6.7,
+  "flow": 13.6,
+  "hift": 0.6
+ },
+ "tokens": 47,
+ "final_problems": []
+}

@@ -1,0 +1,31 @@
+{
+ "id": "ti_nina",
+ "speaker": "tiao",
+ "emotion": "tender",
+ "text": "É sim. Ela coleciona conchas, histórias e perguntas. As perguntas eu não sei responder. As conchas eu ajudo a achar.",
+ "dur": 7.9,
+ "cps": 14.7,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "É sim, ela coleciona conchas, histórias e perguntas. As perguntas eu não sei responder. As conchas eu ajudo a achar.",
+ "attempt": 0,
+ "gen_s": 45.8,
+ "rtf": 5.8,
+ "max_pause": 0.27,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.35,
+  "cfg_weight": 0.25,
+  "temperature": 0.65
+ },
+ "seed": 4181491672,
+ "lufs_in": -24.0,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 28.1,
+  "flow": 15.5,
+  "hift": 2.1
+ },
+ "tokens": 201,
+ "final_problems": []
+}

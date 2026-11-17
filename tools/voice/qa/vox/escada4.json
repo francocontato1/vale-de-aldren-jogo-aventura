@@ -1,31 +1,35 @@
 {
  "id": "escada4",
  "speaker": "eco_f",
- "emotion": "tender",
- "text": "Depois eu olho. É para isso que serve uma escada.",
- "dur": 2.96,
- "cps": 16.6,
- "cer": 0.043,
- "wer": 0.1,
- "asr": "Depois eu ódio. É para isso que serve uma escada.",
+ "emotion": "happy",
+ "text": "Leva até o último degrau.",
+ "dur": 3.74,
+ "cps": 6.7,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Leva até o último degrau.",
  "attempt": 0,
- "gen_s": 26.2,
- "rtf": 8.87,
- "max_pause": 0.3,
- "problems": [],
+ "gen_s": 30.8,
+ "rtf": 8.24,
+ "max_pause": 0.33,
+ "problems": [
+  "cps=6.7"
+ ],
  "params": {
-  "exaggeration": 0.45,
-  "cfg_weight": 0.4,
-  "temperature": 0.75
+  "exaggeration": 0.65,
+  "cfg_weight": 0.45,
+  "temperature": 0.85
  },
  "seed": 1453890335,
  "lufs_in": -20.2,
  "tp_limited": true,
  "stage_s": {
-  "t3": 12.9,
-  "flow": 12.4,
-  "hift": 0.8
+  "t3": 13.9,
+  "flow": 16.0,
+  "hift": 0.7
  },
- "tokens": 105,
- "final_problems": []
+ "tokens": 96,
+ "final_problems": [
+  "cps=6.7"
+ ]
 }

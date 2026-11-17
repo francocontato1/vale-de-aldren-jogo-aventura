@@ -1,0 +1,31 @@
+{
+ "id": "li_pedra_achar",
+ "speaker": "lia",
+ "emotion": "neutral",
+ "text": "Uma pedra boa pra jogar. Achatada, lisa, cabe na curva do dedo.",
+ "dur": 4.6,
+ "cps": 13.7,
+ "cer": 0.068,
+ "wer": 0.333,
+ "asr": "Uma pedra é boa para jogar. A chatada, lisa, cabe na curva do dedo.",
+ "attempt": 0,
+ "gen_s": 38.6,
+ "rtf": 8.39,
+ "max_pause": 0.27,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.5,
+  "cfg_weight": 0.45,
+  "temperature": 0.75
+ },
+ "seed": 3239379395,
+ "lufs_in": -21.7,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 19.3,
+  "flow": 17.6,
+  "hift": 1.5
+ },
+ "tokens": 138,
+ "final_problems": []
+}

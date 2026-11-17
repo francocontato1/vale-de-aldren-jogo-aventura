@@ -1,0 +1,31 @@
+{
+ "id": "ma_c3",
+ "speaker": "marta",
+ "emotion": "tender",
+ "text": "Quando o farol acende, eu fecho a taberna. É o Davi dizendo boa noite para a vila inteira.",
+ "dur": 5.24,
+ "cps": 17.2,
+ "cer": 0.034,
+ "wer": 0.167,
+ "asr": "Quando o farol acende, eu fecho a taberna. Eu dava dizendo boa noite para a vila inteira.",
+ "attempt": 0,
+ "gen_s": 39.9,
+ "rtf": 7.61,
+ "max_pause": 0.52,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.6,
+  "cfg_weight": 0.45,
+  "temperature": 0.75
+ },
+ "seed": 3289192940,
+ "lufs_in": -21.1,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 19.8,
+  "flow": 18.4,
+  "hift": 1.5
+ },
+ "tokens": 147,
+ "final_problems": []
+}

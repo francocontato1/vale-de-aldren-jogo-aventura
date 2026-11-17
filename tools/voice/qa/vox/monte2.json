@@ -2,16 +2,16 @@
  "id": "monte2",
  "speaker": "eco_f",
  "emotion": "sad",
- "text": "Amanhã eles vão me chamar para ir embora junto. Eu vou dizer que sim.",
- "dur": 4.42,
- "cps": 15.6,
- "cer": 0.0,
- "wer": 0.0,
- "asr": "Amanhã, eles vão me chamar para ir embora junto. Eu vou dizer que sim.",
+ "text": "A Sela vai na terceira. Dá pra ver o lenço amarelo. ... Ela não olhou pra trás. Ela nunca olha. Eu é que olho por nós duas.",
+ "dur": 9.03,
+ "cps": 13.6,
+ "cer": 0.018,
+ "wer": 0.077,
+ "asr": "A cela vai na terceira. Dá pra vir o lenço amarelo. Ela não olhou pra trás. Ela nunca olha. Eu é que olho por nós duas.",
  "attempt": 0,
- "gen_s": 30.7,
- "rtf": 6.93,
- "max_pause": 0.49,
+ "gen_s": 68.6,
+ "rtf": 7.6,
+ "max_pause": 0.53,
  "problems": [],
  "params": {
   "exaggeration": 0.45,
@@ -19,13 +19,13 @@
   "temperature": 0.75
  },
  "seed": 2831469210,
- "lufs_in": -20.4,
+ "lufs_in": -19.5,
  "tp_limited": true,
  "stage_s": {
-  "t3": 15.4,
-  "flow": 14.3,
-  "hift": 0.8
+  "t3": 35.4,
+  "flow": 30.6,
+  "hift": 2.2
  },
- "tokens": 123,
+ "tokens": 244,
  "final_problems": []
 }

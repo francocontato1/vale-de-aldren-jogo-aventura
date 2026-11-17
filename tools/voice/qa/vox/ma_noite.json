@@ -1,0 +1,31 @@
+{
+ "id": "ma_noite",
+ "speaker": "marta",
+ "emotion": "tired",
+ "text": "A taberna já fechou, querida. Mas a porta fica sempre só encostada.",
+ "dur": 3.73,
+ "cps": 18.0,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "A taberna já fechou, querida, mas a porta fica sempre só encostada.",
+ "attempt": 0,
+ "gen_s": 32.9,
+ "rtf": 8.82,
+ "max_pause": 0.33,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.5,
+  "cfg_weight": 0.45,
+  "temperature": 0.75
+ },
+ "seed": 3130715359,
+ "lufs_in": -21.5,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 16.6,
+  "flow": 15.0,
+  "hift": 1.1
+ },
+ "tokens": 121,
+ "final_problems": []
+}

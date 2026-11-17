@@ -1,0 +1,31 @@
+{
+ "id": "li_arvore_nomes",
+ "speaker": "lia",
+ "emotion": "tender",
+ "text": "Nomes gravados na casca, uns por cima dos outros. Os mais antigos a árvore já engoliu. Ela guarda todo mundo, crescendo devagar por cima.",
+ "dur": 9.72,
+ "cps": 14.1,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Nomes gravados na casca, uns por cima dos outros. Os mais antigos a árvore já engoliu. Ela guarda todo mundo crescendo devagar por cima.",
+ "attempt": 0,
+ "gen_s": 64.3,
+ "rtf": 6.61,
+ "max_pause": 0.48,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.45,
+  "cfg_weight": 0.35,
+  "temperature": 0.7
+ },
+ "seed": 378729583,
+ "lufs_in": -19.9,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 37.1,
+  "flow": 24.7,
+  "hift": 2.2
+ },
+ "tokens": 249,
+ "final_problems": []
+}

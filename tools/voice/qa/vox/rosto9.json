@@ -1,0 +1,31 @@
+{
+ "id": "rosto9",
+ "speaker": "teo_v",
+ "emotion": "tender",
+ "text": "Vou até o lago. Jogar uma pedra.",
+ "dur": 3.95,
+ "cps": 8.1,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "Vou até o lago jogar uma pedra.",
+ "attempt": 0,
+ "gen_s": 31.5,
+ "rtf": 7.96,
+ "max_pause": 0.43,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.4,
+  "cfg_weight": 0.25,
+  "temperature": 0.65
+ },
+ "seed": 606458827,
+ "lufs_in": -22.9,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 13.7,
+  "flow": 16.7,
+  "hift": 0.8
+ },
+ "tokens": 108,
+ "final_problems": []
+}

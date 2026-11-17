@@ -1,0 +1,31 @@
+{
+ "id": "od_alva",
+ "speaker": "odessa",
+ "emotion": "tender",
+ "text": "A sombra no céu? É a Vésper. A última dragoa dos Veladores. Tem o nome da estrela da tarde. Mora lá no alto, perto da gigante do monte. Se você chegar devagar, ela deixa você chegar perto. Se chegar correndo, ela vai embora e só volta daqui a um ano.",
+ "dur": 20.16,
+ "cps": 12.4,
+ "cer": 0.013,
+ "wer": 0.02,
+ "asr": "A sombra no céu é a Vésper, a última dragoa dos veladores. Tenho o nome da estrela da tarde. Mora lá no alto, perto da gigante do monte. Se você chegar devagar, ela deixa você chegar perto. Se chegar correndo, ela vai embora e só volta daqui a um ano.",
+ "attempt": 0,
+ "gen_s": 139.4,
+ "rtf": 6.91,
+ "max_pause": 0.52,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.35,
+  "cfg_weight": 0.2,
+  "temperature": 0.65
+ },
+ "seed": 1096055089,
+ "lufs_in": -20.5,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 81.1,
+  "flow": 52.6,
+  "hift": 5.2
+ },
+ "tokens": 530,
+ "final_problems": []
+}
