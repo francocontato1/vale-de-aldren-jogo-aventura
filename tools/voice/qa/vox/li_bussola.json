@@ -1,0 +1,31 @@
+{
+ "id": "li_bussola",
+ "speaker": "lia",
+ "emotion": "tender",
+ "text": "A bússola do meu pai continua puxando pro leste. Ele dizia que era defeito. Eu acho que é teimosia. Igual a ele.",
+ "dur": 7.5,
+ "cps": 14.9,
+ "cer": 0.0,
+ "wer": 0.0,
+ "asr": "A bússola do meu pai continua puxando pro leste. Ele dizia que era defeito. Eu acho que é teimosia. Igual a ele.",
+ "attempt": 0,
+ "gen_s": 58.7,
+ "rtf": 7.82,
+ "max_pause": 0.63,
+ "problems": [],
+ "params": {
+  "exaggeration": 0.45,
+  "cfg_weight": 0.35,
+  "temperature": 0.7
+ },
+ "seed": 3134111692,
+ "lufs_in": -20.8,
+ "tp_limited": true,
+ "stage_s": {
+  "t3": 31.3,
+  "flow": 23.1,
+  "hift": 2.2
+ },
+ "tokens": 203,
+ "final_problems": []
+}

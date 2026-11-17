@@ -452,3 +452,8 @@
 2026-11-17 12:43:54,841 rendering 238/313 lines -> ../../a/vox (shard 0/1)
 2026-11-17 12:44:09,364 input frame rate=25
 2026-11-17 12:44:13,753 Initializing the model ...
+2026-11-17 12:45:13,107 Transcribing ...
+2026-11-17 12:45:20,843 Inference time: 7.736 s
+2026-11-17 12:45:20,945 [1/238] li_bussola lia      try0 7.5s audio in 59s (rtf 7.8; t3 31s/203 tok, flow 23s) cps 14.9 cer 0.0 ok
+2026-11-17 12:45:21,916 Reference mel length is not equal to 2 * reference token length.
+
