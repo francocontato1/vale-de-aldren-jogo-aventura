@@ -831,7 +831,7 @@ function closeJournal() { $('journal').hidden = true; if (state === 'journal') s
 const escH = (t) => String(t).replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
 function ribbonWho(r) { return (!r.needs || r.needs.some(seen)) ? 'Amarrada por: ' + r.whoName : 'Não sei de quem é. Ainda.'; }
 const rib = { sel: 0, wish: false };
-function openRibbons() { state = 'ribbons'; document.body.classList.add('cine'); $('prompt').hidden = true; $('ribbons').hidden = false; rib.wish = false; if (!S.flags.fitasVistas) { S.flags.fitasVistas = 1; think('li_fitas'); } renderRibbons(); }
+function openRibbons() { state = 'ribbons'; document.body.classList.add('cine'); $('prompt').hidden = true; $('ribbons').hidden = false; rib.wish = false; const first = !S.flags.fitasVistas; S.flags.fitasVistas = 1; renderRibbons(); if (first) $('ribHint').textContent = lineText('li_fitas'); }
 function closeRibbons() { $('ribbons').hidden = true; document.body.classList.remove('cine'); if (state === 'ribbons') state = 'play'; save(); }
 const canRetie = () => (seen('lago') || seen('arvore')) && !S.flags.fitaNo;
 function renderRibbons() {
@@ -846,8 +846,8 @@ function readRibbon(quiet) {
   const r = RIBBONS[rib.sel]; [...$('ribRow').children].forEach((el, i) => el.classList.toggle('sel', i === rib.sel)); const card = $('ribCard');
   if (!quiet || S.ribbons[r.id]) { if (!S.ribbons[r.id]) { S.ribbons[r.id] = 1; Sound.page(); } }
   const acts = []; if (!S.ribbons.lia) acts.push(['1', 'Amarrar o meu pedido', 'wish']); if (canRetie()) acts.push(['2', 'Refazer o nó da fita vermelha', 'retie']); acts.push(['Esc', 'Voltar', 'close']);
-  if (rib.wish) card.innerHTML = `<h3>O meu pedido</h3><div class="who">Ninguém vai ler. Mas eu vou saber.</div><div class="ribacts">${LIA_WISHES.map((w, i) => `<button data-w="${i}"><b>${i + 1}</b>${escH(w.t)}</button>`).join('')}<button data-a="back"><b>Esc</b>Deixar pra depois</button></div>`;
-  else card.innerHTML = `<h3>${escH(r.title)}</h3><div class="who">${escH(ribbonWho(r))}</div><div class="txt h-${r.hand}" style="--ink-c:${r.ink || '#3b2e20'}">${escH(r.text)}</div><div class="ribacts">${acts.map(([k, t, a]) => `<button data-a="${a}"><b>${k}</b>${t}</button>`).join('')}</div>`;
+  if (rib.wish) card.innerHTML = `<h3>O meu pedido</h3><div class="who">Ninguém vai ler. Mas eu vou saber.</div><div class="ribacts">${LIA_WISHES.map((w, i) => `<button data-w="${i}">${isTouch ? '' : `<b>${i + 1}</b>`}${escH(w.t)}</button>`).join('')}<button data-a="back">${isTouch ? '' : '<b>Esc</b>'}Deixar pra depois</button></div>`;
+  else card.innerHTML = `<h3>${escH(r.title)}</h3><div class="who">${escH(ribbonWho(r))}</div><div class="txt h-${r.hand}" style="--ink-c:${r.ink || '#3b2e20'}">${escH(r.text)}</div><div class="ribacts">${acts.map(([k, t, a]) => `<button data-a="${a}">${isTouch ? '' : `<b>${k}</b>`}${t}</button>`).join('')}</div>`;
   card.querySelectorAll('button').forEach(b => b.onclick = (e) => { e.stopPropagation(); if (b.dataset.w) tieWish(+b.dataset.w); else ribAction(b.dataset.a); });
   $('ribHint').textContent = isTouch ? 'Toque numa fita para ler' : '← → escolher a fita · 1 · 2 · Esc';
 }
@@ -878,14 +878,15 @@ function lakeThrowSpot() {
   return null;
 }
 function enterSkip() {
-  $('prompt').hidden = true; state = 'skip'; player.speed = 0; skip = { phase: 'choose', t: 0, n: 0 }; pH.play('idle', 0.3);
+  $('prompt').hidden = true; state = 'skip'; document.body.classList.add('cine'); player.speed = 0; skip = { phase: 'choose', t: 0, n: 0 }; pH.play('idle', 0.3);
   if (!stoneMesh) { stoneMesh = new THREE.Mesh(new THREE.SphereGeometry(1, 10, 6), M.stone); stoneMesh.castShadow = true; stoneMesh.visible = false; scene.add(stoneMesh); }
   if (!S.flags.pedraVista) { S.flags.pedraVista = 1; think('li_pedra_achar'); }
   $('skipHud').hidden = false; $('skipCount').textContent = ''; skipChooseUI();
 }
 function skipChooseUI() {
   const box = $('skipStones'); box.innerHTML = ''; $('skipMeter').hidden = true;
-  STONES.forEach((st, i) => { const b = document.createElement('button'); b.innerHTML = `<b>${i + 1}</b>${st.t}<small>${st.sub}</small>`; b.onclick = (e) => { e.stopPropagation(); skipPick(i); }; box.appendChild(b); });
+  STONES.forEach((st, i) => { const b = document.createElement('button'); b.innerHTML = `${isTouch ? '' : `<b>${i + 1}</b>`}${st.t}<small>${st.sub}</small>`; b.onclick = (e) => { e.stopPropagation(); skipPick(i); }; box.appendChild(b); });
+  { const b = document.createElement('button'); b.innerHTML = `${isTouch ? '' : '<b>Esc</b>'}Voltar<small>guardar as pedras</small>`; b.onclick = (e) => { e.stopPropagation(); exitSkip(); }; box.appendChild(b); }
   $('skipTip').textContent = isTouch ? 'Escolha uma pedra' : '1 · 2 · 3 escolher a pedra   ·   Esc sair';
 }
 function skipPick(i) { if (!skip || skip.phase !== 'choose') return; skip.kind = STONES[i]; skip.phase = 'aim'; skip.t = 0; $('skipStones').innerHTML = ''; $('skipMeter').hidden = false; $('skipTip').textContent = isTouch ? 'Toque em Usar quando a barra chegar na marca' : 'E ou Espaço quando a barra chegar na marca   ·   Esc sair'; Sound.click(); }
@@ -907,7 +908,7 @@ function skipEnd(sink) {
   else if (n === 0 && !S.flags.pulos0) { S.flags.pulos0 = 1; setTimeout(() => think('li_pulos_zero'), 900); }
   if (first && n) Sound.page(); save();
 }
-function exitSkip() { if (!skip) return; skip = null; if (stoneMesh) stoneMesh.visible = false; $('skipHud').hidden = true; if (state === 'skip') state = 'play'; }
+function exitSkip() { if (!skip) return; skip = null; document.body.classList.remove('cine'); if (stoneMesh) stoneMesh.visible = false; $('skipHud').hidden = true; if (state === 'skip') state = 'play'; }
 function updateSkip(dt) {
   if (!skip) return; skip.t += dt;
   pH.root.position.set(player.x, player.y, player.z); pH.root.rotation.y = player.h; if (skip.phase !== 'wind' || pH.done()) { if (pH.currentName === 'throw' && pH.done()) pH.play('idle', 0.3); }
