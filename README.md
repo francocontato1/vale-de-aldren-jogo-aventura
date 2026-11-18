@@ -2,11 +2,11 @@
 
 Um jogo contemplativo que roda direto no navegador (three.js). Sem combate, sem pressa.
 
-Há muito tempo, um povo chamado Veladores viveu neste vale. Construíam para olhar: torres, escadas que não levam a lugar nenhum, círculos de pedra, relógios de sol. Um dia foram embora, sem guerra e sem despedida. Ficaram as pedras e os gigantes, que, dizem, são Veladores que sentaram para ver algo bonito e esqueceram de levantar.
+"Velar" quer dizer duas coisas: vigiar e passar a noite ao lado de um morto. Seiscentos anos atrás, os Veladores de Aldren faziam as duas: quando alguém morria, sentavam ao lado e lembravam em voz alta a vida inteira daquela pessoa, às vezes por anos. Veneravam Aldren, o primeiro deles, que se ajoelhou para velar alguém e virou pedra. Achavam que era santidade. Era cansaço: a pedra cresce em quem não levanta. Os quatro gigantes do vale são Veladores que nunca terminaram uma vigília.
 
-Você é Lia, uma jovem cartógrafa de Ancoradouro, no litoral, chamada por Odessa, uma maga elfa que mora no observatório do vale há seiscentos anos. Ela não quer um mapa de estradas: quer um mapa do que importa. Quando você senta num dos oito lugares dos Veladores, na hora certa, e olha com calma, o lugar lembra: um lume, uma lembrança de luz. Você desenha o que viu no caderno.
+Você é Lia, uma cartógrafa de Ancoradouro, no litoral. O seu pai, que desenhava estradas para a Coroa, morreu há dois invernos; desde então você aceita todo trabalho longe de casa e deve uma carta à mãe. Uma maga elfa, Odessa, escreve dizendo que conheceu o seu pai. As mãos dela estão virando pedra. Há oito vigílias abertas no vale, e quem velou não pode fechá-las: é preciso um estranho, alguém que veja cada lembrança até o fim sem se agarrar a ela e lhe dê um lugar no mapa.
 
-As oito lembranças contam, fora de ordem, uma história só: Teo e Ilsa, que se conheceram jogando pedras no lago; Sela, a irmã que partiu; o mestre Auren, que ensinava a olhar; e uma menina elfa chamada Dessa. Cabe a você montar. A Lia também tem a sua história (o pai que desenhava estradas, a bússola que puxa para o leste, a carta que ela deve à mãe), e quem fica amigo dela vai sabendo aos poucos.
+Quando você senta num desses lugares, na hora certa, e espera, o lugar lembra: um lume. Fora de ordem, as oito lembranças contam uma história só, a de uma família. Teo e Ilsa perdem a filha, Mira, de febre; Ilsa lembra de tudo e começa a virar pedra, Teo vai esquecendo a voz da menina; o mestre Auren convence os jovens a partir antes que seja tarde; e uma menina elfa, a Dessa, promete cuidar de um relógio de sol "até ele voltar". Cabe a você montar, e decidir o que fazer com o que você mesma carrega.
 
 ## Como jogar
 
@@ -26,15 +26,15 @@ As oito lembranças contam, fora de ordem, uma história só: Teo e Ilsa, que se
 | Voando com a Vésper | W bater asas · S frear · A D curvas (ou o mouse) · Espaço subir · Shift descer · E pousar |
 | Chamar a Vésper | V assoviar (depois do primeiro voo): ela vem de onde estiver e pousa ao seu lado |
 
-No celular, há um joystick e botões na tela.
+No celular, há um joystick e botões na tela. Para jogar em tela cheia no iPhone, abra o link no Safari, toque em Compartilhar e escolha "Adicionar à Tela de Início"; depois abra pelo ícone Aldren. No celular, as texturas ficam em 512 px e o áudio em 24 kHz, para caber na memória do aparelho.
 
 ## O que há no vale
 
 - **A vila de Aldren:** padaria da Celeste (com forno de pão), oficina do Bastião, casa da Irene com ervas secando, casa-torre, casa dos livros, pasto do Seu Anselmo, moinho de vento, poço e fogueira. Cada casa é diferente, e as de dois andares têm escada e quartos de verdade.
 - **Os lugares dos Veladores:** o gigante no lago (de manhã), a árvore das fitas (à tarde), o círculo das estrelas (à noite), a torre partida (no fim da tarde), o jardim dos relógios de sol (às quatro e meia), a escada para o céu (ao entardecer), a gigante sentada no monte (de manhã) e o rosto entre as flores (de dia). Fora de hora, sente e deixe o tempo passar (T).
-- **A árvore das fitas:** leia os pedidos (cada fita com tecido, idade e letra próprios), amarre o seu e refaça o nó da fita mais antiga.
-- **Pedras no lago:** de qualquer ponto da margem, escolha uma pedra e lance no tempo certo. Sem placar; o Teo fez sete.
-- **O caderno:** a linha do tempo dos Veladores, as pessoas das lembranças, perguntas que se respondem com as descobertas, as fitas lidas e uma página sobre a própria Lia.
+- **A árvore das fitas:** cada fita é uma vigília (quem morreu, quem ficou). Leia as fitas (tecido, idade e letra próprios), amarre a sua e refaça os nós da fita mais antiga, a da Mira.
+- **Pedras no lago:** de qualquer ponto da margem, escolha uma pedra e lance no tempo certo. Sem placar; o Teo fazia sete.
+- **O caderno:** a linha do tempo da família, as pessoas das lembranças, perguntas que se respondem com as descobertas, as fitas lidas e uma página sobre a própria Lia.
 - **Pequenas descobertas:** a espada na pedra, o aqueduto, a ponte partida sobre o riacho seco, o santuário da floresta, o balanço, o banco virado para o poente.
 - **A Vila da Maré:** uma vila de pescadores na enseada a sudeste, com praia de areia, mar com ondas, píer, taberna, galpão do barqueiro e um farol no promontório. Moram lá a Dona Marta, o Joca, o Tião, a Nina e o Seu Davi.
 - **Amizades e favores:** conversar todo dia e levar coisas de uma vila para a outra (o pão da Celeste, o desenho do Tomé, a carta do Seu Davi) aumenta a amizade; os corações aparecem no diálogo e no caderno.
