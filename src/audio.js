@@ -1,5 +1,5 @@
 // Som ambiente, passos, música (faixas gravadas com silêncios entre elas) e vozes dubladas.
-import { clamp, lerp, rr, angDiff, resolveURL } from './core.js';
+import { clamp, lerp, rr, angDiff, resolveURL, isTouch } from './core.js';
 import { LINES, speaker, voiceOf } from './story.js';
 
 const P = 'a/snd/';
@@ -23,7 +23,10 @@ function makeIR(c, secs, decay, bright = 0.5) {
 export const Sound = {
   ctx: null, buf: {}, listener: { x: 0, z: 0, yaw: 0 }, loops: {}, ready: false, vol: { master: 0.9, music: 0.55, voice: 1.0, amb: 0.9 },
   async init() {
-    if (this.ctx) return; try { const A = window.AudioContext || window.webkitAudioContext; this.ctx = new A(); } catch (e) { return; }
+    if (this.ctx) return; try { const A = window.AudioContext || window.webkitAudioContext;
+      // no celular, tudo é decodificado a 24 kHz (metade da memória; voz e ambiente não perdem nada audível no alto-falante do aparelho)
+      if (isTouch) { try { this.ctx = new A({ sampleRate: 24000 }); } catch (e) { this.ctx = null; } }
+      if (!this.ctx) this.ctx = new A(); } catch (e) { return; }
     const c = this.ctx;
     this.comp = c.createDynamicsCompressor(); this.comp.threshold.value = -16; this.comp.ratio.value = 3; this.comp.connect(c.destination);
     this.master = c.createGain(); this.master.gain.setValueAtTime(0, c.currentTime); this.master.gain.linearRampToValueAtTime(this.vol.master, c.currentTime + 3); this.master.connect(this.comp);
@@ -38,7 +41,7 @@ export const Sound = {
     // (antes, entrar no vale esperava os 39 sons, o que no celular levava vários segundos)
     const LOOPS = ['ambDay', 'ambNight', 'ambWind', 'ambLake', 'ambRoom', 'ambLap', 'chimes'];
     const order = Object.keys(raw).sort((a, b) => (LOOPS.some(k => FILES[k][0] === b) ? 1 : 0) - (LOOPS.some(k => FILES[k][0] === a) ? 1 : 0));
-    (async () => { for (const k of order) { try { const ab = await raw[k]; if (ab) this.buf[k] = await c.decodeAudioData(ab.slice(0)); } catch (e) { } const lk = LOOPS.find(l => FILES[l][0] === k); if (lk && !this.loops[lk]) this.loop(lk); } })();
+    (async () => { for (const k of order) { try { const ab = await raw[k]; raw[k] = null; if (ab) { let b = await c.decodeAudioData(ab); if (isTouch && b.numberOfChannels > 1) b = toMono(c, b); this.buf[k] = b; } } catch (e) { } const lk = LOOPS.find(l => FILES[l][0] === k); if (lk && !this.loops[lk]) this.loop(lk); } })();
     // estalos da lareira/fogueira (ruído filtrado)
     const n = c.sampleRate * 2; const wb = c.createBuffer(1, n, c.sampleRate); const wd = wb.getChannelData(0); for (let i = 0; i < n; i++) wd[i] = Math.random() < 0.002 ? (Math.random() * 2 - 1) : (Math.random() * 2 - 1) * 0.08; this.white = wb;
     const fs = c.createBufferSource(); fs.buffer = wb; fs.loop = true; const ff = c.createBiquadFilter(); ff.type = 'bandpass'; ff.frequency.value = 1800; ff.Q.value = 0.6; this.fireG = c.createGain(); this.fireG.gain.value = 0; fs.connect(ff).connect(this.fireG).connect(this.amb); fs.start();
@@ -128,6 +131,10 @@ export const Sound = {
   },
 };
 
+// solta tudo o que uma faixa de música segurava (elemento, nó de origem, ganho)
+function releaseTrack(it) { if (!it || it.freed) return; it.freed = true; try { it.el.pause(); it.el.removeAttribute('src'); it.el.load(); } catch (e) { } try { it.src && it.src.disconnect(); it.g.disconnect(); } catch (e) { } }
+// estéreo -> mono (no celular, os ambientes em loop ocupam metade da memória)
+function toMono(c, b) { const m = c.createBuffer(1, b.length, b.sampleRate); const o = m.getChannelData(0), l = b.getChannelData(0), r = b.getChannelData(1); for (let i = 0; i < b.length; i++) o[i] = (l[i] + r[i]) * 0.5; return m; }
 // ---------------- música: faixas com silêncios longos entre elas ----------------
 export const Music = {
   ctx: null, bus: null, man: null, cur: null, silence: 8, t: 0, history: [], forced: null,
@@ -139,11 +146,11 @@ export const Music = {
     const src = this.ctx.createMediaElementSource(el); const g = this.ctx.createGain(); g.gain.value = 0; src.connect(g).connect(this.bus);
     const t = this.ctx.currentTime; g.gain.linearRampToValueAtTime(vol, t + fade);
     el.play().catch(() => { }); const it = { cue, el, g, vol }; this.cur = it; this.history.push(cue); if (this.history.length > 4) this.history.shift();
-    el.onended = () => { if (this.cur === it) { this.cur = null; this.silence = rr(14, 38); } };
+    it.src = src; el.onended = () => { if (this.cur === it) { this.cur = null; this.silence = rr(14, 38); } releaseTrack(it); };
     return true;
   },
-  stop(fade = 3) { const it = this.cur; if (!it) return; this.cur = null; const t = this.ctx.currentTime; it.g.gain.cancelScheduledValues(t); it.g.gain.setValueAtTime(it.g.gain.value, t); it.g.gain.linearRampToValueAtTime(0, t + fade); setTimeout(() => { try { it.el.pause(); } catch (e) { } }, fade * 1000 + 100); },
-  stinger(cue) { if (!this.has(cue)) return; const el = new Audio(resolveURL(this.man[cue].file)); el.crossOrigin = 'anonymous'; const src = this.ctx.createMediaElementSource(el); const g = this.ctx.createGain(); g.gain.value = 0.9; src.connect(g).connect(this.bus); el.play().catch(() => { }); },
+  stop(fade = 3) { const it = this.cur; if (!it) return; this.cur = null; const t = this.ctx.currentTime; it.g.gain.cancelScheduledValues(t); it.g.gain.setValueAtTime(it.g.gain.value, t); it.g.gain.linearRampToValueAtTime(0, t + fade); setTimeout(() => releaseTrack(it), fade * 1000 + 100); },
+  stinger(cue) { if (!this.has(cue)) return; const el = new Audio(resolveURL(this.man[cue].file)); el.crossOrigin = 'anonymous'; const src = this.ctx.createMediaElementSource(el); const g = this.ctx.createGain(); g.gain.value = 0.9; src.connect(g).connect(this.bus); const it = { el, src, g }; el.onended = () => releaseTrack(it); el.play().catch(() => { }); },
   pick(p) {
     const h = p.hour; const opts = [];
     if (p.ruins) opts.push('ruins');
@@ -167,7 +174,9 @@ export const Voice = {
   ctx: null, bus: null, dream: null, cache: new Map(), playing: null, level: 0, man: null, analyser: null, data: null, enabled: true,
   async init(c, bus, dream) { this.ctx = c; this.bus = bus; this.dream = dream; this.analyser = c.createAnalyser(); this.analyser.fftSize = 512; this.data = new Uint8Array(this.analyser.fftSize); try { const r = await fetch(resolveURL('a/vox/manifest.json')); if (r.ok) this.man = await r.json(); } catch (e) { } },
   load(id) {
-    if (this.cache.has(id)) return this.cache.get(id);
+    if (this.cache.has(id)) { const p = this.cache.get(id); this.cache.delete(id); this.cache.set(id, p); return p; }
+    // guarda só as falas recentes (antes, uma sessão longa acumulava centenas de falas decodificadas na memória)
+    while (this.cache.size >= 24) this.cache.delete(this.cache.keys().next().value);
     const p = !this.dubbed(id) ? Promise.resolve(null) : fetch(resolveURL('a/vox/' + id + '.mp3')).then(r => r.ok ? r.arrayBuffer() : null).then(ab => ab && this.ctx ? this.ctx.decodeAudioData(ab) : null).catch(() => null);
     this.cache.set(id, p); return p;
   },

@@ -1,5 +1,5 @@
-<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Vale de Aldren</title>
-<meta name="description" content="Um jogo contemplativo no navegador: um vale tranquilo, ruínas de um povo que construía para olhar, e um mapa do que importa.">
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Vale de Aldren</title><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Aldren"><meta name="theme-color" content="#0b0d10"><link rel="apple-touch-icon" href="a/icon-180.png"><link rel="icon" href="a/icon-192.png">
+<meta name="description" content="Um jogo contemplativo no navegador: um vale tranquilo, ruínas de um povo que velava os mortos até virar pedra, e oito lembranças por terminar.">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=IM+Fell+English:ital@1&family=Inter:wght@400;500;600&family=Italianno&display=swap" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=IM+Fell+English:ital@1&family=Inter:wght@400;500;600&family=Italianno&display=swap"></noscript>
 <style>
@@ -201,9 +201,9 @@ body.touchmode #dlgOpts button{padding:10px 14px}body.touchmode #dlgOpts button 
 </div>
 <div class="overlay" id="menu" role="dialog" aria-modal="true" aria-label="Vale de Aldren">
   <div class="card">
-    <div class="eyebrow">Um mapa do que importa</div>
+    <div class="eyebrow">Oito vigílias abertas</div>
     <h1>Vale de Aldren</h1>
-    <p class="lede">Um povo que construía para olhar foi embora há muito tempo. Ficaram as pedras, os gigantes sentados na paisagem, e uma maga que ainda espera por eles.</p>
+    <p class="lede">Há seiscentos anos, um povo velava os seus mortos até virar pedra. Ficaram quatro gigantes, oito lembranças por terminar e uma maga que já não sente as próprias mãos.</p>
     <button class="btn" id="startBtn" disabled>Entrar no vale</button>
     <div class="loadwrap"><div id="loadBar"></div></div>
     <div id="loading">Preparando…</div>
@@ -250,8 +250,9 @@ body.touchmode #dlgOpts button{padding:10px 14px}body.touchmode #dlgOpts button 
 </div>
 <div id="ribbons" hidden><div class="ribbox"><div class="ribrow" id="ribRow"></div><div class="ribcard" id="ribCard"></div><div class="ribhint" id="ribHint"></div></div></div>
 <div id="memory" hidden><div id="memTime"></div><div id="memName"></div><div id="memText"></div></div>
-<div class="overlay" id="journal" role="dialog" aria-modal="true" aria-label="Caderno de Lia" hidden><div class="jcard"><div class="eyebrow">Caderno de Lia</div><h1>O mapa do que importa</h1><div id="journalCount"></div><div id="journalList"></div><p class="jhint">J ou Esc para fechar</p></div></div>
-<div class="overlay" id="ending" role="dialog" aria-modal="true" aria-label="Fim, e começo" hidden><div class="card"><div class="eyebrow">Fim, e começo</div><h1 style="font-size:64px">O vale lembra</h1><p class="lede">Os lumes subiram de todo o vale e se misturaram às estrelas. O caderno está cheio. Mas o vale, como disse Odessa, nunca fica pronto: ainda há cantos esperando alguém que olhe com calma.</p><button class="btn" id="endBtn">Continuar andando</button></div></div>
+<div class="overlay" id="journal" role="dialog" aria-modal="true" aria-label="Caderno de Lia" hidden><div class="jcard"><div class="eyebrow">Caderno de Lia</div><h1>As vigílias de Aldren</h1><div id="journalCount"></div><div id="journalList"></div><p class="jhint">J ou Esc para fechar</p></div></div>
+<div class="overlay" id="fsHelp" role="dialog" aria-modal="true" aria-label="Tela cheia no iPhone" hidden><div class="card" style="max-width:520px"><div class="eyebrow">Tela cheia no iPhone</div><p class="lede" style="font-size:19px">O Safari do iPhone não deixa nenhum site ocupar a tela inteira. Mas dá para jogar sem as barras:</p><p style="line-height:1.6;font-size:16px;text-align:left;margin:0 auto 22px;max-width:40ch">1. Toque em <b>Compartilhar</b> (o quadrado com a seta para cima).<br>2. Escolha <b>Adicionar à Tela de Início</b>.<br>3. Abra o jogo pelo ícone <b>Aldren</b>: ele abre em tela cheia, deitado.</p><button class="btn" id="fsHelpOk">Entendi</button></div></div>
+<div class="overlay" id="ending" role="dialog" aria-modal="true" aria-label="Fim, e começo" hidden><div class="card"><div class="eyebrow">Fim, e começo</div><h1 style="font-size:64px">O vale descansa</h1><p class="lede">As vigílias se fecharam. Os gigantes continuam onde estão, mas agora é só pedra, e pedra pode virar paisagem. O caderno está cheio. Ainda há cantos do vale esperando alguém que olhe com calma, e uma carta a caminho de Ancoradouro.</p><button class="btn" id="endBtn">Continuar andando</button></div></div>
 <div id="fade"></div>
-<script type="module" src="game-f3c05602.js"></script>
+<script type="module" src="game-a0a5ab4a.js"></script>
 </body></html>

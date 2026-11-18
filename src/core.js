@@ -44,9 +44,11 @@ export const QUAL = {
   media: { lights: 6, sharpen: 0.2, pr: Math.min(devicePixelRatio, 1.0), shadow: 2048, shadowR: 50, grassR: 34, grassDen: 45, msaa: 0, ao: false, bloom: true, treeNear: 85, view: 850, fur: 12 },
   baixa: { lights: 4, pr: 0.75, shadow: 1024, shadowR: 38, grassR: 22, grassDen: 22, msaa: 0, ao: false, bloom: false, treeNear: 55, view: 600, fur: 6 },
 };
-export const settings = { quality: store.get('aldren2-q') || (isTouch ? 'baixa' : 'media'), grassK: 1, treeK: 1, sens: 1 };
+export const settings = { quality: store.get('aldren2-q') || 'media', grassK: 1, treeK: 1, sens: 1 };
 if (!QUAL[settings.quality]) settings.quality = 'media';
 export const Q = () => QUAL[settings.quality];
+// no celular, a qualidade média usa sombra menor e grama um pouco mais rala (o resto fica igual)
+if (isTouch) { QUAL.media.shadow = 1024; QUAL.media.grassDen = 36; QUAL.media.lights = 5; QUAL.alta.shadow = 2048; }
 
 // ---------- renderer / scene ----------
 export const renderer = new THREE.WebGLRenderer({ antialias: false, powerPreference: 'high-performance', stencil: false });
@@ -134,6 +136,22 @@ export const progress = { total: 0, done: 0, onChange: null };
 function track(p) { progress.total++; progress.onChange && progress.onChange(); return p.then(v => { progress.done++; progress.onChange && progress.onChange(); return v; }); }
 export function trackP(p) { return track(p); }
 export function loadGLTF(url) { return track(gltfLoader.loadAsync(url)); }
+// No celular, as texturas passam a ter no máximo `max` pixels de lado. As do jogo são quase todas 1024 ou 2048,
+// e juntas passavam de 400 MB na GPU: o Safari do iPhone matava a aba e recarregava a página.
+const capped = new WeakSet();
+function shrinkTex(t, max) {
+  if (capped.has(t) || t.isDataTexture || t.isRenderTargetTexture || t.isCubeTexture || t.isCompressedTexture || t.isVideoTexture) return;
+  const im = t.image; if (!im || !im.width || !im.height || (im.width <= max && im.height <= max)) { capped.add(t); return; }
+  const k = max / Math.max(im.width, im.height); const c = document.createElement('canvas'); c.width = Math.max(1, Math.round(im.width * k)); c.height = Math.max(1, Math.round(im.height * k));
+  try { const g = c.getContext('2d'); g.imageSmoothingQuality = 'high'; g.drawImage(im, 0, 0, c.width, c.height); } catch (e) { capped.add(t); return; }
+  if (im.close) { try { im.close(); } catch (e) { } }
+  t.image = c; t.needsUpdate = true; capped.add(t);
+}
+export function capTextures(root, max) {
+  if (!max) return;
+  root.traverse(o => { const ms = o.material ? [].concat(o.material) : []; for (const m of ms) { for (const k in m) { const t = m[k]; if (t && t.isTexture) shrinkTex(t, max); } if (m.uniforms) for (const k in m.uniforms) { const t = m.uniforms[k] && m.uniforms[k].value; if (t && t.isTexture) shrinkTex(t, max); } } });
+}
+export const TEX_MAX = isTouch ? 512 : 0;
 export function loadTex(url, { srgb = true, repeat = true } = {}) {
   return track(texLoader.loadAsync(url)).then(t => {
     if (srgb) t.colorSpace = THREE.SRGBColorSpace;

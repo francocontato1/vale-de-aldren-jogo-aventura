@@ -29,16 +29,22 @@ const MODEL = { torre: { eco_m: 'eco_old' }, relogios: { eco_m: 'eco_old' } };
 export class Lume {
   constructor(place, spot, opts, onDone) {
     this.def = place; this.onDone = onDone; this.t = 0; this.fade = 0; this.line = -1; this.done = false; this.ending = false; this.speaking = false; this.lineT = 0;
-    this.mat = lumeMaterial(); this.figs = [];
+    this.mat = lumeMaterial(); this.figs = []; this.props = [];
     const yaw0 = opts.yaw ?? 0;
     for (const f of place.figures) {
       const key = f.model || (MODEL[place.id] && MODEL[place.id][f.who]) || f.who; const h = new Human(key);
       for (const m of h.meshes) { m.material = this.mat; m.castShadow = false; m.receiveShadow = false; }
-      const c = Math.cos(yaw0), s = Math.sin(yaw0); let x = spot.x + f.dx * c + f.dz * s, z = spot.z - f.dx * s + f.dz * c; let y = groundH(x, z);
+      const c = Math.cos(yaw0), s = Math.sin(yaw0); let x = spot.x + f.dx * c + f.dz * s, z = spot.z - f.dx * s + f.dz * c;
+      if (opts.at && opts.at[f.who]) { x = opts.at[f.who].x; z = opts.at[f.who].z; }
+      // nunca dentro de uma pedra, parede ou pilar: procura o lugar livre mais perto
+      if (opts.blocked && opts.blocked(x, z, 0.35)) { let best = null; for (let r = 0.3; r < 3.2 && !best; r += 0.25) for (let k = 0; k < 12; k++) { const a = k / 12 * Math.PI * 2, nx = x + Math.cos(a) * r, nz = z + Math.sin(a) * r; if (!opts.blocked(nx, nz, 0.35)) { best = [nx, nz]; break; } } if (best) { x = best[0]; z = best[1]; } }
+      let y = groundH(x, z);
       if (f.top && opts.top) { x = opts.top.x; z = opts.top.z; y = opts.top.y; }
-      h.root.position.set(x, y + (opts.lift || 0), z); h.root.rotation.y = yaw0 + (f.yaw || 0);
+      h.root.position.set(x, y + (opts.lift || 0), z); h.root.rotation.y = (opts.at && opts.at[f.who] && opts.at[f.who].yaw !== undefined) ? opts.at[f.who].yaw : yaw0 + (f.yaw || 0);
       const an = ANIM[f.anim] || 'idle'; h.play(an, 0); if (an === 'lie') { h.current.timeScale = 0; h.current.time = 0.02; }
       h.mixer.update(rand() * 2); scene.add(h.root); this.figs.push({ h, who: f.who, anim: an, x, y, z, t: rr(0, 3) });
+      // quem senta no chão ganha uma pedra de luz para sentar (faz parte da lembrança)
+      if (an === 'sit' && !(f.top && opts.top)) { const ry = h.root.rotation.y; const g = new THREE.IcosahedronGeometry(0.42, 1); g.scale(1.25, 0.62, 1.0); const rock = new THREE.Mesh(g, this.mat); rock.position.set(x - Math.sin(ry) * 0.12, y + 0.2, z - Math.cos(ry) * 0.12); rock.rotation.y = ry; scene.add(rock); this.props.push(rock); }
     }
     // poeira de luz em volta
     const n = 90; const geo = new THREE.BufferGeometry(); this.dp = new Float32Array(n * 3); this.ds = Array.from({ length: n }, () => [rr(-3, 3), rr(0, 2.6), rr(-3, 3), rr(0, 6)]); geo.setAttribute('position', new THREE.BufferAttribute(this.dp, 3));
@@ -80,7 +86,7 @@ export class Lume {
     else if (this.line >= 0 && !this.ending) { this.lineT += dt; if ((!this.speaking && this.lineT > 1.2) || this.lineT > this.lineMax + 3) this.nextLine(); }
     if (this.ending && this.fade <= 0 && !this.done) { this.done = true; this.dispose(); this.onDone && this.onDone(); }
   }
-  dispose() { for (const f of this.figs) scene.remove(f.h.root); scene.remove(this.dust); this.light.dispose(); this.sub.classList.remove('show'); this.sub.hidden = true; Voice.stop(); }
+  dispose() { for (const f of this.figs) scene.remove(f.h.root); for (const m of this.props) { scene.remove(m); m.geometry.dispose(); } scene.remove(this.dust); this.light.dispose(); this.sub.classList.remove('show'); this.sub.hidden = true; Voice.stop(); }
 }
 
 // ---------- o espírito companheiro (uma luzinha curiosa) ----------

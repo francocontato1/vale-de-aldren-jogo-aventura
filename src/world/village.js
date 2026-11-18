@@ -212,8 +212,9 @@ export function house(x, z, rot, o) {
     // espelho de cada degrau um pouco mais escuro (lê melhor a forma)
     for (let i = 0; i < steps; i++) { const h = (i + 1) * (rise / steps); box(0.025, 0.03, stairW + 0.02, M.timber, 1, mtx(sxB - i * run, prev + h - 0.015, szc, 0, 0, 0, B), false); }
     addWalk(B, sx0, sxB, szc - stairW / 2, szc + stairW / 2, prev + rise, prev + 0.02, 'x');
-    // laje com abertura sobre a parte alta da escada (há altura livre na parte baixa)
-    const hxb = sxB - 0.9, hz1 = szc + stairW / 2 + 0.03;
+    // laje com abertura sobre a escada inteira (e um pouco além do pé): ninguém bate a cabeça, e a câmera,
+    // que vem atrás e acima da Lia, não atravessa o assoalho de cima durante a subida
+    const hxb = Math.min(sxB + 0.35, iw / 2 - 1.2), hz1 = szc + stairW / 2 + 0.03;
     const slabY = fy + SLAB / 2;
     box(iw / 2 - hxb, SLAB, id, M.floor, 1.4, mtx((hxb + iw / 2) / 2, slabY, 0, 0, 0, 0, B), true);
     box(hxb + iw / 2, SLAB, id / 2 - hz1, M.floor, 1.4, mtx((hxb - iw / 2) / 2, slabY, (hz1 + id / 2) / 2, 0, 0, 0, B), true);

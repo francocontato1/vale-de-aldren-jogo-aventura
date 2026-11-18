@@ -40,8 +40,13 @@ function garden() {
   { const gx = x + Math.sin(gate) * 15, gz = z + Math.cos(gate) * 15; const G = mtx(gx, groundH(gx, gz), gz, 0, gate, 0); for (const s of [-1, 1]) box(0.7, 3.6, 0.7, M.ruin, 1.3, mtx(s * 1.6, 1.8, 0, 0, 0, 0, G)); const sh = new THREE.Shape(); sh.moveTo(-2.0, 0); sh.lineTo(2.0, 0); sh.lineTo(2.0, 1.4); sh.lineTo(-2.0, 1.4); sh.lineTo(-2.0, 0); const hole = new THREE.Path(); hole.absarc(0, 0, 1.25, 0, Math.PI, false); sh.holes.push(hole); const ag = new THREE.ExtrudeGeometry(sh, { depth: 0.7, bevelEnabled: false, curveSegments: 16 }); ag.translate(0, 0, -0.35); put(boxUV(ag, 1.3), M.ruin, mtx(0, 3.6 - 0.25, 0, 0, 0, 0, G)); for (const s of [-1, 1]) { const c = new THREE.Vector3(s * 1.6, 0, 0).applyMatrix4(G); addCircle(c.x, c.z, 0.5); } }
   // relógios de sol em espiral, cada um marcando uma hora diferente
   const dials = [];
-  for (let i = 0; i < 13; i++) { const a = i * 2.4, r = 3 + i * 0.75; const px = x + Math.cos(a) * r, pz = z + Math.sin(a) * r; const py = groundH(px, pz); const D = mtx(px, py, pz, 0, rr(0, 6.28), 0);
-    cyl(0.28, 0.36, 0.95, 10, M.ruin, 1, mtx(0, 0.47, 0, 0, 0, 0, D)); cyl(0.5, 0.5, 0.06, 20, M.brass, 1, mtx(0, 0.98, 0, 0, 0, 0, D));
+  // o relógio da Mira é o mais perto do banco de contemplar: o único com a sombra limpa; os outros, tomados de musgo
+  const sx0 = x + 1.5, sz0 = z - 1.2; let mira = 0, md = 1e9;
+  for (let i = 0; i < 13; i++) { const a = i * 2.4, r = 3 + i * 0.75; const d = Math.hypot(x + Math.cos(a) * r - sx0, z + Math.sin(a) * r - sz0); if (d > 2.2 && d < md) { md = d; mira = i; } }
+  for (let i = 0; i < 13; i++) { const a = i * 2.4, r = 3 + i * 0.75; const px = x + Math.cos(a) * r, pz = z + Math.sin(a) * r; const py = groundH(px, pz); const D = mtx(px, py, pz, 0, rr(0, 6.28), 0); const clean = i === mira;
+    cyl(0.28, 0.36, 0.95, 10, clean ? M.ruin : M.ruinMoss, 1, mtx(0, 0.47, 0, 0, 0, 0, D)); cyl(0.5, 0.5, 0.06, 20, M.brass, 1, mtx(0, 0.98, 0, 0, 0, 0, D));
+    if (!clean) { const mr = rr(0.22, 0.42), ox = rr(-0.12, 0.12), oz = rr(-0.12, 0.12); cyl(mr, mr + 0.03, 0.035, 12, M.ruinMoss, 1, mtx(ox, 1.02, oz, 0, 0, 0, D), false); }
+    else storySpots.miraDial = new THREE.Vector3(px, py, pz);
     const sh = new THREE.Shape(); sh.moveTo(0, 0); sh.lineTo(0.42, 0); sh.lineTo(0, 0.32); sh.lineTo(0, 0); const gn = new THREE.ExtrudeGeometry(sh, { depth: 0.025, bevelEnabled: false }); gn.translate(-0.21, 0, -0.012); put(gn, M.brass, mtx(0, 1.01, 0, 0, 0, 0, D));
     for (let k = 0; k < 12; k++) { const ka = k / 12 * Math.PI * 2; box(0.02, 0.012, 0.09, M.iron, 1, mtx(Math.cos(ka) * 0.4, 1.015, Math.sin(ka) * 0.4, 0, -ka, 0, D), false); }
     addCircle(px, pz, 0.42); dials.push([px, pz]); }

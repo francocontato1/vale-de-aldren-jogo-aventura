@@ -1,0 +1,17 @@
+{
+  "name": "Vale de Aldren",
+  "short_name": "Aldren",
+  "description": "Um jogo contemplativo: um vale, quatro gigantes de pedra e oito lembranças por terminar.",
+  "lang": "pt-BR",
+  "start_url": "./",
+  "scope": "./",
+  "display": "fullscreen",
+  "orientation": "landscape",
+  "background_color": "#0b0d10",
+  "theme_color": "#0b0d10",
+  "icons": [
+    { "src": "a/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "a/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "a/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

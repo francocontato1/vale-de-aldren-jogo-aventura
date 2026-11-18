@@ -42,6 +42,8 @@ export const CHARS = {
   v_sela: { sex: 'f', outfit: 'f_ranger', hide: /Pauldron/, hair: 'Hair_Buns', hairCol: [0.3, 0.2, 0.12], skin: [1.3, 1.1, 0.95], height: 0.96 },
   v_sela_m: { sex: 'f', outfit: 'f_peasant', hair: 'Hair_Buns', hairCol: [0.3, 0.2, 0.12], skin: [1.3, 1.1, 0.95], height: 0.55, child: true },
   v_dessa: { sex: 'f', outfit: 'f_ranger', hide: /Hood|Pauldron|Bracer/, hair: 'Hair_Long', hairCol: [0.93, 0.93, 0.95], skin: [1.6, 1.45, 1.35], height: 0.6, child: true, elf: true },
+  v_mira: { sex: 'f', outfit: 'f_peasant', hair: 'Hair_Bob', hairCol: [0.3, 0.2, 0.12], skin: [1.3, 1.1, 0.95], height: 0.5, child: true },
+  v_dessa_j: { sex: 'f', outfit: 'f_ranger', hide: /Hood|Pauldron|Bracer/, hair: 'Hair_Long', hairCol: [0.93, 0.93, 0.95], skin: [1.6, 1.45, 1.35], height: 0.78, child: true, elf: true },
   // Vila da Maré
   marta: { sex: 'f', outfit: 'f_peasant', hair: 'Hair_Buns', hairCol: [0.62, 0.58, 0.54], skin: [1.45, 1.2, 1.02], tint: { T_Peasant: [0.72, 0.85, 1.05] }, height: 0.95, old: true },
   joca: { sex: 'm', outfit: 'm_peasant', hair: ['Hair_Buzzed'], hairCol: [0.22, 0.14, 0.08], skin: [1.2, 0.98, 0.82], tint: { T_Peasant: [1.05, 0.95, 0.8] }, height: 1.02 },

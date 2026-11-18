@@ -1,4 +1,4 @@
-import { hash2, loadTex, THREE, renderer, scene, camera, U, Q, settings, store, clamp, lerp, smooth, rand, rr, angDiff, lerpAng, makeMacroTexture, loadGLTF, progress, isTouch, trackP, VLight, LightPool } from './core.js';
+import { hash2, loadTex, capTextures, TEX_MAX, THREE, renderer, scene, camera, U, Q, settings, store, clamp, lerp, smooth, rand, rr, angDiff, lerpAng, makeMacroTexture, loadGLTF, progress, isTouch, trackP, VLight, LightPool } from './core.js';
 import { computeTerrainData, buildTerrain, groundH, normalY, splatAt, sandAt, seaAt, fromUV, HARBOR, SEA_ROT, POI, PATHS, MIRANTE, TRAIL, NINHO, forestDensity, WATER, HGT, NRM, SPLAT, NV, CELL, HALF, creekDist } from './world/terrain.js';
 import { buildWater, setWaterQuality } from './world/water.js';
 import { buildOcean, updateOcean, seaSurface, depthAt, surfNear } from './world/ocean.js';
@@ -105,6 +105,7 @@ const SPOTS = {}; // onde contemplar cada lugar
 // desenha (o buffer do pós-processamento, sem tone mapping); compilar direto na tela gerava outros shaders
 // e o primeiro quadro, a lanterna e o primeiro lume recompilavam tudo de novo (era o travamento).
 async function prewarm() {
+  capTextures(scene, TEX_MAX);
   const extra = new THREE.Group(); scene.add(extra);
   const lm = lumeMaterial(); for (const key of ['eco_m', 'eco_f']) { const h = new Human(key); for (const m of h.meshes) m.material = lm; extra.add(h.root); }
   const rain = new LumeRain(V3(0, 0, 0), 8); extra.add(rain.pts);
@@ -174,6 +175,7 @@ async function boot() {
 }
 // compila (sem travar, quando o navegador permite) os shaders de algo que entrou na cena depois do carregamento
 async function compileNew() {
+  capTextures(scene, TEX_MAX);
   // a parte síncrona da compilação usa o alvo atual; o alvo volta ao normal antes de esperar
   const prev = renderer.getRenderTarget(); renderer.setRenderTarget(post.composer.renderTarget1);
   let p = null; try { p = renderer.compileAsync ? renderer.compileAsync(scene, camera) : (renderer.compile(scene, camera), null); } catch (e) { }
@@ -410,7 +412,12 @@ function updateCamera(dt) {
   const cy = cam.yaw, cp = cam.pitch;
   camFwd.set(-Math.sin(cy) * Math.cos(cp), Math.sin(cp), -Math.cos(cy) * Math.cos(cp));
   // lume: órbita lenta em volta da lembrança
-  if (state === 'lume' && lume) { const c = lume.center; cam.orbit += dt * 0.045; const a = (cam.lumeA ?? Math.atan2(player.x - c.x, player.z - c.z)) + cam.orbit; cam.lumeA = cam.lumeA ?? a; const want = V3(c.x + Math.sin(a) * 6.8, c.y + 2.2, c.z + Math.cos(a) * 6.8); want.y = Math.max(want.y, groundH(want.x, want.z) + 1.2); cam.cur.lerp(want, 1 - Math.exp(-dt * 1.5)); camera.position.copy(cam.cur); camera.lookAt(c.x, c.y + 1.2, c.z); camera.fov = lerp(camera.fov, 42, 1 - Math.exp(-dt * 2)); camera.updateProjectionMatrix(); return; }
+  if (state === 'lume' && lume) {
+    // enquadra todas as figuras da lembrança (inclusive quem está no alto da escada), girando devagar a partir do lado da Lia
+    const f = lume.figs; let cx = 0, cy = 0, cz = 0, lo = 1e9, hi = -1e9, spread = 0; for (const o of f) { cx += o.x; cy += o.y; cz += o.z; lo = Math.min(lo, o.y); hi = Math.max(hi, o.y); } cx /= f.length; cy /= f.length; cz /= f.length; for (const o of f) spread = Math.max(spread, Math.hypot(o.x - cx, o.z - cz));
+    const c = { x: cx, y: (lo + hi) / 2, z: cz }; const dist = Math.min(14, Math.max(6.2, spread * 1.7 + (hi - lo) * 1.2 + 4.2));
+    cam.orbit += dt * 0.04; const a = (cam.lumeA ?? Math.atan2(player.x - c.x, player.z - c.z) + ((lumePlace && lumePlace.camA) || 0)) + cam.orbit; cam.lumeA = cam.lumeA ?? a; const want = V3(c.x + Math.sin(a) * dist, c.y + 2.4 + (hi - lo) * 0.25, c.z + Math.cos(a) * dist); want.y = Math.max(want.y, groundH(want.x, want.z) + 1.4);
+    cam.cur.lerp(want, 1 - Math.exp(-dt * 1.5)); camera.position.copy(cam.cur); camera.lookAt(c.x, c.y + 0.9, c.z); camera.fov = lerp(camera.fov, 42, 1 - Math.exp(-dt * 2)); camera.updateProjectionMatrix(); return; }
   cam.lumeA = undefined;
   if (state === 'fly' && alva) {
     const b = alva.bodyPos(); const cy2 = cam.yaw, cp2 = cam.pitch; const fwd2 = V3(-Math.sin(cy2) * Math.cos(cp2), Math.sin(cp2), -Math.cos(cy2) * Math.cos(cp2)); const pivot = b.clone().add(V3(0, 3, 0));
@@ -636,22 +643,27 @@ function liaTalk(id, lvl, open, opts) { if (frLevel(id) < lvl || said('lia_' + i
 const seen = (k) => !!S.lumes[k];
 function talkOdessa() {
   if (!S.met.odessa) return Nd('od_first', [
-    O('Você é a maga Odessa?', () => Nd('od_quem', [O('Que tipo de mapa você quer?', mapaOd)])),
-    O('Que tipo de mapa você quer?', mapaOd)]);
+    O('Por que eu?', () => Nd('od_quem', [O('E o que você precisa, exatamente?', mapaOd)])),
+    O('O que você precisa, exatamente?', mapaOd)]);
   if (has('carta')) return Nd('od_carta', [O('Espero.', () => Nd('od_resposta', BYE, () => { give('resposta'); toast('Favor', 'Levar a resposta da Odessa para o Seu Davi, no farol'); }))], () => { take('carta'); S.cartaDay = S.day; friend('odessa', 2); friend('davi', 2); });
   const n = lumesN();
   const alva = O('Que sombra é aquela que passa no céu?', () => Nd('od_alva', BYE), () => { S.flags.alva = 1; save(); });
   if (n >= 8 && !S.told) return Nd('od_todos', [O('Eu volto quando escurecer.', null, () => { S.told = 1; refreshQuest(); save(); })]);
-  if (S.told && !S.final) { if (isNight()) return Nd('fim1', [O('Olhar para cima com ela', null, () => { pendingAfterDialog = startFinale; })]); return Nd('od_noite', BYE); }
+  if (S.told && !S.final) { if (isNight()) return Nd('fim1', [O('Ficar do lado dela', null, () => { pendingAfterDialog = startFinale; })]); return Nd('od_noite', BYE); }
   // o que ela conta de cada lembrança, na ordem em que a Lia encontrou
   const r = firstReaction([...[...new Set([...(S.lumeOrder || []), ...Object.keys(S.lumes)])].map(k => ['od_' + k, seen(k), 'od_r_' + k]), ['od_fita', S.flags.fitaNo, 'od_fita']]);
   if (r) return r;
-  const lia = liaTalk('odessa', 2, 'od_lia1', [['Porque era longe.', 'li_od_longe', 'od_lia2'], ['Porque você pediu um mapa diferente.', 'li_od_mapa', 'od_lia3']]);
+  // as mãos de pedra (depois de três lembranças)
+  if (n >= 3 && !said('od_maos')) return Nd('od_maos', [O('Por isso você me chamou.', () => Nd('od_maos2', BYE)), O('Dói?', () => Nd('od_maos2', BYE))], markSaid('od_maos'));
+  const lia = liaTalk('odessa', 2, 'od_lia1', [['Porque era longe.', 'li_od_longe', 'od_lia2'], ['Porque você disse que ele falou de mim.', 'li_od_mapa', 'od_lia3']]);
   if (lia) return lia;
-  if (S.final) { const c = chat('odessa_pos', ['od_pos1', 'od_pos2', 'od_cha']); c.opts = [alva, ...BYE]; return c; }
-  return Nd(n >= 6 ? 'od_n4' : ['od_n2', 'od_n3', 'od_cha'][(S.chat.odessa = ((S.chat.odessa || 0) + 1) % 3)], [O('Ainda tem chá?', () => Nd('od_cha', BYE)), alva, O('Vou continuar procurando.', null)]);
+  // o que o pai da Lia disse dela (depois da conversa sobre ele e de cinco lembranças)
+  if (said('lia_odessa') && n >= 5 && !said('od_pai')) return Nd('od_pai', [O('…', () => Nd('li_od_pai', [O('…', () => Nd('od_pai2', BYE))]))], () => { markSaid('od_pai')(); friend('odessa', 2); });
+  if (S.final) { const c = chat('odessa_pos', ['od_pos1', 'od_pos2', 'od_cha2']); c.opts = [alva, ...BYE]; return c; }
+  return Nd(n >= 6 ? 'od_n4' : ['od_n2', 'od_n3', 'od_cha'][(S.chat.odessa = ((S.chat.odessa || 0) + 1) % 3)], [O('Ainda tem chá?', () => Nd('od_cha', BYE)), alva, O('Vou continuar.', null)]);
 }
-const mapaOd = () => Nd('od_mapa', [O('Como eu encontro esses lugares?', () => Nd('od_como', [O('Algum jeito certo de olhar?', () => Nd('od_hora', [O('E depois?', () => Nd('od_depois', [O('Combinado.', null, () => { S.met.odessa = 1; friend('odessa', 1); toast('O mapa do que importa', 'Contemple os oito lugares dos Veladores, cada um na sua hora'); refreshQuest(); save(); })]))]))]))]);
+const mapaOd = () => Nd('od_mapa', [O('E o que acontece quando eu desenhar?', () => Nd('od_fechar', [O('Como eu encontro esses lugares?', comoOd)])), O('Como eu encontro esses lugares?', comoOd)]);
+const comoOd = () => Nd('od_como', [O('Tem hora certa?', () => Nd('od_hora', [O('E depois?', () => Nd('od_depois', [O('Combinado.', null, () => { S.met.odessa = 1; friend('odessa', 1); toast('As oito vigílias', 'Veja até o fim as lembranças que os Veladores deixaram abertas, cada uma na sua hora'); refreshQuest(); save(); })]))]))]);
 function talkAnselmo() {
   if (isNight()) return Nd('an_noite', BYE);
   if (!S.met.anselmo) return Nd('an_first', [O('O senhor conhece os gigantes?', () => Nd('an_gigantes', [O('E os Veladores?', () => Nd('an_veladores', BYE, metOnce('anselmo')))])), O('O que acha que aconteceu com os Veladores?', () => Nd('an_veladores', BYE, metOnce('anselmo')))]);
@@ -664,7 +676,7 @@ function talkCeleste() {
   if (!S.met.celeste) return Nd('ce_first', [O('A Odessa vem sempre aqui?', () => Nd('ce_odessa', [O('E as ruínas? O que você acha?', () => Nd('ce_ruinas', BYE))]), metOnce('celeste')), O('O que você acha das ruínas?', () => Nd('ce_ruinas', BYE), metOnce('celeste'))]);
   if (has('peixe')) return Nd('ce_peixe', BYE, () => { take('peixe'); friend('celeste', 2); });
   if (S.sailed && !S.flags.ceBarco) return Nd('ce_barco', BYE, () => { S.flags.ceBarco = 1; friend('celeste', 1); });
-  const r = firstReaction([['ce_rel', seen('relogios'), 'ce_r_relogios']]); if (r) return r;
+  const r = firstReaction([['ce_rel', seen('relogios'), 'ce_r_relogios'], ['ce_um', S.final || lumesN() >= 6, 'ce_um']]); if (r) return r;
   const lia = liaTalk('celeste', 2, 'ce_lia1', [['Sabe… mais ou menos.', 'li_ce1', 'ce_lia2'], ['Prefiro não falar disso.', 'li_ce1', 'ce_lia3']]); if (lia) return lia;
   if (!S.fav.pao && !has('pao') && !has('peixe') && (S.found.mare || S.met.marta || (S.chat.celeste || 0) >= 2)) return Nd('ce_cesta', [O('Levo, sim.', null, () => { give('pao'); toast('Favor', 'Levar o pão para a Dona Marta, na Vila da Maré'); }), O('Agora não, desculpa.', null)]);
   return chat('celeste', ['ce_c1', 'ce_c3', 'ce_c2', ...(S.fav.peixe ? ['ce_c4'] : [])]);
@@ -680,7 +692,7 @@ function talkTome() {
 }
 function talkIrene() {
   if (!S.met.irene) return Nd('ir_first', [O('Então por que você continua?', () => Nd('ir_porque', [O('Posso ver?', () => Nd('ir_ver', BYE))]), metOnce('irene')), O('Posso ver?', () => Nd('ir_ver', BYE), metOnce('irene'))]);
-  const r = firstReaction([['ir_lago', seen('lago'), 'ir_r_lago']]); if (r) return r;
+  const r = firstReaction([['ir_lago', seen('lago'), 'ir_r_lago'], ['ir_mao', (S.chat.irene || 0) >= 1 || seen('lago') || seen('rosto'), 'ir_mao']]); if (r) return r;
   const lia = liaTalk('irene', 2, 'ir_lia1', [['Desenhava por gosto. Agora é trabalho.', 'li_ir1', 'ir_lia2']]); if (lia) return lia;
   return chat('irene', ['ir_c1', 'ir_c2', 'ir_c3', ...(S.found.mare ? ['ir_c4'] : [])]);
 }
@@ -762,12 +774,21 @@ function contemplate(place) {
 }
 const spAt = (sp) => ({ x: sp.x, z: sp.z, yaw: sp.yaw, y: sp.y });
 function startLume(place) {
-  const sp = SPOTS[place.place]; lumePlace = place; state = 'lume'; document.body.classList.add('cine'); timeLapse = 0; $('lapseHint').hidden = true;
+  const sp = SPOTS[place.place]; lumePlace = place; state = 'lume'; document.body.classList.add('cine'); $('prompt').hidden = true; timeLapse = 0; $('lapseHint').hidden = true;
   const fwd = V3(Math.sin(sp.yaw), 0, Math.cos(sp.yaw)); const c = { x: sp.x + fwd.x * 3.2, z: sp.z + fwd.z * 3.2 };
   if (place.id === 'escada') { c.x = sp.x + fwd.x * 1.2; c.z = sp.z + fwd.z * 1.2; }
   const ri = place.reflectIf; const seenAny = ri && [].concat(ri.seen).some(k => S.lumes[k]);
-  lume = new Lume(place, c, { yaw: sp.yaw + Math.PI, top: sp.top, reflect: seenAny ? ri.line : place.reflect, onPeak: () => captureSketch(place.id) }, () => finishLume(place));
+  // no jardim, o Teo se ajoelha junto ao relógio da Mira (o único sem musgo) e a Dessa fica de pé ao lado
+  let at = null; const md = storySpots.miraDial;
+  if (place.id === 'relogios' && md) { const toSp = Math.atan2(sp.x - md.x, sp.z - md.z); const side = toSp + Math.PI / 2; const ta = toSp + 1.3, da = toSp - 1.15; at = { teo: { x: md.x + Math.sin(ta) * 0.8, z: md.z + Math.cos(ta) * 0.8, yaw: ta + Math.PI }, dessa: { x: md.x + Math.sin(da) * 1.5, z: md.z + Math.cos(da) * 1.5 } }; c.x = md.x; c.z = md.z; }
+  lume = new Lume(place, c, { at, blocked: blockedXZ, yaw: sp.yaw + Math.PI, top: sp.top, reflect: seenAny ? ri.line : place.reflect, onPeak: () => captureSketch(place.id) }, () => finishLume(place));
   Music.stop(4); setTimeout(() => Music.play('memory', { fade: 3, vol: 0.8 }), 600);
+}
+// há algo sólido (pedra, pilar, parede) neste ponto? (só no plano do chão)
+function blockedXZ(x, z, r = 0.3) {
+  for (const [cx, cz, cr] of colliders.circles) { const dx = x - cx, dz = z - cz; if (dx * dx + dz * dz < (cr + r) * (cr + r)) return true; }
+  for (const b of colliders.boxes) { if (b.y0 > -1e8 && b.y0 > groundH(x, z) + 1.2) continue; const dx = x - b.x, dz = z - b.z; if (Math.abs(dx) > b.rad + r || Math.abs(dz) > b.rad + r) continue; const lx = dx * b.c - dz * b.s, lz = dx * b.s + dz * b.c; if (Math.abs(lx) < b.hw + r && Math.abs(lz) < b.hd + r) return true; }
+  return false;
 }
 function finishLume(place) {
   lume = null; state = 'play'; document.body.classList.remove('cine'); S.lumes[place.id] = 1; S.lumeOrder = S.lumeOrder || []; if (!S.lumeOrder.includes(place.id)) S.lumeOrder.push(place.id); placeDone(place);
@@ -790,20 +811,20 @@ function captureSketch(id) {
     g.putImageData(im, 0, 0); const url = c.toDataURL('image/jpeg', 0.72); sketches[id] = url; store.set('aldren-sketch-' + id, url);
   } catch (e) { console.warn('esboço', e); }
 }
-// uma anotação pode mudar depois que a Lia descobre algo (o poço da Ilsa, a ponte pronta)
+// uma anotação pode mudar depois que a Lia descobre algo (o poço da corda nova, a ponte pronta)
 function noteNow(id) { const n = NOTES[id], c = n.lineIf; if (c && ((c.flag && S.flags[c.flag]) || (c.seen && S.lumes[c.seen]))) return { title: c.title || n.title, line: c.line, alt: true }; return { title: n.title, line: n.line }; }
 function readNote(id) { const n = noteNow(id); const k = n.alt ? id + '_2' : id; if (!S.notes[id] || (n.alt && !S.notes[k])) { S.notes[id] = 1; if (n.alt) S.notes[k] = 1; Sound.page(); save(); toast('Anotado no caderno', n.title); } think(n.line); }
 // perguntas do caderno: aparecem quando algo as levanta e se respondem com as descobertas
 const QUESTIONS = [
-  { q: 'Por que a Odessa mora aqui há seiscentos anos?', when: () => S.met.odessa, a: () => (seen('relogios') && said('od_relogios')) ? 'Prometeu ao Teo cuidar do jardim dos relógios até eles voltarem. Depois, ficou porque gostava.' : null },
-  { q: 'Quem é a menina que o mestre Auren chamou de Dessa?', when: () => seen('circulo'), a: () => said('od_circulo') ? 'A própria Odessa, aos nove anos de elfa.' : null },
-  { q: 'Por que a Ilsa não partiu com o povo?', when: () => seen('torre') || seen('monte') || seen('escada'), a: () => seen('escada') ? '"Eu sei que você me carrega. É por isso que eu não posso ir." Ela não tinha terminado de olhar.' : null },
-  { q: 'O Teo voltou?', when: () => seen('monte') || seen('escada'), a: () => seen('rosto') ? 'Voltou, velho e sozinho. Esculpiu o rosto dela e foi até o lago jogar uma pedra.' : null },
-  { q: 'De quem é o rosto entre as flores?', when: () => seen('rosto'), a: () => ['lago', 'monte', 'escada', 'arvore'].some(seen) ? 'Da Ilsa, sorrindo. O Teo esculpiu.' : null },
-  { q: 'Quem são os gigantes?', when: () => S.met.anselmo, a: () => seen('monte') && seen('rosto') ? 'A Moça do monte é a Ilsa, que ficou "só mais um pouco". O do lago, de mão erguida, deve ser o Teo.' : seen('monte') ? 'A gigante do monte é a Ilsa. E os outros?' : null },
+  { q: 'Por que a Odessa chamou justo a mim?', when: () => S.met.odessa, a: () => said('od_pai') ? 'Porque eu nunca estive aqui, e quem velou não fecha a vigília. E porque o pai contou a ela que eu sabia ficar quieta.' : said('od_maos') ? 'As mãos dela estão virando pedra. Ela precisa de alguém de fora para fechar as vigílias. Mas por que eu?' : null },
+  { q: 'O que são os gigantes?', when: () => S.met.anselmo || lumesN() > 0, a: () => (seen('torre') || seen('circulo')) ? 'Veladores que nunca terminaram uma vigília. A pedra cresce em quem não levanta: Aldren no círculo, Auren ao pé da torre, a Ilsa no monte, o Teo no lago.' : null },
+  { q: 'Quem limpa o relógio da Mira?', when: () => seen('relogios'), a: () => said('od_relogios') ? 'A Odessa. Toda tarde, às quatro e meia, há seiscentos anos.' : null },
+  { q: 'Por que os Veladores foram embora?', when: () => lumesN() >= 2, a: () => seen('torre') ? 'O mestre Auren viu o povo virando pedra de tanto velar e mandou os jovens embora antes que fosse tarde.' : null },
+  { q: 'Por que a Ilsa não partiu?', when: () => seen('torre') || seen('monte') || seen('escada'), a: () => seen('escada') ? 'Achava que, se esquecesse, a Mira morreria de vez. Ficou, e mandou o Teo levar a filha "andando".' : null },
+  { q: 'O que o gigante do lago segura?', when: () => said('ir_mao') || seen('lago'), a: () => seen('rosto') ? 'Uma pedra. A dos sete pulos que o Teo prometeu ensinar à Mira "amanhã".' : null },
 ];
 // o que a Lia já contou de si (aparece em "Sobre mim")
-const ABOUT = [['lia_anselmo', 'Sou de Ancoradouro, no litoral. Minha mãe tem uma papelaria lá.'], ['lia_odessa', 'Meu pai desenhava estradas para a Coroa. Morreu há dois invernos.'], ['lia_irene', 'Quando eu era pequena, desenhava bichos e gente nas margens dos mapas dele.'], ['lia_bastiao', 'Ele sabia de cor onde cada ponte tinha caído.'], ['lia_celeste', 'Faz um ano que eu não escrevo para a minha mãe.'], ['lia_davi', 'O Seu Davi me deu papel de carta. Disse para não deixar virar quarenta anos.']];
+const ABOUT = [['od_pai', 'O pai contou à Odessa que eu desenhava nas margens dos mapas dele. Nunca me disse isso.'], ['lia_anselmo', 'Sou de Ancoradouro, no litoral. Minha mãe tem uma papelaria lá.'], ['lia_odessa', 'Meu pai desenhava estradas para a Coroa. Morreu há dois invernos.'], ['lia_irene', 'Quando eu era pequena, desenhava bichos e gente nas margens dos mapas dele.'], ['lia_bastiao', 'Ele sabia de cor onde cada ponte tinha caído.'], ['lia_celeste', 'Faz um ano que eu não escrevo para a minha mãe.'], ['lia_davi', 'O Seu Davi me deu papel de carta. Disse para não deixar virar quarenta anos.']];
 function openJournal() {
   const list = $('journalList'); list.innerHTML = ''; const esc = (t) => String(t).replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
   const H = (t) => { const h = document.createElement('h2'); h.textContent = t; list.appendChild(h); };
@@ -845,7 +866,7 @@ function renderRibbons() {
 function readRibbon(quiet) {
   const r = RIBBONS[rib.sel]; [...$('ribRow').children].forEach((el, i) => el.classList.toggle('sel', i === rib.sel)); const card = $('ribCard');
   if (!quiet || S.ribbons[r.id]) { if (!S.ribbons[r.id]) { S.ribbons[r.id] = 1; Sound.page(); } }
-  const acts = []; if (!S.ribbons.lia) acts.push(['1', 'Amarrar o meu pedido', 'wish']); if (canRetie()) acts.push(['2', 'Refazer o nó da fita vermelha', 'retie']); acts.push(['Esc', 'Voltar', 'close']);
+  const acts = []; if (!S.ribbons.lia) acts.push(['1', 'Amarrar o meu pedido', 'wish']); if (canRetie()) acts.push(['2', 'Refazer os nós da fita vermelha', 'retie']); acts.push(['Esc', 'Voltar', 'close']);
   if (rib.wish) card.innerHTML = `<h3>O meu pedido</h3><div class="who">Ninguém vai ler. Mas eu vou saber.</div><div class="ribacts">${LIA_WISHES.map((w, i) => `<button data-w="${i}">${isTouch ? '' : `<b>${i + 1}</b>`}${escH(w.t)}</button>`).join('')}<button data-a="back">${isTouch ? '' : '<b>Esc</b>'}Deixar pra depois</button></div>`;
   else card.innerHTML = `<h3>${escH(r.title)}</h3><div class="who">${escH(ribbonWho(r))}</div><div class="txt h-${r.hand}" style="--ink-c:${r.ink || '#3b2e20'}">${escH(r.text)}</div><div class="ribacts">${acts.map(([k, t, a]) => `<button data-a="${a}">${isTouch ? '' : `<b>${k}</b>`}${t}</button>`).join('')}</div>`;
   card.querySelectorAll('button').forEach(b => b.onclick = (e) => { e.stopPropagation(); if (b.dataset.w) tieWish(+b.dataset.w); else ribAction(b.dataset.a); });
@@ -853,7 +874,7 @@ function readRibbon(quiet) {
 }
 function ribAction(a) { if (a === 'close') closeRibbons(); else if (a === 'back') { rib.wish = false; readRibbon(true); } else if (a === 'wish' && !S.ribbons.lia) { rib.wish = true; readRibbon(true); } else if (a === 'retie' && canRetie()) retie(); }
 function tieWish(i) { if (S.ribbons.lia || !LIA_WISHES[i]) return; S.ribbons.lia = LIA_WISHES[i].id; Sound.knot(); storySpots.ribbonTree && storySpots.ribbonTree.showLia(); toast('Fita amarrada', 'Perto da pedra furada'); closeRibbons(); setTimeout(() => think('li_fita_minha'), 600); save(); }
-function retie() { S.flags.fitaNo = 1; Sound.knot(); storySpots.ribbonTree && storySpots.ribbonTree.retie(); toast('Nó refeito', 'A fita da Ilsa aguenta mais uns cem anos'); closeRibbons(); setTimeout(() => think('li_fita_no'), 600); save(); }
+function retie() { S.flags.fitaNo = 1; Sound.knot(); storySpots.ribbonTree && storySpots.ribbonTree.retie(); toast('Nós refeitos', 'A fita da Mira não vai cair antes da hora'); closeRibbons(); setTimeout(() => think('li_fita_no'), 600); save(); }
 function ribbonKey(e) {
   if (e.code === 'Escape' || e.code === 'KeyE' && !rib.wish) { if (rib.wish) { rib.wish = false; readRibbon(true); } else closeRibbons(); return; }
   if (rib.wish) { const m = e.code.match(/^(Digit|Numpad)([1-3])$/); if (m) tieWish(+m[2] - 1); return; }
@@ -956,19 +977,56 @@ function startFinale() {
   for (const [n, a, b] of ring) { n.finale = true; n.inside = false; n.x = c.x + rgt.x * a + fwd.x * b; n.z = c.z + rgt.z * a + fwd.z * b; n.yaw = Math.atan2(fwd.x, fwd.z); n.finaleIdle = n === odessa ? 'idle' : n === anselmo ? 'fold' : 'idle'; n.h.root.visible = true; }
   player.x = c.x - rgt.x * 0.4; player.z = c.z - rgt.z * 0.4; player.h = Math.atan2(fwd.x, fwd.z); player.y = probe(player.x, player.z, groundH(player.x, player.z) + 0.5).h; player.speed = 0;
   const lines = FINALE.slice(); let i = -1; let t = 0, waiting = false;
-  finale = { speaker: null, t: 0, rain: null, camera: (dt) => { finale.t += dt; const a = finale.t * 0.03; const center = V3(c.x, groundH(c.x, c.z), c.z); const up = smooth(10, 26, finale.t); const want = center.clone().add(V3(Math.sin(odessa.yaw + Math.PI + a) * lerp(7, 9, up), lerp(1.8, 1.2, up), Math.cos(odessa.yaw + Math.PI + a) * lerp(7, 9, up))); cam.cur.lerp(want, 1 - Math.exp(-dt * 1.2)); camera.position.copy(cam.cur); const look = center.clone().add(V3(fwd.x * 6, lerp(1.4, 7.5, up), fwd.z * 6)); camera.lookAt(look); camera.fov = lerp(camera.fov, 50, dt); camera.updateProjectionMatrix(); },
-    update: (dt) => { t += dt; if (finale.rain) finale.rain.update(dt); pH.root.position.set(player.x, player.y, player.z); pH.root.rotation.y = player.h; pH.locomote(0); pH.lookAtPoint(V3(player.x + fwd.x * 6, player.y + 8, player.z + fwd.z * 6), 0.9); pH.update(dt);
+  finale = { speaker: null, t: 0, rain: null, camera: (dt) => { finale.t += dt; if (finale.shot === 'lake' && lakeShot) { lakeShot.camera(dt); return; } const a = finale.t * 0.03; const center = V3(c.x, groundH(c.x, c.z), c.z); const up = smooth(10, 26, finale.t); const want = center.clone().add(V3(Math.sin(odessa.yaw + Math.PI + a) * lerp(7, 9, up), lerp(1.8, 1.2, up), Math.cos(odessa.yaw + Math.PI + a) * lerp(7, 9, up))); cam.cur.lerp(want, 1 - Math.exp(-dt * 1.2)); camera.position.copy(cam.cur); const look = center.clone().add(V3(fwd.x * 6, lerp(1.4, 7.5, up), fwd.z * 6)); camera.lookAt(look); camera.fov = lerp(camera.fov, 50, dt); camera.updateProjectionMatrix(); },
+    update: (dt) => { t += dt; if (finale.rain) finale.rain.update(dt); if (lakeShot) lakeShot.update(dt); if (liaLume) liaLume.update(dt); pH.root.position.set(player.x, player.y, player.z); pH.root.rotation.y = player.h; pH.locomote(0); pH.lookAtPoint(V3(player.x + fwd.x * 6, player.y + 8, player.z + fwd.z * 6), 0.9); pH.update(dt);
       if (!waiting && t > 2.5) { i++; const id = lines[i]; if (!id) { finale.end(); return; } const [sp] = LINES[id]; finale.speaker = sp; showSub(id); waiting = true;
         if (id === 'fim5') { odessa.finaleIdle = 'spellIn'; setTimeout(() => { odessa.finaleIdle = 'spell'; }, 1500); }
-        if (id === 'fim6') { finale.rain = new LumeRain(c); sky.meteors = 1; Music.play('finale', { fade: 2, vol: 1 });
+        if (id === 'fim_lago') { lakeShot = makeLakeShot(); finale.shot = 'lake'; }
+        if (id === 'fim_pulos' && lakeShot) lakeShot.throwStone((Voice.man && Voice.man[id] && Voice.dubbed(id)) ? Voice.man[id].dur : 5.5);
+        if (id === 'fim7') { finale.shot = null; cam.cur.copy(camera.position); }
+        if (id === 'fim_lia4') liaLume = makeLiaLume(V3(player.x, player.y + 1.1, player.z));
+        if (id === 'fim6') { finale.rain = new LumeRain(c); sky.meteors = 1; Music.play('finale', { fade: 2, vol: 1 }); for (const g of giants) g.target = 1;
           // a Vésper vem ver também (se já é amiga da Lia)
           if (alva && S.flags.voou && !alva.rider) { const spot = alvaSpot(c.x, c.z); if (spot) alva.callTo(spot); } }
         Voice.say(id, { onEnd: () => { waiting = false; t = id === 'fim5' ? -3 : 0.6; } }); } },
     end: () => { hideSub(); finale.speaker = null; odessa.finaleIdle = 'idle'; S.final = 1; S.flags.ponte = 1; if (storySpots.bridgeDone) storySpots.bridgeDone.visible = true; save(); refreshQuest(); finalAmbience(); $('ending').hidden = false; setTimeout(() => $('ending').classList.add('show'), 50);
       // depois do narrador, a carta que a Lia devia à mãe (se o Seu Davi deu o papel)
-      setTimeout(() => think('fim11', () => { if (has('papel')) setTimeout(() => think('li_carta_mae', () => { take('papel'); S.flags.cartaMae = 1; toast('Carta escrita', 'Para a minha mãe, em Ancoradouro'); save(); }), 1500); }), 1200); } };
+      setTimeout(() => think('fim11', () => setTimeout(() => think('li_carta_mae', () => { if (has('papel')) take('papel'); S.flags.cartaMae = 1; toast('Carta escrita', 'Para a minha mãe, em Ancoradouro'); save(); }), 1500)), 1200); } };
 }
-function finalAmbience() { for (const g of giants) g.target = 0.6; for (let i = 0; i < 4; i++) addSiteSpirits(V3(rr(-40, 40), groundH(0, 0), rr(-40, 40)), 6, 14, 6); }
+// o gigante do lago, enfim, joga a pedra: sete pulos, como o Teo prometeu à Mira
+let lakeShot = null, liaLume = null;
+function makeLakeShot() {
+  const g = giants.find(g => g.id === 'lago'); if (!g) return null; g.root.updateMatrixWorld(true);
+  const hand = new THREE.Vector3(...g.P.arms[0][2]).multiplyScalar(g.S).applyMatrix4(g.root.matrixWorld);
+  const shore = SPOTS.lake; const toShore = V3(shore.x - g.x, 0, shore.z - g.z).normalize();
+  // uma direção ao longo do lago em que os oito toques caiam todos na água
+  const hops = [9, 6.2, 5.0, 4.0, 3.2, 2.5, 1.9, 1.4]; let best = null;
+  for (let k = 0; k < 24 && !best; k++) { const a = Math.atan2(toShore.x, toShore.z) + Math.PI / 2 + (k % 2 ? 1 : -1) * Math.floor((k + 1) / 2) * 0.22; const dir = V3(Math.sin(a), 0, Math.cos(a)); let p = hand.clone().setY(WATER), ok = true; const pts = []; for (const h of hops) { p = p.clone().addScaledVector(dir, h); if (groundH(p.x, p.z) > WATER - 0.3) { ok = false; break; } pts.push(p); } if (ok) best = pts; }
+  if (!best) return null;
+  const stone = new THREE.Group(); const core = new THREE.Mesh(new THREE.SphereGeometry(0.2, 12, 8), new THREE.MeshBasicMaterial({ color: 0xfff1d0 })); stone.add(core);
+  const glow = new THREE.Sprite(new THREE.SpriteMaterial({ map: GLOW, color: 0xffd9a0, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false })); glow.scale.setScalar(3.6); stone.add(glow); stone.position.copy(hand); scene.add(stone);
+  const mid = best[3]; const camPos = V3(shore.x, 0, shore.z).addScaledVector(toShore, 6); camPos.y = Math.max(groundH(camPos.x, camPos.z), WATER) + 3.2;
+  const look = hand.clone(); let fly = null, done = false;
+  const o = {
+    camera(dt) { const tgt = fly ? stone.position : hand; look.lerp(tgt, 1 - Math.exp(-dt * 2.5)); camera.position.lerp(camPos, 1 - Math.exp(-dt * 3)); camera.lookAt(look); camera.fov = lerp(camera.fov, 42, dt * 2); camera.updateProjectionMatrix(); },
+    throwStone(total) { // o primeiro arco sai da mão; cada pulo dura um pedaço da contagem da Lia
+      const seq = [hand, ...best]; const per = Math.max(0.35, (total - 0.6) / 8); fly = { seq, i: 0, t: 0, durs: seq.slice(1).map((_, i) => i === 0 ? per * 1.6 : per * (1 - i * 0.05)) }; },
+    update(dt) {
+      if (!fly || done) { if (!fly) stone.position.y = hand.y + Math.sin(performance.now() / 300) * 0.05; return; }
+      fly.t += dt; const d = fly.durs[fly.i], a = fly.seq[fly.i], b = fly.seq[fly.i + 1]; const k = Math.min(1, fly.t / d);
+      const h = fly.i === 0 ? 2.5 : 0.9 * (1 - fly.i / 9); stone.position.lerpVectors(a, b, k); stone.position.y = lerp(a.y, b.y, k) + Math.sin(k * Math.PI) * h + 0.05;
+      if (k >= 1) { ripple(b.x, b.z, 0.6 + 0.1 * fly.i); Sound.plip(b.x, b.z, fly.i + 1); for (let i = 0; i < 6; i++) dust.emit({ x: b.x, y: WATER + 0.03, z: b.z, vx: rr(-0.4, 0.4), vy: rr(0.8, 1.6), vz: rr(-0.4, 0.4), g: 9, drag: 0.5, life: rr(0.3, 0.5), s0: 0.05, s1: 0.1, c: [1, 0.92, 0.75], a0: 0.6, wind: 0 });
+        fly.i++; fly.t = 0; if (fly.i >= fly.seq.length - 1) { done = true; ripple(b.x, b.z, 1.4); Sound.plop(b.x, b.z, 0.8); const s0 = stone; let f = 1; const fade = () => { f -= 0.04; s0.children[1].material.opacity = Math.max(0, f); s0.position.y += 0.05; if (f > 0) setTimeout(fade, 40); else scene.remove(s0); }; fade(); addSiteSpirits(V3(b.x, WATER, b.z), 8, 5, 4); } }
+    },
+  };
+  return o;
+}
+// a luz da Lia: sai das mãos dela e sobe devagar
+function makeLiaLume(at) {
+  const s = new THREE.Sprite(new THREE.SpriteMaterial({ map: GLOW, color: 0xbfe0ff, transparent: true, opacity: 0, blending: THREE.AdditiveBlending, depthWrite: false })); s.position.copy(at); s.scale.setScalar(0.8); scene.add(s);
+  let t = 0; return { update(dt) { t += dt; s.material.opacity = Math.min(1, t / 1.5) * Math.max(0, 1 - Math.max(0, t - 9) / 3); s.position.y += dt * (t < 2 ? 0.15 : 0.7); s.position.x += Math.sin(t * 1.3) * dt * 0.2; s.scale.setScalar(0.8 + Math.sin(t * 3) * 0.08); if (t > 12) { scene.remove(s); liaLume = null; } } };
+}
+function finalAmbience() { for (const g of giants) g.target = 0.15; for (let i = 0; i < 4; i++) addSiteSpirits(V3(rr(-40, 40), groundH(0, 0), rr(-40, 40)), 6, 14, 6); }
 function endFinale() { if (finale && finale.rain) { const r = finale.rain; let t = 0; const fade = () => { t += 0.05; r.update(0.05); r.mat.opacity = Math.max(0, 0.95 * (1 - t / 6)); if (t < 6) setTimeout(fade, 50); else { scene.remove(r.pts); r.pts.geometry.dispose(); r.mat.dispose(); } }; fade(); }
   $('ending').hidden = true; $('ending').classList.remove('show'); document.body.classList.remove('cine'); for (const n of npcs) n.finale = false; state = 'play'; finale = null; sky.meteors = 0.25; cam.mode = 'follow'; requestLock(); }
 function showSub(id) { const m = $('memory'); m.hidden = false; $('memTime').textContent = ''; const sp = LINES[id][0]; $('memName').textContent = CAST[sp] ? CAST[sp].name : ''; $('memText').textContent = lineText(id); m.classList.remove('show', 'thought'); void m.offsetWidth; m.classList.add('show'); }
@@ -1016,9 +1074,9 @@ function nearestOpenPlace() { let best = null, bd = 1e9; for (const pl of PLACES
 function objectives() {
   const n = lumesN(); const o = [];
   if (!S.met.odessa) o.push({ t: 'Encontre Odessa no observatório, na colina a nordeste da vila', tgt: storySpots.odessa });
-  else if (n < 8) { const b = nearestOpenPlace(); o.push({ t: `Contemple os lugares dos Veladores (${n}/8)`, sub: b ? b.pl.hint : '', tgt: b ? b.sp : null }); }
+  else if (n < 8) { const b = nearestOpenPlace(); o.push({ t: `Veja até o fim as vigílias abertas (${n}/8)`, sub: b ? b.pl.hint : '', tgt: b ? b.sp : null }); }
   else if (!S.told) o.push({ t: 'Volte ao observatório e conte tudo a Odessa', tgt: storySpots.odessa });
-  else if (!S.final) o.push({ t: isNight() ? 'Suba ao observatório: a Chuva de Lumes começou' : 'Espere a noite e suba ao observatório', tgt: storySpots.odessa });
+  else if (!S.final) o.push({ t: isNight() ? 'Suba ao observatório: a Odessa vai fechar as vigílias' : 'Espere a noite e suba ao observatório', tgt: storySpots.odessa });
   else o.push({ t: 'O vale é seu. Ande por onde quiser.', tgt: null });
   return o;
 }
@@ -1210,11 +1268,22 @@ document.addEventListener('visibilitychange', () => { for (const k in keys) keys
 addEventListener('resize', () => { renderer.setSize(innerWidth, innerHeight); camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); post && post.setSize(innerWidth, innerHeight); });
 $('resumeBtn').onclick = (e) => { e.stopPropagation(); resume(); };
 // ---------- tela cheia e menu dentro do jogo ----------
+// tela cheia: API padrão, a do Safari (iPad) e, no iPhone (onde o Safari não deixa nenhum site ocupar a tela toda),
+// o caminho que funciona: adicionar o jogo à Tela de Início e abrir pelo ícone (abre sem barras, em tela cheia)
+const standalone = matchMedia('(display-mode: fullscreen), (display-mode: standalone)').matches || navigator.standalone === true;
+const fsEl = () => document.fullscreenElement || document.webkitFullscreenElement;
 function toggleFullscreen() {
-  const d = document; if (!d.fullscreenElement) { const r = d.documentElement.requestFullscreen ? d.documentElement.requestFullscreen({ navigationUI: 'hide' }) : null; if (r && r.then) r.then(() => { if (state === 'play' || state === 'sail' || state === 'fly') requestLock(); }).catch(() => toast('Tela cheia', 'O navegador não permitiu. Tente F11.')); }
-  else d.exitFullscreen && d.exitFullscreen();
+  const d = document, el = d.documentElement;
+  if (fsEl()) { (d.exitFullscreen || d.webkitExitFullscreen || (() => { })).call(d); return; }
+  const req = el.requestFullscreen || el.webkitRequestFullscreen;
+  if (!req) { $('fsHelp').hidden = false; return; }
+  let r = null; try { r = req.call(el, { navigationUI: 'hide' }); } catch (e) { $('fsHelp').hidden = false; return; }
+  const after = () => { try { screen.orientation && screen.orientation.lock && screen.orientation.lock('landscape').catch(() => { }); } catch (e) { } if (state === 'play' || state === 'sail' || state === 'fly') requestLock(); };
+  if (r && r.then) r.then(after).catch(() => { if (isTouch) $('fsHelp').hidden = false; else toast('Tela cheia', 'O navegador não permitiu. Tente F11.'); }); else after();
 }
-document.addEventListener('fullscreenchange', () => { const on = !!document.fullscreenElement; for (const id of ['fsBtn', 'fsBtn0']) { const b = $(id); if (b) b.textContent = on ? 'Sair da tela cheia (F)' : 'Tela cheia (F)'; } });
+const fsLabel = () => { const on = !!fsEl(); for (const id of ['fsBtn', 'fsBtn0']) { const b = $(id); if (b) { b.textContent = on ? 'Sair da tela cheia' + (isTouch ? '' : ' (F)') : 'Tela cheia' + (isTouch ? '' : ' (F)'); b.hidden = standalone; } } };
+document.addEventListener('fullscreenchange', fsLabel); document.addEventListener('webkitfullscreenchange', fsLabel); fsLabel();
+if ($('fsHelpOk')) $('fsHelpOk').onclick = (e) => { e.stopPropagation(); $('fsHelp').hidden = true; };
 for (const id of ['fsBtn', 'fsBtn0']) { const b = $(id); if (b) b.onclick = (e) => { e.stopPropagation(); toggleFullscreen(); }; }
 const VOL = JSON.parse(store.get('aldren-vol') || '{"mus":55,"amb":90,"vox":100,"sens":100}');
 function applyVol() { Sound.vol.music = VOL.mus / 100; Sound.vol.amb = VOL.amb / 100; Sound.vol.voice = VOL.vox / 100; if (Sound.mus) Sound.mus.gain.value = Sound.vol.music; if (Sound.vox) Sound.vox.gain.value = Sound.vol.voice; if (Sound.sfx) Sound.sfx.gain.value = 0.85 * VOL.amb / 90; settings.sens = VOL.sens / 100; store.set('aldren-vol', JSON.stringify(VOL)); }
@@ -1342,7 +1411,7 @@ $('startBtn').addEventListener('click', () => {
   const go = () => { if (!S.letter && !MANUAL) startIntro(); else { state = 'play'; requestLock(); Music.silence = 6; } };
   if (Sound.ctx) { const w = setInterval(() => { if (Sound.ready) { clearInterval(w); go(); } }, 100); setTimeout(() => { clearInterval(w); if (state === 'menu') go(); }, 6000); } else go();
 });
-window.__game = { keys, get alva() { return alva; }, mountDragon, FAUNA, get boat() { return boat; }, startSailing, stopSailing, harbor, storySpots, groundH, probe, get nav() { return nav; }, npcPlan, planRoute, sky: () => sky, post: () => post, camera, scene, player, S, npcs, cam, renderer, trees, grass, SPOTS, PLACES, get state() { return state; }, set state(v) { state = v; }, setHour: (h) => { hour = h; }, get hour() { return hour; }, tick: (dt, n = 1) => { for (let i = 0; i < n; i++) frame(dt); }, startLume: (i) => startLume(PLACES[i]), lieAt, seats, beds, Human, startFinale: () => startFinale(), openJournal, openDialog, choose, get pH() { return pH; }, toggleLantern, sitAt, interiors, think, Voice, Music };
+window.__game = { keys, get alva() { return alva; }, mountDragon, FAUNA, get boat() { return boat; }, startSailing, stopSailing, harbor, storySpots, groundH, probe, get nav() { return nav; }, npcPlan, planRoute, sky: () => sky, post: () => post, camera, scene, player, S, npcs, cam, renderer, trees, grass, SPOTS, PLACES, get state() { return state; }, set state(v) { state = v; }, setHour: (h) => { hour = h; }, get hour() { return hour; }, tick: (dt, n = 1) => { for (let i = 0; i < n; i++) frame(dt); }, startLume: (i) => startLume(PLACES[i]), get lume() { return lume; }, lieAt, seats, beds, Human, startFinale: () => startFinale(), openJournal, openDialog, choose, get pH() { return pH; }, toggleLantern, sitAt, interiors, think, Voice, Music };
 renderer.domElement.addEventListener('webglcontextlost', (e) => { e.preventDefault(); store.set('aldren2-q', settings.quality === 'alta' ? 'media' : 'baixa'); $('loading').textContent = 'A placa de vídeo reiniciou. Recarregando com gráficos mais leves…'; $('menu').hidden = false; $('loadBar').parentElement.hidden = true; setTimeout(() => location.reload(), 1500); });
 document.addEventListener('visibilitychange', () => { if (Sound.ctx) { if (document.hidden) Sound.ctx.suspend(); else Sound.ctx.resume(); } if (document.hidden && state === 'play') pauseGame(); });
 boot().catch((e) => { console.error(e); $('loading').textContent = 'Falha ao carregar: ' + e.message; });
