@@ -13,6 +13,7 @@ import { FLOWER_ZONES } from './world/landmarks.js';
 import { LINES, CAST, PLACES, NOTES, FINALE, FRIENDS, ITEMS, RIBBONS, LIA_WISHES, MEMPEOPLE, CHAPTERS, FOOD, text as lineText } from './story.js';
 import { Orchard, makeBow } from './food.js';
 import { buildGiant, buildHeadFragment, updateGiants, giants } from './world/giants.js';
+import { initPetrify } from './world/petrify.js';
 import { Lume, lumeMaterial, initSpirits, addSiteSpirits, updateSpirits, Motes, LumeRain, GLOW } from './magic.js';
 import { buildProps, updateProps, setPropRadius } from './world/props.js';
 import { loadHumanLibrary, Human } from './actors/human.js';
@@ -146,7 +147,7 @@ async function boot() {
   load();
   // o que a Lia deixou no mundo continua lá
   if (S.flags.ponte && storySpots.bridgeDone) storySpots.bridgeDone.visible = true; if (S.ribbons && S.ribbons.lia) storySpots.ribbonTree?.showLia(); if (S.flags.fitaNo) storySpots.ribbonTree?.retie();
-  await step('Os gigantes descansam…', 0.42, () => placeGiants(rockMat));
+  await step('Os gigantes descansam…', 0.42, async () => { await loadHumanLibrary(); placeGiants(rockMat); }); // as estátuas são esculpidas a partir dos personagens
   const zones = [[POI.garden.x, POI.garden.z, 18], [POI.observatory.x, POI.observatory.z, 26], [POI.stairs.x, POI.stairs.z, 16], [POI.shrine.x, POI.shrine.z, 6], [POI.tower.x, POI.tower.z, 14], [POI.stones.x, POI.stones.z, 14], [POI.bridge.x, POI.bridge.z, 12], [-74, -34, 6]];
   const [hbx, hbz] = fromUV(HARBOR.u, HARBOR.v);
   const vEx = (x, z) => Math.hypot(x, z) < 62 || Math.hypot(x - hbx, z - hbz) < 58 || sandAt(x, z) > 0.3 || zones.some(zn => Math.hypot(x - zn[0], z - zn[1]) < zn[2]) || giants.some(g => Math.hypot(x - g.x, z - g.z) < 18) || creekDist(x, z) < 2.5;
@@ -163,7 +164,7 @@ async function boot() {
   roomLight = new VLight(0xfff0dc, 0, 9, 1.4, 2);
   LightPool.init(Q().lights || 4); buildLamps(); updateObsBlink(0); buildLantern(); buildRipples();
   const had = !!store.get(SAVE_KEY);
-  await step('Últimos detalhes…', 0.9, () => { initNav(); buildPlayer(); buildBoat(); buildNPCs(); spawnAnimals(); spawnFauna(FLOWER_ZONES()); POI.ninho = { x: NINHO.x, z: NINHO.z, name: 'O Ninho da Vésper' }; buildMapBase(); orchard = new Orchard(trees, { radius: 300, count: 16, ok: (x, z) => pathDistOK(x, z, 12) && Math.hypot(x - POI.observatory.x, z - POI.observatory.z) > 20 }); if (storySpots.arcoWall && !has('arco')) { wallBow = makeBow(); wallBow.position.copy(storySpots.arcoWall.p); wallBow.rotation.set(0, storySpots.arcoWall.yaw, 0); scene.add(wallBow); } if (has('arco')) setBow(); if (S.flags.liaPedra && !S.final) setLiaStone(true); renderBag(); });
+  await step('Últimos detalhes…', 0.9, () => { initNav(); buildPlayer(); buildBoat(); buildNPCs(); initPetrify({ player: pH, odessa, davi }); spawnAnimals(); spawnFauna(FLOWER_ZONES()); POI.ninho = { x: NINHO.x, z: NINHO.z, name: 'O Ninho da Vésper' }; buildMapBase(); orchard = new Orchard(trees, { radius: 300, count: 16, ok: (x, z) => pathDistOK(x, z, 12) && Math.hypot(x - POI.observatory.x, z - POI.observatory.z) > 20 }); if (storySpots.arcoWall && !has('arco')) { wallBow = makeBow(); wallBow.position.copy(storySpots.arcoWall.p); wallBow.rotation.set(0, storySpots.arcoWall.yaw, 0); scene.add(wallBow); } if (has('arco')) setBow(); if (S.flags.liaPedra && !S.final) setLiaStone(true); renderBag(); });
   post = new Post(); post.setSize(innerWidth, innerHeight);
   player.y = groundH(player.x, player.z);
   for (let i = 0; i < 30; i++) grass.update(player.x, player.z, 100);

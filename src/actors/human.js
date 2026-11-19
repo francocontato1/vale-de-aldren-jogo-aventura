@@ -56,8 +56,10 @@ export const CHARS = {
   aldeao1: { sex: 'm', outfit: 'm_noble', hair: ['Hair_SlickBack'], hairCol: [0.12, 0.1, 0.08], skin: [1.25, 1.05, 0.9], height: 1.0, nobleTex: 'Noble_3' },
 };
 
-let meshoptReady = null;
-export async function loadHumanLibrary() {
+// carregada uma vez só (os gigantes de pedra pedem a biblioteca antes dos moradores)
+let libReady = null;
+export function loadHumanLibrary() { return libReady || (libReady = loadLibrary()); }
+async function loadLibrary() {
   const { MeshoptDecoder } = await import('three/addons/libs/meshopt_decoder.module.js');
   const { gltfLoader } = await import('../core.js'); gltfLoader.setMeshoptDecoder(MeshoptDecoder);
   const [anims, extra, ...parts] = await Promise.all([loadGLTF('a/chars/anims.glb.wasm'), loadGLTF('a/chars/anims_extra.glb.wasm').catch(() => null), ...FILES.map(f => loadGLTF(`a/chars/${f}.glb.wasm`))]);
@@ -149,9 +151,10 @@ export class Human {
     this.mixer = new THREE.AnimationMixer(outfit); this.actions = {};
     const clips = LIB.clips[def.sex];
     for (const k in clips) { const a = this.mixer.clipAction(clips[k]); if (ONESHOT.has(k)) { a.setLoop(THREE.LoopOnce, 1); a.clampWhenFinished = true; } this.actions[k] = a; }
-    this.current = null; this.currentName = ''; this.play(opts.idle || 'idle', 0); this.mixer.update(rand() * 3);
+    // opts.still: sem sorteios (estátuas montadas durante a geração do mundo não podem consumir o rand compartilhado)
+    this.current = null; this.currentName = ''; this.play(opts.idle || 'idle', 0); this.mixer.update(opts.still ? 0 : rand() * 3);
     this.lookTarget = null; this.lookW = 0; this.lookWTarget = 1; this.talking = 0; this.talkAmp = 0; this.talkPhase = 0; this.nod = 0; this.speed = 0;
-    this.blinkT = rr(1, 4); this.blink = 0; this.breath = rand() * 6;
+    this.blinkT = opts.still ? 2 : rr(1, 4); this.blink = 0; this.breath = opts.still ? 0 : rand() * 6;
     this.root.updateMatrixWorld(true);
     this.restQ = {}; for (const n of ['Head', 'neck_01', 'spine_03']) if (this.bones[n]) this.restQ[n] = this.bones[n].quaternion.clone();
     // eixo "para frente" da cabeça em espaço local do osso (medido na pose atual: o corpo olha para +Z)
