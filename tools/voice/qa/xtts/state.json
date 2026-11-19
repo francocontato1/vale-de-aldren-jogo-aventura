@@ -1,0 +1,1820 @@
+{
+ "an_c2": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.036
+ },
+ "an_c3": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.007
+ },
+ "an_first": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "an_fugindo": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "an_gigantes": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.007
+ },
+ "an_lia2": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "an_noite": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "an_pai": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.02
+ },
+ "an_r_lago": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.019
+ },
+ "an_r_monte": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.028
+ },
+ "an_sorri": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "arv1": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "arv3": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.061
+ },
+ "arv4": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.036
+ },
+ "arv5": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "arv6": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "arv7": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "arv8": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "arvore_r": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "ba_c2": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "ba_conhecer": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.041
+ },
+ "ba_conta": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.012
+ },
+ "ba_lia1": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.04
+ },
+ "ba_ponte": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "ba_pronta": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "carta": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.007
+ },
+ "ce_barco": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.01
+ },
+ "ce_c1": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.047
+ },
+ "ce_c2": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "ce_c3": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.008
+ },
+ "ce_desmaio": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "ce_lia1": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "ce_lia2": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.029
+ },
+ "ce_odessa": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.022
+ },
+ "ce_pao": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "ce_pedra": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.007
+ },
+ "ce_peixe": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "ce_prova": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "circ3": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "circ4": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "circ5": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.031
+ },
+ "circ6": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.015
+ },
+ "circ_r": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.011
+ },
+ "co_arco2": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "co_arco": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.037
+ },
+ "co_c1": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.016
+ },
+ "co_c2": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.028
+ },
+ "co_c3": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "co_carta2": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "co_carta": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "co_comida": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "co_desmaio": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "co_first2": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.03
+ },
+ "co_first3": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "co_first": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "co_noite": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "co_quarto": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "da_c1": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "da_c2": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.027
+ },
+ "da_dedos": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.028
+ },
+ "da_first": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.008
+ },
+ "da_lia2": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.032
+ },
+ "da_noite": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.024
+ },
+ "esc1": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.062
+ },
+ "esc2": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.027
+ },
+ "esc3": {
+  "attempts": 2,
+  "best": 0.3,
+  "done": true,
+  "cer": 0.15
+ },
+ "esc4": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "esc_r": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.051
+ },
+ "fim11": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "fim1": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.095
+ },
+ "fim2": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "fim3": {
+  "attempts": 2,
+  "best": 0.12698412698412698,
+  "done": true,
+  "cer": 0.063
+ },
+ "fim7": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "fim8": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.078
+ },
+ "fim_davi": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "fim_dede": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.047
+ },
+ "fim_lago": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "fim_lia1": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "fim_lia2": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "fim_maos": {
+  "attempts": 3,
+  "best": 0.125,
+  "done": true,
+  "cer": 0.0
+ },
+ "fim_mapa": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "fim_marta": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.017
+ },
+ "fim_pulos": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "intro1": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.012
+ },
+ "intro2": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "ir_c1": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.032
+ },
+ "ir_cor2": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.013
+ },
+ "ir_cor": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "ir_first": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "ir_fita": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "ir_lia1": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "ir_lia2": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.061
+ },
+ "jo_barco": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.014
+ },
+ "jo_c1": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.008
+ },
+ "jo_c2": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.007
+ },
+ "jo_cheg1": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.09
+ },
+ "jo_cheg2": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "jo_cheg3": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.046
+ },
+ "jo_cheg4": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "jo_lago1": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.008
+ },
+ "jo_lago2": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "lago1": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "lago2": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "lago3": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "lago5": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.143
+ },
+ "lago6": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "lago7": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.047
+ },
+ "lago8": {
+  "attempts": 3,
+  "best": 0.16666666666666666,
+  "done": true,
+  "cer": 0.167
+ },
+ "lago_r": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.021
+ },
+ "li_ainda_nao": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "li_amoras": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.02
+ },
+ "li_an1": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.01
+ },
+ "li_an_pai": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "li_aqueduto": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.009
+ },
+ "li_arco": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "li_arvore_nomes": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "li_ba1": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "li_balanco": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "li_banco": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.037
+ },
+ "li_barco": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.041
+ },
+ "li_bolsa_cheia": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "li_cansada": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "li_carta_mae": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.043
+ },
+ "li_ce1": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.035
+ },
+ "li_ce_obg": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "li_ce_otimo": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "li_chegada": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "li_circ_dia": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "li_co_carta": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "li_co_frutas": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.041
+ },
+ "li_co_obg": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "li_co_pedras": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "li_co_volta": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.05
+ },
+ "li_colher": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.077
+ },
+ "li_colmeia": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "li_comer1": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "li_comer2": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.059
+ },
+ "li_comer3": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "li_da_dedos": {
+  "attempts": 2,
+  "best": 0.3,
+  "done": true,
+  "cer": 0.0
+ },
+ "li_dedos": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "li_dedos_ok": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "li_dormir1": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "li_espada": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.031
+ },
+ "li_estrela": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.014
+ },
+ "li_estrela_pedra": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.024
+ },
+ "li_farol": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.018
+ },
+ "li_fita_minha": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "li_fitas": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.054
+ },
+ "li_fome2": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "li_fome": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "li_fome_fim": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "li_fonte": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.056
+ },
+ "li_hora_arvore": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "li_hora_escada": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "li_hora_lago": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.083
+ },
+ "li_hora_monte": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.019
+ },
+ "li_hora_rel": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "li_hora_rosto": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "li_hora_torre": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "li_hospedaria": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.045
+ },
+ "li_ir1": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "li_ir_cor": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "li_jo_cheg": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "li_luneta": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.019
+ },
+ "li_mapa_cheio": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "li_ni1": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "li_ninho": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "li_noite1": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "li_od_comeco": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "li_od_ensinou": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "li_od_esc2": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.018
+ },
+ "li_od_esc3": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "li_od_eu": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "li_od_hoje": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "li_od_n3": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "li_od_n4": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "li_od_ninguem": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.033
+ },
+ "li_od_oque": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "li_od_r_circulo": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "li_od_r_lago": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "li_od_r_monte": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "li_od_r_relogios": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "li_od_r_rosto": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.065
+ },
+ "li_od_sinto": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "li_poco2": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.011
+ },
+ "li_poco": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "li_ponte": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "li_pulos_bom": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "li_pulos_cansei": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "li_pulos_zero": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "li_santuario": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.008
+ },
+ "li_sentar1": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "li_sentar2": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "li_sentar4": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.023
+ },
+ "li_to_amora2": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.062
+ },
+ "li_to_amora3": {
+  "attempts": 3,
+  "best": 0.2,
+  "done": true,
+  "cer": 0.0
+ },
+ "li_to_amora": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "li_to_amoras_fim": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "li_to_desenho": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "li_to_naosei": {
+  "attempts": 2,
+  "best": 0.38461538461538464,
+  "done": true,
+  "cer": 0.0
+ },
+ "li_tronco": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "li_voo_fim": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "ma_c1": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.02
+ },
+ "ma_c2": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "ma_c3": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "ma_dance": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.057
+ },
+ "ma_lia1": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "ma_lia2": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.013
+ },
+ "ma_lugar": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "ma_odessa": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "ma_pao": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.073
+ },
+ "ma_voo": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "monte1": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.048
+ },
+ "monte2": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.038
+ },
+ "monte3": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "monte4": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.039
+ },
+ "monte5": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "monte6": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "monte8": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.154
+ },
+ "monte_r": {
+  "attempts": 3,
+  "best": 0.10666666666666667,
+  "done": true,
+  "cer": 0.107
+ },
+ "ni_baleia": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "ni_c1": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.019
+ },
+ "ni_c3": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.035
+ },
+ "ni_lia1": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "ni_noite": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.038
+ },
+ "od_descanse": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "od_dormir": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.025
+ },
+ "od_esc1": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.019
+ },
+ "od_esc2": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "od_esc3": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "od_esc4": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.057
+ },
+ "od_estudo": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.018
+ },
+ "od_first": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.082
+ },
+ "od_jardim": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "od_luneta": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "od_maos": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.006
+ },
+ "od_medo": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.035
+ },
+ "od_n2": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.025
+ },
+ "od_n3": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "od_n4": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "od_noite": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "od_porque": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.022
+ },
+ "od_pos1": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "od_pos2": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.013
+ },
+ "od_prox": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.014
+ },
+ "od_r_arvore2": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.072
+ },
+ "od_r_arvore": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.009
+ },
+ "od_r_circulo2": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "od_r_circulo": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.005
+ },
+ "od_r_lago2": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.009
+ },
+ "od_r_lago": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "od_r_monte2": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.007
+ },
+ "od_r_monte": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "od_r_relogios2": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.024
+ },
+ "od_r_relogios": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.016
+ },
+ "od_r_rosto2": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.01
+ },
+ "od_r_rosto": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.004
+ },
+ "od_r_torre2": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "od_r_torre": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.056
+ },
+ "od_voce": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "rel1": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "rel2": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "rel3": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "rel4": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "rel5": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "rel6": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "rel7": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "rel8": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.075
+ },
+ "rel9": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "rel_r": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.042
+ },
+ "rosto1": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.039
+ },
+ "rosto3": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "rosto4": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "rosto_r": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.1
+ },
+ "ti_pesca": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.016
+ },
+ "to_amoras2": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "to_amoras3": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "to_amoras4": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "to_amoras": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "to_amoras_fim": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.031
+ },
+ "to_c1": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "to_c2": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "to_c3": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "to_desenho": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "to_longe": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "to_pos": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "to_r_lago": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.029
+ },
+ "torre2": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "torre3": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "torre4": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.039
+ },
+ "torre5": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "torre_r": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.053
+ },
+ "an_c1": {
+  "attempts": 0,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "ti_first": {
+  "attempts": 0,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "ce_first": {
+  "attempts": 0,
+  "best": 9,
+  "done": true,
+  "cer": 0.014
+ },
+ "ma_first": {
+  "attempts": 0,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "torre1": {
+  "attempts": 0,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "lago4": {
+  "attempts": 0,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "circ1": {
+  "attempts": 0,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "monte7": {
+  "attempts": 0,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "rosto2": {
+  "attempts": 0,
+  "best": 9,
+  "done": true,
+  "cer": 0.039
+ },
+ "to_first": {
+  "attempts": 0,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "ni_voo": {
+  "attempts": 0,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ }
+}

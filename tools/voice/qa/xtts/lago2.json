@@ -1,0 +1,10 @@
+{
+ "id": "lago2",
+ "text": "Eu quero sete!",
+ "asr": "Eu quero 7",
+ "cer": 0.0,
+ "dur": 1.5,
+ "ok": true,
+ "approved": false,
+ "attempt": 1
+}

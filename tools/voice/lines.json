@@ -416,7 +416,7 @@
  {
   "id": "od_cha",
   "speaker": "odessa",
-  "text": "Chá? Está morno. Sempre está. Não me pergunte por quê.",
+  "text": "Aceita um chá? Está morno. Sempre está. Não me pergunte por quê.",
   "emotion": "neutral"
  },
  {
@@ -632,7 +632,7 @@
  {
   "id": "od_cha2",
   "speaker": "odessa",
-  "text": "Chá? Cuidado, está quente. Faz trinta anos que eu não digo isso.",
+  "text": "Aceita um chá? Cuidado, está quente. Faz trinta anos que eu não digo isso.",
   "emotion": "happy"
  },
  {
@@ -1400,7 +1400,7 @@
  {
   "id": "circ2",
   "speaker": "auren",
-  "text": "Subiu, Sela.",
+  "text": "Subiu, Sela. Subiu.",
   "emotion": "sad"
  },
  {
@@ -1868,7 +1868,7 @@
  {
   "id": "li_estrela2",
   "speaker": "lia",
-  "text": "Outra! Essa eu vi inteira.",
+  "text": "Mais uma! Dessa vez eu vi inteira.",
   "emotion": "happy"
  },
  {
@@ -1904,7 +1904,7 @@
  {
   "id": "li_cogumelos",
   "speaker": "lia",
-  "text": "Um círculo perfeito de cogumelos. A Nina diria que é uma porta. O Anselmo diria que choveu.",
+  "text": "Um círculo perfeito de cogumelos. A Nina diria que é uma casa de fadas. O Anselmo diria que choveu.",
   "emotion": "neutral"
  },
  {
@@ -2042,7 +2042,7 @@
  {
   "id": "li_fruta_alta",
   "speaker": "lia",
-  "text": "Frutas lá no alto. Daqui não alcanço.",
+  "text": "Tem frutas lá em cima. Daqui eu não alcanço.",
   "emotion": "neutral"
  },
  {

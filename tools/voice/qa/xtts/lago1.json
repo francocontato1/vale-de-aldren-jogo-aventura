@@ -1,0 +1,10 @@
+{
+ "id": "lago1",
+ "text": "Pedra boa é chata e lisa. Olha: um, dois, três, quatro!",
+ "asr": "Pedra boa é chata e lisa. Olha. Um, dois, três, quatro.",
+ "cer": 0.0,
+ "dur": 6.65,
+ "ok": true,
+ "approved": false,
+ "attempt": 1
+}
