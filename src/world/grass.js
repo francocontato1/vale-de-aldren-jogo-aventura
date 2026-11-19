@@ -52,7 +52,8 @@ const VERT_BODY = `
 export class Grass {
   constructor(scene, opts) {
     this.scene = scene; this.opts = opts; this.tiles = new Map(); this.queue = [];
-    this.geo = bladeGeometry(4);
+    // LOD das folhas: 4 segmentos perto, 3 no meio, 2 longe (a curvatura some na distância; o vento e a cor ficam iguais)
+    this.lods = [bladeGeometry(4), bladeGeometry(3), bladeGeometry(2)]; this.geo = this.lods[0];
     this.uniforms = { uTime: U.time, uWind: U.wind, uWindStr: U.windStrength, uPlayer: U.player, tMacro: U.macro, uSunDir: U.sunDir, uSunCol: U.sunColor, uSunI: { value: 1 } };
     const mat = new THREE.MeshStandardMaterial({ roughness: 0.62, metalness: 0, side: THREE.DoubleSide });
     mat.onBeforeCompile = (s) => {
@@ -116,6 +117,10 @@ uniform vec3 uSunDir; uniform vec3 uSunCol; uniform float uSunI; varying float v
     m.userData.cx = x0 + TILE / 2; m.userData.cz = z0 + TILE / 2;
     this.scene.add(m); return m;
   }
+  setLod(m, lod) {
+    const src = this.lods[lod], g = m.geometry; m.userData.lod = lod;
+    g.index = src.index; g.attributes.position = src.attributes.position; g.attributes.normal = src.attributes.normal; g.attributes.uv = src.attributes.uv;
+  }
   clear() { for (const m of this.tiles.values()) { this.scene.remove(m); m.geometry.dispose(); } this.tiles.clear(); }
   update(cx, cz, budget = 3) {
     const R = Q().grassR * (settings.grassK || 1); const r = Math.ceil(R / TILE) + 1;
@@ -132,6 +137,9 @@ uniform vec3 uSunDir; uniform vec3 uSunCol; uniform float uSunI; varying float v
       if (!m) { if (budget-- <= 0) continue; m = this.makeTile(i, j); this.tiles.set(k, m); }
       const f = 1 - smooth(8, R + TILE * 0.5, d);
       m.geometry.instanceCount = Math.floor(m.geometry.userData.max * (0.06 + 0.94 * f * f));
+      // nível de detalhe por distância do centro do pedaço (com folga para não ficar trocando na borda)
+      const cur = m.userData.lod || 0, t1 = cur >= 1 ? 19 : 23, t2 = cur >= 2 ? 31 : 35; const lod = d < t1 ? 0 : d < t2 ? 1 : 2;
+      if (lod !== cur) this.setLod(m, lod);
     }
     for (const [k, m] of this.tiles) if (!keep.has(k)) { this.scene.remove(m); m.geometry.dispose(); this.tiles.delete(k); }
     this.uniforms.uSunI.value = 1;
