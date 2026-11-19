@@ -1,9 +1,9 @@
 {
  "id": "od_cha",
- "text": "Chá? Está morno. Sempre está. Não me pergunte por quê.",
- "asr": "Ah? É... Cha! Está morno. Sempre está. Não me pergunte por quê.",
- "cer": 0.1,
- "dur": 7.17,
+ "text": "Aceita um chá? Está morno. Sempre está. Não me pergunte por quê.",
+ "asr": "Aceita um chá? Está morno. Sempre está. Não me pergunte por quê.",
+ "cer": 0.0,
+ "dur": 4.93,
  "ok": true,
  "approved": false,
  "attempt": 1

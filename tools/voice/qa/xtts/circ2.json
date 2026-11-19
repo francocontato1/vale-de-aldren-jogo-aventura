@@ -1,10 +1,10 @@
 {
  "id": "circ2",
- "text": "Subiu, Sela.",
- "asr": "Subiu o céu.",
- "cer": 0.2,
- "dur": 1.03,
- "ok": false,
+ "text": "Subiu, Sela. Subiu.",
+ "asr": "Subiu, Cela. Subiu.",
+ "cer": 0.062,
+ "dur": 2.01,
+ "ok": true,
  "approved": false,
- "attempt": 3
+ "attempt": 1
 }

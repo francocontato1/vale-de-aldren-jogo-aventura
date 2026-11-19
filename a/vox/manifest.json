@@ -346,8 +346,8 @@
  },
  "od_cha": {
   "speaker": "odessa",
-  "dur": 7.167,
-  "text": "Chá? Está morno. Sempre está. Não me pergunte por quê."
+  "dur": 4.933,
+  "text": "Aceita um chá? Está morno. Sempre está. Não me pergunte por quê."
  },
  "od_n2": {
   "speaker": "odessa",
@@ -526,8 +526,8 @@
  },
  "od_cha2": {
   "speaker": "odessa",
-  "dur": 8.262,
-  "text": "Chá? Cuidado, está quente. Faz trinta anos que eu não digo isso."
+  "dur": 5.189,
+  "text": "Aceita um chá? Cuidado, está quente. Faz trinta anos que eu não digo isso."
  },
  "an_first": {
   "speaker": "anselmo",
@@ -1069,6 +1069,11 @@
   "dur": 3.639,
   "text": "Vem cá, Dédé. Qual é o seu pedido?"
  },
+ "arv2": {
+  "speaker": "dessa",
+  "dur": 3.166,
+  "text": "Não sei. Nunca amarrei nenhuma fita."
+ },
  "arv3": {
   "speaker": "ilsa",
   "dur": 4.914,
@@ -1161,8 +1166,8 @@
  },
  "circ2": {
   "speaker": "auren",
-  "dur": 1.026,
-  "text": "Subiu, Sela."
+  "dur": 2.005,
+  "text": "Subiu, Sela. Subiu."
  },
  "circ3": {
   "speaker": "aldren",
@@ -1551,8 +1556,8 @@
  },
  "li_estrela2": {
   "speaker": "lia",
-  "dur": 2.079,
-  "text": "Outra! Essa eu vi inteira."
+  "dur": 2.692,
+  "text": "Mais uma! Dessa vez eu vi inteira."
  },
  "li_dedos": {
   "speaker": "lia",
@@ -1581,8 +1586,8 @@
  },
  "li_cogumelos": {
   "speaker": "lia",
-  "dur": 6.721,
-  "text": "Um círculo perfeito de cogumelos. A Nina diria que é uma porta. O Anselmo diria que choveu."
+  "dur": 7.088,
+  "text": "Um círculo perfeito de cogumelos. A Nina diria que é uma casa de fadas. O Anselmo diria que choveu."
  },
  "li_tronco": {
   "speaker": "lia",
@@ -1696,8 +1701,8 @@
  },
  "li_fruta_alta": {
   "speaker": "lia",
-  "dur": 2.971,
-  "text": "Frutas lá no alto. Daqui não alcanço."
+  "dur": 3.224,
+  "text": "Tem frutas lá em cima. Daqui eu não alcanço."
  },
  "li_colher": {
   "speaker": "lia",

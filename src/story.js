@@ -293,7 +293,7 @@ export const LINES = {
   lago_r: ['lia', 'Teo, Ilsa e a filha deles, Mira. E a Dédé, que não era filha, mas estava sempre junto. O gigante do lago é o Teo. Ele ainda está com uma pedra na mão.', 'tender'],
   // 2 · A Árvore das Fitas (antes)
   arv1: ['ilsa', 'Vem cá, Dédé. Qual é o seu pedido?', 'tender'],
-  arv2: ['dede', 'Não sei. Eu nunca amarrei.', 'neutral'],
+  arv2: ['dede', 'Não sei. Nunca amarrei nenhuma fita.', 'neutral'],
   arv3: ['ilsa', 'Então eu peço por você: quero que você fique com a gente pra sempre.', 'tender'],
   arv4: ['mira', 'Eu pedi pra fazer sete pulos!', 'excited'],
   arv5: ['ilsa', 'Pedido não se conta, senão não vale!', 'happy'],

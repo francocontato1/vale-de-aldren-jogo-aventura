@@ -222,7 +222,7 @@ No alto da árvore, presa num galho, há uma fita azul desbotada.
 
 Cada família amarra fitas com pedidos para o ano. A Dédé, órfã, olha de longe: nunca amarrou nenhuma. A Ilsa chama a Dédé e entrega uma fita azul.
 - **Ilsa:** "Vem cá, Dédé. Qual é o seu pedido?"
-- **Dédé:** "Não sei. Eu nunca amarrei."
+- **Dédé:** "Não sei. Nunca amarrei nenhuma fita."
 - **Ilsa:** "Então eu peço por você: quero que você fique com a gente pra sempre."
 
 As duas amarram a fita juntas, em primeiro plano. Depois:

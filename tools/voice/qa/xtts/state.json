@@ -1816,5 +1816,47 @@
   "best": 9,
   "done": true,
   "cer": 0.0
+ },
+ "circ2": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.062
+ },
+ "li_cogumelos": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "li_estrela2": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "li_fruta_alta": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "od_cha2": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "od_cha": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "arv2": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
  }
 }

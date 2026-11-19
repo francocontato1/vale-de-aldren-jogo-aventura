@@ -1,10 +1,10 @@
 {
  "id": "li_fruta_alta",
- "text": "Frutas lá no alto. Daqui não alcanço.",
- "asr": "Frutas Lanual. Daqui não alcanço.",
- "cer": 0.114,
- "dur": 2.97,
- "ok": false,
+ "text": "Tem frutas lá em cima. Daqui eu não alcanço.",
+ "asr": "Tem frutas lá em cima. Daqui eu não alcanço.",
+ "cer": 0.0,
+ "dur": 3.22,
+ "ok": true,
  "approved": false,
- "attempt": 3
+ "attempt": 1
 }

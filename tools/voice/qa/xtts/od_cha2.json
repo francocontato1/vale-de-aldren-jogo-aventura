@@ -1,9 +1,9 @@
 {
  "id": "od_cha2",
- "text": "Chá? Cuidado, está quente. Faz trinta anos que eu não digo isso.",
- "asr": "Ah? É... Cha! Cuidado! Está quente! Faz 30 anos que eu não digo isso.",
- "cer": 0.083,
- "dur": 8.26,
+ "text": "Aceita um chá? Cuidado, está quente. Faz trinta anos que eu não digo isso.",
+ "asr": "Aceita um chá? Cuidado? Está quente? Faz 30 anos que eu não digo isso.",
+ "cer": 0.0,
+ "dur": 5.19,
  "ok": true,
  "approved": false,
  "attempt": 1
