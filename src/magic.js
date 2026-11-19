@@ -23,8 +23,26 @@ export function lumeMaterial() {
   m.customProgramCacheKey = () => 'lume';
   return m;
 }
-const ANIM = { throw: 'throw', sit: 'sit', lie: 'lie', idle: 'idle', idleOld: 'idle', reach: 'interact', kneel: 'kneel', work: 'kneel' };
+const ANIM = { throw: 'throw', sit: 'sit', lie: 'lie', idle: 'idle', idleOld: 'idle', reach: 'interact', kneel: 'kneel', work: 'kneel', run: 'run', walk: 'walk' };
 const MODEL = { torre: { eco_m: 'eco_old' }, relogios: { eco_m: 'eco_old' } };
+
+// lanternas de papel subindo devagar, balançando
+function makeLanterns(spot) {
+  const g = new THREE.Group(); const L = []; const cy = groundH(spot.x, spot.z);
+  for (let i = 0; i < 16; i++) { const sp = new THREE.Sprite(new THREE.SpriteMaterial({ map: GLOW, color: 0xffb060, transparent: true, opacity: 0, blending: THREE.AdditiveBlending, depthWrite: false })); const a = rand() * 6.28, r = rr(1.5, 6); sp.position.set(spot.x + Math.cos(a) * r, cy + rr(0.6, 2), spot.z + Math.sin(a) * r); sp.scale.setScalar(rr(0.45, 0.7)); g.add(sp); L.push({ sp, v: rr(0.25, 0.5), ph: rand() * 6, delay: i * 0.9 + rr(0, 0.8) }); }
+  scene.add(g); let t = 0;
+  return { update(dt, fade) { t += dt; for (const l of L) { if (t < l.delay) continue; l.sp.position.y += l.v * dt; l.sp.position.x += Math.sin(t * 0.7 + l.ph) * dt * 0.15; l.sp.material.opacity = fade * Math.min(1, (t - l.delay) / 1.5) * (0.75 + 0.25 * Math.sin(t * 5 + l.ph)) * Math.max(0, 1 - (l.sp.position.y - cy) / 26); } },
+    dispose() { scene.remove(g); for (const l of L) l.sp.material.dispose(); } };
+}
+// chuva em volta da câmera e relâmpagos de vez em quando
+function makeRain() {
+  const n = 900; const pos = new Float32Array(n * 6); const geo = new THREE.BufferGeometry(); geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+  const mat = new THREE.LineBasicMaterial({ color: 0xbfd2e6, transparent: true, opacity: 0, depthWrite: false }); const lines = new THREE.LineSegments(geo, mat); lines.frustumCulled = false; scene.add(lines);
+  const drops = Array.from({ length: n }, () => [rr(-14, 14), rr(0, 16), rr(-14, 14), rr(16, 22)]); let t = 0, flash = 0, next = 3;
+  return { update(dt, fade, light) { t += dt; const c = camera.position; for (let i = 0; i < n; i++) { const d = drops[i]; d[1] -= d[3] * dt; if (d[1] < -4) { d[1] = rr(10, 16); d[0] = rr(-14, 14); d[2] = rr(-14, 14); } const x = c.x + d[0], y = c.y + d[1], z = c.z + d[2]; pos.set([x, y, z, x - 0.05, y + 0.55, z - 0.02], i * 6); } geo.attributes.position.needsUpdate = true; mat.opacity = fade * 0.42;
+      next -= dt; if (next <= 0) { flash = 1; next = rr(4, 9); } flash = Math.max(0, flash - dt * 3.5); if (light && flash > 0) light.intensity += flash * 40 * fade; },
+    dispose() { scene.remove(lines); geo.dispose(); mat.dispose(); } };
+}
 
 export class Lume {
   constructor(place, spot, opts, onDone) {
@@ -42,10 +60,13 @@ export class Lume {
       if (f.top && opts.top) { x = opts.top.x; z = opts.top.z; y = opts.top.y; }
       h.root.position.set(x, y + (opts.lift || 0), z); h.root.rotation.y = (opts.at && opts.at[f.who] && opts.at[f.who].yaw !== undefined) ? opts.at[f.who].yaw : yaw0 + (f.yaw || 0);
       const an = ANIM[f.anim] || 'idle'; h.play(an, 0); if (an === 'lie') { h.current.timeScale = 0; h.current.time = 0.02; }
-      h.mixer.update(rand() * 2); scene.add(h.root); this.figs.push({ h, who: f.who, anim: an, x, y, z, t: rr(0, 3) });
+      h.mixer.update(rand() * 2); scene.add(h.root); if (f.hidden) h.root.visible = false; this.figs.push({ h, who: f.who, anim: an, x, y, z, t: rr(0, 3), def: f });
       // quem senta no chão ganha uma pedra de luz para sentar (faz parte da lembrança)
       if (an === 'sit' && !(f.top && opts.top)) { const ry = h.root.rotation.y; const g = new THREE.IcosahedronGeometry(0.42, 1); g.scale(1.25, 0.62, 1.0); const rock = new THREE.Mesh(g, this.mat); rock.position.set(x - Math.sin(ry) * 0.12, y + 0.2, z - Math.cos(ry) * 0.12); rock.rotation.y = ry; scene.add(rock); this.props.push(rock); }
     }
+    this.yaw0 = yaw0;
+    // lanternas de papel subindo (o círculo) e a tempestade (a escada)
+    if (place.lanterns) this.lanterns = makeLanterns(spot); if (place.rain) this.rain = makeRain();
     // poeira de luz em volta
     const n = 90; const geo = new THREE.BufferGeometry(); this.dp = new Float32Array(n * 3); this.ds = Array.from({ length: n }, () => [rr(-3, 3), rr(0, 2.6), rr(-3, 3), rr(0, 6)]); geo.setAttribute('position', new THREE.BufferAttribute(this.dp, 3));
     this.dust = new THREE.Points(geo, new THREE.PointsMaterial({ map: GLOW, size: 0.09, color: 0xffe2b0, transparent: true, opacity: 0, blending: THREE.AdditiveBlending, depthWrite: false })); this.dust.frustumCulled = false; scene.add(this.dust);
@@ -56,13 +77,21 @@ export class Lume {
     this.lines = place.lines.slice(); this.reflect = opts.reflect || place.reflect; this.onPeak = opts.onPeak; this.peaked = false;
     Voice.prefetch([...this.lines, this.reflect]);
   }
+  // o que muda quando uma fala começa: pose nova, andar até um ponto, ir embora, aparecer
+  beat(f, b) {
+    if (b.show) f.h.root.visible = true; if (b.hide) { f.h.root.visible = false; return; }
+    const mv = b.walk || b.leave;
+    if (mv) { const c = Math.cos(this.yaw0), s = Math.sin(this.yaw0); const x1 = f.x + mv[0] * c + mv[1] * s, z1 = f.z - mv[0] * s + mv[1] * c; f.move = { x0: f.x, z0: f.z, x1, z1, t: 0, d: mv[2] || 2, leave: !!b.leave, then: b.anim ? (ANIM[b.anim] || b.anim) : 'idle' }; f.h.play(f.anim === 'run' || b.leave ? 'walk' : 'walk', 0.3); return; }
+    if (b.anim) { const an = ANIM[b.anim] || b.anim; f.anim = an; f.h.play(an, 0.4); if (an === 'lie') { f.h.current.timeScale = 0; f.h.current.time = 0.02; } }
+  }
   skip() { Voice.stop(); this.speaking = false; this.lineT = 99; }
   nextLine() {
     this.line++;
     const id = this.line < this.lines.length ? this.lines[this.line] : (this.line === this.lines.length ? this.reflect : null);
     if (!id) { this.ending = true; return; }
+    const b = this.def.beats && this.def.beats[id]; if (b) for (const w in b) { const f = this.figs.find(o => o.who === w); if (f) this.beat(f, b[w]); }
     const [who, text] = LINES[id]; const isLia = who === 'lia';
-    document.getElementById('memName').textContent = isLia ? 'Lia, em pensamento' : (CAST[who] ? CAST[who].name : 'Um Velador');
+    document.getElementById('memName').textContent = isLia ? 'Lia, em pensamento' : (CAST[who] ? CAST[who].name : '');
     document.getElementById('memText').textContent = text; this.sub.classList.toggle('thought', isLia); this.sub.classList.remove('show'); void this.sub.offsetWidth; this.sub.classList.add('show');
     this.speaking = true; this.lineT = 0; this.lineMax = 2.5 + text.length * 0.075; this.who = who;
     if (isLia) this.fadeOut = true;
@@ -75,18 +104,21 @@ export class Lume {
     const lvl = Voice.update();
     for (const f of this.figs) {
       f.t += dt; f.h.talking = (this.speaking && f.who === this.who) ? lvl : 0;
+      if (f.move) { const m = f.move; m.t += dt; const k = Math.min(1, m.t / m.d); f.x = lerp(m.x0, m.x1, k); f.z = lerp(m.z0, m.z1, k); f.y = groundH(f.x, f.z); f.h.root.position.set(f.x, f.y, f.z); f.h.root.rotation.y = Math.atan2(m.x1 - m.x0, m.z1 - m.z0);
+        if (k >= 1) { f.move = null; if (m.leave) f.h.root.visible = false; else { f.anim = m.then; f.h.play(m.then, 0.4); } } }
       if ((f.anim === 'throw' || f.anim === 'interact') && f.h.done() && f.t > 3) { f.t = 0; f.h.current.reset().play(); }
       f.h.update(dt); const sp = this.figs.find(o => o !== f && o.who === this.who), other = sp || this.figs.find(o => o !== f); f.h.lookAtPoint(other ? other.h.headPos : lookAt, 0.8);
     }
     for (let i = 0; i < this.ds.length; i++) { const s = this.ds[i]; this.dp[i * 3] = this.center.x + s[0] + Math.sin(this.t * 0.3 + s[3]) * 0.4; this.dp[i * 3 + 1] = this.center.y + ((s[1] + this.t * 0.18) % 2.8); this.dp[i * 3 + 2] = this.center.z + s[2] + Math.cos(this.t * 0.27 + s[3]) * 0.4; }
     this.dust.geometry.attributes.position.needsUpdate = true;
+    if (this.lanterns) this.lanterns.update(dt, this.fade); if (this.rain) this.rain.update(dt, this.fade, this.light);
     // o esboço do caderno é tirado no auge da lembrança, com as figuras bem visíveis
     if (!this.peaked && this.onPeak && this.fade > 0.97 && this.line >= Math.floor(this.lines.length * 0.55)) { this.peaked = true; this.onPeak(); }
     if (this.t > 1.6 && this.line < 0) this.nextLine();
     else if (this.line >= 0 && !this.ending) { this.lineT += dt; if ((!this.speaking && this.lineT > 1.2) || this.lineT > this.lineMax + 3) this.nextLine(); }
     if (this.ending && this.fade <= 0 && !this.done) { this.done = true; this.dispose(); this.onDone && this.onDone(); }
   }
-  dispose() { for (const f of this.figs) scene.remove(f.h.root); for (const m of this.props) { scene.remove(m); m.geometry.dispose(); } scene.remove(this.dust); this.light.dispose(); this.sub.classList.remove('show'); this.sub.hidden = true; Voice.stop(); }
+  dispose() { for (const f of this.figs) scene.remove(f.h.root); for (const m of this.props) { scene.remove(m); m.geometry.dispose(); } scene.remove(this.dust); this.light.dispose(); if (this.lanterns) this.lanterns.dispose(); if (this.rain) this.rain.dispose(); this.sub.classList.remove('show'); this.sub.hidden = true; Voice.stop(); }
 }
 
 // ---------- o espírito companheiro (uma luzinha curiosa) ----------

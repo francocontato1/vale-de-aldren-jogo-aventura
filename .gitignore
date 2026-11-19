@@ -8,3 +8,6 @@ tools/music/__pycache__/
 __pycache__/
 a/vox/_test/
 shots/
+tools/voice/jobs_xtts.json
+.claude/
+t_*.js

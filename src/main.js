@@ -10,7 +10,8 @@ import { Nav } from './actors/nav.js';
 import { SailBoat, boatMaterials } from './actors/boat.js';
 import { harbor, updateHarbor } from './world/harbor.js';
 import { FLOWER_ZONES } from './world/landmarks.js';
-import { LINES, CAST, PLACES, NOTES, FINALE, FRIENDS, ITEMS, RIBBONS, LIA_WISHES, VELADORES, text as lineText } from './story.js';
+import { LINES, CAST, PLACES, NOTES, FINALE, FRIENDS, ITEMS, RIBBONS, LIA_WISHES, MEMPEOPLE, CHAPTERS, FOOD, text as lineText } from './story.js';
+import { Orchard, makeBow } from './food.js';
 import { buildGiant, buildHeadFragment, updateGiants, giants } from './world/giants.js';
 import { Lume, lumeMaterial, initSpirits, addSiteSpirits, updateSpirits, Motes, LumeRain, GLOW } from './magic.js';
 import { buildProps, updateProps, setPropRadius } from './world/props.js';
@@ -83,15 +84,16 @@ class Particles {
 // =====================================================================
 // estado
 // =====================================================================
-const S = { said: {}, pulos: 0, ribbons: {}, lumeOrder: [], met: {}, lumes: {}, notes: {}, final: 0, letter: 0, told: 0, chat: {}, day: 0, found: {}, sat: 0, fr: {}, frDay: {}, inv: {}, fav: {}, boat: 0, sailed: 0, flags: {} };
+const S = { rep: {}, bag: {}, fed: 0, said: {}, pulos: 0, ribbons: {}, lumeOrder: [], met: {}, lumes: {}, notes: {}, final: 0, letter: 0, told: 0, chat: {}, day: 0, found: {}, sat: 0, fr: {}, frDay: {}, inv: {}, fav: {}, boat: 0, sailed: 0, flags: {} };
 let state = 'loading', hour = 16.4, elapsed = 0, timeLapse = 0;
+const START = { x: 2, z: 44, h: Math.PI };
 const player = { x: 2, z: 44, y: 0, vy: 0, h: Math.PI, onGround: true, stepAcc: 0, speed: 0, sit: null, standT: 0 };
 const cam = { yaw: 0, pitch: -0.1, dist: 3.4, cur: V3(), look: V3(), cine: 0, intro: 0, mode: 'follow', orbit: 0 };
 const keys = {}; let locked = false, lockFailed = false;
 const touch = { mx: 0, my: 0, run: false, jump: false };
 let sky, trees, grass, post, smoke, fireP, dust, motes = null, water;
 const npcs = []; let pH = null;
-const SAVE_KEY = 'aldren-vale-v7';
+const SAVE_KEY = 'aldren-vale-v8';
 const sketches = {}; // imagens do caderno (guardadas à parte, por tamanho)
 function save() { store.set(SAVE_KEY, JSON.stringify({ S, p: { x: player.x, z: player.z, h: player.h }, hour })); }
 function load() { const raw = store.get(SAVE_KEY); if (!raw) return false; try { const d = JSON.parse(raw); Object.assign(S, d.S); if (d.p) { player.x = d.p.x; player.z = d.p.z; player.h = d.p.h; cam.yaw = d.p.h + Math.PI; } if (typeof d.hour === 'number') hour = d.hour; for (const pl of PLACES) { const s = store.get('aldren-sketch-' + pl.id); if (s) sketches[pl.id] = s; } return true; } catch (e) { return false; } }
@@ -161,7 +163,7 @@ async function boot() {
   roomLight = new VLight(0xfff0dc, 0, 9, 1.4, 2);
   LightPool.init(Q().lights || 4); buildLamps(); updateObsBlink(0); buildLantern(); buildRipples();
   const had = !!store.get(SAVE_KEY);
-  await step('Últimos detalhes…', 0.9, () => { initNav(); buildPlayer(); buildBoat(); buildNPCs(); spawnAnimals(); spawnFauna(FLOWER_ZONES()); POI.ninho = { x: NINHO.x, z: NINHO.z, name: 'O Ninho da Vésper' }; buildMapBase(); });
+  await step('Últimos detalhes…', 0.9, () => { initNav(); buildPlayer(); buildBoat(); buildNPCs(); spawnAnimals(); spawnFauna(FLOWER_ZONES()); POI.ninho = { x: NINHO.x, z: NINHO.z, name: 'O Ninho da Vésper' }; buildMapBase(); orchard = new Orchard(trees, { radius: 300, count: 16, ok: (x, z) => pathDistOK(x, z, 12) && Math.hypot(x - POI.observatory.x, z - POI.observatory.z) > 20 }); if (storySpots.arcoWall && !has('arco')) { wallBow = makeBow(); wallBow.position.copy(storySpots.arcoWall.p); wallBow.rotation.set(0, storySpots.arcoWall.yaw, 0); scene.add(wallBow); } if (has('arco')) setBow(); if (S.flags.liaPedra && !S.final) setLiaStone(true); renderBag(); });
   post = new Post(); post.setSize(innerWidth, innerHeight);
   player.y = groundH(player.x, player.z);
   for (let i = 0; i < 30; i++) grass.update(player.x, player.z, 100);
@@ -222,7 +224,8 @@ function updatePlayer(dt) {
   const len = Math.min(1, Math.hypot(f, s));
   const cy = cam.yaw; const fwd = V3(-Math.sin(cy), 0, -Math.cos(cy)), right = V3(Math.cos(cy), 0, -Math.sin(cy));
   const dir = fwd.clone().multiplyScalar(f).addScaledVector(right, s); if (dir.lengthSq() > 0) dir.normalize();
-  const jog = (k.ShiftLeft || k.ShiftRight || touch.run);
+  // com fome (ou mirando), a Lia não corre
+  const jog = (k.ShiftLeft || k.ShiftRight || touch.run) && hunger() < 0.85 && !(bow && bow.aiming);
   let speed = jog ? 3.7 : 1.75;
   const gh0 = groundH(player.x, player.z); const depth = WATER - gh0; const inWater = depth > 0.08 && player.y < WATER + 0.1; if (inWater) speed *= clamp(1 - depth * 0.35, 0.5, 1);
   // nadar em água funda (mar, lagos)
@@ -443,7 +446,8 @@ function updateCamera(dt) {
     cam.cur.lerp(last, 1 - Math.exp(-dt * 3)); camera.position.copy(cam.cur); camera.lookAt(head.x, head.y - 0.15, head.z); camera.fov = lerp(camera.fov, 50, 1 - Math.exp(-dt * 3)); camera.updateProjectionMatrix(); if (pH) pH.root.visible = true; return;
   }
   const sitK = cam.mode === 'sit' ? 1 : 0; cam.sitK = lerp(cam.sitK || 0, sitK, 1 - Math.exp(-dt * 1.2));
-  const dist = lerp(lerp(3.5, 1.9, cam.inK), 5.2, cam.sitK * (1 - cam.inK)), shoulder = lerp(0.3, 0.18, cam.inK), fov = lerp(lerp(52, 62, cam.inK), 46, cam.sitK);
+  cam.aimK = lerp(cam.aimK || 0, bow && bow.aiming ? 1 : 0, 1 - Math.exp(-dt * 8));
+  const dist = lerp(lerp(lerp(3.5, 1.9, cam.inK), 5.2, cam.sitK * (1 - cam.inK)), 1.55, cam.aimK), shoulder = lerp(lerp(0.3, 0.18, cam.inK), 0.62, cam.aimK), fov = lerp(lerp(lerp(52, 62, cam.inK), 46, cam.sitK), 40, cam.aimK);
   if (cam.mode === 'sit') { cam.yaw = lerpAng(cam.yaw, player.h + Math.PI + 0.5 + Math.sin(elapsed * 0.05) * 0.15, dt * 0.25); cam.pitch = lerp(cam.pitch, -0.05, dt * 0.4); }
   const right = V3(Math.cos(cy), 0, -Math.sin(cy));
   const pivot = V3(player.x, player.y + (player.sit ? 1.0 : 1.5), player.z);
@@ -477,15 +481,14 @@ function buildNPCs() {
   anselmo = addNPC({ id: 'anselmo', key: 'anselmo', day: [44, 47, 0.4], talk: talkAnselmo, idle: 'idle', wander: [[44, 47], [52, 44], [50, 55], [40, 52]], home: houseOf('anselmo'), slow: true });
   celeste = addNPC({ id: 'celeste', key: 'celeste', day: [-21.9, -11.4, 0.35], talk: talkCeleste, idle: 'idle', home: houseOf('padaria'), work: 'kneel' });
   tome = addNPC({ id: 'tome', key: 'tome', day: [-3, 6, 0], talk: talkTome, idle: 'idle', wander: [[-3, 6], [-38, 25], [-12, 20], [6, 12], [0, -6]], home: houseOf('familia'), fast: true });
-  // a Irene pinta na margem do lago: procura terra firme indo do lago em direção à vila
-  // ...mas longe do lugar de contemplar o lago (antes ela e o cavalete apareciam dentro da lembrança)
-  let ix = -128, iz = 92; { const LS = SPOTS.lake; let best = null;
-    for (let k = 0; k < 24 && !best; k++) { const a = Math.atan2(92 - POI.lake.z, -128 - POI.lake.x) + (k % 2 ? 1 : -1) * Math.ceil(k / 2) * 0.16; let x = POI.lake.x + Math.cos(a) * 20, z = POI.lake.z + Math.sin(a) * 20; const dx = Math.cos(a), dz = Math.sin(a);
-      for (let i = 0; i < 160 && groundH(x, z) < 0.9; i++) { x += dx; z += dz; } x += dx * 2; z += dz * 2;
-      if (groundH(x, z) >= 0.9 && (!LS || Math.hypot(x - LS.x, z - LS.z) > 18) && normalY(x, z) > 0.9 && Math.hypot(x, z) < Math.hypot(POI.lake.x, POI.lake.z) + 40) best = [x, z]; }
-    if (best) [ix, iz] = best; else { const dx = -ix, dz = -iz, dl = Math.hypot(dx, dz); for (let i = 0; i < 120 && groundH(ix, iz) < 0.9; i++) { ix += dx / dl; iz += dz / dl; } ix += dx / dl * 2; iz += dz / dl * 2; } }
-  irene = addNPC({ id: 'irene', key: 'irene', day: [ix, iz, Math.atan2(POI.lake.x - ix, POI.lake.z - iz)], talk: talkIrene, idle: 'idle', home: houseOf('irene') });
-  const bs = storySpots.bastiao; bastiao = addNPC({ id: 'bastiao', key: 'bastiao', day: [bs.x, bs.z, storySpots.bastiaoYaw + Math.PI], talk: talkBastiao, idle: 'kneel', home: houseOf('casagrande') });
+  // a Irene pinta a Árvore das Fitas, de longe, de frente pra árvore
+  let ix = -140, iz = -74; { const T = storySpots.treeRoot || { x: -152, z: -80 }; let best = null; for (let k = 0; k < 24 && !best; k++) { const a = 0.4 + k * 0.26, r = 9 + (k % 3); const x = T.x + Math.cos(a) * r, z = T.z + Math.sin(a) * r; if (normalY(x, z) > 0.9 && !treeHit(x, z) && !insideBox(x, z, 0.8)) best = [x, z]; } if (best) [ix, iz] = best; }
+  const lookAtTree = Math.atan2((storySpots.treeRoot || { x: -152 }).x - ix, (storySpots.treeRoot || { z: -80 }).z - iz);
+  irene = addNPC({ id: 'irene', key: 'irene', day: [ix, iz, lookAtTree], talk: talkIrene, idle: 'idle', home: houseOf('irene') });
+  const bs = storySpots.bastiao; bastiao = addNPC({ id: 'bastiao', key: 'bastiao', day: [bs.x, bs.z, storySpots.bastiaoYaw + Math.PI], talk: talkBastiao, idle: 'kneel', home: houseOf('torre') });
+  // o Seu Cosme, na porta da hospedaria
+  { const h = houseOf('hospedaria'); const dp = h.door.p, fw = [Math.sin(h.rot), Math.cos(h.rot)]; storySpots.inn = { x: dp.x + fw[0] * 1.3, z: dp.z + fw[1] * 1.3, yaw: h.rot };
+    cosme = addNPC({ id: 'cosme', key: 'cosme', day: [dp.x + fw[0] * 1.6 + fw[1] * 1.2, dp.z + fw[1] * 1.6 - fw[0] * 1.2, h.rot], talk: talkCosme, idle: 'fold', home: h, slow: true }); }
   // Vila da Maré
   { const s2 = storySpots.marta; marta = addNPC({ id: 'marta', key: 'marta', day: [s2.x, s2.z, storySpots.martaYaw], talk: talkMarta, idle: 'idle', home: houseOf('taberna'), slow: true }); }
   { const s2 = storySpots.joca; joca = addNPC({ id: 'joca', key: 'joca', day: [s2.x, s2.z, storySpots.jocaYaw], talk: talkJoca, idle: 'idle', work: 'kneel', home: houseOf('barqueiro') }); }
@@ -494,7 +497,7 @@ function buildNPCs() {
     nina = addNPC({ id: 'nina', key: 'nina', day: [d2[0], d2[1], SEA_ROT], talk: talkNina, idle: 'idle', wander: [d2, a, b, c], home: houseOf('tiao') }); }
   if (storySpots.davi) { const s2 = storySpots.davi; davi = addNPC({ id: 'davi', key: 'davi', day: [s2.x, s2.z, storySpots.daviYaw], talk: talkDavi, idle: 'fold', always: true, nightIdle: 'lantern', lookSky: true, slow: true }); }
   // cavalete de pintura da Irene
-  { const ia = Math.atan2(POI.lake.x - ix, POI.lake.z - iz); const ex = ix + Math.sin(ia) * 1.1 + Math.cos(ia) * 0.6, ez = iz + Math.cos(ia) * 1.1 - Math.sin(ia) * 0.6, ey = groundH(ex, ez); const g = new THREE.Group(); for (const a of [-1, 1]) { const l = new THREE.Mesh(new THREE.BoxGeometry(0.05, 1.6, 0.05), M.oldWood); l.position.set(a * 0.35, 0.8, 0); l.rotation.set(0.12, 0, a * -0.08); g.add(l); } const cv = new THREE.Mesh(new THREE.PlaneGeometry(0.8, 0.6), paintingMat()); cv.position.set(0, 1.15, 0.08); cv.rotation.x = 0.12; g.add(cv); g.position.set(ex, ey, ez); g.rotation.y = ia + Math.PI; scene.add(g); addCirc(ex, ez, 0.4); }
+  { const ia = lookAtTree; const ex = ix + Math.sin(ia) * 1.1 + Math.cos(ia) * 0.6, ez = iz + Math.cos(ia) * 1.1 - Math.sin(ia) * 0.6, ey = groundH(ex, ez); const g = new THREE.Group(); for (const a of [-1, 1]) { const l = new THREE.Mesh(new THREE.BoxGeometry(0.05, 1.6, 0.05), M.oldWood); l.position.set(a * 0.35, 0.8, 0); l.rotation.set(0.12, 0, a * -0.08); g.add(l); } const cv = new THREE.Mesh(new THREE.PlaneGeometry(0.8, 0.6), paintingMat()); cv.position.set(0, 1.15, 0.08); cv.rotation.x = 0.12; g.add(cv); g.position.set(ex, ey, ez); g.rotation.y = ia + Math.PI; scene.add(g); addCirc(ex, ez, 0.4); }
 }
 function paintingMat() { const c = document.createElement('canvas'); c.width = 256; c.height = 192; const g = c.getContext('2d'); const gr = g.createLinearGradient(0, 0, 0, 192); gr.addColorStop(0, '#f2c78a'); gr.addColorStop(0.45, '#e9a06a'); gr.addColorStop(0.55, '#5a7c86'); gr.addColorStop(1, '#2f4f5a'); g.fillStyle = gr; g.fillRect(0, 0, 256, 192); g.fillStyle = 'rgba(255,240,200,0.8)'; for (let i = 0; i < 40; i++) g.fillRect(90 + Math.random() * 80, 110 + Math.random() * 60, 18 + Math.random() * 20, 2); g.fillStyle = '#2b3a2a'; g.beginPath(); g.moveTo(0, 105); g.quadraticCurveTo(60, 70, 120, 100); g.lineTo(256, 95); g.lineTo(256, 108); g.lineTo(0, 110); g.fill(); const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return new THREE.MeshStandardMaterial({ map: t, roughness: 0.9 }); }
 const isNight = () => hour >= 20.2 || hour < 6.3;
@@ -544,7 +547,7 @@ function planRoute(n, plan) {
   return pts;
 }
 function addNPC(o) { const h = new Human(o.key); scene.add(h.root); const n = Object.assign({ h, wi: 0, wait: rr(1, 4), speed: 0, talkT: 0, x: o.day[0], z: o.day[1], y: groundH(o.day[0], o.day[1]), yaw: o.day[2] || 0, route: null, pose: null, fails: 0, stuckT: 0 }, o); h.root.position.set(n.x, n.y, n.z); npcs.push(n); return n; }
-let odessa, anselmo, celeste, tome, irene, bastiao, marta, joca, tiao, nina, davi;
+let odessa, anselmo, celeste, tome, irene, bastiao, marta, joca, tiao, nina, davi, cosme;
 function houseOf(role) { return interiors.find(h => h.role === role); }
 function teleportNPC(n, x, z, y) { n.x = x; n.z = z; n.y = y ?? probe(x, z, groundH(x, z) + 0.3).h; n.floorUp = null; }
 function npcVisible(n) { const dx = n.x - camera.position.x, dz = n.z - camera.position.z, d = Math.hypot(dx, dz); if (d < 6) return true; if (d > 95) return false; const f = camFwd; return (dx * f.x + dz * f.z) / d > 0.35; }
@@ -641,102 +644,114 @@ function firstReaction(list) { for (const [k, cond, line, act] of list) if (cond
 // conversa sobre o passado da Lia: abre com amizade (frLevel >= lvl), uma vez; respostas de Lia como opções
 function liaTalk(id, lvl, open, opts) { if (frLevel(id) < lvl || said('lia_' + id)) return null; return Nd(open, opts.map(([t, liaLine, reply]) => O(t, () => Nd(liaLine, [O('…', () => Nd(reply, BYE))]), () => { markSaid('lia_' + id)(); friend(id, 2); }))); }
 const seen = (k) => !!S.lumes[k];
-function talkOdessa() {
-  if (!S.met.odessa) return Nd('od_first', [
-    O('Por que eu?', () => Nd('od_quem', [O('E o que você precisa, exatamente?', mapaOd)])),
-    O('O que você precisa, exatamente?', mapaOd)]);
-  if (has('carta')) return Nd('od_carta', [O('Espero.', () => Nd('od_resposta', BYE, () => { give('resposta'); toast('Favor', 'Levar a resposta da Odessa para o Seu Davi, no farol'); }))], () => { take('carta'); S.cartaDay = S.day; friend('odessa', 2); friend('davi', 2); });
-  const n = lumesN();
-  const alva = O('Que sombra é aquela que passa no céu?', () => Nd('od_alva', BYE), () => { S.flags.alva = 1; save(); });
-  if (n >= 8 && !S.told) return Nd('od_todos', [O('Eu volto quando escurecer.', null, () => { S.told = 1; refreshQuest(); save(); })]);
-  if (S.told && !S.final) { if (isNight()) return Nd('fim1', [O('Ficar do lado dela', null, () => { pendingAfterDialog = startFinale; })]); return Nd('od_noite', BYE); }
-  // o que ela conta de cada lembrança, na ordem em que a Lia encontrou
-  const r = firstReaction([...[...new Set([...(S.lumeOrder || []), ...Object.keys(S.lumes)])].map(k => ['od_' + k, seen(k), 'od_r_' + k]), ['od_fita', S.flags.fitaNo, 'od_fita']]);
-  if (r) return r;
-  // as mãos de pedra (depois de três lembranças)
-  if (n >= 3 && !said('od_maos')) return Nd('od_maos', [O('Por isso você me chamou.', () => Nd('od_maos2', BYE)), O('Dói?', () => Nd('od_maos2', BYE))], markSaid('od_maos'));
-  const lia = liaTalk('odessa', 2, 'od_lia1', [['Porque era longe.', 'li_od_longe', 'od_lia2'], ['Porque você disse que ele falou de mim.', 'li_od_mapa', 'od_lia3']]);
-  if (lia) return lia;
-  // o que o pai da Lia disse dela (depois da conversa sobre ele e de cinco lembranças)
-  if (said('lia_odessa') && n >= 5 && !said('od_pai')) return Nd('od_pai', [O('…', () => Nd('li_od_pai', [O('…', () => Nd('od_pai2', BYE))]))], () => { markSaid('od_pai')(); friend('odessa', 2); });
-  if (S.final) { const c = chat('odessa_pos', ['od_pos1', 'od_pos2', 'od_cha2']); c.opts = [alva, ...BYE]; return c; }
-  return Nd(n >= 6 ? 'od_n4' : ['od_n2', 'od_n3', 'od_cha'][(S.chat.odessa = ((S.chat.odessa || 0) + 1) % 3)], [O('Ainda tem chá?', () => Nd('od_cha', BYE)), alva, O('Vou continuar.', null)]);
+// cadeia de falas: cada fala da Lia vira a opção que o jogador escolhe; act roda quando a última aparece
+function seq(ids, end = BYE, act) { const go = (i) => { const id = ids[i], last = i === ids.length - 1, nx = ids[i + 1]; const opts = last ? end : [O(nx && LINES[nx][0] === 'lia' ? lineText(nx) : '…', () => go(i + 1))]; return Nd(id, opts, last ? act : null); }; return go(0); }
+// os capítulos: a próxima lembrança só abre depois de contar a anterior para a Odessa
+const reported = (k) => !!(S.rep && S.rep[k]);
+function currentChapter() { for (let i = 0; i < CHAPTERS.length; i++) { const id = CHAPTERS[i]; if (seen(id)) { if (!reported(id) && id !== 'escada') return null; continue; } return id; } return null; }
+const pendingReport = () => CHAPTERS.find(id => id !== 'escada' && seen(id) && !reported(id));
+const REPORT = { lago: ['od_r_lago', 'li_od_r_lago', 'od_r_lago2'], arvore: ['od_r_arvore', 'od_r_arvore2'], relogios: ['od_r_relogios', 'li_od_r_relogios', 'od_r_relogios2'], circulo: ['od_r_circulo', 'li_od_r_circulo', 'od_r_circulo2'], rosto: ['od_r_rosto', 'li_od_r_rosto', 'od_r_rosto2'], monte: ['od_r_monte', 'li_od_r_monte', 'od_r_monte2'], torre: ['od_r_torre', 'od_r_torre2'] };
+function afterReport(id) {
+  if (id === 'monte') { S.flags.liaPedra = 1; setLiaStone(true); pendingAfterDialog = () => setTimeout(() => think('li_dedos'), 600); }
+  if (id === 'torre') { S.flags.escada = 1; toast('A escada', 'Depois que escurecer, encontre a Odessa na Escada para o Céu, a leste'); }
 }
-const mapaOd = () => Nd('od_mapa', [O('E o que acontece quando eu desenhar?', () => Nd('od_fechar', [O('Como eu encontro esses lugares?', comoOd)])), O('Como eu encontro esses lugares?', comoOd)]);
-const comoOd = () => Nd('od_como', [O('Tem hora certa?', () => Nd('od_hora', [O('E depois?', () => Nd('od_depois', [O('Combinado.', null, () => { S.met.odessa = 1; friend('odessa', 1); toast('As oito vigílias', 'Veja até o fim as lembranças que os Veladores deixaram abertas, cada uma na sua hora'); refreshQuest(); save(); })]))]))]);
+function talkOdessa() {
+  if (!S.met.odessa) return seq(['od_first', 'li_od_ensinou', 'od_maos', 'li_od_sinto', 'od_porque', 'li_od_oque', 'od_estudo', 'od_luneta', 'li_od_ninguem', 'od_medo', 'li_od_eu', 'od_voce', 'li_od_comeco', 'od_dormir', 'li_od_hoje', 'od_descanse'], [O('Até amanhã.', null)],
+    () => { S.met.odessa = 1; S.odDay = S.day; friend('odessa', 1); toast('O trabalho', 'O mapa do vale para a Coroa · as oito luzes da luneta'); refreshQuest(); save(); });
+  const pr = pendingReport(); if (pr && REPORT[pr]) return seq(REPORT[pr], BYE, () => { S.rep[pr] = 1; friend('odessa', 2); afterReport(pr); refreshQuest(); save(); });
+  if (S.final) { const i = (S.chat.odpos = ((S.chat.odpos || 0) + 1) % 3); return Nd(['od_pos1', 'od_pos2', 'od_cha2'][i], BYE); }
+  if (seen('escada')) return Nd('od_jardim', S.flags.jardim && inFinaleHour() && nearGarden(odessa) ? [O('Fico do seu lado.', null, () => { pendingAfterDialog = startFinale; })] : BYE);
+  if (S.flags.escada) return Nd(isNight() ? 'od_esc1' : 'od_noite', isNight() && nearStairs(odessa) ? [O('Seguro, sim.', null, () => { pendingAfterDialog = () => { const pl = PLACES.find(p => p.id === 'escada'); contemplate(pl, true); }; })] : BYE);
+  const i = (S.chat.odessa = ((S.chat.odessa || 0) + 1) % 5);
+  if (i === 2) return seq(['od_n3', 'li_od_n3']); if (i === 3 && lumesN() >= 2) return seq(['od_n4', 'li_od_n4']);
+  return Nd(['od_cha', 'od_n2', 'od_prox', 'od_cha', 'od_prox'][i], [O('Ainda tem chá?', () => Nd('od_cha', BYE)), O('Vou continuar.', null)]);
+}
+function talkCosme() {
+  if (isBedtime()) return Nd('co_noite', BYE);
+  if (!S.met.cosme) return seq(['co_first', 'li_co_obg', 'co_first2', 'li_co_pedras', 'co_first3'], [O('Obrigada, Seu Cosme.', () => Nd('co_quarto', BYE))], () => { S.met.cosme = 1; friend('cosme', 1); refreshQuest(); save(); });
+  if (S.flags.desmaio === 1) return Nd('co_desmaio', BYE, () => { S.flags.desmaio = 2; save(); });
+  const opts = [];
+  if (!has('arco') && !S.flags.arcoOk && (S.flags.viuFruta || S.day >= 1 || said('amoras'))) opts.push(O('Seu Cosme, vi umas frutas no alto das árvores…', () => seq(['li_co_frutas', 'co_arco', 'li_co_volta', 'co_arco2'], BYE, () => { S.flags.arcoOk = 1; friend('cosme', 1); toast('O arco', 'Na parede da sala dos fundos da hospedaria'); save(); })));
+  if (S.final && !S.flags.cosmeCarta) opts.push(O('O senhor devia escrever pro seu filho.', () => seq(['co_carta', 'li_co_carta', 'co_carta2'], BYE, () => { S.flags.cosmeCarta = 1; friend('cosme', 2); save(); })));
+  if (hunger() > 0.35) opts.push(O('Tem alguma coisa pra comer?', () => Nd('co_comida', BYE, () => eatMeal())));
+  opts.push(...BYE);
+  const c = chat('cosme', ['co_c2', 'co_c3', 'co_c1']); c.opts = opts; return c;
+}
+function talkJoca() {
+  // na chegada, ele espera a Lia no fim da estrada
+  if (!S.flags.chegou) return seq(['jo_cheg1', 'li_jo_cheg', 'jo_cheg2', 'jo_cheg3'], [O('Vamos.', null, () => { pendingAfterDialog = arriveAtInn; })], () => { S.met.joca = 1; });
+  // capítulo 1: leva a Lia de barco até o gigante do lago
+  if (currentChapter() === 'lago' && S.met.odessa && joca.ferry) return Nd('jo_lago1', [O('Vamos.', null, () => { pendingAfterDialog = ferryToLake; })]);
+  const barco = O('Aquele barco no fim do píer é de quem?', () => Nd('jo_barco', BYE), () => { if (!S.boat) { S.boat = 1; toast('O barco do mestre Elias', 'Agora você pode velejar. Ele fica no fim do píer.'); } save(); });
+  if (!S.boat && S.found.mare) return Nd('jo_c1', [barco, ...BYE]);
+  if (S.sailed && !S.flags.jocaDepois) return Nd('jo_depois', BYE, () => { S.flags.jocaDepois = 1; friend('joca', 1); });
+  return chat('joca', ['jo_c1', 'jo_c2', 'jo_c3']);
+}
 function talkAnselmo() {
   if (isNight()) return Nd('an_noite', BYE);
-  if (!S.met.anselmo) return Nd('an_first', [O('O senhor conhece os gigantes?', () => Nd('an_gigantes', [O('E os Veladores?', () => Nd('an_veladores', BYE, metOnce('anselmo')))])), O('O que acha que aconteceu com os Veladores?', () => Nd('an_veladores', BYE, metOnce('anselmo')))]);
-  const r = firstReaction([['an_monte', seen('monte'), 'an_r_monte'], ['an_lago', seen('lago') || S.pulos > 0, 'an_r_lago']]); if (r) return r;
-  const lia = liaTalk('anselmo', 2, 'an_lia1', [['De Ancoradouro, no litoral.', 'li_an1', 'an_lia2'], ['De longe. De vários lugares.', 'li_an1', 'an_lia2']]); if (lia) return lia;
-  return chat('anselmo', ['an_c1', 'an_c2', 'an_c3', ...(S.found.mare ? ['an_c4', 'an_c5'] : [])]);
+  if (!S.met.anselmo) return Nd('an_first', [O('Era o meu pai.', () => Nd('li_an_pai', [O('…', () => Nd('an_pai', [O('O senhor conhece os gigantes?', () => Nd('an_gigantes', BYE))]))]), metOnce('anselmo')), O('O senhor conhece os gigantes?', () => Nd('an_gigantes', BYE), metOnce('anselmo'))]);
+  const r = firstReaction([['an_sorri', S.met.celeste && S.day >= 1, 'an_sorri'], ['an_fugindo', lumesN() >= 2, 'an_fugindo'], ['an_monte', seen('monte'), 'an_r_monte'], ['an_lago', seen('lago') || S.pulos > 0, 'an_r_lago']]); if (r) return r;
+  const lia = liaTalk('anselmo', 2, 'an_lia1', [['De Ancoradouro, no litoral.', 'li_an1', 'an_lia2']]); if (lia) return lia;
+  return chat('anselmo', ['an_c1', 'an_c2', 'an_c3']);
 }
 function talkCeleste() {
   if (isNight()) return Nd('ce_noite', BYE);
-  if (!S.met.celeste) return Nd('ce_first', [O('A Odessa vem sempre aqui?', () => Nd('ce_odessa', [O('E as ruínas? O que você acha?', () => Nd('ce_ruinas', BYE))]), metOnce('celeste')), O('O que você acha das ruínas?', () => Nd('ce_ruinas', BYE), metOnce('celeste'))]);
-  if (has('peixe')) return Nd('ce_peixe', BYE, () => { take('peixe'); friend('celeste', 2); });
+  if (!S.met.celeste) return seq(['ce_first', 'li_ce_obg', 'ce_prova', 'li_ce_otimo'], [O('A Odessa vem sempre aqui?', () => Nd('ce_odessa', BYE)), O('Até mais.', null)], () => { S.met.celeste = 1; friend('celeste', 1); addFood('pao', 2); save(); });
+  if (has('peixe')) return Nd('ce_peixe', BYE, () => { take('peixe'); friend('celeste', 2); addFood('pao', 1); });
+  if (S.flags.desmaio === 1) return Nd('ce_desmaio', BYE);
   if (S.sailed && !S.flags.ceBarco) return Nd('ce_barco', BYE, () => { S.flags.ceBarco = 1; friend('celeste', 1); });
-  const r = firstReaction([['ce_rel', seen('relogios'), 'ce_r_relogios'], ['ce_um', S.final || lumesN() >= 6, 'ce_um']]); if (r) return r;
-  const lia = liaTalk('celeste', 2, 'ce_lia1', [['Sabe… mais ou menos.', 'li_ce1', 'ce_lia2'], ['Prefiro não falar disso.', 'li_ce1', 'ce_lia3']]); if (lia) return lia;
-  if (!S.fav.pao && !has('pao') && !has('peixe') && (S.found.mare || S.met.marta || (S.chat.celeste || 0) >= 2)) return Nd('ce_cesta', [O('Levo, sim.', null, () => { give('pao'); toast('Favor', 'Levar o pão para a Dona Marta, na Vila da Maré'); }), O('Agora não, desculpa.', null)]);
+  const r = firstReaction([['ce_pedra', lumesN() >= 1, 'ce_pedra']]); if (r) return r;
+  const lia = liaTalk('celeste', 2, 'ce_lia1', [['Sabe… mais ou menos.', 'li_ce1', 'ce_lia2']]); if (lia) return lia;
+  if (!S.fav.pao && !has('pao') && !has('peixe') && (S.found.mare || (S.chat.celeste || 0) >= 2)) return Nd('ce_cesta', [O('Levo, sim.', null, () => { give('pao'); toast('Favor', 'Levar o pão para a Dona Marta, na Vila da Maré'); }), O('Agora não, desculpa.', null)]);
+  if (S.flags.paoDia !== S.day) return Nd('ce_pao', BYE, () => { S.flags.paoDia = S.day; addFood('pao', 1); });
   return chat('celeste', ['ce_c1', 'ce_c3', 'ce_c2', ...(S.fav.peixe ? ['ce_c4'] : [])]);
 }
 function talkTome() {
   if (has('concha')) return Nd('to_concha', BYE, () => { take('concha'); friend('tome', 2); });
   if (S.final && !said('to_pos')) return Nd('to_pos', BYE, markSaid('to_pos'));
-  if (!S.met.tome) return Nd('to_first', [O('Eu ainda não sei.', () => Nd('to_naosei', BYE), metOnce('tome')), O('Por que você quer saber?', () => Nd('to_porque', BYE), metOnce('tome'))]);
-  const r = firstReaction([['to_lago', seen('lago'), 'to_r_lago'], ['to_pulos', (S.pulos || 0) >= 5, 'to_r_pulos']]); if (r) return r;
-  const lia = liaTalk('tome', 1, 'to_lia1', [['Tinha. Ele desenhava mapas.', 'li_to1', 'to_lia2']]); if (lia) return lia;
-  if (!S.fav.desenho && !has('desenho') && !has('concha') && (S.found.mare || S.met.nina || (S.chat.tome || 0) >= 2)) return Nd('to_nina', [O('Entrego, sim.', null, () => { give('desenho'); toast('Favor', 'Levar o desenho do Tomé para a Nina, na Vila da Maré'); }), O('Hoje não, Tomé.', null)]);
-  return chat('tome', ['to_c1', 'to_c2', 'to_c3', ...(S.fav.concha ? ['to_c4'] : [])]);
+  if (S.final && !said('amoras_fim')) return seq(['to_amoras_fim', 'li_to_amoras_fim'], BYE, () => { markSaid('amoras_fim')(); addFood('amora', 3); });
+  if (!S.met.tome) return seq(['to_first', 'li_to_naosei', 'to_amoras', 'li_to_amora', 'to_amoras2', 'li_to_amora2', 'to_amoras3', 'li_to_amora3', 'to_amoras4'], BYE, () => { S.met.tome = 1; friend('tome', 1); markSaid('amoras')(); addFood('amora', 4); pH.play('eat', 0.2); save(); });
+  const r = firstReaction([['to_desenho', S.day >= 1, 'to_desenho', null], ['to_lago', seen('lago'), 'to_r_lago']]);
+  if (r && r.line === 'to_desenho') return seq(['to_desenho', 'li_to_desenho', 'to_longe'], BYE, () => markSaid('to_desenho')());
+  if (r) return r;
+  if (!S.fav.desenho && !has('desenho') && !has('concha') && (S.found.mare || (S.chat.tome || 0) >= 2)) return Nd('to_nina', [O('Entrego, sim.', null, () => { give('desenho'); toast('Favor', 'Levar o desenho do Tomé para a Nina, na Vila da Maré'); }), O('Hoje não, Tomé.', null)]);
+  return chat('tome', ['to_c1', 'to_c2', 'to_c3']);
 }
 function talkIrene() {
-  if (!S.met.irene) return Nd('ir_first', [O('Então por que você continua?', () => Nd('ir_porque', [O('Posso ver?', () => Nd('ir_ver', BYE))]), metOnce('irene')), O('Posso ver?', () => Nd('ir_ver', BYE), metOnce('irene'))]);
-  const r = firstReaction([['ir_lago', seen('lago'), 'ir_r_lago'], ['ir_mao', (S.chat.irene || 0) >= 1 || seen('lago') || seen('rosto'), 'ir_mao']]); if (r) return r;
-  const lia = liaTalk('irene', 2, 'ir_lia1', [['Desenhava por gosto. Agora é trabalho.', 'li_ir1', 'ir_lia2']]); if (lia) return lia;
-  return chat('irene', ['ir_c1', 'ir_c2', 'ir_c3', ...(S.found.mare ? ['ir_c4'] : [])]);
+  if (!S.met.irene) return seq(['ir_first', 'ir_cor', 'li_ir_cor', 'ir_cor2'], BYE, metOnce('irene'));
+  const r = firstReaction([['ir_fita', true, 'ir_fita']]); if (r) return r;
+  const lia = liaTalk('irene', 2, 'ir_lia1', [['Desenhava, quando era pequena.', 'li_ir1', 'ir_lia2']]); if (lia) return lia;
+  return chat('irene', ['ir_c1', 'ir_c2', 'ir_c3']);
 }
 function talkBastiao() {
-  if (!S.met.bastiao) return Nd('ba_first', [O('Só vim conhecer.', () => Nd('ba_conhecer', [O('O que você está fazendo?', () => Nd('ba_ponte', BYE))]), metOnce('bastiao')), O('O que você está fazendo?', () => Nd('ba_ponte', BYE), metOnce('bastiao'))]);
-  const r = firstReaction([['ba_pronta', S.flags.ponte, 'ba_pronta'], ['ba_escada', seen('escada'), 'ba_r_escada'], ['ba_quase', lumesN() >= 4 && !S.final, 'ba_quase']]); if (r) return r;
-  const lia = liaTalk('bastiao', 2, 'ba_lia1', [['Ele desenhava estradas.', 'li_ba1', 'ba_lia2']]); if (lia) return lia;
-  return chat('bastiao', ['ba_c1', 'ba_c2', 'ba_c3', ...(S.flags.ponte ? [] : ['ba_c4']), ...(S.found.mare ? ['ba_c5'] : [])]);
+  if (!S.met.bastiao) return Nd('ba_first', [O('Só vim conhecer.', () => Nd('ba_conhecer', [O('O que você está fazendo?', () => Nd('ba_ponte', [O('Como você sabe calcular isso?', () => Nd('ba_conta', BYE))]))]), metOnce('bastiao')), O('O que você está fazendo?', () => Nd('ba_ponte', BYE), metOnce('bastiao'))]);
+  const r = firstReaction([['ba_pronta', S.flags.ponte, 'ba_pronta'], ['ba_quase', lumesN() >= 4 && !S.final, 'ba_quase']]); if (r) return r;
+  const lia = liaTalk('bastiao', 2, 'ba_lia1', [['Ele fazia mapas.', 'li_ba1', 'ba_lia2']]); if (lia) return lia;
+  return chat('bastiao', ['ba_c1', 'ba_c2', 'ba_conta']);
 }
 // ---------- Vila da Maré ----------
 function talkMarta() {
   if (has('pao')) { const n = Nd('ma_pao', BYE, () => { take('pao'); friend('marta', 2); give('peixe'); toast('Favor', 'Levar o peixe defumado para a Celeste'); }); if (!S.met.marta) { S.met.marta = 1; friend('marta', 1); } return n; }
   if (isNight()) return Nd('ma_noite', BYE);
-  if (!S.met.marta) return Nd('ma_first', [O('A senhora conhece a Odessa?', () => Nd('ma_odessa', BYE), metOnce('marta')), O('Que lugar bonito.', () => Nd('ma_lugar', BYE), metOnce('marta'))]);
+  if (!S.met.marta) return Nd('ma_first', [O('Todo mundo aqui sabe ler?', () => Nd('ma_odessa', BYE), metOnce('marta')), O('Que lugar bonito.', () => Nd('ma_lugar', BYE), metOnce('marta'))]);
   const r = firstReaction([['ma_voo', S.flags.voou, 'ma_voo']]); if (r) return r;
-  if (frLevel('marta') >= 2 && !S.flags.martaAmiga) return Nd('ma_amiga', BYE, () => { S.flags.martaAmiga = 1; });
   const lia = liaTalk('marta', 2, 'ma_lia1', [['Mãe viva. Longe.', 'li_ma1', 'ma_lia2']]); if (lia) return lia;
   return chat('marta', ['ma_c1', 'ma_c2', 'ma_c3']);
 }
-function talkJoca() {
-  const barco = O('Aquele barco no fim do píer é seu?', () => Nd('jo_barco', BYE), () => { if (!S.boat) { S.boat = 1; toast('O barco do mestre Elias', 'Agora você pode velejar. Ele fica no fim do píer.'); } S.met.joca = S.met.joca || 1; save(); });
-  if (!S.met.joca) return Nd('jo_first', [O('O que você está construindo?', () => Nd('jo_casco', [barco, ...BYE]), metOnce('joca')), barco]);
-  if (!S.boat) return Nd('jo_c1', [barco, ...BYE]);
-  if (S.sailed && !S.flags.jocaDepois) return Nd('jo_depois', BYE, () => { S.flags.jocaDepois = 1; friend('joca', 1); });
-  return chat('joca', ['jo_c1', 'jo_c2', 'jo_c3']);
-}
 function talkTiao() {
-  if (!S.met.tiao) return Nd('ti_first', [O('Está pescando o quê?', () => Nd('ti_pesca', BYE), metOnce('tiao')), O('A Nina é sua filha?', () => Nd('ti_nina', BYE), metOnce('tiao'))]);
+  if (!S.met.tiao) return Nd('ti_first', [O('Está pescando o quê?', () => Nd('ti_pesca', BYE), metOnce('tiao'))]);
   return chat('tiao', ['ti_c1', 'ti_c2', 'ti_c3']);
 }
 function talkNina() {
   if (has('desenho')) { const n = Nd('ni_desenho', BYE, () => { take('desenho'); friend('nina', 2); give('concha'); toast('Favor', 'Levar a concha da Nina para o Tomé'); }); if (!S.met.nina) { S.met.nina = 1; friend('nina', 1); } return n; }
   if (isNight()) return Nd('ni_noite', BYE);
-  if (!S.met.nina) return Nd('ni_first', [O('Pode ser que tenha.', () => Nd('ni_dragao', BYE), metOnce('nina')), O('Baleia canta?', () => Nd('ni_baleia', BYE), metOnce('nina'))]);
+  if (!S.met.nina) return Nd('ni_first', [O('Baleia canta?', () => Nd('ni_baleia', BYE), metOnce('nina'))]);
   const r = firstReaction([['ni_voo', S.flags.voou, 'ni_voo', () => friend('nina', 1)]]); if (r) return r;
   const lia = liaTalk('nina', 2, 'ni_lia1', [['Sabe… mais ou menos.', 'li_ni1', 'ni_lia2']]); if (lia) return lia;
   return chat('nina', ['ni_c1', 'ni_c2', 'ni_c3']);
 }
 function talkDavi() {
-  if (!S.met.davi) return Nd('da_first', [O('Faz tempo que o senhor está aqui?', () => Nd('da_tempo', BYE), metOnce('davi')), O('O que o senhor vê lá de cima?', () => Nd('da_ve', BYE), metOnce('davi'))]);
-  if (has('resposta')) return Nd('da_resposta', BYE, () => { take('resposta'); friend('davi', 3); S.blinkFrom = S.day; save(); });
-  // a Odessa pisca de volta na primeira noite depois da resposta; no dia seguinte ele conta
-  const r = firstReaction([['da_piscou', S.fav.resposta && S.blinkSeen, 'da_piscou']]); if (r) return r;
-  if (!S.fav.carta && !has('carta') && frLevel('davi') >= 1 && (S.chat.davi || 0) >= 1) return Nd('da_carta', [O('Levo, sim.', null, () => { give('carta'); toast('Favor', 'Levar a carta do Seu Davi para a Odessa'); }), O('Outra hora.', null)]);
+  if (!S.met.davi) return Nd('da_first', [O('Faz tempo que o senhor está aqui?', () => seq(['da_tempo', 'li_da_dedos', 'da_dedos'], BYE), metOnce('davi'))]);
   const lia = liaTalk('davi', 2, 'da_lia1', [['Devo uma pra minha mãe.', 'li_da1', 'da_lia2']]);
   if (lia) { const o = lia.opts[0]; const act0 = o.act; o.act = () => { act0(); setTimeout(() => give('papel'), 800); }; return lia; }
   if (isNight()) return Nd('da_noite', BYE);
@@ -744,7 +759,7 @@ function talkDavi() {
 }
 const met = (id) => () => { S.met[id] = 1; save(); };
 let dlgNPC = null, dlgNode = null, pendingAfterDialog = null;
-function openDialog(n) { if (n.finale) return; document.body.classList.add('cine'); dlgNPC = n; state = 'dialog'; post.bokeh.enabled = settings.quality !== 'baixa' && !isTouch; chatDaily(n.id); const node = n.talk(); Voice.prefetch([node.line]); showNode(node); }
+function openDialog(n) { if (n.finale) return; document.body.classList.add('cine'); dlgNPC = n; state = 'dialog'; post.bokeh.enabled = settings.quality !== 'baixa' && !isTouch; chatDaily(n.id); const node = n.onceNode || n.talk(); n.onceNode = null; Voice.prefetch([node.line]); showNode(node); }
 function showNode(node) {
   if (!node) { closeDialog(); return; } dlgNode = node; $('dialog').hidden = false; $('prompt').hidden = true; if (node.act) { const a = node.act; node.act = null; a(); }
   const sp = LINES[node.line] ? LINES[node.line][0] : null; const who = CAST[sp] || { name: dlgNPC.name || '', role: '' };
@@ -767,10 +782,13 @@ function think(id, after) { const el = $('thought'); const tok = ++thinkTok; el.
 let lume = null, lumePlace = null;
 // cada lugar lembra numa faixa de horas (pode atravessar a meia-noite)
 const inHours = (pl) => { const h = pl.hours; if (!h) return true; return h[0] <= h[1] ? (hour >= h[0] && hour < h[1]) : (hour >= h[0] || hour < h[1]); };
-function contemplate(place) {
+function contemplate(place, force) {
   const sp = SPOTS[place.place]; if (!sp) return;
+  const cur = currentChapter();
+  if (!force && place.id !== cur) { sitAt(spAt(sp), () => think(seen(place.id) ? 'li_sentar3' : (S.met.odessa ? 'li_ainda_nao' : 'li_sentar1'))); return; }
+  if (place.id === 'escada' && !force) { if (isNight() && nearStairs(odessa)) openDialog(odessa); else sitAt(spAt(sp), () => think('li_hora_escada')); return; }
   if (!inHours(place)) { sitAt(spAt(sp), () => think(place.wait || 'li_sentar2', () => { if (!player.sit) return; $('lapseHint').hidden = false; $('lapseHint').textContent = 'T · deixar o tempo passar até a hora deste lugar'; player.sit.waitPlace = place; })); return; }
-  sitAt(spAt(sp), () => startLume(place));
+  sitAt(spAt(sp), () => startLens(place));
 }
 const spAt = (sp) => ({ x: sp.x, z: sp.z, yaw: sp.yaw, y: sp.y });
 function startLume(place) {
@@ -778,9 +796,10 @@ function startLume(place) {
   const fwd = V3(Math.sin(sp.yaw), 0, Math.cos(sp.yaw)); const c = { x: sp.x + fwd.x * 3.2, z: sp.z + fwd.z * 3.2 };
   if (place.id === 'escada') { c.x = sp.x + fwd.x * 1.2; c.z = sp.z + fwd.z * 1.2; }
   const ri = place.reflectIf; const seenAny = ri && [].concat(ri.seen).some(k => S.lumes[k]);
-  // no jardim, o Teo se ajoelha junto ao relógio da Mira (o único sem musgo) e a Dessa fica de pé ao lado
+  // no jardim: a Mira deitada ao lado do relógio dela (o único sem musgo), o Auren ajoelhado do lado, o Teo no relógio
   let at = null; const md = storySpots.miraDial;
-  if (place.id === 'relogios' && md) { const toSp = Math.atan2(sp.x - md.x, sp.z - md.z); const side = toSp + Math.PI / 2; const ta = toSp + 1.3, da = toSp - 1.15; at = { teo: { x: md.x + Math.sin(ta) * 0.8, z: md.z + Math.cos(ta) * 0.8, yaw: ta + Math.PI }, dessa: { x: md.x + Math.sin(da) * 1.5, z: md.z + Math.cos(da) * 1.5 } }; c.x = md.x; c.z = md.z; }
+  if (place.id === 'relogios' && md) { const toSp = Math.atan2(sp.x - md.x, sp.z - md.z); const P = (a, r, yaw) => ({ x: md.x + Math.sin(toSp + a) * r, z: md.z + Math.cos(toSp + a) * r, yaw });
+    at = { mira: P(0.9, 1.5, toSp + 0.9 + Math.PI / 2), auren: P(1.5, 2.1, toSp + 1.5 + Math.PI), teo: P(-0.4, 0.95, toSp - 0.4 + Math.PI), ilsa: P(0.35, 2.6, toSp + 0.35 + Math.PI), dede: P(-1.2, 1.9, toSp - 1.2 + Math.PI) }; c.x = md.x; c.z = md.z; }
   lume = new Lume(place, c, { at, blocked: blockedXZ, yaw: sp.yaw + Math.PI, top: sp.top, reflect: seenAny ? ri.line : place.reflect, onPeak: () => captureSketch(place.id) }, () => finishLume(place));
   Music.stop(4); setTimeout(() => Music.play('memory', { fade: 3, vol: 0.8 }), 600);
 }
@@ -792,11 +811,12 @@ function blockedXZ(x, z, r = 0.3) {
 }
 function finishLume(place) {
   lume = null; state = 'play'; document.body.classList.remove('cine'); S.lumes[place.id] = 1; S.lumeOrder = S.lumeOrder || []; if (!S.lumeOrder.includes(place.id)) S.lumeOrder.push(place.id); placeDone(place);
-  // desenha a cena no caderno
   if (!sketches[place.id]) captureSketch(place.id); Sound.page();
   const n = lumesN(); toast('Desenhado no caderno', `${place.name} · ${n}/8`); refreshQuest(); save();
-  if (n === 8) setTimeout(() => think('li_mapa_cheio'), 2500);
   Music.silence = rr(12, 30);
+  if (place.id === 'lago') { S.flags.naBarca = 0; joca.always = false; }
+  if (place.id === 'escada') { setTimeout(() => { if (player.sit) standUp(); odessa.onceNode = seq(['od_esc2', 'li_od_esc2', 'od_esc3', 'li_od_esc3', 'od_esc4'], [O('Fico.', null)], () => { S.flags.jardim = 1; friend('odessa', 3); refreshQuest(); save(); }); openDialog(odessa); }, 1800); }
+  else setTimeout(() => toast('A próxima luz', 'Volte ao observatório e conte à Odessa o que você viu'), 2600);
 }
 function placeDone(place, quiet) { const g = giants.find(g => g.id === place.id); if (g) g.target = 0.35; const sp = SPOTS[place.place]; if (sp) addSiteSpirits(V3(sp.x, groundH(sp.x, sp.z), sp.z), quiet ? 6 : 9, 9, 3); }
 function captureSketch(id) {
@@ -816,32 +836,51 @@ function noteNow(id) { const n = NOTES[id], c = n.lineIf; if (c && ((c.flag && S
 function readNote(id) { const n = noteNow(id); const k = n.alt ? id + '_2' : id; if (!S.notes[id] || (n.alt && !S.notes[k])) { S.notes[id] = 1; if (n.alt) S.notes[k] = 1; Sound.page(); save(); toast('Anotado no caderno', n.title); } think(n.line); }
 // perguntas do caderno: aparecem quando algo as levanta e se respondem com as descobertas
 const QUESTIONS = [
-  { q: 'Por que a Odessa chamou justo a mim?', when: () => S.met.odessa, a: () => said('od_pai') ? 'Porque eu nunca estive aqui, e quem velou não fecha a vigília. E porque o pai contou a ela que eu sabia ficar quieta.' : said('od_maos') ? 'As mãos dela estão virando pedra. Ela precisa de alguém de fora para fechar as vigílias. Mas por que eu?' : null },
-  { q: 'O que são os gigantes?', when: () => S.met.anselmo || lumesN() > 0, a: () => (seen('torre') || seen('circulo')) ? 'Veladores que nunca terminaram uma vigília. A pedra cresce em quem não levanta: Aldren no círculo, Auren ao pé da torre, a Ilsa no monte, o Teo no lago.' : null },
-  { q: 'Quem limpa o relógio da Mira?', when: () => seen('relogios'), a: () => said('od_relogios') ? 'A Odessa. Toda tarde, às quatro e meia, há seiscentos anos.' : null },
-  { q: 'Por que os Veladores foram embora?', when: () => lumesN() >= 2, a: () => seen('torre') ? 'O mestre Auren viu o povo virando pedra de tanto velar e mandou os jovens embora antes que fosse tarde.' : null },
-  { q: 'Por que a Ilsa não partiu?', when: () => seen('torre') || seen('monte') || seen('escada'), a: () => seen('escada') ? 'Achava que, se esquecesse, a Mira morreria de vez. Ficou, e mandou o Teo levar a filha "andando".' : null },
-  { q: 'O que o gigante do lago segura?', when: () => said('ir_mao') || seen('lago'), a: () => seen('rosto') ? 'Uma pedra. A dos sete pulos que o Teo prometeu ensinar à Mira "amanhã".' : null },
+  { q: 'O que exatamente eu vim fazer aqui?', when: () => S.met.odessa, a: () => 'Terminar o contrato do meu pai: o mapa oficial do vale e um relatório para a Coroa dizendo o que são as pedras. Se acharem que pega, fecham a estrada. E ver, pela luneta da Odessa, as oito luzes que os gigantes guardam.' },
+  { q: 'Quem era a Dédé?', when: () => seen('lago'), a: () => reported('lago') ? 'A própria Odessa, aos dez anos. A Mira não conseguia falar Odessa.' : null },
+  { q: 'O que são os gigantes?', when: () => S.met.odessa, a: () => reported('circulo') ? 'Pedras-memória. Nascem com a forma de quem morreu sem conseguir partir em paz e crescem enquanto a história não termina. Os quatro são a família da Mira: o Teo, a Ilsa, o avô Aldren e o curandeiro Auren.' : null },
+  { q: 'A pedra pega?', when: () => S.met.cosme, a: () => reported('circulo') ? 'Não. A pedra só cresce em quem para de viver por causa de alguém que perdeu. É isso que vai no relatório.' : null },
+  { q: 'Por que as mãos da Dédé estavam enfaixadas no enterro?', when: () => seen('rosto'), a: () => seen('escada') ? 'Ela caiu na escada, correndo na chuva para chamar o Auren. Não dormiu: desmaiou depois de fazer tudo o que dava pra fazer.' : null },
+  { q: 'Quem chamou o Auren naquela noite?', when: () => seen('torre'), a: () => seen('escada') ? 'A Dédé.' : null },
+  { q: 'Por que as pontas dos meus dedos ficaram cinzentas?', when: () => S.flags.liaPedra, a: () => S.final ? 'Pedra não sente nada. Eu também não sentia. Voltaram quando eu chorei pelo meu pai.' : 'A Odessa disse que eu não estou imune. Que eu só comecei antes.' },
 ];
 // o que a Lia já contou de si (aparece em "Sobre mim")
-const ABOUT = [['od_pai', 'O pai contou à Odessa que eu desenhava nas margens dos mapas dele. Nunca me disse isso.'], ['lia_anselmo', 'Sou de Ancoradouro, no litoral. Minha mãe tem uma papelaria lá.'], ['lia_odessa', 'Meu pai desenhava estradas para a Coroa. Morreu há dois invernos.'], ['lia_irene', 'Quando eu era pequena, desenhava bichos e gente nas margens dos mapas dele.'], ['lia_bastiao', 'Ele sabia de cor onde cada ponte tinha caído.'], ['lia_celeste', 'Faz um ano que eu não escrevo para a minha mãe.'], ['lia_davi', 'O Seu Davi me deu papel de carta. Disse para não deixar virar quarenta anos.']];
+const ABOUT = [['lia_anselmo', 'Sou de Ancoradouro, no litoral. Minha mãe tem uma papelaria lá.'], ['lia_celeste', 'Faz um ano que eu não escrevo para a minha mãe. Mando dinheiro todo mês. Carta, não.'], ['lia_irene', 'Quando eu era pequena, desenhava bichos nas margens dos mapas do meu pai. Depois parei.'], ['lia_bastiao', 'Ele sabia de cor onde cada ponte tinha caído.'], ['amoras', 'O Tomé me deu amoras. Não senti muito o gosto.'], ['lia_davi', 'O Seu Davi me deu papel de carta. Disse para não deixar virar quarenta anos.']];
+// o mapa que o pai fez do vale, com bichos desenhados nas margens, tortos, imitando os dela
+let fatherMap = null;
+function fatherMapURL() {
+  if (fatherMap) return fatherMap; const c = document.createElement('canvas'); c.width = c.height = 520; const g = c.getContext('2d');
+  g.fillStyle = '#efe3c6'; g.fillRect(0, 0, 520, 520); if (mapBase) { g.save(); g.globalAlpha = 0.85; g.filter = 'sepia(0.8) contrast(0.9)'; g.drawImage(mapBase, 60, 60, 400, 400); g.restore(); }
+  g.strokeStyle = '#5a4630'; g.lineWidth = 2; g.strokeRect(58, 58, 404, 404); g.lineWidth = 1.6; g.lineCap = 'round'; g.lineJoin = 'round';
+  const P = (pts) => { g.beginPath(); pts.forEach(([x, y], i) => i ? g.lineTo(x, y) : g.moveTo(x, y)); g.stroke(); };
+  // uma raposa (canto de cima), um passarinho, um peixe, uma casinha com fumaça, um gigante de mão erguida, uma menina
+  P([[20, 30], [34, 18], [40, 30], [52, 30], [58, 18], [64, 32], [60, 44], [40, 48], [24, 44], [20, 30]]); P([[24, 44], [8, 52], [14, 40]]);
+  P([[470, 20], [480, 14], [492, 20], [500, 14], [508, 20]]); P([[478, 40], [490, 34], [502, 40]]);
+  P([[18, 480], [40, 470], [56, 480], [40, 490], [18, 480], [10, 472], [10, 488], [18, 480]]);
+  P([[470, 500], [470, 476], [484, 464], [498, 476], [498, 500], [470, 500]]); P([[492, 470], [494, 456], [500, 450], [496, 440]]);
+  P([[230, 506], [230, 482], [238, 474], [246, 482], [246, 506]]); P([[238, 474], [238, 462]]); P([[246, 482], [256, 466], [256, 456]]);
+  g.font = 'italic 15px Georgia, serif'; g.fillStyle = '#5a4630'; g.textAlign = 'center'; g.fillText('Vale de Aldren — H.', 260, 44); g.font = 'italic 12px Georgia, serif'; g.fillText('pra Lia, que desenha melhor do que eu', 260, 510);
+  return (fatherMap = c.toDataURL('image/jpeg', 0.8));
+}
 function openJournal() {
   const list = $('journalList'); list.innerHTML = ''; const esc = (t) => String(t).replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
   const H = (t) => { const h = document.createElement('h2'); h.textContent = t; list.appendChild(h); };
   const A = (html, cls) => { const b = document.createElement('article'); if (cls) b.className = cls; b.innerHTML = html; list.appendChild(b); };
-  const n = lumesN(); $('journalCount').textContent = `${n} de 8 lugares` + (n > 1 ? ' · em ordem do tempo dos Veladores' : '');
+  const n = lumesN(); $('journalCount').textContent = `${n} de 8 lembranças · último barco do outono em ${Math.max(0, 24 - S.day)} dias`;
   // os lugares vistos aparecem na ordem em que as coisas aconteceram; os que faltam, no fim, com a dica e a hora
   const seenP = PLACES.filter(p => S.lumes[p.id]).sort((a, b) => a.order - b.order), rest = PLACES.filter(p => !S.lumes[p.id]);
   for (const pl of seenP) { const ri = pl.reflectIf; const refl = ri && [].concat(ri.seen).some(k => S.lumes[k]) ? ri.line : pl.reflect;
     A(`<div class="era">${esc(pl.era)} · ${esc(pl.time)}</div>${sketches[pl.id] ? `<img alt="" src="${sketches[pl.id]}">` : ''}<h3>${esc(pl.name)}</h3><p class="cap">${esc(pl.sketch)}</p><p>${esc(lineText(refl))}</p>`); }
   for (const pl of rest) A(`<h3 class="unk">Um lugar ainda não visto</h3><p class="cap">${esc(pl.hint)}</p>`);
-  const vel = Object.values(VELADORES).filter(v => v.seen.some(k => S.lumes[k])); if (vel.length) { H('As pessoas das lembranças'); for (const v of vel) A(`<h3>${esc(v.name)}</h3><p>${esc(v.note)}</p>`); }
+  const vel = Object.values(MEMPEOPLE).filter(v => v.seen.some(k => S.lumes[k])); if (vel.length) { H('As pessoas das lembranças'); for (const v of vel) A(`<h3>${esc(v.name)}</h3><p>${esc(v.note)}</p>`); }
   const qs = QUESTIONS.filter(q => q.when()); if (qs.length) { H('Perguntas'); for (const q of qs) { const a = q.a(); A(`<h3 class="q${a ? ' done' : ''}">${esc(q.q)}</h3>${a ? `<p>${esc(a)}</p>` : '<p class="cap">Ainda não sei.</p>'}`); } }
   const rib = RIBBONS.filter(r => S.ribbons && S.ribbons[r.id]); if (rib.length || S.ribbons?.lia) { H('Fitas da árvore'); for (const r of rib) A(`<h3>${esc(r.title)}</h3><p class="cap">${esc(ribbonWho(r))}</p><p>${esc(r.text)}</p>`); if (S.ribbons?.lia) A(`<h3>A minha fita</h3><p class="cap">Amarrada perto da pedra furada.</p><p>Não vou contar o que pedi. Senão não vale.</p>`); }
-  const notes = Object.keys(NOTES).filter(k => S.notes[k]); if (notes.length || S.pulos) { H('Anotações'); for (const k of notes) { const nn = noteNow(k); A(`<h3>${esc(nn.title)}</h3><p>${esc(lineText(nn.line))}</p>`); } if (S.pulos) A(`<h3>Pedras no lago</h3><p>Meu recorde: ${S.pulos} ${S.pulos === 1 ? 'pulo' : 'pulos'}. O Teo fez sete. Ainda.</p>`); }
-  const inv = Object.keys(S.inv); if (inv.length) { H('Comigo'); for (const k of inv) A(`<h3>${esc(ITEMS[k].split(' (')[0])}</h3><p class="cap">${esc(ITEMS[k].split(' (')[1]?.replace(')', '') || '')}</p>`); }
+  const notes = Object.keys(NOTES).filter(k => S.notes[k]); if (notes.length || S.pulos) { H('Anotações'); for (const k of notes) { const nn = noteNow(k); A(`<h3>${esc(nn.title)}</h3><p>${esc(lineText(nn.line))}</p>`); } if (S.pulos) A(`<h3>Pedras no lago</h3><p>Meu recorde: ${S.pulos} ${S.pulos === 1 ? 'pulo' : 'pulos'}. A Mira queria sete.</p>`); }
+  if (has('mapa')) { H('O mapa do meu pai'); A(`<img alt="" src="${fatherMapURL()}"><p class="cap">Ele desenhava igual a mim. Ele reparava.</p>`); }
+  { const ks = Object.keys(S.bag || {}).filter(k => S.bag[k] > 0); if (ks.length) { H('Na bolsa'); A(`<p>${ks.map(k => `${FOOD[k].icon} ${FOOD[k].name} ×${S.bag[k]}`).join(' · ')}</p>`); } }
+  const inv = Object.keys(S.inv).filter(k => k !== 'mapa'); if (inv.length) { H('Comigo'); for (const k of inv) A(`<h3>${esc(ITEMS[k].split(' (')[0])}</h3><p class="cap">${esc(ITEMS[k].split(' (')[1]?.replace(')', '') || '')}</p>`); }
   const fr = Object.keys(FRIENDS).filter(k => S.met[k]); if (fr.length) { H('Amizades'); for (const k of fr) A(`<h3>${esc(CAST[k].name)} <span class="hearts">${hearts(k)}</span></h3><p class="cap">${esc(CAST[k].role)}</p><p>${esc(FRIENDS[k])}</p>`); }
-  const ab = ABOUT.filter(([k]) => said(k)); H('Sobre mim'); A(`<p>${ab.length ? ab.map(([, t]) => esc(t)).join(' ') : 'A bússola do meu pai puxa para o leste. O resto, ainda não escrevi.'}${S.flags.cartaMae ? ' <br><br><i>Escrevi para a minha mãe.</i>' : ''}</p>`, 'about');
+  const ab = ABOUT.filter(([k]) => said(k)); H('Sobre mim'); A(`<p>${ab.length ? ab.map(([, t]) => esc(t)).join(' ') : 'Tenho 26 anos. Vim terminar o mapa que o meu pai não terminou. A papelaria da minha mãe tem dívidas desde que ele morreu.'}${S.flags.cartaMae ? ' <br><br><i>Escrevi para a minha mãe.</i>' : ''}</p>`, 'about');
   $('journal').hidden = false; if (state === 'play') state = 'journal';
 }
 function closeJournal() { $('journal').hidden = true; if (state === 'journal') state = 'play'; }
@@ -854,7 +893,7 @@ function ribbonWho(r) { return (!r.needs || r.needs.some(seen)) ? 'Amarrada por:
 const rib = { sel: 0, wish: false };
 function openRibbons() { state = 'ribbons'; document.body.classList.add('cine'); $('prompt').hidden = true; $('ribbons').hidden = false; rib.wish = false; const first = !S.flags.fitasVistas; S.flags.fitasVistas = 1; renderRibbons(); if (first) $('ribHint').textContent = lineText('li_fitas'); }
 function closeRibbons() { $('ribbons').hidden = true; document.body.classList.remove('cine'); if (state === 'ribbons') state = 'play'; save(); }
-const canRetie = () => (seen('lago') || seen('arvore')) && !S.flags.fitaNo;
+const canRetie = () => false;
 function renderRibbons() {
   const row = $('ribRow'); row.innerHTML = '';
   RIBBONS.forEach((r, i) => { const b = document.createElement('button'); b.className = 'ribw' + (i === rib.sel ? ' sel' : ''); b.setAttribute('aria-label', r.title);
@@ -924,9 +963,11 @@ function skipEnd(sink) {
   skip.phase = 'after'; skip.t = 0; const n = skip.n; const first = !S.pulos;
   if (n > (S.pulos || 0)) S.pulos = n;
   $('skipCount').textContent = n ? `${n} ${n === 1 ? 'pulo' : 'pulos'}` : (sink ? 'Ploc.' : '');
-  if (n >= 8 && !S.flags.pulos8) { S.flags.pulos8 = 1; toast(`${n} pulos`, 'Mais que o Teo. Não conta pra ele.'); }
-  else if (n >= 7 && !S.flags.pulos7) { S.flags.pulos7 = 1; toast('Sete pulos', 'Igual ao Teo.'); setTimeout(() => think('li_pulos_bom'), 1200); }
-  else if (n === 0 && !S.flags.pulos0) { S.flags.pulos0 = 1; setTimeout(() => think('li_pulos_zero'), 900); }
+  S.flags.tries = (S.flags.tries || 0) + 1;
+  // sete pulos não dá agora; a Lia avisa depois de algumas tentativas, pra ninguém ficar tentando à toa
+  if (n === 0 && !S.flags.pulos0) { S.flags.pulos0 = 1; setTimeout(() => think('li_pulos_zero'), 900); }
+  else if (S.flags.tries === 4 || (n >= 5 && !S.flags.pulos5)) { S.flags.pulos5 = 1; setTimeout(() => think('li_pulos_bom'), 1200); }
+  else if (S.flags.tries === 9) setTimeout(() => think('li_pulos_cansei'), 1200);
   if (first && n) Sound.page(); save();
 }
 function exitSkip() { if (!skip) return; skip = null; document.body.classList.remove('cine'); if (stoneMesh) stoneMesh.visible = false; $('skipHud').hidden = true; if (state === 'skip') state = 'play'; }
@@ -942,7 +983,7 @@ function updateSkip(dt) {
     if (gh > P.y - 0.02 && gh > WATER - 0.05) { Sound.plop(P.x, P.z, 0.6); stoneMesh.visible = false; skipEnd(false); return; } // bateu na margem
     if (P.y <= WATER + 0.01 && Vv.y < 0) {
       const h = Math.hypot(Vv.x, Vv.z), ang = Math.atan2(-Vv.y, h), k = skip.kind;
-      if (ang < k.maxAng && h > k.minV && skip.n < 16) {
+      if (ang < k.maxAng && h > k.minV && skip.n < 5) {
         skip.n++; Vv.y = -Vv.y * 0.48 + 0.5; Vv.x *= k.keep; Vv.z *= k.keep; P.y = WATER + 0.01;
         ripple(P.x, P.z, 0.45 + 0.1 * Math.min(4, skip.n)); for (let i = 0; i < 6; i++) dust.emit({ x: P.x + rr(-0.1, 0.1), y: WATER + 0.03, z: P.z + rr(-0.1, 0.1), vx: Vv.x * 0.05 + rr(-0.4, 0.4), vy: rr(0.8, 1.6), vz: Vv.z * 0.05 + rr(-0.4, 0.4), g: 9, drag: 0.5, life: rr(0.3, 0.5), s0: 0.04, s1: 0.08, c: [0.85, 0.9, 0.92], a0: 0.5, wind: 0 });
         Sound.plip(P.x, P.z, skip.n); $('skipCount').textContent = String(skip.n);
@@ -968,30 +1009,32 @@ function skipCamera(dt) {
 // =====================================================================
 let finale = null;
 function startFinale() {
-  state = 'finale'; document.body.classList.add('cine'); Music.stop(3); timeLapse = 0;
-  const c = storySpots.finale; const fwd = V3(Math.sin(odessa.day[2]), 0, Math.cos(odessa.day[2]));
-  const ring = [[odessa, 1.2, 0], [anselmo, -1.8, 1.6], [celeste, -2.6, -0.4], [tome, 2.2, 1.8], [irene, 0.6, 2.8], [bastiao, 3.0, -0.8],
-    // a Vila da Maré também sobe para ver a Chuva de Lumes
-    [marta, -3.6, 1.2], [davi, 3.9, 1.5], [nina, 1.5, 3.4], [tiao, -1.0, 3.7], [joca, 4.6, 0.3]].filter(r => r[0]);
-  const rgt = V3(fwd.z, 0, -fwd.x);
-  for (const [n, a, b] of ring) { n.finale = true; n.inside = false; n.x = c.x + rgt.x * a + fwd.x * b; n.z = c.z + rgt.z * a + fwd.z * b; n.yaw = Math.atan2(fwd.x, fwd.z); n.finaleIdle = n === odessa ? 'idle' : n === anselmo ? 'fold' : 'idle'; n.h.root.visible = true; }
-  player.x = c.x - rgt.x * 0.4; player.z = c.z - rgt.z * 0.4; player.h = Math.atan2(fwd.x, fwd.z); player.y = probe(player.x, player.z, groundH(player.x, player.z) + 0.5).h; player.speed = 0;
+  state = 'finale'; document.body.classList.add('cine'); Music.stop(3); timeLapse = 0; hour = Math.max(hour, 16.4);
+  const md = storySpots.miraDial || SPOTS.garden, gsp = SPOTS.garden; const c = { x: md.x, z: md.z };
+  const fwd = V3(md.x - gsp.x, 0, md.z - gsp.z).normalize(); const rgt = V3(fwd.z, 0, -fwd.x);
+  // a Odessa ajoelhada no relógio; a Lia do lado; a vila em meia-lua atrás, olhando pro relógio
+  const ring = [[odessa, 0.7, 0.6], [anselmo, -2.2, -2.6], [celeste, -1.2, -3.2], [tome, 1.0, -2.4], [irene, 2.4, -3.0], [bastiao, 3.4, -2.2], [cosme, -3.4, -1.8],
+    [marta, -2.8, -4.2], [davi, 3.6, -4.0], [nina, 1.6, -4.4], [tiao, -0.6, -4.6], [joca, 0.4, -5.0]].filter(r => r[0]);
+  for (const [n, a2, b2] of ring) { n.finale = true; n.inside = false; n.x = c.x + rgt.x * a2 + fwd.x * b2; n.z = c.z + rgt.z * a2 + fwd.z * b2; n.yaw = Math.atan2(c.x - n.x, c.z - n.z); n.finaleIdle = n === anselmo ? 'fold' : 'idle'; n.h.root.visible = true; }
+  odessa.finaleIdle = 'kneel';
+  player.x = c.x - rgt.x * 0.9 - fwd.x * 0.6; player.z = c.z - rgt.z * 0.9 - fwd.z * 0.6; player.h = Math.atan2(c.x - player.x, c.z - player.z); player.y = probe(player.x, player.z, groundH(player.x, player.z) + 0.5).h; player.speed = 0;
+  if (bow) toggleAim(false);
   const lines = FINALE.slice(); let i = -1; let t = 0, waiting = false;
-  finale = { speaker: null, t: 0, rain: null, camera: (dt) => { finale.t += dt; if (finale.shot === 'lake' && lakeShot) { lakeShot.camera(dt); return; } const a = finale.t * 0.03; const center = V3(c.x, groundH(c.x, c.z), c.z); const up = smooth(10, 26, finale.t); const want = center.clone().add(V3(Math.sin(odessa.yaw + Math.PI + a) * lerp(7, 9, up), lerp(1.8, 1.2, up), Math.cos(odessa.yaw + Math.PI + a) * lerp(7, 9, up))); cam.cur.lerp(want, 1 - Math.exp(-dt * 1.2)); camera.position.copy(cam.cur); const look = center.clone().add(V3(fwd.x * 6, lerp(1.4, 7.5, up), fwd.z * 6)); camera.lookAt(look); camera.fov = lerp(camera.fov, 50, dt); camera.updateProjectionMatrix(); },
-    update: (dt) => { t += dt; if (finale.rain) finale.rain.update(dt); if (lakeShot) lakeShot.update(dt); if (liaLume) liaLume.update(dt); pH.root.position.set(player.x, player.y, player.z); pH.root.rotation.y = player.h; pH.locomote(0); pH.lookAtPoint(V3(player.x + fwd.x * 6, player.y + 8, player.z + fwd.z * 6), 0.9); pH.update(dt);
+  finale = { speaker: null, t: 0, rain: null, camera: (dt) => { finale.t += dt; if (finale.shot === 'lake' && lakeShot) { lakeShot.camera(dt); return; } const a = finale.t * 0.03; const center = V3(c.x, groundH(c.x, c.z), c.z); const up = finale.rain ? smooth(0, 14, finale.t - finale.rainT) : 0; const base = Math.atan2(-fwd.x, -fwd.z) + 0.7; const want = center.clone().add(V3(Math.sin(base + a) * lerp(5.5, 8.5, up), lerp(1.7, 1.3, up), Math.cos(base + a) * lerp(5.5, 8.5, up))); cam.cur.lerp(want, 1 - Math.exp(-dt * 1.2)); camera.position.copy(cam.cur); const look = center.clone().add(V3(0, lerp(0.9, 6.5, up), 0)); camera.lookAt(look); camera.fov = lerp(camera.fov, 50, dt); camera.updateProjectionMatrix(); },
+    update: (dt) => { t += dt; if (finale.rain) finale.rain.update(dt); if (lakeShot) lakeShot.update(dt); if (liaLume) liaLume.update(dt); pH.root.position.set(player.x, player.y, player.z); pH.root.rotation.y = player.h; pH.locomote(0); pH.lookAtPoint(finale.rain ? V3(player.x, player.y + 8, player.z) : odessa.h.headPos, 0.9); pH.update(dt);
       if (!waiting && t > 2.5) { i++; const id = lines[i]; if (!id) { finale.end(); return; } const [sp] = LINES[id]; finale.speaker = sp; showSub(id); waiting = true;
-        if (id === 'fim5') { odessa.finaleIdle = 'spellIn'; setTimeout(() => { odessa.finaleIdle = 'spell'; }, 1500); }
+        if (id === 'fim2') odessa.finaleIdle = 'idle';
+        if (id === 'fim3') { odessa.finaleIdle = 'spellIn'; setTimeout(() => { odessa.finaleIdle = 'spell'; }, 1500); finale.rain = new LumeRain(c); finale.rainT = finale.t; sky.meteors = 1; Music.play('finale', { fade: 2, vol: 1 }); for (const g of giants) g.target = 1;
+          if (alva && S.flags.voou && !alva.rider) { const spot = alvaSpot(c.x, c.z); if (spot) alva.callTo(spot); } }
         if (id === 'fim_lago') { lakeShot = makeLakeShot(); finale.shot = 'lake'; }
         if (id === 'fim_pulos' && lakeShot) lakeShot.throwStone((Voice.man && Voice.man[id] && Voice.dubbed(id)) ? Voice.man[id].dur : 5.5);
-        if (id === 'fim7') { finale.shot = null; cam.cur.copy(camera.position); }
-        if (id === 'fim_lia4') liaLume = makeLiaLume(V3(player.x, player.y + 1.1, player.z));
-        if (id === 'fim6') { finale.rain = new LumeRain(c); sky.meteors = 1; Music.play('finale', { fade: 2, vol: 1 }); for (const g of giants) g.target = 1;
-          // a Vésper vem ver também (se já é amiga da Lia)
-          if (alva && S.flags.voou && !alva.rider) { const spot = alvaSpot(c.x, c.z); if (spot) alva.callTo(spot); } }
-        Voice.say(id, { onEnd: () => { waiting = false; t = id === 'fim5' ? -3 : 0.6; } }); } },
+        if (id === 'fim_maos') { finale.shot = null; cam.cur.copy(camera.position); odessa.finaleIdle = 'idle'; setOdessaStone(0); }
+        if (id === 'fim_lia1') { setLiaStone(false); liaLume = makeLiaLume(V3(player.x, player.y + 1.1, player.z)); }
+        if (id === 'fim_davi') setDaviStone(0);
+        if (id === 'fim_mapa') give('mapa');
+        Voice.say(id, { onEnd: () => { waiting = false; t = id === 'fim3' ? -2.5 : 0.6; } }); } },
     end: () => { hideSub(); finale.speaker = null; odessa.finaleIdle = 'idle'; S.final = 1; S.flags.ponte = 1; if (storySpots.bridgeDone) storySpots.bridgeDone.visible = true; save(); refreshQuest(); finalAmbience(); $('ending').hidden = false; setTimeout(() => $('ending').classList.add('show'), 50);
-      // depois do narrador, a carta que a Lia devia à mãe (se o Seu Davi deu o papel)
-      setTimeout(() => think('fim11', () => setTimeout(() => think('li_carta_mae', () => { if (has('papel')) take('papel'); S.flags.cartaMae = 1; toast('Carta escrita', 'Para a minha mãe, em Ancoradouro'); save(); }), 1500)), 1200); } };
+      setTimeout(() => think('fim11', () => setTimeout(() => think('li_fome_fim', () => setTimeout(() => think('li_carta_mae', () => { if (has('papel')) take('papel'); S.flags.cartaMae = 1; toast('Carta escrita', 'Para a minha mãe, em Ancoradouro'); save(); }), 1200)), 1200)), 1200); } };
 }
 // o gigante do lago, enfim, joga a pedra: sete pulos, como o Teo prometeu à Mira
 let lakeShot = null, liaLume = null;
@@ -1031,6 +1074,116 @@ function endFinale() { if (finale && finale.rain) { const r = finale.rain; let t
   $('ending').hidden = true; $('ending').classList.remove('show'); document.body.classList.remove('cine'); for (const n of npcs) n.finale = false; state = 'play'; finale = null; sky.meteors = 0.25; cam.mode = 'follow'; requestLock(); }
 function showSub(id) { const m = $('memory'); m.hidden = false; $('memTime').textContent = ''; const sp = LINES[id][0]; $('memName').textContent = CAST[sp] ? CAST[sp].name : ''; $('memText').textContent = lineText(id); m.classList.remove('show', 'thought'); void m.offsetWidth; m.classList.add('show'); }
 function hideSub() { $('memory').classList.remove('show'); $('memory').hidden = true; }
+// =====================================================================
+// o diretor da história: onde cada um está em cada capítulo
+// =====================================================================
+const inFinaleHour = () => hour >= 16.2 && hour < 17.9;
+const gardenSpot = () => { const md = storySpots.miraDial, sp = SPOTS.garden; if (!md) return sp; const a = Math.atan2(sp.x - md.x, sp.z - md.z) + 0.9; return { x: md.x + Math.sin(a) * 1.1, z: md.z + Math.cos(a) * 1.1, yaw: a + Math.PI }; };
+const stairsSpot = () => { const sp = SPOTS.stairs; return { x: sp.x + Math.sin(sp.yaw + 1.4) * 2.2, z: sp.z + Math.cos(sp.yaw + 1.4) * 2.2, yaw: sp.yaw + Math.PI }; };
+const nearGarden = (n) => { const g = gardenSpot(); return Math.hypot(n.x - g.x, n.z - g.z) < 7; };
+const nearStairs = (n) => { const g = stairsSpot(); return Math.hypot(n.x - g.x, n.z - g.z) < 8; };
+function moveNPC(n, x, z, yaw) { if (!n) return; if (n.day[0] === x && n.day[1] === z) return; n.day = [x, z, yaw ?? n.day[2]]; n.planKey = null; n.route = null; if (Math.hypot(n.x - x, n.z - z) > 30 && !npcVisible(n)) teleportNPC(n, x, z); }
+let directorT = 0;
+function director(dt) {
+  directorT -= dt; if (directorT > 0) return; directorT = 0.8; renderBag();
+  if (!joca.home0) joca.home0 = joca.day.slice(); if (!odessa.home0) odessa.home0 = odessa.day.slice();
+  // o Joca: na chegada, no fim da estrada; no capítulo do lago, na porta da hospedaria de manhã
+  const ferry = S.flags.chegou && S.met.odessa && currentChapter() === 'lago' && !seen('lago') && S.day > (S.odDay ?? 0) && hour > 6.2 && hour < 17.5;
+  joca.ferry = ferry;
+  if (!S.flags.chegou) { joca.always = true; moveNPC(joca, START.x + Math.sin(START.h) * 3.2, START.z + Math.cos(START.h) * 3.2, START.h + Math.PI); }
+  else if (ferry && !S.flags.naBarca) { joca.always = true; const s = storySpots.inn; moveNPC(joca, s.x + Math.cos(s.yaw) * 2.2, s.z - Math.sin(s.yaw) * 2.2, s.yaw); }
+  else if (!S.flags.naBarca) { joca.always = false; moveNPC(joca, ...joca.home0); }
+  // a Odessa: na escada, na noite da verdade; no jardim, na tarde do fim; no resto, no observatório
+  if (S.flags.escada && !seen('escada') && isNight()) { const g = stairsSpot(); moveNPC(odessa, g.x, g.z, g.yaw); }
+  else if (seen('escada') && S.flags.jardim && !S.final && hour > 13.5 && hour < 18.5) { const g = gardenSpot(); moveNPC(odessa, g.x, g.z, g.yaw); }
+  else moveNPC(odessa, ...odessa.home0);
+  // fome
+  if (S.flags.chegou && state === 'play') { const h = hunger(); if (h > 0.62 && !S.flags.avisouFome && !player.sit) { S.flags.avisouFome = 1; think('li_fome'); } if (h > 0.85 && !S.flags.avisouFome2 && !player.sit) { S.flags.avisouFome2 = 1; think('li_fome2'); } }
+  // frutas no alto: a Lia comenta (uma vez) quando passa embaixo, sem arco
+  if (orchard && !has('arco') && !S.flags.viuFruta && state === 'play' && orchard.treeNear(player.x, player.z, 5)) { S.flags.viuFruta = 1; think('li_fruta_alta'); refreshQuest(); }
+  // dia novo: as frutas voltam
+  if (orchard && S.fruitDay !== S.day) { S.fruitDay = S.day; orchard.regrow(); }
+}
+// a chegada: o Joca leva a Lia (e a mochila) até a hospedaria
+function travel(caption, after) {
+  const f = $('fade'); f.style.opacity = '1'; state = 'intro'; $('travelCap').textContent = caption; $('travelCap').hidden = false;
+  setTimeout(() => { after(); setTimeout(() => { f.style.opacity = '0'; $('travelCap').hidden = true; if (state === 'intro') state = 'play'; }, 1100); }, 1700);
+}
+function arriveAtInn() {
+  travel('O Joca atravessa o lago com a Lia', () => {
+    const s = storySpots.inn; player.x = s.x + Math.sin(s.yaw) * 1.2; player.z = s.z + Math.cos(s.yaw) * 1.2; player.y = probe(player.x, player.z, groundH(player.x, player.z) + 0.5).h; player.h = s.yaw + Math.PI; cam.yaw = player.h + Math.PI; cam.cur.set(player.x - Math.sin(player.h) * 3.4, player.y + 1.8, player.z - Math.cos(player.h) * 3.4);
+    teleportNPC(joca, s.x + Math.cos(s.yaw) * 1.6, s.z - Math.sin(s.yaw) * 1.6); joca.yaw = s.yaw - Math.PI / 2;
+    S.flags.chegou = 1; save(); refreshQuest();
+    setTimeout(() => { joca.onceNode = Nd('jo_cheg4', BYE); openDialog(joca); }, 1400);
+  });
+}
+// capítulo 1: de barco até a ponta de pedra do gigante do lago
+function ferryToLake() {
+  travel('De barco até o gigante do lago', () => {
+    const sp = SPOTS.lake; S.flags.naBarca = 1; player.x = sp.x - Math.sin(sp.yaw) * 2.5; player.z = sp.z - Math.cos(sp.yaw) * 2.5; player.y = probe(player.x, player.z, groundH(player.x, player.z) + 0.5).h; player.h = sp.yaw; cam.yaw = player.h + Math.PI; cam.cur.set(player.x - Math.sin(player.h) * 3.4, player.y + 1.8, player.z - Math.cos(player.h) * 3.4);
+    const jx = sp.x - Math.sin(sp.yaw) * 4.5 + Math.cos(sp.yaw) * 2, jz = sp.z - Math.cos(sp.yaw) * 4.5 - Math.sin(sp.yaw) * 2; teleportNPC(joca, jx, jz); joca.day = [jx, jz, sp.yaw]; joca.always = true;
+    setTimeout(() => { joca.onceNode = Nd('jo_lago2', BYE); openDialog(joca); }, 1300);
+  });
+}
+// =====================================================================
+// a luneta: acertar a luz no centro antes da lembrança aparecer
+// =====================================================================
+let lens = null;
+function startLens(place) {
+  state = 'lens'; document.body.classList.add('cine'); $('prompt').hidden = true; $('lapseHint').hidden = true; timeLapse = 0;
+  const sg = () => (rand() < 0.5 ? -1 : 1); lens = { place, x: rr(0.35, 0.6) * sg(), y: rr(0.25, 0.5) * sg(), hold: 0, t: 0 };
+  $('lens').hidden = false; requestAnimationFrame(() => $('lens').classList.add('show'));
+  $('lensTip').textContent = isTouch ? 'Arraste o dedo para trazer a luz ao centro da luneta' : 'Mova o mouse (ou W A S D) para trazer a luz ao centro · Esc para sair';
+  if (!S.flags.lensTut) { S.flags.lensTut = 1; think('li_luneta'); } Sound.page();
+}
+function lensMove(dx, dy) { if (!lens) return; lens.x -= dx * 0.0022; lens.y -= dy * 0.0022; }
+function endLens(go) { const L = lens; lens = null; $('lens').classList.remove('show'); setTimeout(() => { $('lens').hidden = true; }, 500); if (go) { state = 'play'; startLume(L.place); } else { state = 'play'; document.body.classList.remove('cine'); } }
+function updateLens(dt) {
+  const L = lens; if (!L) return; L.t += dt;
+  L.x += (Math.sin(L.t * 0.9) * 0.55 + Math.sin(L.t * 2.3 + 1) * 0.3) * 0.09 * dt; L.y += (Math.cos(L.t * 0.7) * 0.55 + Math.sin(L.t * 1.9) * 0.3) * 0.09 * dt;
+  const kx = (keys.KeyD || keys.ArrowRight ? 1 : 0) - (keys.KeyA || keys.ArrowLeft ? 1 : 0), ky = (keys.KeyS || keys.ArrowDown ? 1 : 0) - (keys.KeyW || keys.ArrowUp ? 1 : 0);
+  L.x -= kx * dt * 0.45; L.y -= ky * dt * 0.45; L.x = clamp(L.x, -0.95, 0.95); L.y = clamp(L.y, -0.95, 0.95);
+  const d = Math.hypot(L.x, L.y); if (d < 0.09) L.hold += dt; else L.hold = Math.max(0, L.hold - dt * 0.7);
+  const R = $('lensRing').offsetWidth / 2 || 150; $('lensDot').style.transform = `translate(${L.x * R}px, ${L.y * R}px) scale(${1 + Math.min(1, L.hold) * 0.5})`;
+  $('lensRing').style.setProperty('--k', String(clamp(L.hold / 1.3, 0, 1)));
+  if (L.hold > 1.3) { Sound.page(); endLens(true); }
+}
+// =====================================================================
+// comer, fome, bolsa, arco
+// =====================================================================
+const BAG_MAX = 6;
+const bagCount = () => Object.values(S.bag || {}).reduce((a, b) => a + b, 0);
+// fome: 0 (acabou de comer) a 1, em ~16 horas do vale
+function hunger() { const t = (S.day * 24 + hour) - (S.fed ?? (S.day * 24 + hour)); return clamp(t / 16, 0, 1); }
+function fed() { S.fed = S.day * 24 + hour; S.flags.avisouFome = 0; S.flags.avisouFome2 = 0; renderBag(); save(); }
+function addFood(kind, n = 1) { S.bag = S.bag || {}; let added = 0; for (let i = 0; i < n; i++) { if (bagCount() >= BAG_MAX) break; S.bag[kind] = (S.bag[kind] || 0) + 1; added++; } if (added) toast('Na bolsa', `${FOOD[kind].icon} ${FOOD[kind].name}${added > 1 ? ' ×' + added : ''}`); else think('li_bolsa_cheia'); renderBag(); save(); return added; }
+// o gosto muda com a história: no começo não tem gosto; depois azeda; no fim, doce
+const tasteLine = () => S.final ? 'li_comer3' : lumesN() >= 5 ? 'li_comer2' : 'li_comer1';
+function eat() {
+  if (state !== 'play' || player.sit) return; const k = ['amora', 'maca', 'figo', 'laranja', 'pao'].find(k => (S.bag[k] || 0) > 0); if (!k) { toast('A bolsa está vazia', 'Frutas nas árvores, amoras nos arbustos, pão na Celeste'); return; }
+  S.bag[k]--; if (!S.bag[k]) delete S.bag[k]; pH.play('eat', 0.2); Sound.rustle(player.x, player.z); fed(); const n = (S.eaten = (S.eaten || 0) + 1); if (n === 1 || n % 3 === 0) setTimeout(() => think(tasteLine()), 900);
+}
+function eatMeal() { fed(); setTimeout(() => think(tasteLine()), 1200); }
+function renderBag() { const b = $('bag'); if (!b) return; const ks = Object.keys(S.bag || {}).filter(k => S.bag[k] > 0); b.hidden = !ks.length && !has('arco'); b.innerHTML = ks.map(k => `<span>${FOOD[k].icon}<b>${S.bag[k]}</b></span>`).join('') + (hunger() > 0.62 ? '<span class="hungry">com fome</span>' : ''); }
+// o arco
+let bow = null, orchard = null, wallBow = null;
+function setBow() { if (!has('arco') || bow) return; bow = { mesh: makeBow(), aiming: false, cool: 0 }; pH.root.add(bow.mesh); placeBow(); if (isTouch) $('tbBow').hidden = false; renderBag(); }
+function placeBow() { if (!bow) return; const b = bow.aiming ? pH.bones.hand_l : pH.bones.spine_03; if (!b) return; if (bow.mesh.parent !== b) b.add(bow.mesh); if (bow.aiming) { bow.mesh.position.set(0, 0.02, 0); bow.mesh.rotation.set(0, Math.PI / 2, 0); bow.mesh.scale.setScalar(1); } else { bow.mesh.position.set(0.05, -0.18, -0.16); bow.mesh.rotation.set(0.2, 0, 0.5); bow.mesh.scale.setScalar(1); } }
+function toggleAim(on) { if (!bow || state !== 'play' || player.sit) return; bow.aiming = on ?? !bow.aiming; placeBow(); $('crosshair').hidden = !bow.aiming; if (bow.aiming && !S.flags.arcoTut) { S.flags.arcoTut = 1; toast('Mirando', isTouch ? 'Toque em Usar para atirar · Arco de novo para guardar' : 'Clique ou E para atirar · R para guardar'); } }
+function shoot() {
+  if (!bow || !bow.aiming || bow.cool > 0) return; bow.cool = 0.7; pH.play('throw', 0.1);
+  const o = camera.position.clone(), d = camFwd.clone().normalize(); const from = pH.handPos ? pH.handPos('l') : V3(player.x, player.y + 1.4, player.z);
+  const hit = orchard && orchard.pick(o, d); let to;
+  if (hit) to = o.clone().addScaledVector(d, hit.t); else { to = o.clone().addScaledVector(d, 30); for (let t = 2; t < 30; t += 0.5) { const q = o.clone().addScaledVector(d, t); if (q.y < groundH(q.x, q.z) + 0.05 || treeHit(q.x, q.z)) { to = q; break; } } }
+  Sound.rustle(player.x, player.z);
+  orchard.shoot(from, to, hit && hit.f, (f) => { if (f) { orchard.knock(f); Sound.plip(f.pos.x, f.pos.z, 2); if (!S.flags.primeiraFruta) { S.flags.primeiraFruta = 1; toast('Acertou', 'A fruta caiu. Vá até ela e pegue.'); } } });
+}
+
+// mãos de pedra (o módulo de pedra é ligado quando existe)
+function setLiaStone(on) { const P = window.__petrify; if (P && P.setLia) P.setLia(on); }
+function setOdessaStone(a) { const P = window.__petrify; if (P && P.setOdessa) P.setOdessa(a); }
+function setDaviStone(a) { const P = window.__petrify; if (P && P.setDavi) P.setDavi(a); }
+
 
 // =====================================================================
 // interações
@@ -1045,6 +1198,9 @@ function interactables() {
   if (storySpots.ribbonTree) { const rs = storySpots.ribbonTree.readSpot; if (Math.abs(rs.x - player.x) < 4 && Math.abs(rs.z - player.z) < 4) out.push({ x: rs.x, z: rs.z, r: 2.6, label: S.flags.fitasVistas ? 'Ler as fitas' : 'Olhar as fitas de perto', act: openRibbons }); }
   // jogar pedra no lago (de qualquer ponto da margem)
   { const ls = lakeThrowSpot(); if (ls) out.push({ x: ls.x, z: ls.z, r: 3, label: 'Procurar uma pedra e jogar no lago', act: enterSkip }); }
+  if (orchard) { const f = orchard.groundNear(player.x, player.z, 2.2); if (f) out.push({ x: f.pos.x, z: f.pos.z, r: 2.2, label: 'Pegar ' + (f.kind === 'maca' ? 'a maçã' : f.kind === 'laranja' ? 'a laranja' : 'o figo'), act: () => { if (addFood(f.kind, 1)) { orchard.take(f); pH.play('pickup', 0.2); } } }); }
+  { const am = storySpots.amoras; if (am && Math.abs(am.x - player.x) < 4 && Math.abs(am.z - player.z) < 4) out.push({ x: am.x, z: am.z, r: 2.6, label: S.flags.amoraDia === S.day ? 'Já colhi as amoras de hoje' : 'Colher amoras', act: () => { if (S.flags.amoraDia === S.day) { think('li_amoras'); return; } if (addFood('amora', 3)) { S.flags.amoraDia = S.day; pH.play('harvest', 0.2); setTimeout(() => think('li_colher'), 700); } } }); }
+  if (S.flags.arcoOk && !has('arco') && storySpots.arco && Math.abs(storySpots.arco.x - player.x) < 3 && Math.abs(storySpots.arco.z - player.z) < 3) out.push({ x: storySpots.arco.x, z: storySpots.arco.z, r: 2.2, label: 'Pegar o arco do filho do Seu Cosme', act: () => { give('arco'); if (wallBow) { wallBow.parent && wallBow.parent.remove(wallBow); wallBow = null; } setBow(); think('li_arco'); toast('O arco', isTouch ? 'Toque em Arco para mirar, Usar para atirar' : 'R para mirar · clique ou E para atirar · Q para comer'); } });
   for (const k in NOTES) { const sp = storySpots[k]; if (sp) out.push({ x: sp.x, z: sp.z, r: 2.4, label: S.notes[k] ? 'Olhar de novo' : 'Observar', act: () => readNote(k) }); }
   // a Alva
   if (alva && (alva.mode === 'rest' || alva.mode === 'ground')) { const d = Math.hypot(alva.x - player.x, alva.z - player.z); if (d < 21) { if (!S.alva) out.push({ x: alva.x, z: alva.z, r: 19, label: 'Aproximar-se devagar da dragoa', act: () => { if (player.speed > 2.2 || alva.alert > 0.5) { think('li_alva_corre'); return; } alva.bow = 1; think('li_alva1', () => { think('li_alva2'); S.alva = 1; alva.trust = 1; save(); setTimeout(() => { if (alva) alva.bow = 0; }, 8000); }); } }); else out.push({ x: alva.x, z: alva.z, r: 19, label: 'Montar na Vésper e voar', act: mountDragon }); } }
@@ -1062,7 +1218,7 @@ function checkInteract() {
   for (const it of interactables()) { const dx = it.x - player.x, dz = it.z - player.z, d = Math.hypot(dx, dz); if (d > it.r) continue; const dot = (dx * fx + dz * fz) / (d || 1); if (dot < 0.1 && d > 1.4) continue; const sc = d - dot; if (sc < bd) { bd = sc; best = it; } }
   curInter = best; const pr = $('prompt'); if (best) { pr.hidden = false; pr.innerHTML = `<kbd>${isTouch ? 'Usar' : 'E'}</kbd>${best.label}`; } else pr.hidden = true;
 }
-function interact() { if (state === 'play' && curInter && !player.sit) { curInter.act(); refreshQuest(); } }
+function interact() { if (state === 'play' && bow && bow.aiming) { shoot(); return; } if (state === 'play' && curInter && !player.sit) { curInter.act(); refreshQuest(); } }
 function checkDiscover() {
   for (const k in POI) { if (S.found[k] || k === 'village') continue; const p = POI[k]; if (Math.hypot(player.x - p.x, player.z - p.z) < (k === 'lake' ? 80 : 26)) { S.found[k] = 1; toast('Lugar descoberto', p.name); Music.stinger('discover'); refreshQuest(); save(); } }
 }
@@ -1072,12 +1228,17 @@ function checkDiscover() {
 // =====================================================================
 function nearestOpenPlace() { let best = null, bd = 1e9; for (const pl of PLACES) { if (S.lumes[pl.id]) continue; const sp = SPOTS[pl.place]; if (!sp) continue; const d = Math.hypot(sp.x - player.x, sp.z - player.z); if (d < bd) { bd = d; best = { pl, sp }; } } return best; }
 function objectives() {
-  const n = lumesN(); const o = [];
-  if (!S.met.odessa) o.push({ t: 'Encontre Odessa no observatório, na colina a nordeste da vila', tgt: storySpots.odessa });
-  else if (n < 8) { const b = nearestOpenPlace(); o.push({ t: `Veja até o fim as vigílias abertas (${n}/8)`, sub: b ? b.pl.hint : '', tgt: b ? b.sp : null }); }
-  else if (!S.told) o.push({ t: 'Volte ao observatório e conte tudo a Odessa', tgt: storySpots.odessa });
-  else if (!S.final) o.push({ t: isNight() ? 'Suba ao observatório: a Odessa vai fechar as vigílias' : 'Espere a noite e suba ao observatório', tgt: storySpots.odessa });
-  else o.push({ t: 'O vale é seu. Ande por onde quiser.', tgt: null });
+  const o = []; const cur = currentChapter(), pr = pendingReport();
+  if (!S.flags.chegou) o.push({ t: 'Fale com o Joca, no fim da estrada', tgt: joca });
+  else if (!S.met.cosme) o.push({ t: 'Entre na hospedaria do Seu Cosme', tgt: storySpots.inn });
+  else if (!S.met.odessa) o.push({ t: 'Encontre a Odessa no observatório, na colina ao norte da vila', tgt: storySpots.odessa });
+  else if (S.final) o.push({ t: 'O vale é seu. Ande por onde quiser.', tgt: null });
+  else if (pr) o.push({ t: 'Volte ao observatório e conte à Odessa o que você viu', tgt: storySpots.odessa });
+  else if (cur === 'lago' && !joca.ferry && S.day <= (S.odDay ?? 0)) o.push({ t: 'Descanse na hospedaria. Amanhã o Joca leva você ao lago', tgt: storySpots.inn });
+  else if (cur === 'lago' && joca.ferry && !S.flags.naBarca) o.push({ t: 'O Joca está esperando na porta da hospedaria', sub: 'Ou vá a pé até o lago, a sudoeste', tgt: joca });
+  else if (cur === 'escada') o.push({ t: isNight() ? 'A Odessa espera você na Escada para o Céu, a leste' : 'Depois que escurecer, vá à Escada para o Céu', tgt: SPOTS.stairs });
+  else if (cur) { const pl = PLACES.find(p => p.id === cur); o.push({ t: `Capítulo ${CHAPTERS.indexOf(cur) + 1} de 8 · ${pl.name}`, sub: pl.hint, tgt: SPOTS[pl.place] }); }
+  else if (seen('escada')) o.push({ t: inFinaleHour() ? 'A Odessa espera você no relógio da Mira' : 'Às quatro e meia da tarde, no relógio da Mira', sub: 'Jardim dos Relógios de Sol, a sudeste', tgt: gardenSpot() });
   return o;
 }
 function refreshQuest() { const o = objectives()[0]; $('questText').innerHTML = `<div>${o.t}</div>` + (o.sub ? `<div>${o.sub}</div>` : ''); $('lumeCount').textContent = lumesN() + '/8'; }
@@ -1235,9 +1396,9 @@ let prevState = 'play';
 function pauseGame() { if (!['play', 'dialog', 'sail', 'fly'].includes(state)) return; prevState = state; state = 'paused'; $('pause').hidden = false; $('pauseInfo').textContent = `São ${$('clock').textContent} no vale. ${lumesN()} de 8 lugares no caderno. O progresso fica salvo neste navegador.`; }
 function resume() { $('pause').hidden = true; state = prevState === 'dialog' && dlgNode ? 'dialog' : (prevState === 'sail' || prevState === 'fly') ? prevState : 'play'; if (state === 'play') { $('dialog').hidden = true; post.bokeh.enabled = false; } requestLock(); }
 let drag = null;
-canvas.addEventListener('mousedown', (e) => { window.focus(); if (state !== 'play') return; if (!locked && !lockFailed && !isTouch) requestLock(); if (!locked) drag = { x: e.clientX, y: e.clientY }; });
-addEventListener('mouseup', () => { drag = null; });
-addEventListener('mousemove', (e) => { if (state !== 'play' && state !== 'sail' && state !== 'fly') return; let mx = 0, my = 0; if (locked) { mx = e.movementX; my = e.movementY; } else if (drag) { mx = e.clientX - drag.x; my = e.clientY - drag.y; drag.x = e.clientX; drag.y = e.clientY; } else return; mx = clamp(mx, -200, 200); my = clamp(my, -200, 200); const s = 0.0019 * (locked ? 1 : 1.6) * settings.sens; cam.yaw -= mx * s; cam.pitch = clamp(cam.pitch - my * s, -1.1, 0.9); cam.boatT = 0; cam.flyT = 0; if (cam.mode === 'sit') cam.sitK = Math.max(0, (cam.sitK || 0) - 0.02); });
+canvas.addEventListener('mousedown', (e) => { window.focus(); if (state === 'lens') { if (!locked) drag = { x: e.clientX, y: e.clientY }; return; } if (state !== 'play') return; if (bow && bow.aiming && locked && e.button === 0) { shoot(); return; } if (e.button === 2 && bow) { toggleAim(true); return; } if (!locked && !lockFailed && !isTouch) requestLock(); if (!locked) drag = { x: e.clientX, y: e.clientY }; });
+addEventListener('mouseup', (e) => { drag = null; if (e.button === 2 && bow && bow.aiming && !S.flags.aimToggle) toggleAim(false); });
+addEventListener('mousemove', (e) => { if (state === 'lens') { if (locked) lensMove(e.movementX, e.movementY); else if (drag) { lensMove(e.clientX - drag.x, e.clientY - drag.y); drag.x = e.clientX; drag.y = e.clientY; } return; } if (state !== 'play' && state !== 'sail' && state !== 'fly') return; let mx = 0, my = 0; if (locked) { mx = e.movementX; my = e.movementY; } else if (drag) { mx = e.clientX - drag.x; my = e.clientY - drag.y; drag.x = e.clientX; drag.y = e.clientY; } else return; mx = clamp(mx, -200, 200); my = clamp(my, -200, 200); const s = 0.0019 * (locked ? 1 : 1.6) * settings.sens; cam.yaw -= mx * s; cam.pitch = clamp(cam.pitch - my * s, -1.1, 0.9); cam.boatT = 0; cam.flyT = 0; if (cam.mode === 'sit') cam.sitK = Math.max(0, (cam.sitK || 0) - 0.02); });
 canvas.addEventListener('contextmenu', (e) => e.preventDefault());
 addEventListener('keydown', (e) => {
   keys[e.code] = true;
@@ -1248,6 +1409,7 @@ addEventListener('keydown', (e) => {
   if (e.code === 'KeyJ' && !e.repeat) { if (state === 'journal') closeJournal(); else if (state === 'play') openJournal(); return; }
   if (state === 'journal' && e.code === 'Escape') { closeJournal(); return; }
   if (state === 'ribbons') { if (!e.repeat) ribbonKey(e); return; }
+  if (state === 'lens') { if (e.code === 'Escape' || e.code === 'KeyQ') endLens(false); return; }
   if (state === 'skip') { if (e.repeat) return; const m = e.code.match(/^(Digit|Numpad)([1-3])$/); if (m) skipPick(+m[2] - 1); else if (e.code === 'KeyE' || e.code === 'Space' || e.code === 'Enter') { e.preventDefault(); skipThrow(); } else if (e.code === 'Escape' || e.code === 'KeyQ') exitSkip(); else if (/^Key[WASD]$/.test(e.code) && skip && (skip.phase === 'choose' || skip.phase === 'aim')) exitSkip(); return; }
   if (/^Arrow|Space/.test(e.code) && (state === 'play' || state === 'sail' || state === 'fly')) e.preventDefault(); if (e.repeat) return;
   if (state === 'dialog') { const m = e.code.match(/^(Digit|Numpad)([1-9])$/); if (m) choose(+m[2] - 1); else if (e.code === 'KeyE' || e.code === 'Enter' || e.code === 'Space') { if (Voice.playing) Voice.stop(); else if (dlgNode && dlgNode.opts.length === 1) choose(0); } else if (e.code === 'Escape') closeDialog(); return; }
@@ -1255,6 +1417,8 @@ addEventListener('keydown', (e) => {
   if (state === 'sail') { if (e.code === 'KeyE') stopSailing(); if (e.code === 'KeyM') $('mapView').hidden = !$('mapView').hidden; if ((e.code === 'Escape' && lockFailed) || e.code === 'KeyP') pauseGame(); return; }
   if (state !== 'play') return;
   if (e.code === 'KeyL') toggleLantern();
+  if (e.code === 'KeyR' && bow) { S.flags.aimToggle = 1; toggleAim(); }
+  if (e.code === 'KeyQ') eat();
   if (e.code === 'KeyV' && !e.repeat) whistle();
   if (e.code === 'KeyE') interact();
   if (e.code === 'KeyT' && player.sit) { if (player.sit.lie && isNight()) sleepUntilMorning(); else { timeLapse = timeLapse ? 0 : 1; $('lapseHint').classList.toggle('on', !!timeLapse); } }
@@ -1300,12 +1464,12 @@ $('voiceToggle').onclick = (e) => { e.stopPropagation(); Voice.enabled = !Voice.
 if (store.get('aldren-vox') === '0') { Voice.enabled = false; $('voiceToggle').textContent = 'Vozes: desligadas'; }
 $('endBtn').onclick = (e) => { e.stopPropagation(); endFinale(); };
 function setupTouch() {
-  document.body.classList.add('touchmode'); $('touch').hidden = false; if (S.flags.voou) $('tbWhistle').hidden = false; $('keysList').hidden = true; let joyId = null, lookId = null, jx = 0, jy = 0, lx = 0, ly = 0; const joy = $('joy'), knob = $('joyKnob');
-  addEventListener('touchstart', (e) => { if (state !== 'play') return; for (const t of e.changedTouches) { if (t.target.closest('button')) continue; if (t.clientX < innerWidth * 0.45 && joyId === null) { joyId = t.identifier; jx = t.clientX; jy = t.clientY; joy.style.left = (jx - 60) + 'px'; joy.style.top = (jy - 60) + 'px'; joy.style.bottom = 'auto'; } else if (lookId === null) { lookId = t.identifier; lx = t.clientX; ly = t.clientY; } } }, { passive: true });
-  addEventListener('touchmove', (e) => { for (const t of e.changedTouches) { if (t.identifier === joyId) { let dx = t.clientX - jx, dy = t.clientY - jy; const d = Math.hypot(dx, dy); if (d > 50) { dx *= 50 / d; dy *= 50 / d; } knob.style.transform = `translate(${dx}px,${dy}px)`; touch.mx = dx / 50; touch.my = -dy / 50; } else if (t.identifier === lookId && state === 'play') { cam.yaw -= (t.clientX - lx) * 0.005; cam.pitch = clamp(cam.pitch - (t.clientY - ly) * 0.005, -1.1, 0.9); lx = t.clientX; ly = t.clientY; } } }, { passive: true });
+  document.body.classList.add('touchmode'); $('touch').hidden = false; if (S.flags.voou) $('tbWhistle').hidden = false; if (has('arco')) $('tbBow').hidden = false; $('keysList').hidden = true; let joyId = null, lookId = null, jx = 0, jy = 0, lx = 0, ly = 0; const joy = $('joy'), knob = $('joyKnob');
+  addEventListener('touchstart', (e) => { if (state !== 'play' && state !== 'lens') return; for (const t of e.changedTouches) { if (t.target.closest('button')) continue; if (t.clientX < innerWidth * 0.45 && joyId === null) { joyId = t.identifier; jx = t.clientX; jy = t.clientY; joy.style.left = (jx - 60) + 'px'; joy.style.top = (jy - 60) + 'px'; joy.style.bottom = 'auto'; } else if (lookId === null) { lookId = t.identifier; lx = t.clientX; ly = t.clientY; } } }, { passive: true });
+  addEventListener('touchmove', (e) => { for (const t of e.changedTouches) { if (t.identifier === joyId) { let dx = t.clientX - jx, dy = t.clientY - jy; const d = Math.hypot(dx, dy); if (d > 50) { dx *= 50 / d; dy *= 50 / d; } knob.style.transform = `translate(${dx}px,${dy}px)`; touch.mx = dx / 50; touch.my = -dy / 50; } else if (t.identifier === lookId && state === 'lens') { lensMove((t.clientX - lx) * 1.6, (t.clientY - ly) * 1.6); lx = t.clientX; ly = t.clientY; } else if (t.identifier === lookId && state === 'play') { cam.yaw -= (t.clientX - lx) * 0.005; cam.pitch = clamp(cam.pitch - (t.clientY - ly) * 0.005, -1.1, 0.9); lx = t.clientX; ly = t.clientY; } } }, { passive: true });
   const end = (e) => { for (const t of e.changedTouches) { if (t.identifier === joyId) { joyId = null; touch.mx = touch.my = 0; knob.style.transform = ''; } if (t.identifier === lookId) lookId = null; } }; addEventListener('touchend', end); addEventListener('touchcancel', end);
   const tb = (id, fn) => { const b = $(id); b.addEventListener('touchstart', (e) => { e.preventDefault(); e.stopPropagation(); fn(); }, { passive: false }); };
-  tb('tbUse', () => { if (state === 'dialog') { if (dlgNode && dlgNode.opts.length === 1) choose(0); } else if (state === 'lume' && lume) lume.skip(); else if (state === 'skip') skipThrow(); else if (state === 'ribbons') closeRibbons(); else interact(); }); tb('tbJump', () => { touch.jump = true; }); tb('tbMap', () => { $('mapView').hidden = !$('mapView').hidden; }); tb('tbRun', () => { touch.run = !touch.run; $('tbRun').classList.toggle('on', touch.run); }); tb('tbLamp', toggleLantern); tb('tbWhistle', () => { if (state === 'play') whistle(); }); tb('tbBook', () => { if (state === 'journal') closeJournal(); else openJournal(); }); tb('tbTime', () => { if (player.sit) { if (player.sit.lie && isNight()) sleepUntilMorning(); else { timeLapse = timeLapse ? 0 : 1; $('lapseHint').classList.toggle('on', !!timeLapse); } } });
+  tb('tbBow', () => { if (state === 'play' && bow) toggleAim(); }); tb('tbEat', () => eat()); tb('tbUse', () => { if (state === 'lens') return; if (state === 'dialog') { if (dlgNode && dlgNode.opts.length === 1) choose(0); } else if (state === 'lume' && lume) lume.skip(); else if (state === 'skip') skipThrow(); else if (state === 'ribbons') closeRibbons(); else interact(); }); tb('tbJump', () => { touch.jump = true; }); tb('tbMap', () => { $('mapView').hidden = !$('mapView').hidden; }); tb('tbRun', () => { touch.run = !touch.run; $('tbRun').classList.toggle('on', touch.run); }); tb('tbLamp', toggleLantern); tb('tbWhistle', () => { if (state === 'play') whistle(); }); tb('tbBook', () => { if (state === 'journal') closeJournal(); else openJournal(); }); tb('tbTime', () => { if (player.sit) { if (player.sit.lie && isNight()) sleepUntilMorning(); else { timeLapse = timeLapse ? 0 : 1; $('lapseHint').classList.toggle('on', !!timeLapse); } } });
 }
 
 // =====================================================================
@@ -1314,12 +1478,12 @@ function setupTouch() {
 const INTRO_T = 22;
 function startIntro() {
   state = 'intro'; document.body.classList.add('cine'); cam.intro = INTRO_T; hour = 17.2;
-  const seq = ['intro1', 'intro2', 'intro3']; let i = 0;
+  const lines = ['intro1', 'intro2']; let i = 0;
   Music.play('title', { fade: 4, vol: 0.85 });
-  const next = () => { if (i >= seq.length) { setTimeout(letter, 1200); return; } const id = seq[i++]; const el = $('narr'); el.textContent = lineText(id); el.hidden = false; el.classList.remove('show'); void el.offsetWidth; el.classList.add('show'); Voice.say(id, { onEnd: () => setTimeout(() => { el.classList.remove('show'); setTimeout(next, 700); }, 900) }); };
+  const next = () => { if (i >= lines.length) { setTimeout(letter, 1200); return; } const id = lines[i++]; const el = $('narr'); el.textContent = lineText(id); el.hidden = false; el.classList.remove('show'); void el.offsetWidth; el.classList.add('show'); Voice.say(id, { onEnd: () => setTimeout(() => { el.classList.remove('show'); setTimeout(next, 700); }, 900) }); };
   setTimeout(next, 1800);
   const letter = () => { $('narr').hidden = true; $('letter').hidden = false; $('letterText').textContent = lineText('carta'); setTimeout(() => $('letter').classList.add('show'), 50); Voice.say('carta', { onEnd: () => setTimeout(closeLetter, 1500) }); };
-  const closeLetter = () => { if ($('letter').hidden) return; $('letter').classList.remove('show'); setTimeout(() => { $('letter').hidden = true; }, 900); cam.intro = 0; document.body.classList.remove('cine'); state = 'play'; S.letter = 1; save(); refreshQuest(); requestLock(); setTimeout(() => think('chegada', () => setTimeout(() => think('li_bussola'), 1800)), 1500); };
+  const closeLetter = () => { if ($('letter').hidden) return; $('letter').classList.remove('show'); setTimeout(() => { $('letter').hidden = true; }, 900); cam.intro = 0; document.body.classList.remove('cine'); state = 'play'; S.letter = 1; save(); director(99); refreshQuest(); requestLock(); setTimeout(() => think('li_chegada'), 1500); };
   $('letter').onclick = closeLetter; window.__skipIntro = () => { Voice.stop(); i = 99; closeLetter(); };
 }
 
@@ -1353,11 +1517,13 @@ function frame(fixedDt) {
   // tempo do vale: um dia leva 40 minutos; sentada, pode-se deixar o tempo correr
   const lapse = timeLapse ? 60 : 1;
   if (!['paused', 'loading', 'menu'].includes(state)) { hour += dt * 24 / 2400 * lapse; if (hour >= 24) { hour -= 24; S.day++; } }
-  if (player.sit && player.sit.waitPlace && inHours(player.sit.waitPlace) && state === 'play') { const pl = player.sit.waitPlace; player.sit.waitPlace = null; timeLapse = 0; $('lapseHint').classList.remove('on'); $('lapseHint').hidden = true; $('lapseHint').textContent = lapseText; startLume(pl); }
+  if (player.sit && player.sit.waitPlace && inHours(player.sit.waitPlace) && state === 'play') { const pl = player.sit.waitPlace; player.sit.waitPlace = null; timeLapse = 0; $('lapseHint').classList.remove('on'); $('lapseHint').hidden = true; $('lapseHint').textContent = lapseText; startLens(pl); }
   if (timeLapse && hour > 5.5 && hour < 5.6) { timeLapse = 0; $('lapseHint').classList.remove('on'); }
   sky.setHour(hour);
   if (state === 'skip') {
     updateSkip(dt); updateNPCs(dt); skipCamera(dt); post.grade.uniforms.letterbox.value = lerp(post.grade.uniforms.letterbox.value, 0, 1 - Math.exp(-dt * 2));
+  } else if (state === 'lens') {
+    if (player.sit) updateSitting(dt); updateLens(dt); updateNPCs(dt); updateCamera(dt); post.grade.uniforms.letterbox.value = lerp(post.grade.uniforms.letterbox.value, 1, 1 - Math.exp(-dt * 2));
   } else if (state === 'lume' || state === 'journal' || state === 'ribbons' || state === 'intro' || state === 'finale') {
     if (state === 'lume') { if (player.sit) updateSitting(dt); else { pH.locomote(0); pH.update(dt); } } else if (state === 'finale') { finale.update(dt); } else { pH.locomote(0); pH.update(dt); }
     updateNPCs(dt); if (lume) lume.update(dt, camera.position);
@@ -1367,7 +1533,7 @@ function frame(fixedDt) {
   } else if (state === 'sail') {
     updateSailing(dt); updateNPCs(dt); updateCamera(dt); post.grade.uniforms.letterbox.value = lerp(post.grade.uniforms.letterbox.value, 0, 1 - Math.exp(-dt * 2)); saveT += dt; if (saveT > 12) { saveT = 0; S.boatPos = { x: boat.x, z: boat.z, yaw: boat.yaw }; save(); }
   } else if (state === 'play' || state === 'dialog') {
-    updatePlayer(dt); updateNPCs(dt); checkInteract(); if (state === 'play') checkDiscover();
+    updatePlayer(dt); updateNPCs(dt); checkInteract(); if (state === 'play') checkDiscover(); director(dt); if (bow) { bow.cool = Math.max(0, bow.cool - dt); if (bow.aiming) player.h = lerpAng(player.h, cam.yaw + Math.PI, dt * 10); }
     cam.cine = clamp(cam.cine + (state === 'dialog' && dlgNPC && dlgNPC.h ? dt * 2 : -dt * 3), 0, 1);
     updateCamera(dt);
     if (post.bokeh.enabled && dlgNPC && dlgNPC.h) { post.bokeh.uniforms.focus.value = camera.position.distanceTo(dlgNPC.h.headPos); }
@@ -1384,7 +1550,7 @@ function frame(fixedDt) {
   updateDoors(dt); updateInteriorLights(dt); updateLantern(dt); updateRipples(dt); updateLamps(); updateObsBlink(dt);
   if (alva && state !== 'fly' && alva.target && alva.mode === 'auto' && Math.hypot(player.x - alva.target.px, player.z - alva.target.pz) > 35 && (!alva.retT || elapsed - alva.retT > 2)) { alva.retT = elapsed; const sp = alvaSpot(player.x, player.z); if (sp) alva.target = sp; }
   if (alva && state !== 'fly') { alva.update(dt, null, player); if (alva.alert > 0.9 && state === 'play' && !S.alva && (!alva.spookT || elapsed - alva.spookT > 40)) { alva.spookT = elapsed; think('li_alva_corre'); } }
-  updateOcean(); updateHarbor(dt, elapsed, scene); if (boat && state !== 'sail') boat.update(dt, null, elapsed); updateGiants(dt, elapsed); const obj = state !== 'menu' ? objectives()[0] : null; updateSpirits(dt, elapsed, player, obj ? obj.tgt : null, sky.nightF, player.speed > 0.3); if (motes) motes.update(elapsed, camera.position.x, camera.position.z, sky.dayF, sky.nightF, U.wind.value);
+  updateOcean(); updateHarbor(dt, elapsed, scene); if (boat && state !== 'sail') boat.update(dt, null, elapsed); updateGiants(dt, elapsed); if (orchard) orchard.update(dt); const obj = state !== 'menu' ? objectives()[0] : null; updateSpirits(dt, elapsed, player, obj ? obj.tgt : null, sky.nightF, player.speed > 0.3); if (motes) motes.update(elapsed, camera.position.x, camera.position.z, sky.dayF, sky.nightF, U.wind.value);
   post.updateLook(U.sunDir.value, sky.dayF, sky.nightF, sky.dusk || 0, U.sunColor.value);
   const focus = state === 'menu' ? camera.position : V3(player.x, 0, player.z);
   grass.update(focus.x, focus.z, 2); updateProps(camera.position.x, camera.position.z);
@@ -1411,7 +1577,7 @@ $('startBtn').addEventListener('click', () => {
   const go = () => { if (!S.letter && !MANUAL) startIntro(); else { state = 'play'; requestLock(); Music.silence = 6; } };
   if (Sound.ctx) { const w = setInterval(() => { if (Sound.ready) { clearInterval(w); go(); } }, 100); setTimeout(() => { clearInterval(w); if (state === 'menu') go(); }, 6000); } else go();
 });
-window.__game = { keys, get alva() { return alva; }, mountDragon, FAUNA, get boat() { return boat; }, startSailing, stopSailing, harbor, storySpots, groundH, probe, get nav() { return nav; }, npcPlan, planRoute, sky: () => sky, post: () => post, camera, scene, player, S, npcs, cam, renderer, trees, grass, SPOTS, PLACES, get state() { return state; }, set state(v) { state = v; }, setHour: (h) => { hour = h; }, get hour() { return hour; }, tick: (dt, n = 1) => { for (let i = 0; i < n; i++) frame(dt); }, startLume: (i) => startLume(PLACES[i]), get lume() { return lume; }, lieAt, seats, beds, Human, startFinale: () => startFinale(), openJournal, openDialog, choose, get pH() { return pH; }, toggleLantern, sitAt, interiors, think, Voice, Music };
+window.__game = { get orchard() { return orchard; }, get bow() { return bow; }, startLens, endLens, director, currentChapter, objectives, eat, addFood, shoot, toggleAim, fatherMapURL, setHour2: (h) => { hour = h; }, keys, get alva() { return alva; }, mountDragon, FAUNA, get boat() { return boat; }, startSailing, stopSailing, harbor, storySpots, groundH, probe, get nav() { return nav; }, npcPlan, planRoute, sky: () => sky, post: () => post, camera, scene, player, S, npcs, cam, renderer, trees, grass, SPOTS, PLACES, get state() { return state; }, set state(v) { state = v; }, setHour: (h) => { hour = h; }, get hour() { return hour; }, tick: (dt, n = 1) => { for (let i = 0; i < n; i++) frame(dt); }, startLume: (i) => startLume(PLACES[i]), get lume() { return lume; }, lieAt, seats, beds, Human, startFinale: () => startFinale(), openJournal, openDialog, choose, get pH() { return pH; }, toggleLantern, sitAt, interiors, think, Voice, Music };
 renderer.domElement.addEventListener('webglcontextlost', (e) => { e.preventDefault(); store.set('aldren2-q', settings.quality === 'alta' ? 'media' : 'baixa'); $('loading').textContent = 'A placa de vídeo reiniciou. Recarregando com gráficos mais leves…'; $('menu').hidden = false; $('loadBar').parentElement.hidden = true; setTimeout(() => location.reload(), 1500); });
 document.addEventListener('visibilitychange', () => { if (Sound.ctx) { if (document.hidden) Sound.ctx.suspend(); else Sound.ctx.resume(); } if (document.hidden && state === 'play') pauseGame(); });
 boot().catch((e) => { console.error(e); $('loading').textContent = 'Falha ao carregar: ' + e.message; });

@@ -340,7 +340,9 @@ A Lia, de noite, no banco (só acontece se ela sentar):
 
 ---
 
-## 9. Capítulo 6: Torre, "Era medo de levantar"
+## 9. Capítulo 7: Torre, "Era medo de levantar"
+
+> No jogo, o Monte (um ano depois) vem antes da Torre (doze anos depois), para seguir a ordem do tempo. A virada dos dedos da Lia acontece depois do Monte; o "Falta a escada" da Odessa, depois da Torre.
 
 **Hoje.** A torre do curandeiro está rachada e inclinada. A Odessa:
 > "Ninguém entra lá faz duzentos anos."
@@ -368,7 +370,7 @@ A Lia, de noite, no banco (só acontece se ela sentar):
 
 ---
 
-## 10. Capítulo 7: Monte, "Eu estou falando de mim"
+## 10. Capítulo 6: Monte, "Eu estou falando de mim"
 
 **Hoje.** Só dá para chegar ao cume voando com a Vésper.
 

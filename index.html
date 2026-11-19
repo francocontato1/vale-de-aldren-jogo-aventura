@@ -172,6 +172,24 @@ body.touchmode #dlgOpts button{padding:10px 14px}body.touchmode #dlgOpts button 
 .opts button,#fsBtn0{all:unset;cursor:pointer;padding:4px 11px;border:1px solid var(--line);border-radius:999px;color:var(--ink);background:rgba(0,0,0,.25)}
 .opts details{margin-top:12px}.opts summary{cursor:pointer;letter-spacing:.14em;text-transform:uppercase;font-size:11px}
 .qnote{margin:6px 0;font-size:12px}
+
+/* a luneta da Odessa */
+#lens{position:fixed;inset:0;z-index:30;pointer-events:none;opacity:0;transition:opacity .5s}
+#lens.show{opacity:1}
+#lens::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 50%,transparent 0,transparent min(30vh,30vw),rgba(6,5,4,.93) calc(min(30vh,30vw) + 2px))}
+#lensRing{position:absolute;left:50%;top:50%;width:min(60vh,60vw);height:min(60vh,60vw);transform:translate(-50%,-50%);border-radius:50%;box-shadow:inset 0 0 0 2px rgba(232,199,142,.55),inset 0 0 60px rgba(0,0,0,.6);--k:0}
+#lensRing::before{content:'';position:absolute;inset:-6px;border-radius:50%;background:conic-gradient(var(--gold) calc(var(--k)*360deg),transparent 0);-webkit-mask:radial-gradient(circle,transparent calc(50% - 3px),#000 calc(50% - 2px));mask:radial-gradient(circle,transparent calc(50% - 3px),#000 calc(50% - 2px));opacity:.9}
+#lensRing::after{content:'';position:absolute;left:50%;top:50%;width:26px;height:26px;margin:-13px;border-radius:50%;border:1px solid rgba(243,236,220,.55)}
+#lensDot{position:absolute;left:50%;top:50%;width:46px;height:46px;margin:-23px;border-radius:50%;background:radial-gradient(circle,#fff 0,#ffe2b0 22%,rgba(255,200,130,.35) 50%,transparent 72%);filter:blur(.5px);mix-blend-mode:screen}
+#lensTip{position:absolute;left:50%;bottom:calc(5vh + env(safe-area-inset-bottom,0px));transform:translateX(-50%);font-size:13px;letter-spacing:.06em;color:var(--ink-dim);text-shadow:0 1px 4px #000;text-align:center;width:90%}
+/* bolsa, mira e viagem */
+#bag{position:absolute;right:calc(18px + env(safe-area-inset-right,0px));bottom:calc(64px + env(safe-area-inset-bottom,0px));display:flex;gap:10px;align-items:center;font-size:18px;text-shadow:0 1px 4px rgba(0,0,0,.8)}
+#bag b{font:600 12px var(--f-ui);color:var(--ink);margin-left:2px;vertical-align:top}
+#bag .hungry{font:500 11px var(--f-ui);letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+#crosshair{position:fixed;left:50%;top:50%;width:18px;height:18px;margin:-9px;pointer-events:none;z-index:5}
+#crosshair::before,#crosshair::after{content:'';position:absolute;background:rgba(243,236,220,.85);box-shadow:0 0 3px #000}
+#crosshair::before{left:8px;top:0;width:2px;height:18px}#crosshair::after{top:8px;left:0;height:2px;width:18px}
+#travelCap{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:60;font-family:var(--f-display);font-size:26px;font-style:italic;color:var(--ink);text-shadow:0 2px 12px #000;text-align:center;pointer-events:none}
 </style></head><body>
 
 <div id="game"></div>
@@ -179,6 +197,7 @@ body.touchmode #dlgOpts button{padding:10px 14px}body.touchmode #dlgOpts button 
   <div id="compass"><canvas id="compassCv" width="880" height="76"></canvas></div>
   <div id="status">Caderno <b id="lumeCount">0/8</b> · <span id="clock">16:30</span> · <span id="keyHint">J caderno · M mapa · L lanterna · V assoviar · F tela cheia · Esc menu</span></div>
   <div id="quest"><div id="questText"></div></div>
+  <div id="bag" hidden></div>
   <div id="prompt" hidden></div>
   <div id="sailHud" hidden><div id="sailInfo"></div><div id="sailKeys"></div></div>
   <div id="lapseHint" hidden>T · deixar o tempo passar · mova-se para levantar</div>
@@ -195,15 +214,15 @@ body.touchmode #dlgOpts button{padding:10px 14px}body.touchmode #dlgOpts button 
   <div id="joy"><div id="joyKnob"></div></div>
   <div id="tmap"><button id="tbMap">Mapa</button></div>
   <div id="tbtns">
-    <button id="tbBook">Caderno</button><button id="tbLamp">Lanterna</button><button id="tbTime">Tempo</button><button id="tbWhistle" hidden>Assoviar</button>
+    <button id="tbBook">Caderno</button><button id="tbLamp">Lanterna</button><button id="tbTime">Tempo</button><button id="tbWhistle" hidden>Assoviar</button><button id="tbBow" hidden>Arco</button><button id="tbEat">Comer</button>
     <button id="tbRun">Correr</button><button id="tbJump">Pular</button><button id="tbUse" class="big">Usar</button>
   </div>
 </div>
 <div class="overlay" id="menu" role="dialog" aria-modal="true" aria-label="Vale de Aldren">
   <div class="card">
-    <div class="eyebrow">Oito vigílias abertas</div>
+    <div class="eyebrow">Oito luzes guardadas na pedra</div>
     <h1>Vale de Aldren</h1>
-    <p class="lede">Há seiscentos anos, um povo velava os seus mortos até virar pedra. Ficaram quatro gigantes, oito lembranças por terminar e uma maga que já não sente as próprias mãos.</p>
+    <p class="lede">No vale de Aldren existem quatro gigantes de pedra que ninguém esculpiu. Uma cartógrafa vem terminar o mapa que o pai deixou pela metade, e uma velha professora que já não sente as próprias mãos tem um último pedido.</p>
     <button class="btn" id="startBtn" disabled>Entrar no vale</button>
     <div class="loadwrap"><div id="loadBar"></div></div>
     <div id="loading">Preparando…</div>
@@ -220,7 +239,8 @@ body.touchmode #dlgOpts button{padding:10px 14px}body.touchmode #dlgOpts button 
       <kbd>W A S D</kbd><span>Andar · Shift para correr</span>
       <kbd>Mouse</kbd><span>Olhar ao redor (ou setas)</span>
       <kbd>E</kbd><span>Conversar, observar, sentar</span>
-      <kbd>T</kbd><span>Sentada: deixar o tempo passar</span>
+      <kbd>T</kbd><span>Sentada: deixar o tempo passar · deitada: dormir</span>
+      <kbd>R · Q</kbd><span>Mirar com o arco (clique para atirar) · Comer</span>
       <kbd>J · M · L</kbd><span>Caderno · Mapa · Lanterna</span>
       <kbd>V</kbd><span>Assoviar: depois do primeiro voo, a Vésper vem até você</span>
       <kbd>Espaço</kbd><span>Pular · avançar uma fala</span>
@@ -250,9 +270,13 @@ body.touchmode #dlgOpts button{padding:10px 14px}body.touchmode #dlgOpts button 
 </div>
 <div id="ribbons" hidden><div class="ribbox"><div class="ribrow" id="ribRow"></div><div class="ribcard" id="ribCard"></div><div class="ribhint" id="ribHint"></div></div></div>
 <div id="memory" hidden><div id="memTime"></div><div id="memName"></div><div id="memText"></div></div>
-<div class="overlay" id="journal" role="dialog" aria-modal="true" aria-label="Caderno de Lia" hidden><div class="jcard"><div class="eyebrow">Caderno de Lia</div><h1>As vigílias de Aldren</h1><div id="journalCount"></div><div id="journalList"></div><p class="jhint">J ou Esc para fechar</p></div></div>
+<div class="overlay" id="journal" role="dialog" aria-modal="true" aria-label="Caderno de Lia" hidden><div class="jcard"><div class="eyebrow">Caderno de Lia</div><h1>O vale de Aldren</h1><div id="journalCount"></div><div id="journalList"></div><p class="jhint">J ou Esc para fechar</p></div></div>
 <div class="overlay" id="fsHelp" role="dialog" aria-modal="true" aria-label="Tela cheia no iPhone" hidden><div class="card" style="max-width:520px"><div class="eyebrow">Tela cheia no iPhone</div><p class="lede" style="font-size:19px">O Safari do iPhone não deixa nenhum site ocupar a tela inteira. Mas dá para jogar sem as barras:</p><p style="line-height:1.6;font-size:16px;text-align:left;margin:0 auto 22px;max-width:40ch">1. Toque em <b>Compartilhar</b> (o quadrado com a seta para cima).<br>2. Escolha <b>Adicionar à Tela de Início</b>.<br>3. Abra o jogo pelo ícone <b>Aldren</b>: ele abre em tela cheia, deitado.</p><button class="btn" id="fsHelpOk">Entendi</button></div></div>
-<div class="overlay" id="ending" role="dialog" aria-modal="true" aria-label="Fim, e começo" hidden><div class="card"><div class="eyebrow">Fim, e começo</div><h1 style="font-size:64px">O vale descansa</h1><p class="lede">As vigílias se fecharam. Os gigantes continuam onde estão, mas agora é só pedra, e pedra pode virar paisagem. O caderno está cheio. Ainda há cantos do vale esperando alguém que olhe com calma, e uma carta a caminho de Ancoradouro.</p><button class="btn" id="endBtn">Continuar andando</button></div></div>
+<div class="overlay" id="ending" role="dialog" aria-modal="true" aria-label="Fim, e começo" hidden><div class="card"><div class="eyebrow">Fim, e começo</div><h1 style="font-size:64px">O vale descansa</h1><p class="lede">A história da Mira terminou. Os gigantes pararam de crescer e as pedras viraram paisagem. O relatório vai no último barco: a pedra não pega, é luto. Ainda há cantos do vale esperando alguém que olhe com calma, e uma carta a caminho de Ancoradouro.</p><button class="btn" id="endBtn">Continuar andando</button></div></div>
 <div id="fade"></div>
+<div id="lens" hidden><div id="lensRing"></div><div id="lensDot"></div><div id="lensTip"></div></div>
+<div id="crosshair" hidden></div>
+<div id="travelCap" hidden></div>
+
 <script type="module" src="game-a0a5ab4a.js"></script>
 </body></html>

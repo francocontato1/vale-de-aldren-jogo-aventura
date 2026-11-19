@@ -122,7 +122,7 @@ export const HOUSES = [
   // x, z, rot, opções
   [-24, -16, 0.35, { role: 'padaria', w: 8, d: 6, floors: 2, lower: 'stoneWarm', upper: 'plasterOchre', roof: 'roof', door: 'red', shutters: 'ochre', flowers: true, sign: 'pão' }],
   [22, -22, -0.5, { role: 'familia', w: 7, d: 5.6, floors: 2, lower: 'plasterBlue', upper: 'plasterBlue', frame: true, roof: 'roofDark', door: 'blue', shutters: 'blue', flowers: true }],
-  [-14, 32, 3.0, { role: 'casagrande', w: 9, d: 6.2, floors: 2, lower: 'stone', upper: 'plaster', roof: 'roofMoss', door: 'wood', shutters: 'green', jetty: true }],
+  [-14, 32, 3.0, { role: 'hospedaria', w: 9, d: 6.2, floors: 2, lower: 'stone', upper: 'plaster', roof: 'roofMoss', door: 'wood', shutters: 'green', jetty: true, sign: 'hospedaria', flowers: true }],
   [16, 30, -2.8, { role: 'irene', w: 6.4, d: 5.2, floors: 1, lower: 'plasterSage', frame: true, roof: 'thatch', door: 'green', shutters: 'green', flowers: true, herbs: true }],
   [-32, -38, 0.6, { role: 'vazia', w: 6.4, d: 5.2, floors: 1, lower: 'stone', roof: 'roofMoss', door: 'wood', shutters: null, ivy: true }],
   [-44, 2, 1.57, { role: 'torre', w: 6.2, d: 5.6, floors: 2, lower: 'block', upper: 'plasterRose', roof: 'roofDark', door: 'ochre', shutters: 'red', pitch: 0.95 }],
@@ -301,6 +301,14 @@ export function house(x, z, rot, o) {
     table(-w * 0.12, d * 0.08, 0); bed(-iw / 2 + 0.55, -id / 2 + 1.15, 0, fl0, M.cloth.blue); chest(-iw / 2 + 0.55, id / 2 - 0.6, fl0, Math.PI / 2);
     { const cx2 = iw / 2 - 0.7, cz2 = id / 2 - 0.9; box(0.55, 0.06, 0.55, M.oldWood, 1, mtx(cx2, fl0 + 0.45, cz2, 0, 0, 0, B)); box(0.55, 0.7, 0.06, M.oldWood, 1, mtx(cx2, fl0 + 0.8, cz2 - 0.27, -0.12, 0, 0, B)); for (const a of [-1, 1]) for (const b of [-1, 1]) box(0.05, 0.45, 0.05, M.oldWood, 1, mtx(cx2 + a * 0.24, fl0 + 0.22, cz2 + b * 0.24, 0, 0, 0, B)); col(cx2, cz2, 0.3, 0.3); seatAt(B, cx2, fl0 + 0.48, cz2 + 0.02, 0, 'chair'); }
     candle = L(-w * 0.12 + 0.2, fl0 + 0.95, d * 0.08);
+  } else if (o.role === 'hospedaria') {
+    // balcão do Seu Cosme, duas mesas e, na parede dos fundos, o arco do filho dele
+    { const Ct = mtx(iw / 2 - 1.0, fl0, -0.4, 0, Math.PI / 2, 0, B); box(2.0, 1.0, 0.6, M.oldWood, 1, mtx(0, 0.5, 0, 0, 0, 0, Ct)); box(2.1, 0.06, 0.7, M.timber, 1, mtx(0, 1.03, 0, 0, 0, 0, Ct)); col(iw / 2 - 1.0, -0.4, 0.35, 1.05); }
+    table(-1.6, 0.9, 0); table(0.4, 1.3, 0.2); rug(-0.6, -0.6, fl0, M.cloth.green, [2.2, 1.3]);
+    { const bx = -iw / 2 + 1.4, bz = -id / 2 + 0.07, by = fl0 + 1.45;
+      storySpots.arcoWall = { p: L(bx, by, bz + 0.05), yaw: rot };
+      storySpots.arco = L(bx, fl0, bz + 1.0); }
+    candle = L(iw / 2 - 1.0, fl0 + 1.25, -0.4);
   } else if (o.role === 'livros') {
     table(0.6, d * 0.05, 0); shelf(iw / 2 - 0.2, id / 2 - 0.85, Math.PI / 2, fl0, 'books'); shelf(-iw / 2 + 0.2, 0.8, -Math.PI / 2, fl0, 'books'); rug(0.6, d * 0.05 + 1.2, fl0, M.cloth.blue);
     candle = L(0.8, fl0 + 0.95, d * 0.05);
@@ -372,7 +380,7 @@ export function house(x, z, rot, o) {
   // lampião ao lado da porta (acende à noite)
   { const lp = L(dx + DW / 2 + 0.45, base + DH + 0.05, dz + 0.22); box(0.06, 0.06, 0.32, M.iron, 1, mtx(dx + DW / 2 + 0.45, base + DH + 0.25, dz + 0.12, 0, 0, 0, B), false); lamps.push(lp); }
   // placa
-  if (o.sign) { const S2 = mtx(dx + DW / 2 + 0.9, base + DH + 0.55, dz + 0.55, 0, 0, 0, B); box(0.06, 0.06, 0.7, M.iron, 1, mtx(0, 0.25, -0.2, 0, 0, 0, S2), false); box(0.7, 0.5, 0.05, M.oldWood, 1, mtx(0, 0, 0.12, 0, Math.PI / 2, 0, S2)); if (o.sign === 'peixe') put(fishGeo(0.6), M.fishSkin, mtx(0.05, 0, 0.12, 0, 0, 0, S2), false); else { const sp = new THREE.SphereGeometry(0.16, 12, 6); sp.scale(1.6, 0.6, 0.5); put(boxUV(sp, 0.4), M.bread, mtx(0.04, 0, 0.12, 0, Math.PI / 2, 0, S2), false); } }
+  if (o.sign) { const S2 = mtx(dx + DW / 2 + 0.9, base + DH + 0.55, dz + 0.55, 0, 0, 0, B); box(0.06, 0.06, 0.7, M.iron, 1, mtx(0, 0.25, -0.2, 0, 0, 0, S2), false); box(0.7, 0.5, 0.05, M.oldWood, 1, mtx(0, 0, 0.12, 0, Math.PI / 2, 0, S2)); if (o.sign === 'peixe') put(fishGeo(0.6), M.fishSkin, mtx(0.05, 0, 0.12, 0, 0, 0, S2), false); else if (o.sign === 'hospedaria') { const pl = new THREE.PlaneGeometry(0.66, 0.46); const m = signMat('Hospedaria'); for (const a of [1, -1]) put(pl, m, mtx(0.028 * a, 0, 0.12, 0, a * Math.PI / 2, 0, S2), false); } else { const sp = new THREE.SphereGeometry(0.16, 12, 6); sp.scale(1.6, 0.6, 0.5); put(boxUV(sp, 0.4), M.bread, mtx(0.04, 0, 0.12, 0, Math.PI / 2, 0, S2), false); } }
   // hera
   if (o.ivy) for (let i = 0; i < 40; i++) { const sp = new THREE.IcosahedronGeometry(rr(0.12, 0.26), 0); put(sp, M.leaf, mtx(-w / 2 + rr(0, 1.6), rr(0.2, 3.2), d / 2 + 0.12, rr(0, 3), rr(0, 3), 0, B), false); }
   // cadeira junto à lareira (todas as casas)
@@ -479,6 +487,8 @@ function windmill(x, z, ry) {
   windmills.push({ hub, sails }); return hub;
 }
 
+let _signMat = null;
+function signMat(word) { if (_signMat) return _signMat; const c = document.createElement('canvas'); c.width = 256; c.height = 180; const g = c.getContext('2d'); g.fillStyle = '#5a3d24'; g.fillRect(0, 0, 256, 180); g.strokeStyle = '#d9c39a'; g.lineWidth = 6; g.strokeRect(10, 10, 236, 160); g.fillStyle = '#efe0bd'; g.font = 'italic 34px Georgia, serif'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(word, 128, 82); g.font = '40px Georgia, serif'; g.fillText('☾', 128, 132); const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 4; _signMat = new THREE.MeshStandardMaterial({ map: t, roughness: 0.85 }); return _signMat; }
 export function buildVillage(scene) {
   parts.length = 0;
   for (const h of HOUSES) house(h[0], h[1], h[2], h[3]);

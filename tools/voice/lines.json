@@ -2,79 +2,415 @@
  {
   "id": "intro1",
   "speaker": "narrador",
-  "text": "Seiscentos anos atrás, no vale de Aldren, ninguém morria sozinho.",
+  "text": "No vale de Aldren existem quatro gigantes de pedra. Ninguém os esculpiu. Eles cresceram.",
   "emotion": "tender"
  },
  {
   "id": "intro2",
   "speaker": "narrador",
-  "text": "Quando alguém partia, um Velador sentava ao lado e lembrava, em voz alta, a vida inteira daquela pessoa. Às vezes por uma noite. Às vezes por anos.",
-  "emotion": "neutral"
- },
- {
-  "id": "intro3",
-  "speaker": "narrador",
-  "text": "Numa manhã de primavera, os Veladores foram embora. Ficaram as pedras, as escadas, e quatro gigantes que ninguém se lembra de ter esculpido.",
+  "text": "Cada um no lugar onde alguém não conseguiu seguir em frente.",
   "emotion": "tender"
  },
  {
   "id": "carta",
   "speaker": "odessa",
-  "text": "Cara Lia. Há doze anos escrevi ao seu pai pedindo um mapa deste vale. Ele veio, mediu tudo em três dias e foi embora sem ver nada. Antes de ir, me disse que tinha uma filha que sabia ficar quieta. Soube da morte dele. Sinto muito. O trabalho é seu, se quiser. Não preciso de estradas. Preciso de alguém que nunca esteve aqui. Odessa, observatório de Aldren.",
+  "text": "Lia, sou Odessa, do vale de Aldren. Seu pai e eu trocamos cartas por doze anos. Ele tinha aceitado refazer o mapa do vale para a Coroa. Sua mãe me escreveu dizendo que o contrato passou para a família, e que você é cartógrafa. O prazo é o último barco do outono. Se o mapa e o relatório não chegarem, fecham a estrada. Eu dou hospedagem e comida. Tenho também um pedido que era para ele. Explico quando você chegar.",
   "emotion": "tired"
  },
  {
-  "id": "chegada",
+  "id": "jo_cheg1",
+  "speaker": "joca",
+  "text": "Opa. Cuidado com a serragem. Você é a cartógrafa? A Odessa pediu pra eu te buscar.",
+  "emotion": "happy"
+ },
+ {
+  "id": "li_jo_cheg",
   "speaker": "lia",
-  "text": "Então foi aqui que ele passou três dias. Não me admira que não tenha visto nada. Este lugar não tem pressa nenhuma.",
+  "text": "Sou. Obrigada por esperar.",
+  "emotion": "neutral"
+ },
+ {
+  "id": "jo_cheg2",
+  "speaker": "joca",
+  "text": "Esperar é comigo mesmo. Faz um mês que não aparece ninguém. Vem, que eu levo você e a mochila até a hospedaria.",
+  "emotion": "happy"
+ },
+ {
+  "id": "jo_cheg3",
+  "speaker": "joca",
+  "text": "Aquele lá no lago é o Teo. Pelo menos é o que a Odessa diz. Passo por ele todo dia e até hoje não me acostumei.",
+  "emotion": "neutral"
+ },
+ {
+  "id": "jo_cheg4",
+  "speaker": "joca",
+  "text": "Pronto, a hospedaria do Seu Cosme. Amanhã, se precisar de barco, é só chamar.",
+  "emotion": "happy"
+ },
+ {
+  "id": "jo_lago1",
+  "speaker": "joca",
+  "text": "Bom dia, cartógrafa! A Odessa mandou te levar no Teo. Esse barco aqui eu fiz com o que ela me ensinou de conta. Barco é conta e paciência.",
+  "emotion": "happy"
+ },
+ {
+  "id": "jo_lago2",
+  "speaker": "joca",
+  "text": "Pronto. Daqui você vê a mão dele bem de perto. Eu espero ali na margem, sem pressa.",
   "emotion": "tender"
  },
  {
-  "id": "li_bussola",
+  "id": "jo_c1",
+  "speaker": "joca",
+  "text": "Essa tábua aqui: estou curvando ela faz três dias. Ela não quer. Eu também não quero desistir. Vamos ver quem cansa primeiro.",
+  "emotion": "happy"
+ },
+ {
+  "id": "jo_c2",
+  "speaker": "joca",
+  "text": "Aprendi a fazer barco com o mestre Elias, marido da Celeste. A conta, com a Odessa. Ele conversava com os barcos. Ela conversava com os números.",
+  "emotion": "tender"
+ },
+ {
+  "id": "jo_c3",
+  "speaker": "joca",
+  "text": "Vento pelo lado é o melhor. Vento de frente, nem tente: o barco para e a vela fica batendo. Aí é virar um pouco e ir em zigue-zague.",
+  "emotion": "neutral"
+ },
+ {
+  "id": "jo_barco",
+  "speaker": "joca",
+  "text": "Aquele, no fim do píer? Era do mestre Elias. Ele dizia que barco parado apodrece por dentro. Se quiser, leva pra passear. Só traz de volta inteiro.",
+  "emotion": "tender"
+ },
+ {
+  "id": "jo_depois",
+  "speaker": "joca",
+  "text": "E aí, velejou? Ela puxa um pouco pra esquerda, né? O mestre dizia que era saudade.",
+  "emotion": "happy"
+ },
+ {
+  "id": "ce_first",
+  "speaker": "celeste",
+  "text": "Olha só! Gente nova por aqui. Entra, que o pão acabou de sair! Você deve ser a moça que a Odessa falou. Ela encomendou pão pra você. Pode ficar à vontade!",
+  "emotion": "excited"
+ },
+ {
+  "id": "li_ce_obg",
   "speaker": "lia",
-  "text": "A bússola do pai continua puxando pro leste. Ele dizia que era defeito de fábrica. Nunca mandou consertar.",
+  "text": "Obrigada. É muita gentileza.",
+  "emotion": "neutral"
+ },
+ {
+  "id": "ce_prova",
+  "speaker": "celeste",
+  "text": "Prova enquanto está quente!",
+  "emotion": "happy"
+ },
+ {
+  "id": "li_ce_otimo",
+  "speaker": "lia",
+  "text": "Está ótimo. Obrigada.",
+  "emotion": "neutral"
+ },
+ {
+  "id": "ce_odessa",
+  "speaker": "celeste",
+  "text": "A Odessa? Foi ela que ensinou a minha avó a fazer conta pra vender pão. E a mim, a ler. Metade do vale aprendeu a ler naquela escola lá em cima.",
+  "emotion": "tender"
+ },
+ {
+  "id": "ce_c1",
+  "speaker": "celeste",
+  "text": "Prova esse. Não, esse não, esse queimou. Esse aqui. Viu? Leva dois. A subida pro observatório é comprida e a Odessa só oferece chá morno.",
+  "emotion": "happy"
+ },
+ {
+  "id": "ce_c2",
+  "speaker": "celeste",
+  "text": "Meu marido construía barcos. Faz seis invernos que ele se foi. Eu ainda faço pão pra dois. O que sobra eu dou pros passarinhos.",
+  "emotion": "sad"
+ },
+ {
+  "id": "ce_c3",
+  "speaker": "celeste",
+  "text": "O Tomé passou aqui correndo de novo, com um livro da Odessa debaixo do braço. Aquele menino vai saber mais do que todo mundo.",
+  "emotion": "happy"
+ },
+ {
+  "id": "ce_noite",
+  "speaker": "celeste",
+  "text": "O forno já esfriou, querida. Volta amanhã cedo, que tem pão de mel.",
+  "emotion": "tired"
+ },
+ {
+  "id": "ce_cesta",
+  "speaker": "celeste",
+  "text": "Você vai pros lados do mar? Então leva este pão pra Marta, da taberna da Maré. A gente troca pão por peixe desde antes de você nascer.",
+  "emotion": "happy"
+ },
+ {
+  "id": "ce_peixe",
+  "speaker": "celeste",
+  "text": "Peixe da Marta! Ela sempre manda o melhor. Obrigada, querida. Volta amanhã que eu guardo um pão pra você.",
+  "emotion": "excited"
+ },
+ {
+  "id": "ce_barco",
+  "speaker": "celeste",
+  "text": "Você velejou o barco do Elias? Que bom. Ele ia gostar de saber que alguém ainda leva ele pra ver o mar.",
+  "emotion": "sad"
+ },
+ {
+  "id": "ce_c4",
+  "speaker": "celeste",
+  "text": "A Marta e eu trocamos pão por peixe faz trinta anos. Nunca anotamos nada. Ela jura que eu devo dois peixes. Eu juro que ela me deve um pedido de desculpas desde o casamento dela.",
+  "emotion": "happy"
+ },
+ {
+  "id": "ce_pedra",
+  "speaker": "celeste",
+  "text": "Lá embaixo, quando sabem que a gente é de Aldren, ninguém aperta a mão. Acham que pega. Não pega, querida. A Odessa explicou pra gente desde pequeno.",
+  "emotion": "sad"
+ },
+ {
+  "id": "ce_desmaio",
+  "speaker": "celeste",
+  "text": "Menina, você não come, não dorme… Quer chegar aonde desse jeito?",
+  "emotion": "sad"
+ },
+ {
+  "id": "ce_lia1",
+  "speaker": "celeste",
+  "text": "Você está comendo direito, menina? E a sua mãe, sabe que você está aqui no fim do mundo?",
+  "emotion": "neutral"
+ },
+ {
+  "id": "li_ce1",
+  "speaker": "lia",
+  "text": "Mais ou menos. Faz um ano que eu não escrevo pra ela. Mando dinheiro todo mês. Carta, não.",
+  "emotion": "sad"
+ },
+ {
+  "id": "ce_lia2",
+  "speaker": "celeste",
+  "text": "Escreve o que você comeu. Mãe só quer saber disso. O resto ela adivinha.",
+  "emotion": "tender"
+ },
+ {
+  "id": "ce_pao",
+  "speaker": "celeste",
+  "text": "Toma, pra levar. Pão de ontem também mata a fome.",
+  "emotion": "happy"
+ },
+ {
+  "id": "co_first",
+  "speaker": "cosme",
+  "text": "A moça do mapa! A Odessa já pagou o quarto. Pode ficar quanto quiser.",
+  "emotion": "happy"
+ },
+ {
+  "id": "li_co_obg",
+  "speaker": "lia",
+  "text": "Obrigada. Eu não vou dar trabalho.",
+  "emotion": "neutral"
+ },
+ {
+  "id": "co_first2",
+  "speaker": "cosme",
+  "text": "Trabalho é hóspede nenhum. Faz tempo que ninguém de fora vem aqui. Lá embaixo acham que a gente dá azar.",
+  "emotion": "tender"
+ },
+ {
+  "id": "li_co_pedras",
+  "speaker": "lia",
+  "text": "Por causa das pedras?",
+  "emotion": "neutral"
+ },
+ {
+  "id": "co_first3",
+  "speaker": "cosme",
+  "text": "Por causa das pedras. Mas aqui ninguém pega nada de ninguém. A Odessa explica melhor do que eu. Foi ela que me ensinou a ler, sabia? O observatório é lá em cima, na colina.",
+  "emotion": "tender"
+ },
+ {
+  "id": "co_quarto",
+  "speaker": "cosme",
+  "text": "O seu quarto é lá em cima, a primeira porta. A cama é boa. Dormir nela é que é com você.",
+  "emotion": "happy"
+ },
+ {
+  "id": "li_co_frutas",
+  "speaker": "lia",
+  "text": "Seu Cosme, vi umas frutas no alto das árvores, perto da estrada. O senhor teria alguma coisa pra alcançar? Eu não consigo subir.",
+  "emotion": "neutral"
+ },
+ {
+  "id": "co_arco",
+  "speaker": "cosme",
+  "text": "Escada eu não tenho… Mas tem um arco na sala dos fundos. Era do meu filho. Ele foi pra capital faz cinco anos. Pode levar. Arco parado empena.",
+  "emotion": "tender"
+ },
+ {
+  "id": "li_co_volta",
+  "speaker": "lia",
+  "text": "Ele volta pra buscar?",
+  "emotion": "neutral"
+ },
+ {
+  "id": "co_arco2",
+  "speaker": "cosme",
+  "text": "Ele nem escreve.",
+  "emotion": "sad"
+ },
+ {
+  "id": "co_comida",
+  "speaker": "cosme",
+  "text": "Já comeu hoje? Tem sopa no fogo. Senta aí que eu sirvo.",
+  "emotion": "tender"
+ },
+ {
+  "id": "co_c1",
+  "speaker": "cosme",
+  "text": "Quer ir atrás do meu filho, eu? Já pensei. Mas lá fora, com o sotaque daqui, ninguém dá nem bom dia. A gente é o povo das pedras.",
+  "emotion": "sad"
+ },
+ {
+  "id": "co_c2",
+  "speaker": "cosme",
+  "text": "Hospedaria sem hóspede é casa grande demais. Por isso eu deixo as janelas abertas. Pra parecer que tem gente.",
+  "emotion": "tender"
+ },
+ {
+  "id": "co_c3",
+  "speaker": "cosme",
+  "text": "A cama do quarto de cima é a melhor da casa. Dormir cedo também é trabalho, moça.",
+  "emotion": "happy"
+ },
+ {
+  "id": "co_desmaio",
+  "speaker": "cosme",
+  "text": "Perdeu um dia. Quase perdeu foi você.",
+  "emotion": "tender"
+ },
+ {
+  "id": "co_noite",
+  "speaker": "cosme",
+  "text": "Boa noite, moça. A porta fica só encostada. Aqui ninguém tranca nada.",
+  "emotion": "tired"
+ },
+ {
+  "id": "co_carta",
+  "speaker": "cosme",
+  "text": "Escrever primeiro? Eu? Ele é que foi embora.",
+  "emotion": "sad"
+ },
+ {
+  "id": "li_co_carta",
+  "speaker": "lia",
+  "text": "Às vezes quem tem que escrever primeiro é quem ficou.",
+  "emotion": "tender"
+ },
+ {
+  "id": "co_carta2",
+  "speaker": "cosme",
+  "text": "Hum. Me arruma um papel desses seus, então. E não fica olhando enquanto eu escrevo.",
   "emotion": "tender"
  },
  {
   "id": "od_first",
   "speaker": "odessa",
-  "text": "Lia. Você é mais alta do que eu imaginava. Seu pai falava de você como se você ainda tivesse oito anos. Sente, por favor. A subida é ingrata.",
+  "text": "Lia. Você tem o jeito do seu pai: olha as coisas como quem mede.",
   "emotion": "tender"
  },
  {
-  "id": "od_quem",
-  "speaker": "odessa",
-  "text": "Porque você nunca esteve aqui. Neste vale, quem conhece a história não consegue olhar pra ela sem se agarrar. Eu preciso de olhos de fora.",
-  "emotion": "neutral"
- },
- {
-  "id": "od_mapa",
-  "speaker": "odessa",
-  "text": "Os Veladores deixaram oito vigílias abertas. Oito lembranças que alguém começou a velar e nunca terminou. Continuam lá, presas nos lugares onde aconteceram. Quero que você veja cada uma até o fim e desenhe no mapa, no lugar certo.",
-  "emotion": "neutral"
- },
- {
-  "id": "od_fechar",
-  "speaker": "odessa",
-  "text": "Lembrança que tem lugar não precisa de ninguém segurando. Os Veladores chamavam isso de fechar a vigília. E quem velou não fecha. Eu tentei. Toda vez que chego perto, eu seguro.",
+  "id": "li_od_ensinou",
+  "speaker": "lia",
+  "text": "Foi ele que me ensinou.",
   "emotion": "tender"
  },
  {
-  "id": "od_como",
+  "id": "od_maos",
   "speaker": "odessa",
-  "text": "Vá até o lugar na hora em que aconteceu. Sente. Não procure nada, espere. Quando você estiver quieta o bastante, o lugar mostra. A gente chamava isso de lume.",
+  "text": "Você deve ter reparado que eu nunca pego a xícara pela asa. Eu não sinto mais as mãos. Começou nos dedos, trinta anos atrás. Já passou do cotovelo. Quando chegar no peito, acabou pra mim.",
+  "emotion": "tired"
+ },
+ {
+  "id": "li_od_sinto",
+  "speaker": "lia",
+  "text": "Entendo… Sinto muito.",
+  "emotion": "sad"
+ },
+ {
+  "id": "od_porque",
+  "speaker": "odessa",
+  "text": "Sobre o porquê eu te chamei… Fazer o mapa daqui, na verdade, é a parte fácil pra você. A Coroa quer saber o que são as pedras. Se acharem que pega, fecham a estrada, e o vale morre devagar.",
   "emotion": "neutral"
  },
  {
-  "id": "od_hora",
-  "speaker": "odessa",
-  "text": "Cada lugar tem a sua hora. O lago é de manhã cedo. A escada, de fim de tarde. O jardim dos relógios é exigente: quatro e meia. Se chegar fora de hora, sente e deixe o tempo passar.",
+  "id": "li_od_oque",
+  "speaker": "lia",
+  "text": "E o que elas são?",
   "emotion": "neutral"
  },
  {
-  "id": "od_depois",
+  "id": "od_estudo",
   "speaker": "odessa",
-  "text": "E volte pra me contar o que viu. Não precisa ser rápido. Só não demore anos. Disso eu já me encarreguei.",
+  "text": "Eu passei seiscentos anos estudando isso. Ensinei o vale inteiro a ler, a contar, a construir… tentando manter de pé esse povo que o mundo abandonou, e tentando descobrir o segredo das pedras. Eu sei como acontece. Consigo ver o que está na minha frente. Mas não sei a razão de acontecer.",
+  "emotion": "tired"
+ },
+ {
+  "id": "od_luneta",
+  "speaker": "odessa",
+  "text": "Pedra guarda luz. Tudo o que aconteceu perto dos gigantes ficou guardado neles. Com essa luneta, dá pra ver. Mas a luz fica presa em pontos exatos: tem que medir ângulo, sombra, distância. É trabalho de cartógrafa. Eu até poderia estudar mais um pouco, mas as minhas mãos já não seguram nada.",
+  "emotion": "neutral"
+ },
+ {
+  "id": "li_od_ninguem",
+  "speaker": "lia",
+  "text": "Por que ninguém daqui faz isso?",
+  "emotion": "neutral"
+ },
+ {
+  "id": "od_medo",
+  "speaker": "odessa",
+  "text": "Medo. Aqui dizem que quem olha demais pro passado endurece.",
+  "emotion": "neutral"
+ },
+ {
+  "id": "li_od_eu",
+  "speaker": "lia",
+  "text": "E por que eu?",
+  "emotion": "neutral"
+ },
+ {
+  "id": "od_voce",
+  "speaker": "odessa",
+  "text": "Porque o contrato é seu. Porque você sabe medir. Porque a Coroa vai acreditar em você. E porque seu pai escrevia que você não desiste de nada. Nem quando devia.",
+  "emotion": "tender"
+ },
+ {
+  "id": "li_od_comeco",
+  "speaker": "lia",
+  "text": "Certo… Estou um pouco cansada da viagem, mas por onde eu começo?",
+  "emotion": "tired"
+ },
+ {
+  "id": "od_dormir",
+  "speaker": "odessa",
+  "text": "Por dormir. Amanhã o Joca te leva no lago.",
+  "emotion": "tender"
+ },
+ {
+  "id": "li_od_hoje",
+  "speaker": "lia",
+  "text": "Eu posso começar hoje.",
+  "emotion": "neutral"
+ },
+ {
+  "id": "od_descanse",
+  "speaker": "odessa",
+  "text": "Eu sei que pode. Descanse, Lia.",
   "emotion": "tender"
  },
  {
@@ -86,43 +422,211 @@
  {
   "id": "od_n2",
   "speaker": "odessa",
-  "text": "O Auren dizia que a gente não lembra das pessoas. Lembra do jeito que olhava pra elas. Por isso tem lembrança que muda com os anos. Quem muda é quem olha.",
+  "text": "O Tomé me perguntou hoje por que a lua não cai. Eu demorei duzentos anos pra entender isso. Ele entendeu numa tarde. Às vezes eu gosto de ensinar mais do que de saber.",
   "emotion": "tender"
  },
  {
   "id": "od_n3",
   "speaker": "odessa",
-  "text": "Seiscentos anos, e eu ainda subo esta colina toda noite pra ver se a estrada mudou. Não muda. Estrada não tem esse costume.",
-  "emotion": "tired"
+  "text": "Você mede tudo três vezes.",
+  "emotion": "neutral"
+ },
+ {
+  "id": "li_od_n3",
+  "speaker": "lia",
+  "text": "Duas não dá certeza.",
+  "emotion": "neutral"
  },
  {
   "id": "od_n4",
   "speaker": "odessa",
-  "text": "Faltam poucas. É estranho. Achei que eu ia sentir alívio. Estou com medo de ficar sem nada pra segurar.",
+  "text": "Quando foi a última vez que você fez alguma coisa só porque gostava?",
+  "emotion": "tender"
+ },
+ {
+  "id": "li_od_n4",
+  "speaker": "lia",
+  "text": "…Não lembro.",
   "emotion": "sad"
  },
  {
-  "id": "od_todos",
+  "id": "od_prox",
   "speaker": "odessa",
-  "text": "Oito. Você viu tudo, do começo ao fim. Hoje à noite eu fecho as vigílias. Suba depois que escurecer. Eu não quero fazer isso sozinha.",
+  "text": "A próxima luz está onde eu te disse. Vá com calma. Coma alguma coisa antes.",
   "emotion": "tender"
  },
  {
   "id": "od_noite",
   "speaker": "odessa",
-  "text": "Ainda não. Vigília se fecha de noite, que é quando elas começam. Volte quando as estrelas aparecerem.",
+  "text": "Ainda não. A escada só guarda a luz daquela noite depois que escurece. Volte quando as estrelas aparecerem.",
   "emotion": "neutral"
+ },
+ {
+  "id": "od_r_lago",
+  "speaker": "odessa",
+  "text": "Tinha uma menina chamada Dédé, não tinha?",
+  "emotion": "tender"
+ },
+ {
+  "id": "li_od_r_lago",
+  "speaker": "lia",
+  "text": "Tinha. Estava sempre junto deles.",
+  "emotion": "neutral"
+ },
+ {
+  "id": "od_r_lago2",
+  "speaker": "odessa",
+  "text": "…Era eu. A Mira não conseguia falar Odessa. A próxima luz está na Árvore das Fitas, na floresta a noroeste. De tarde.",
+  "emotion": "sad"
+ },
+ {
+  "id": "od_r_arvore",
+  "speaker": "odessa",
+  "text": "A fita azul. Ainda está lá em cima? Eu nunca tive coragem de subir pra ver. Eu sei que ela está lá. E não sinto.",
+  "emotion": "sad"
+ },
+ {
+  "id": "od_r_arvore2",
+  "speaker": "odessa",
+  "text": "A próxima é no jardim dos relógios de sol, a sudeste. Às quatro e meia da tarde. Nem um minuto antes.",
+  "emotion": "neutral"
+ },
+ {
+  "id": "od_r_relogios",
+  "speaker": "odessa",
+  "text": "Ele voltou, sabe. No dia seguinte. E não veio jantar. Eu continuei limpando. Seiscentos anos. Promessa a gente não larga no meio.",
+  "emotion": "tender"
+ },
+ {
+  "id": "li_od_r_relogios",
+  "speaker": "lia",
+  "text": "Eu entendo isso. Melhor do que eu queria.",
+  "emotion": "sad"
+ },
+ {
+  "id": "od_r_relogios2",
+  "speaker": "odessa",
+  "text": "Naquela noite, a vila acendeu lanternas no círculo de pedras, a noroeste. Vá de noite.",
+  "emotion": "neutral"
+ },
+ {
+  "id": "od_r_circulo",
+  "speaker": "odessa",
+  "text": "O vô não levantou mesmo. Endureceu ali, meses depois, e morreu. A gente enterrou ele do lado da Mira. Na primavera seguinte, nasceu uma pedra no lugar onde ele rezava. Com o formato dele. Pequena. E foi crescendo.",
+  "emotion": "sad"
+ },
+ {
+  "id": "li_od_r_circulo",
+  "speaker": "lia",
+  "text": "Por que cresce?",
+  "emotion": "neutral"
+ },
+ {
+  "id": "od_r_circulo2",
+  "speaker": "odessa",
+  "text": "Aqui a pedra guarda a lembrança de quem não conseguiu partir em paz. Os mais velhos dizem que guarda a alma também. Enquanto a história não termina, ela cresce. A próxima luz está no rosto entre as flores, a leste da vila. Ao meio-dia.",
+  "emotion": "tender"
+ },
+ {
+  "id": "od_r_rosto",
+  "speaker": "odessa",
+  "text": "Eu dormi. Ela estava ardendo em febre e eu dormi do lado dela. Sonhei a noite inteira que corria na chuva, chamando o Auren. Quando acordei, já era de manhã. E ela tinha ido. Enquanto ela precisava de mim, eu estava sonhando. A Ilsa tinha razão.",
+  "emotion": "sad"
+ },
+ {
+  "id": "li_od_r_rosto",
+  "speaker": "lia",
+  "text": "E as suas mãos? Na lembrança estavam enfaixadas.",
+  "emotion": "neutral"
+ },
+ {
+  "id": "od_r_rosto2",
+  "speaker": "odessa",
+  "text": "…Não lembro disso. A próxima luz é no alto do monte, ao norte. A Ilsa morou lá em cima. De manhã cedo.",
+  "emotion": "tired"
+ },
+ {
+  "id": "od_r_monte",
+  "speaker": "odessa",
+  "text": "Ela pediu desculpa… pra mim?",
+  "emotion": "surprised"
+ },
+ {
+  "id": "li_od_r_monte",
+  "speaker": "lia",
+  "text": "Eu achava que virar pedra era coisa de quem sente demais. Mas pedra não sente nada. Que nem eu.",
+  "emotion": "sad"
+ },
+ {
+  "id": "od_r_monte2",
+  "speaker": "odessa",
+  "text": "Você não está imune, Lia. Você só começou antes. Seu pai também trabalhava assim. Até cair. A próxima é a torre do Auren, ao norte. No fim da tarde.",
+  "emotion": "tender"
+ },
+ {
+  "id": "od_r_torre",
+  "speaker": "odessa",
+  "text": "Alguém chamou o Auren naquela noite. Eu sempre achei que tinha sido o vô.",
+  "emotion": "neutral"
+ },
+ {
+  "id": "od_r_torre2",
+  "speaker": "odessa",
+  "text": "Falta a escada. Aquela noite. Eu nunca tive coragem. Vou com você. Me encontre na escada para o céu, a leste, depois que escurecer.",
+  "emotion": "tired"
+ },
+ {
+  "id": "od_esc1",
+  "speaker": "odessa",
+  "text": "Segura a luneta pra mim. As minhas mãos não firmam mais.",
+  "emotion": "tired"
+ },
+ {
+  "id": "od_esc2",
+  "speaker": "odessa",
+  "text": "Eu corri. Aquilo não era sonho.",
+  "emotion": "surprised"
+ },
+ {
+  "id": "li_od_esc2",
+  "speaker": "lia",
+  "text": "Não era. Você correu na chuva, com dez anos, caiu na escada e levantou. Trouxe o Auren e só caiu quando chegou em casa.",
+  "emotion": "tender"
+ },
+ {
+  "id": "od_esc3",
+  "speaker": "odessa",
+  "text": "Eu acordei do lado dela e achei que tinha dormido a noite inteira. Seiscentos anos achando que eu tinha dormido enquanto ela morria.",
+  "emotion": "sad"
+ },
+ {
+  "id": "li_od_esc3",
+  "speaker": "lia",
+  "text": "Você não dormiu. Você desmaiou depois de fazer tudo o que dava pra fazer.",
+  "emotion": "tender"
+ },
+ {
+  "id": "od_esc4",
+  "speaker": "odessa",
+  "text": "Por isso as mãos estavam enfaixadas… Amanhã, às quatro e meia, no relógio dela. Fica comigo?",
+  "emotion": "tender"
+ },
+ {
+  "id": "od_jardim",
+  "speaker": "odessa",
+  "text": "Quatro e meia. No relógio da Mira. Eu espero você lá.",
+  "emotion": "tender"
  },
  {
   "id": "od_pos1",
   "speaker": "odessa",
-  "text": "Desci até a vila hoje. Comprei pão. A Celeste quase deixou a bandeja cair.",
+  "text": "Desci até a vila hoje. Comprei pão. Peguei pela mão, quente. A Celeste quase deixou a bandeja cair.",
   "emotion": "happy"
  },
  {
   "id": "od_pos2",
   "speaker": "odessa",
-  "text": "O mapa está pronto. Pode ir quando quiser. Ou não ir. Ninguém aqui vai achar estranho você ficar.",
+  "text": "O Tomé fica com a luneta. A escola continua. Eu é que vou dar aula mais devagar.",
   "emotion": "tender"
  },
  {
@@ -132,154 +636,28 @@
   "emotion": "happy"
  },
  {
-  "id": "od_r_lago",
-  "speaker": "odessa",
-  "text": "A Mira. Seis anos, banguela, e já jogava pedra melhor do que muito adulto. Eu tinha a idade dela, contando em anos de elfa. Fomos amigas um verão só.",
-  "emotion": "tender"
- },
- {
-  "id": "od_r_arvore",
-  "speaker": "odessa",
-  "text": "Um nó simples e um duplo. Todo mundo reparou. Ninguém disse nada. Num velório, o nó diz o que ninguém tem coragem de dizer.",
-  "emotion": "sad"
- },
- {
-  "id": "od_r_circulo",
-  "speaker": "odessa",
-  "text": "Então você me viu. A menina que não conseguia soltar a luz. Era eu. O Auren me achou na estrada, sozinha, e me trouxe pra cá. Ele me chamava de Dessa. Ninguém mais chama.",
-  "emotion": "sad"
- },
- {
-  "id": "od_r_torre",
-  "speaker": "odessa",
-  "text": "O povo rezava pro gigante do círculo como se ele fosse santo. O Auren foi o primeiro a dizer em voz alta que era só um homem cansado demais pra levantar. Quase expulsaram ele do vale.",
-  "emotion": "neutral"
- },
- {
-  "id": "od_r_relogios",
-  "speaker": "odessa",
-  "text": "Quatro e meia. Eu limpo aquele relógio toda tarde, há seiscentos anos. Ele pediu isso pra ninguém achar que ela não existiu. Ninguém nunca passou por lá pra achar nada.",
-  "emotion": "tender"
- },
- {
-  "id": "od_r_escada",
-  "speaker": "odessa",
-  "text": "Eu vi os dois daqui de cima, com a luneta. Ela no último degrau, ele no primeiro. Fiquei a noite inteira esperando um deles mudar de lugar. Nenhum mudou.",
-  "emotion": "sad"
- },
- {
-  "id": "od_r_monte",
-  "speaker": "odessa",
-  "text": "Os da vila chamam ela de Moça e deixam pão no pé dela. Ela ia achar graça. A Ilsa nunca comia nada antes do meio-dia.",
-  "emotion": "tender"
- },
- {
-  "id": "od_r_rosto",
-  "speaker": "odessa",
-  "text": "Ele voltou velho, com um cinzel e pão duro na sacola. Esculpiu o rosto da filha porque já não lembrava da voz. Depois desceu até o lago. Eu esquentei o jantar duas vezes.",
-  "emotion": "sad"
- },
- {
-  "id": "od_maos",
-  "speaker": "odessa",
-  "text": "Você deve ter reparado que eu nunca pego a xícara pela asa. Eu não sinto mais as mãos. Começou nos dedos, trinta anos atrás. Este inverno passou do pulso. É pedra. É o que acontece com quem vela tempo demais.",
-  "emotion": "tired"
- },
- {
-  "id": "od_maos2",
-  "speaker": "odessa",
-  "text": "Também. Mas não é só por mim. Vigília aberta não deixa ninguém descansar. Nem quem velou, nem quem foi velado.",
-  "emotion": "tender"
- },
- {
-  "id": "od_lia1",
-  "speaker": "odessa",
-  "text": "Posso fazer uma pergunta de velha? Por que você aceitou? Uma desconhecida escreve dizendo que conheceu o seu pai, e você atravessa o reino.",
-  "emotion": "neutral"
- },
- {
-  "id": "li_od_longe",
-  "speaker": "lia",
-  "text": "Porque era longe. Desde que ele morreu, eu aceito tudo o que fica longe de casa.",
-  "emotion": "sad"
- },
- {
-  "id": "od_lia2",
-  "speaker": "odessa",
-  "text": "Eu fiz isso por duzentos anos, sem sair do lugar. Dá pra fugir parada, sabia? É até mais fácil.",
-  "emotion": "tender"
- },
- {
-  "id": "li_od_mapa",
-  "speaker": "lia",
-  "text": "Porque você escreveu que ele falou de mim. Ele quase nunca falava de mim. Nem comigo.",
-  "emotion": "sad"
- },
- {
-  "id": "od_lia3",
-  "speaker": "odessa",
-  "text": "Hum. As pessoas raramente dizem as coisas pra quem precisa ouvir. Dizem pra uma velha num observatório.",
-  "emotion": "tender"
- },
- {
-  "id": "od_pai",
-  "speaker": "odessa",
-  "text": "Tem uma coisa que eu devia ter contado no primeiro dia. Seu pai, quando esteve aqui, disse que você desenhava bichos nas margens dos mapas dele, e que ele nunca teve coragem de apagar. Disse que você sabia ficar quieta. Ele, não.",
-  "emotion": "tender"
- },
- {
-  "id": "li_od_pai",
-  "speaker": "lia",
-  "text": "Ele nunca me disse isso.",
-  "emotion": "sad"
- },
- {
-  "id": "od_pai2",
-  "speaker": "odessa",
-  "text": "Eu sei. Por isso estou dizendo eu.",
-  "emotion": "tender"
- },
- {
-  "id": "od_carta",
-  "speaker": "odessa",
-  "text": "Do Davi? Ele ainda escreve como se eu tivesse vinte anos. Espere aqui um instante.",
-  "emotion": "tender"
- },
- {
-  "id": "od_resposta",
-  "speaker": "odessa",
-  "text": "Leve isto pra ele. Demorei, a letra não sai mais como antes. Diga que hoje à noite ele olhe pra cá.",
-  "emotion": "tender"
- },
- {
-  "id": "od_alva",
-  "speaker": "odessa",
-  "text": "A sombra no céu é a Vésper. Os Veladores diziam que ela levava pro alto as vigílias que se fechavam. Faz seiscentos anos que não tem nada pra levar. Se chegar devagar, ela deixa você se aproximar.",
-  "emotion": "tender"
- },
- {
-  "id": "od_fita",
-  "speaker": "odessa",
-  "text": "Você refez os nós da fita da Mira? Obrigada. Eu nunca tive coragem de encostar nela.",
-  "emotion": "tender"
- },
- {
   "id": "an_first",
   "speaker": "anselmo",
-  "text": "Boa tarde, moça. É você que veio trabalhar pra Odessa? Hum. Faz tempo que ela não chama ninguém. A última vez foi um homem de botas boas que não parava quieto.",
+  "text": "Boa tarde, moça. É você que veio fazer o mapa? Hum. A última vez que veio alguém de fora foi um homem de botas boas que não parava quieto.",
   "emotion": "neutral"
+ },
+ {
+  "id": "li_an_pai",
+  "speaker": "lia",
+  "text": "Era o meu pai.",
+  "emotion": "neutral"
+ },
+ {
+  "id": "an_pai",
+  "speaker": "anselmo",
+  "text": "Era? Então ele já foi. Sinto muito, moça. Ele mediu até a minha cerca. Disse que estava torta. Estava mesmo.",
+  "emotion": "tender"
  },
  {
   "id": "an_gigantes",
   "speaker": "anselmo",
-  "text": "Desde menino. Meu avô dizia que não são estátuas. São gente que sentou pra esperar alguém e esperou demais. Por isso a gente não aponta pra eles. Não é medo. É respeito. Não se aponta pra quem está rezando.",
+  "text": "Os gigantes? Meu avô dizia que não são estátuas. São gente que não conseguiu ir embora em paz. Por isso a gente não aponta pra eles. Não é medo. É respeito.",
   "emotion": "tender"
- },
- {
-  "id": "an_veladores",
-  "speaker": "anselmo",
-  "text": "Foram embora. Numa manhã só, dizem. Meu avô achava que eles cansaram de lembrar. Eu acho que ninguém cansa de lembrar. Cansa é de esperar.",
-  "emotion": "neutral"
  },
  {
   "id": "an_c1",
@@ -306,21 +684,21 @@
   "emotion": "tired"
  },
  {
-  "id": "an_c4",
+  "id": "an_fugindo",
   "speaker": "anselmo",
-  "text": "Você foi até a Maré? A Marta fala por três, mas o peixe dela vale por quatro.",
-  "emotion": "happy"
+  "text": "Moça, você trabalha como quem está fugindo de alguma coisa.",
+  "emotion": "tender"
  },
  {
-  "id": "an_c5",
+  "id": "an_sorri",
   "speaker": "anselmo",
-  "text": "Quando eu era moço, desci até o mar com as ovelhas. Elas olharam a água um tempão e voltaram. Ovelha é bicho sábio.",
-  "emotion": "tender"
+  "text": "A Celeste disse que você agradece tudo, mas não sorri com nada. Eu disse que tem gente que sorri por dentro. Ela disse que ninguém sorri por dentro.",
+  "emotion": "neutral"
  },
  {
   "id": "an_r_monte",
   "speaker": "anselmo",
-  "text": "Subiu no monte, foi? A gente chama aquela lá de Moça. Minha avó deixava um pão no pé dela todo dia de colheita. Dizia que moça que fica pra trás sente fome.",
+  "text": "Subiu no monte, foi? A gente chama aquela lá de Moça. Minha avó deixava um pão no pé dela todo dia de colheita.",
   "emotion": "tender"
  },
  {
@@ -338,7 +716,7 @@
  {
   "id": "li_an1",
   "speaker": "lia",
-  "text": "De Ancoradouro, no litoral. Minha mãe tem uma papelaria lá. Meu pai desenhava estradas pra Coroa. Passava meses fora.",
+  "text": "De Ancoradouro, no litoral. Minha mãe tem uma papelaria lá. Meu pai fazia mapas pra Coroa. Passava meses fora.",
   "emotion": "neutral"
  },
  {
@@ -348,135 +726,69 @@
   "emotion": "tender"
  },
  {
-  "id": "ce_first",
-  "speaker": "celeste",
-  "text": "Gente nova! Entra, que o pão acabou de sair. Você é a moça da Odessa? Ela encomendou pão pra você. Três por dia, ela disse. Eu disse que ninguém come três pães por dia. Ela disse que cartógrafo anda muito.",
-  "emotion": "excited"
- },
- {
-  "id": "ce_odessa",
-  "speaker": "celeste",
-  "text": "A Odessa? Desce uma vez por ano, se tanto. Fica parada na porta sentindo o cheiro e vai embora sem comprar. Ano passado eu pus um pão quentinho na mão dela. Ela segurou como quem segura uma pedra.",
-  "emotion": "tender"
- },
- {
-  "id": "ce_ruinas",
-  "speaker": "celeste",
-  "text": "Minha avó dizia que eles velavam os mortos por anos. Anos! Eu velei o Elias uma noite e achei que ia junto. Desculpa. Você perguntou das pedras.",
-  "emotion": "sad"
- },
- {
-  "id": "ce_c1",
-  "speaker": "celeste",
-  "text": "Prova esse. Não, esse não, esse queimou. Esse aqui. Viu? Leva dois. A subida pro observatório é comprida e a Odessa só oferece chá morno.",
-  "emotion": "happy"
- },
- {
-  "id": "ce_c2",
-  "speaker": "celeste",
-  "text": "Meu marido construía barcos. Faz seis invernos que ele se foi. Eu ainda faço pão pra dois. O que sobra eu dou pros passarinhos. Eles agradecem do jeito deles.",
-  "emotion": "sad"
- },
- {
-  "id": "ce_c3",
-  "speaker": "celeste",
-  "text": "O Tomé passou aqui correndo de novo. Aquele menino acha que vai acordar os gigantes. Deixa ele. Alguém tem que tentar.",
-  "emotion": "happy"
- },
- {
-  "id": "ce_noite",
-  "speaker": "celeste",
-  "text": "O forno já esfriou, querida. Volta amanhã cedo, que tem pão de mel.",
-  "emotion": "tired"
- },
- {
-  "id": "ce_cesta",
-  "speaker": "celeste",
-  "text": "Você vai pros lados do mar? Então leva este pão pra Marta, da taberna da Maré. A gente troca pão por peixe desde antes de você nascer.",
-  "emotion": "happy"
- },
- {
-  "id": "ce_peixe",
-  "speaker": "celeste",
-  "text": "Peixe da Marta! Ela sempre manda o melhor. Sabia que foi ela que me ensinou a fazer pão de sal? Obrigada, querida. Volta amanhã que eu guardo um pra você.",
-  "emotion": "excited"
- },
- {
-  "id": "ce_barco",
-  "speaker": "celeste",
-  "text": "Você velejou o barco do Elias? Que bom. Ele ia gostar de saber que alguém ainda leva ele pra ver o mar.",
-  "emotion": "sad"
- },
- {
-  "id": "ce_c4",
-  "speaker": "celeste",
-  "text": "A Marta e eu trocamos pão por peixe faz trinta anos. Nunca anotamos nada. Ela jura que eu devo dois peixes. Eu juro que ela me deve um pedido de desculpas desde o casamento dela.",
-  "emotion": "happy"
- },
- {
-  "id": "ce_r_relogios",
-  "speaker": "celeste",
-  "text": "Um relógio que marca a hora em que a pessoa morreu? O do Elias marcaria cinco da manhã. Eu estava acendendo o forno. Ainda acendo às cinco. Vai ver eu também tenho um relógio desses.",
-  "emotion": "sad"
- },
- {
-  "id": "ce_um",
-  "speaker": "celeste",
-  "text": "Ontem eu fiz pão pra um. Só pra um. Sobrou espaço no forno e eu fiquei olhando aquele buraco um tempão. Depois coloquei um bolo.",
-  "emotion": "tender"
- },
- {
-  "id": "ce_lia1",
-  "speaker": "celeste",
-  "text": "Você está comendo direito, menina? E a sua mãe, sabe que você está aqui no fim do mundo?",
-  "emotion": "neutral"
- },
- {
-  "id": "li_ce1",
-  "speaker": "lia",
-  "text": "Mais ou menos. Faz um ano que eu não escrevo pra ela. Toda vez que eu começo, não sei o que dizer.",
-  "emotion": "sad"
- },
- {
-  "id": "ce_lia2",
-  "speaker": "celeste",
-  "text": "Escreve o que você comeu. Mãe só quer saber disso. O resto ela adivinha.",
-  "emotion": "tender"
- },
- {
-  "id": "ce_lia3",
-  "speaker": "celeste",
-  "text": "Tá bom, não pergunto mais. Mas da próxima vez que for pra casa, leva um pão. Pão fala por você.",
-  "emotion": "tender"
- },
- {
   "id": "to_first",
   "speaker": "tome",
   "text": "Você é cartógrafa? De verdade? Então você sabe onde fica tudo! Me diz: o que os gigantes estão olhando?",
   "emotion": "excited"
  },
  {
-  "id": "to_naosei",
-  "speaker": "tome",
-  "text": "Ah. Eu acho que estão esperando alguém. Por isso não piscam.",
-  "emotion": "happy"
+  "id": "li_to_naosei",
+  "speaker": "lia",
+  "text": "Ainda não sei.",
+  "emotion": "neutral"
  },
  {
-  "id": "to_porque",
+  "id": "to_amoras",
   "speaker": "tome",
-  "text": "Porque eu quero acordar eles! Todo dia eu grito bom dia pro gigante do lago. Um dia ele responde. A tia Celeste diz que paciência é a magia mais forte. Mas é a mais chata também.",
+  "text": "Então prova! É a melhor coisa do mundo!",
   "emotion": "excited"
+ },
+ {
+  "id": "li_to_amora",
+  "speaker": "lia",
+  "text": "É amora.",
+  "emotion": "neutral"
+ },
+ {
+  "id": "to_amoras2",
+  "speaker": "tome",
+  "text": "Só isso?",
+  "emotion": "surprised"
+ },
+ {
+  "id": "li_to_amora2",
+  "speaker": "lia",
+  "text": "Desculpa. Não senti muito o gosto.",
+  "emotion": "sad"
+ },
+ {
+  "id": "to_amoras3",
+  "speaker": "tome",
+  "text": "A Odessa diz que tem gente que esquece o gosto das coisas. Você esqueceu?",
+  "emotion": "neutral"
+ },
+ {
+  "id": "li_to_amora3",
+  "speaker": "lia",
+  "text": "É… Pode ser.",
+  "emotion": "sad"
+ },
+ {
+  "id": "to_amoras4",
+  "speaker": "tome",
+  "text": "Leva umas. Vai que lembra.",
+  "emotion": "tender"
  },
  {
   "id": "to_c1",
   "speaker": "tome",
-  "text": "Sabia que se você deitar na grama e olhar as nuvens, parece que é a terra que está andando?",
+  "text": "Sabia que se você deitar na grama e olhar as nuvens, parece que é a terra que está andando? A Odessa disse que é a terra mesmo.",
   "emotion": "excited"
  },
  {
   "id": "to_c2",
   "speaker": "tome",
-  "text": "Eu achei uma pedra com um desenho de estrela! Escondi. Não vou contar onde. Tá bom, é perto do círculo de pedras. Mas não conta pra ninguém!",
+  "text": "Hoje a Odessa me ensinou a medir a altura do farol pela sombra. Eu errei por dois metros. Ela disse que dois metros é um erro muito bonito.",
   "emotion": "happy"
  },
  {
@@ -486,10 +798,22 @@
   "emotion": "happy"
  },
  {
-  "id": "to_pos",
+  "id": "to_desenho",
   "speaker": "tome",
-  "text": "Você viu? A mão do gigante do lago! Ele jogou! Eu falei que eles estavam acordados por dentro!",
+  "text": "Olha o meu desenho! É o gigante do lago jogando a pedra.",
   "emotion": "excited"
+ },
+ {
+  "id": "li_to_desenho",
+  "speaker": "lia",
+  "text": "Está muito bonito, Tomé.",
+  "emotion": "neutral"
+ },
+ {
+  "id": "to_longe",
+  "speaker": "tome",
+  "text": "Você fala bonito, mas parece que está longe.",
+  "emotion": "neutral"
  },
  {
   "id": "to_nina",
@@ -504,63 +828,57 @@
   "emotion": "excited"
  },
  {
-  "id": "to_c4",
-  "speaker": "tome",
-  "text": "A Nina viu uma baleia. Eu vi um gigante. Empate.",
-  "emotion": "happy"
- },
- {
   "id": "to_r_lago",
   "speaker": "tome",
   "text": "Você viu gente jogando pedra no lago? Me ensina! Eu só consigo fazer a pedra afundar. Com estilo, mas afundar.",
   "emotion": "excited"
  },
  {
-  "id": "to_r_pulos",
+  "id": "to_amoras_fim",
   "speaker": "tome",
-  "text": "A tia Celeste falou que você fez a pedra pular um montão de vezes! Amanhã eu vou lá e bato o seu recorde. Ou empato. Ou pelo menos molho o pé.",
-  "emotion": "excited"
- },
- {
-  "id": "to_lia1",
-  "speaker": "tome",
-  "text": "Você tem pai? O meu foi pro mar e voltou com uma tatuagem de peixe. Era pra ser uma baleia.",
+  "text": "Quer amora? Hoje estão quentinhas.",
   "emotion": "happy"
  },
  {
-  "id": "li_to1",
+  "id": "li_to_amoras_fim",
   "speaker": "lia",
-  "text": "Tinha. Ele desenhava mapas. Foi ele que me ensinou.",
-  "emotion": "tender"
+  "text": "Está quente de sol. Me dá mais uma.",
+  "emotion": "happy"
  },
  {
-  "id": "to_lia2",
+  "id": "to_pos",
   "speaker": "tome",
-  "text": "Ah. Desculpa. Quer ver a minha pedra de estrela? Não, eu não vou mostrar. Mas você pode imaginar ela. Ela é muito bonita.",
-  "emotion": "tender"
+  "text": "Você viu? Sete! Eu contei! Eu falei que eles estavam acordados por dentro!",
+  "emotion": "excited"
  },
  {
   "id": "ir_first",
   "speaker": "irene",
-  "text": "Ah, desculpa, não vi você chegar. Estou tentando pintar a luz em cima do lago. É impossível. Quando eu acerto a cor, a luz já mudou.",
+  "text": "Ah, desculpa, não vi você chegar. Estou tentando pintar a luz nessa árvore. É impossível. Quando eu acerto a cor, a luz já mudou.",
   "emotion": "tender"
  },
  {
-  "id": "ir_porque",
+  "id": "ir_cor",
   "speaker": "irene",
-  "text": "Porque a parte boa não é o quadro. É a meia hora olhando. O quadro é só a desculpa que eu dou pros outros.",
-  "emotion": "tender"
+  "text": "De que cor você diria que está a luz agora?",
+  "emotion": "neutral"
  },
  {
-  "id": "ir_ver",
+  "id": "li_ir_cor",
+  "speaker": "lia",
+  "text": "Amarela… acho.",
+  "emotion": "neutral"
+ },
+ {
+  "id": "ir_cor2",
   "speaker": "irene",
-  "text": "Pode. Está horrível. Mas olha este canto aqui. O reflexo. Por um segundo, eu acertei.",
-  "emotion": "happy"
+  "text": "Você fala pouco, né? Quem olha de verdade pra essa árvore nunca diz só amarela.",
+  "emotion": "tender"
  },
  {
   "id": "ir_c1",
   "speaker": "irene",
-  "text": "Eu acho que os Veladores não pintavam. Quem pinta um lugar consegue ir embora dele depois. Fica com o quadro. Eles, pelo jeito, não conseguiam ir embora de nada.",
+  "text": "Eu pinto pra poder ir embora dos lugares. Quem pinta um lugar fica com o quadro. Aí consegue sair.",
   "emotion": "tender"
  },
  {
@@ -576,22 +894,10 @@
   "emotion": "neutral"
  },
  {
-  "id": "ir_c4",
+  "id": "ir_fita",
   "speaker": "irene",
-  "text": "Tentei pintar o mar uma vez. Usei todo o azul que eu tinha e ainda faltou.",
-  "emotion": "happy"
- },
- {
-  "id": "ir_mao",
-  "speaker": "irene",
-  "text": "Já reparou na mão do gigante do lago? Eu pintei ela umas vinte vezes. Só semana passada eu vi: os dedos estão fechados em volta de alguma coisa. Pequena. Uma pedra, eu acho.",
+  "text": "Lá no alto tem uma fita azul, quase branca de tão velha. Já tentei pintar. Ela nunca fica parada.",
   "emotion": "neutral"
- },
- {
-  "id": "ir_r_lago",
-  "speaker": "irene",
-  "text": "Você viu alguma coisa no lago, não viu? Dá pra ver na sua cara. Eu pinto ali faz três anos e nunca vi nada. Acho que eu falo demais com a tela. Ou de menos. Não sei.",
-  "emotion": "tender"
  },
  {
   "id": "ir_lia1",
@@ -602,7 +908,7 @@
  {
   "id": "li_ir1",
   "speaker": "lia",
-  "text": "Quando eu era pequena, meu pai fazia os mapas e eu desenhava nas margens. Bichos, gente pequenininha, casas com fumaça. Ele deixava. Depois eu parei.",
+  "text": "Quando eu era pequena, meu pai fazia os mapas e eu desenhava nas margens. Bichos, gente pequenininha, casas com fumaça. Depois eu parei.",
   "emotion": "tender"
  },
  {
@@ -626,7 +932,13 @@
  {
   "id": "ba_ponte",
   "speaker": "bastiao",
-  "text": "Uma ponte. Os Veladores fizeram uma de pedra, ali no riacho seco. Caiu faz trezentos anos. Ninguém precisa dela, o riacho nem tem água. Mas ponte caída parece frase pela metade. Me incomoda.",
+  "text": "A ponte velha. Caiu faz trezentos anos. Ninguém precisa dela, o riacho nem tem água. Mas ponte caída parece frase pela metade. Me incomoda.",
+  "emotion": "neutral"
+ },
+ {
+  "id": "ba_conta",
+  "speaker": "bastiao",
+  "text": "A Odessa me ensinou conta quando eu tinha a idade do Tomé. Ponte são muitas contas.",
   "emotion": "neutral"
  },
  {
@@ -640,30 +952,6 @@
   "speaker": "bastiao",
   "text": "A Odessa me pediu uma estante nova. Pra quê, eu perguntei. Pra guardar o que eu ainda não li, ela disse. Vai precisar de mil estantes.",
   "emotion": "happy"
- },
- {
-  "id": "ba_c3",
-  "speaker": "bastiao",
-  "text": "Os Veladores cortavam pedra como eu nunca vi. Nenhuma junta torta. Mas a escada deles não leva a lugar nenhum. Bons de mão, ruins de plano. Igual a mim.",
-  "emotion": "happy"
- },
- {
-  "id": "ba_c4",
-  "speaker": "bastiao",
-  "text": "Cimbre montado. Falta pedra, tempo e coragem. Pedra tem.",
-  "emotion": "neutral"
- },
- {
-  "id": "ba_c5",
-  "speaker": "bastiao",
-  "text": "O Joca pediu carvalho. Pra barco. Barco e ponte levam pro outro lado. Só isso.",
-  "emotion": "neutral"
- },
- {
-  "id": "ba_r_escada",
-  "speaker": "bastiao",
-  "text": "Você foi na escada. Viu o último degrau? Gasto de um jeito diferente dos outros. Não é de pé. É de gente sentada. Muito tempo.",
-  "emotion": "neutral"
  },
  {
   "id": "ba_quase",
@@ -686,7 +974,7 @@
  {
   "id": "li_ba1",
   "speaker": "lia",
-  "text": "Ele desenhava estradas. E sabia de cor onde cada ponte tinha caído.",
+  "text": "Ele fazia mapas. E sabia de cor onde cada ponte tinha caído.",
   "emotion": "tender"
  },
  {
@@ -696,850 +984,16 @@
   "emotion": "tender"
  },
  {
-  "id": "lago1",
-  "speaker": "teo",
-  "text": "Olha a mão, Mira. Assim, de lado. Como se fosse cortar a água.",
-  "emotion": "tender"
- },
- {
-  "id": "lago2",
-  "speaker": "mira",
-  "text": "Assim?",
-  "emotion": "excited"
- },
- {
-  "id": "lago3",
-  "speaker": "ilsa",
-  "text": "Mais baixo, filha. Abaixa o ombro.",
-  "emotion": "tender"
- },
- {
-  "id": "lago4",
-  "speaker": "mira",
-  "text": "Foi! Mãe, conta!",
-  "emotion": "excited"
- },
- {
-  "id": "lago5",
-  "speaker": "ilsa",
-  "text": "Uma, duas, três. Três!",
-  "emotion": "happy"
- },
- {
-  "id": "lago6",
-  "speaker": "mira",
-  "text": "O pai faz sete.",
-  "emotion": "neutral"
- },
- {
-  "id": "lago7",
-  "speaker": "teo",
-  "text": "O pai treina faz trinta anos. Amanhã a gente volta e eu te ensino o segredo.",
-  "emotion": "happy"
- },
- {
-  "id": "lago8",
-  "speaker": "mira",
-  "text": "Que segredo?",
-  "emotion": "surprised"
- },
- {
-  "id": "lago9",
-  "speaker": "teo",
-  "text": "Amanhã.",
-  "emotion": "happy"
- },
- {
-  "id": "lago10",
-  "speaker": "mira",
-  "text": "Mãe, essa aqui tem um furo. Essa não pula, né?",
-  "emotion": "neutral"
- },
- {
-  "id": "lago11",
-  "speaker": "ilsa",
-  "text": "Não. Essa é de guardar.",
-  "emotion": "tender"
- },
- {
-  "id": "lago_r",
-  "speaker": "lia",
-  "text": "Amanhã, ele disse. E o lago ficou quieto como quem sabe de alguma coisa.",
-  "emotion": "tender"
- },
- {
-  "id": "lago_r2",
-  "speaker": "lia",
-  "text": "Ele voltou pra ensinar o segredo. A mão do gigante ainda está erguida. Ele nunca soltou a pedra.",
-  "emotion": "sad"
- },
- {
-  "id": "circ1",
-  "speaker": "auren",
-  "text": "Fechem os olhos. Pensem em alguém que vocês perderam. Não no rosto. Numa coisa pequena. O jeito de rir. Um cheiro.",
-  "emotion": "tender"
- },
- {
-  "id": "circ2",
-  "speaker": "sela_m",
-  "text": "Posso pensar no meu cachorro?",
-  "emotion": "neutral"
- },
- {
-  "id": "circ3",
-  "speaker": "auren",
-  "text": "Pode. Cachorro conta.",
-  "emotion": "happy"
- },
- {
-  "id": "circ4",
-  "speaker": "auren",
-  "text": "Agora abram a mão. Devagar. Deixem ir.",
-  "emotion": "tender"
- },
- {
-  "id": "circ5",
-  "speaker": "sela_m",
-  "text": "Subiu! Mestre, a minha subiu!",
-  "emotion": "excited"
- },
- {
-  "id": "circ6",
-  "speaker": "auren",
-  "text": "Dessa?",
-  "emotion": "neutral"
- },
- {
-  "id": "circ7",
-  "speaker": "dessa",
-  "text": "A minha não sobe. Fica aqui, pesando.",
-  "emotion": "sad"
- },
- {
-  "id": "circ8",
-  "speaker": "auren",
-  "text": "Em quem você pensou?",
-  "emotion": "tender"
- },
- {
-  "id": "circ9",
-  "speaker": "dessa",
-  "text": "Na minha mãe. Se eu soltar, ela vai embora de novo.",
-  "emotion": "sad"
- },
- {
-  "id": "circ10",
-  "speaker": "auren",
-  "text": "Não vai. Vai pra onde dá pra ver. Olhem o Aldren ali, ajoelhado. Ele também não conseguiu soltar. Faz quatrocentos anos.",
-  "emotion": "tender"
- },
- {
-  "id": "circ11",
-  "speaker": "auren",
-  "text": "O povo acende vela pra ele como se fosse santo. Eu não quero isso pra nenhum de vocês.",
-  "emotion": "neutral"
- },
- {
-  "id": "circ_r",
-  "speaker": "lia",
-  "text": "Uma menina de orelhas pontudas que não conseguia abrir a mão. Ele a chamou de Dessa.",
-  "emotion": "surprised"
- },
- {
-  "id": "arvore1",
-  "speaker": "ilsa",
-  "text": "Me dá a pedra.",
-  "emotion": "sad"
- },
- {
-  "id": "arvore2",
-  "speaker": "teo",
-  "text": "A furada? Ela ia querer levar.",
-  "emotion": "sad"
- },
- {
-  "id": "arvore3",
-  "speaker": "ilsa",
-  "text": "Ela vai ficar aqui. Então a pedra fica com ela.",
-  "emotion": "neutral"
- },
- {
-  "id": "arvore4",
-  "speaker": "teo",
-  "text": "Ilsa, a gente não precisa fazer do jeito antigo. Amarrar, dizer o nome e voltar pra casa. Tem família que faz assim.",
-  "emotion": "tender"
- },
- {
-  "id": "arvore5",
-  "speaker": "ilsa",
-  "text": "Tem família que esquece em um ano.",
-  "emotion": "neutral"
- },
- {
-  "id": "arvore6",
-  "speaker": "teo",
-  "text": "Eu não vou esquecer ela.",
-  "emotion": "sad"
- },
- {
-  "id": "arvore7",
-  "speaker": "ilsa",
-  "text": "Então diz. Do jeito certo.",
-  "emotion": "neutral"
- },
- {
-  "id": "arvore8",
-  "speaker": "teo",
-  "text": "Eu velo. Enquanto eu olhar, você fica.",
-  "emotion": "sad"
- },
- {
-  "id": "arvore9",
-  "speaker": "ilsa",
-  "text": "Eu velo. Enquanto eu olhar, você fica.",
-  "emotion": "tender"
- },
- {
-  "id": "arvore10",
-  "speaker": "ilsa",
-  "text": "Você deu nó simples, Teo.",
-  "emotion": "neutral"
- },
- {
-  "id": "arvore11",
-  "speaker": "teo",
-  "text": "Eu sei.",
-  "emotion": "sad"
- },
- {
-  "id": "arvore_r",
-  "speaker": "lia",
-  "text": "Dois nós na mesma fita. Um duplo, bem apertado. Um simples, que desata se alguém puxar.",
-  "emotion": "tender"
- },
- {
-  "id": "rel1",
-  "speaker": "dessa",
-  "text": "Você vem todo dia nessa hora.",
-  "emotion": "neutral"
- },
- {
-  "id": "rel2",
-  "speaker": "teo",
-  "text": "Quatro e meia. Foi quando ela parou de respirar. A Ilsa quis um relógio que marcasse.",
-  "emotion": "tender"
- },
- {
-  "id": "rel3",
-  "speaker": "dessa",
-  "text": "Todos esses relógios são de gente morta?",
-  "emotion": "neutral"
- },
- {
-  "id": "rel4",
-  "speaker": "teo",
-  "text": "Todos. Cada família senta no seu, na sua hora. Tem gente que senta há quarenta anos.",
-  "emotion": "neutral"
- },
- {
-  "id": "rel5",
-  "speaker": "dessa",
-  "text": "E você vai sentar quarenta anos?",
-  "emotion": "neutral"
- },
- {
-  "id": "rel6",
-  "speaker": "teo",
-  "text": "Eu não lembro mais da voz dela, Dessa. Eu sento aqui, tento lembrar, e cada dia vem um pouco menos. A Ilsa lembra de tudo. A Ilsa não sai mais de casa.",
-  "emotion": "sad"
- },
- {
-  "id": "rel7",
-  "speaker": "dessa",
-  "text": "Então para de vir.",
-  "emotion": "neutral"
- },
- {
-  "id": "rel8",
-  "speaker": "teo",
-  "text": "Se um dia eu não vier, você tira o musgo da sombra? Só isso. Pra ninguém achar que ela não existiu.",
-  "emotion": "tender"
- },
- {
-  "id": "rel9",
-  "speaker": "dessa",
-  "text": "Até quando?",
-  "emotion": "neutral"
- },
- {
-  "id": "rel10",
-  "speaker": "teo",
-  "text": "Até eu voltar.",
-  "emotion": "tender"
- },
- {
-  "id": "rel_r",
-  "speaker": "lia",
-  "text": "Todos os relógios estão cobertos de musgo. Menos este. Alguém ainda limpa a sombra dele.",
-  "emotion": "surprised"
- },
- {
-  "id": "torre1",
-  "speaker": "sela",
-  "text": "Mestre, desce daí. A rachadura já passou do terceiro andar.",
-  "emotion": "sad"
- },
- {
-  "id": "torre2",
-  "speaker": "auren",
-  "text": "Daqui eu vejo o vale inteiro, Sela. Hoje eu contei. Dezenove pessoas sentadas no mesmo lugar desde ontem.",
-  "emotion": "neutral"
- },
- {
-  "id": "torre3",
-  "speaker": "sela",
-  "text": "Estão velando.",
-  "emotion": "neutral"
- },
- {
-  "id": "torre4",
-  "speaker": "auren",
-  "text": "Estão virando o Aldren. Pega a minha mão.",
-  "emotion": "tired"
- },
- {
-  "id": "torre5",
-  "speaker": "sela",
-  "text": "Está gelada.",
-  "emotion": "surprised"
- },
- {
-  "id": "torre6",
-  "speaker": "auren",
-  "text": "Faz um ano que eu não sinto os pés. Quarenta anos velando a minha mulher. Eu chamei isso de amor. Era medo de levantar.",
-  "emotion": "tired"
- },
- {
-  "id": "torre7",
-  "speaker": "sela",
-  "text": "O conselho não vai aceitar. Eles rezam pro Aldren.",
-  "emotion": "sad"
- },
- {
-  "id": "torre8",
-  "speaker": "auren",
-  "text": "Por isso vocês vão embora. Os jovens. Na primavera. Um lugar onde lembrar virou reza não é lugar pra ninguém crescer.",
-  "emotion": "neutral"
- },
- {
-  "id": "torre9",
-  "speaker": "sela",
-  "text": "E a Ilsa? Ela não sai do relógio da Mira. As mãos dela estão iguais às suas.",
-  "emotion": "sad"
- },
- {
-  "id": "torre10",
-  "speaker": "auren",
-  "text": "Então leve ela. Nem que seja carregada.",
-  "emotion": "tender"
- },
- {
-  "id": "torre_r",
-  "speaker": "lia",
-  "text": "Dezenove pessoas sentadas sem levantar. E o vale inteiro chamando isso de devoção.",
-  "emotion": "tender"
- },
- {
-  "id": "escada1",
-  "speaker": "teo",
-  "text": "Ilsa. Desce. As carroças saem com o sol.",
-  "emotion": "sad"
- },
- {
-  "id": "escada2",
-  "speaker": "ilsa",
-  "text": "Eu sei a que horas elas saem.",
-  "emotion": "neutral"
- },
- {
-  "id": "escada3",
-  "speaker": "teo",
-  "text": "A Sela arrumou as suas coisas. Eu levo o relógio da Mira, se você quiser. A gente arranca a placa e leva.",
-  "emotion": "tender"
- },
- {
-  "id": "escada4",
-  "speaker": "ilsa",
-  "text": "E ela fica aqui sozinha? Sem ninguém pra dizer o nome dela?",
-  "emotion": "sad"
- },
- {
-  "id": "escada5",
-  "speaker": "teo",
-  "text": "Ela não está aqui, Ilsa. Ela não está em lugar nenhum.",
-  "emotion": "sad"
- },
- {
-  "id": "escada6",
-  "speaker": "ilsa",
-  "text": "Então me diz como era a voz dela.",
-  "emotion": "neutral"
- },
- {
-  "id": "escada7",
-  "speaker": "teo",
-  "text": "Eu não sei. Eu não sei mais.",
-  "emotion": "sad"
- },
- {
-  "id": "escada8",
-  "speaker": "ilsa",
-  "text": "Eu sei. Eu lembro de tudo, Teo. Se eu for embora, eu esqueço. E se eu esquecer, ela morre de verdade.",
-  "emotion": "sad"
- },
- {
-  "id": "escada9",
-  "speaker": "teo",
-  "text": "Olha as suas mãos.",
-  "emotion": "sad"
- },
- {
-  "id": "escada10",
-  "speaker": "ilsa",
-  "text": "Eu já olhei.",
-  "emotion": "tender"
- },
- {
-  "id": "escada11",
-  "speaker": "ilsa",
-  "text": "Vai. Alguém tem que levar ela andando. Eu levo ela parada.",
-  "emotion": "tender"
- },
- {
-  "id": "escada12",
-  "speaker": "teo",
-  "text": "E se eu subir?",
-  "emotion": "sad"
- },
- {
-  "id": "escada13",
-  "speaker": "ilsa",
-  "text": "Aí a gente vira pedra junto, e ninguém leva ela pra lugar nenhum. Não sobe, Teo.",
-  "emotion": "tender"
- },
- {
-  "id": "escada_r",
-  "speaker": "lia",
-  "text": "Ele não subiu. Ela não desceu. E os dois achavam que estavam salvando alguém.",
-  "emotion": "sad"
- },
- {
-  "id": "monte1",
-  "speaker": "ilsa",
-  "text": "Olha, Mira. Lá vão eles. Daqui as carroças parecem formiga.",
-  "emotion": "tender"
- },
- {
-  "id": "monte2",
-  "speaker": "ilsa",
-  "text": "A tia Sela vai na terceira, de lenço amarelo. Ela não olha pra trás. Nunca olhou. Eu é que olho por nós duas.",
-  "emotion": "sad"
- },
- {
-  "id": "monte3",
-  "speaker": "ilsa",
-  "text": "E o seu pai vai a pé, por último. Devagar. Ele sempre foi devagar pra ir embora.",
-  "emotion": "tender"
- },
- {
-  "id": "monte4",
-  "speaker": "ilsa",
-  "text": "Ele parou. Está olhando pra cá.",
-  "emotion": "surprised"
- },
- {
-  "id": "monte5",
-  "speaker": "ilsa",
-  "text": "Não acena, filha. Se a gente acenar, ele volta. E se ele voltar, ele fica.",
-  "emotion": "sad"
- },
- {
-  "id": "monte6",
-  "speaker": "ilsa",
-  "text": "Pronto. Foi. Agora somos só nós duas. Eu fico mais um pouco. Só mais um pouco.",
-  "emotion": "tender"
- },
- {
-  "id": "monte_r",
-  "speaker": "lia",
-  "text": "Só mais um pouco. Ela disse isso há seiscentos anos.",
-  "emotion": "tender"
- },
- {
-  "id": "rosto1",
-  "speaker": "dessa",
-  "text": "Teo?",
-  "emotion": "surprised"
- },
- {
-  "id": "rosto2",
-  "speaker": "teo_v",
-  "text": "Dessa. Você não envelheceu nada. Eu envelheci por nós dois.",
-  "emotion": "happy"
- },
- {
-  "id": "rosto3",
-  "speaker": "dessa",
-  "text": "Os outros vieram?",
-  "emotion": "neutral"
- },
- {
-  "id": "rosto4",
-  "speaker": "teo_v",
-  "text": "Não. Estão espalhados pelo litoral, criando netos. Esqueceram o caminho de volta. Fez bem pra eles.",
-  "emotion": "tender"
- },
- {
-  "id": "rosto5",
-  "speaker": "dessa",
-  "text": "De quem é esse rosto?",
-  "emotion": "neutral"
- },
- {
-  "id": "rosto6",
-  "speaker": "teo_v",
-  "text": "Da Mira. Eu esqueci a voz dela no terceiro inverno. O rosto, não. Vou deixar o rosto aqui antes de esquecer também.",
-  "emotion": "tender"
- },
- {
-  "id": "rosto7",
-  "speaker": "dessa",
-  "text": "A Ilsa está lá em cima, no monte. Ela virou...",
-  "emotion": "sad"
- },
- {
-  "id": "rosto8",
-  "speaker": "teo_v",
-  "text": "Eu vi da estrada. Ela me pediu pra não subir. Eu não subo.",
-  "emotion": "sad"
- },
- {
-  "id": "rosto9",
-  "speaker": "teo_v",
-  "text": "Vou até o lago. Devo uma pedra de sete pulos pra alguém.",
-  "emotion": "tender"
- },
- {
-  "id": "rosto10",
-  "speaker": "dessa",
-  "text": "Volta pro jantar.",
-  "emotion": "tender"
- },
- {
-  "id": "rosto_r",
-  "speaker": "lia",
-  "text": "Um rosto de criança sorrindo no meio das flores. Alguém deixou ele aqui pra não precisar mais carregar.",
-  "emotion": "tender"
- },
- {
-  "id": "rosto_r2",
-  "speaker": "lia",
-  "text": "É a Mira. Ele deixou o rosto dela aqui e foi pagar a promessa do lago.",
-  "emotion": "tender"
- },
- {
-  "id": "li_circ_dia",
-  "speaker": "lia",
-  "text": "Este lugar precisa das estrelas. Vou esperar a noite.",
-  "emotion": "neutral"
- },
- {
-  "id": "li_hora_lago",
-  "speaker": "lia",
-  "text": "A névoa já foi embora. Este lugar lembra melhor de manhã cedo.",
-  "emotion": "neutral"
- },
- {
-  "id": "li_hora_torre",
-  "speaker": "lia",
-  "text": "Este lugar pede o fim da tarde. Vou esperar o sol baixar.",
-  "emotion": "neutral"
- },
- {
-  "id": "li_hora_monte",
-  "speaker": "lia",
-  "text": "Daqui de cima, a vista é de manhã. Vou esperar o dia nascer.",
-  "emotion": "neutral"
- },
- {
-  "id": "li_hora_arvore",
-  "speaker": "lia",
-  "text": "Aqui o que importa é a luz da tarde. Vou esperar um pouco.",
-  "emotion": "neutral"
- },
- {
-  "id": "li_hora_rel",
-  "speaker": "lia",
-  "text": "Quatro e meia, ela disse. Nem um minuto antes.",
-  "emotion": "neutral"
- },
- {
-  "id": "li_hora_escada",
-  "speaker": "lia",
-  "text": "Esta escada pede o entardecer. Vou ficar aqui até lá.",
-  "emotion": "neutral"
- },
- {
-  "id": "li_hora_rosto",
-  "speaker": "lia",
-  "text": "As flores estão fechadas. Melhor esperar o dia.",
-  "emotion": "neutral"
- },
- {
-  "id": "fim1",
-  "speaker": "odessa",
-  "text": "Chegou a hora. Fica aqui do meu lado.",
-  "emotion": "tender"
- },
- {
-  "id": "fim2",
-  "speaker": "odessa",
-  "text": "Oito vigílias. Você viu cada uma até o fim e deu um lugar pra elas no seu mapa. Agora ninguém precisa segurar.",
-  "emotion": "tender"
- },
- {
-  "id": "fim_dessa",
-  "speaker": "odessa",
-  "text": "Eu prometi ao Teo que limpava o relógio da Mira até ele voltar. Ele voltou e não veio jantar. Eu continuei limpando. Seiscentos anos, Lia.",
-  "emotion": "sad"
- },
- {
-  "id": "fim3",
-  "speaker": "lia",
-  "text": "E agora?",
-  "emotion": "tender"
- },
- {
-  "id": "fim4b",
-  "speaker": "odessa",
-  "text": "Agora eu abro a mão. Do jeito que o Auren ensinou. Faz seiscentos anos que eu tento.",
-  "emotion": "tender"
- },
- {
-  "id": "fim5",
-  "speaker": "odessa",
-  "text": "Mira. Ilsa. Teo. Auren. Aldren.",
-  "emotion": "tender"
- },
- {
-  "id": "fim6",
-  "speaker": "odessa",
-  "text": "Pronto. Podem ir.",
-  "emotion": "tender"
- },
- {
-  "id": "fim_lago",
-  "speaker": "lia",
-  "text": "Olha. Lá embaixo, no lago.",
-  "emotion": "surprised"
- },
- {
-  "id": "fim_pulos",
-  "speaker": "lia",
-  "text": "Um. Dois. Três, quatro, cinco. Seis. Sete.",
-  "emotion": "tender"
- },
- {
-  "id": "fim7",
-  "speaker": "anselmo",
-  "text": "Faz oitenta anos que eu não fico acordado até tão tarde.",
-  "emotion": "happy"
- },
- {
-  "id": "fim8",
-  "speaker": "celeste",
-  "text": "Trouxe pão pra todo mundo. Até pra você, Odessa. Não adianta fazer essa cara.",
-  "emotion": "happy"
- },
- {
-  "id": "fim_marta",
-  "speaker": "marta",
-  "text": "Fechei a taberna cedo, olha só. A primeira vez em trinta anos! O Tião quase chorou. Ele ia pedir a sopa.",
-  "emotion": "excited"
- },
- {
-  "id": "fim_nina",
-  "speaker": "nina",
-  "text": "É a baleia cantando? Não? Como é que você sabe?",
-  "emotion": "excited"
- },
- {
-  "id": "fim_davi",
-  "speaker": "davi",
-  "text": "Lá embaixo, o farol está aceso. Hoje eu deixei ele sozinho. Ele que me desculpe. Daqui eu vejo os dois.",
-  "emotion": "tender"
- },
- {
-  "id": "fim9",
-  "speaker": "tome",
-  "text": "Eu falei! Eu falei que eles estavam acordados!",
-  "emotion": "excited"
- },
- {
-  "id": "fim_lia0",
-  "speaker": "odessa",
-  "text": "E você, cartógrafa? Não está segurando nada?",
-  "emotion": "tender"
- },
- {
-  "id": "fim_lia",
-  "speaker": "lia",
-  "text": "A bússola do meu pai. Puxa pro leste desde que ele morreu. Eu achava que era defeito.",
-  "emotion": "sad"
- },
- {
-  "id": "fim_lia2",
-  "speaker": "odessa",
-  "text": "E o que fica a leste?",
-  "emotion": "tender"
- },
- {
-  "id": "fim_lia3",
-  "speaker": "lia",
-  "text": "Ancoradouro. A minha mãe.",
-  "emotion": "tender"
- },
- {
-  "id": "fim_lia4",
-  "speaker": "lia",
-  "text": "Pode ir, pai.",
-  "emotion": "tender"
- },
- {
-  "id": "fim10",
-  "speaker": "odessa",
-  "text": "Lia. As minhas mãos. Estão quentes.",
-  "emotion": "surprised"
- },
- {
-  "id": "fim11",
-  "speaker": "narrador",
-  "text": "Em Aldren, nada se perde. Só muda de lugar.",
-  "emotion": "tender"
- },
- {
-  "id": "li_carta_mae",
-  "speaker": "lia",
-  "text": "Mãe. Desculpa a demora. Estou num vale onde as pessoas viravam pedra de tanta saudade. Não quero isso pra nós duas. Chego antes da primavera. Guarda um lugar na mesa. Lia.",
-  "emotion": "tender"
- },
- {
-  "id": "li_espada",
-  "speaker": "lia",
-  "text": "Uma espada fincada na pedra, com o cabo pra cima. Um jeito antigo de velar alguém que morreu lutando.",
-  "emotion": "tender"
- },
- {
-  "id": "li_aqueduto",
-  "speaker": "lia",
-  "text": "Um aqueduto que não leva mais água a lugar nenhum. As ovelhas dormem na sombra dos arcos. Ainda serve. Só que de outro jeito.",
-  "emotion": "tender"
- },
- {
-  "id": "li_balanco",
-  "speaker": "lia",
-  "text": "Alguém pendurou este balanço há muito tempo. As cordas já foram trocadas várias vezes. Gerações de gente cuidando de um balanço.",
-  "emotion": "happy"
- },
- {
-  "id": "li_ponte",
-  "speaker": "lia",
-  "text": "A ponte dos Veladores, partida no meio. O riacho secou faz séculos. Mesmo assim, o Bastião quer terminar a frase.",
-  "emotion": "tender"
- },
- {
-  "id": "li_ponte2",
-  "speaker": "lia",
-  "text": "A ponte está inteira. Não leva a lugar nenhum que já não desse pra ir. Atravessei duas vezes, só pra garantir.",
-  "emotion": "happy"
- },
- {
-  "id": "li_santuario",
-  "speaker": "lia",
-  "text": "Estatuetas cobertas de musgo no meio da floresta. Alguém deixou flores frescas aqui. Hoje.",
-  "emotion": "surprised"
- },
- {
-  "id": "li_banco",
-  "speaker": "lia",
-  "text": "Um banco virado pro oeste. Quem colocou ele aqui sabia exatamente onde o sol se põe.",
-  "emotion": "tender"
- },
- {
-  "id": "li_poco",
-  "speaker": "lia",
-  "text": "Dizem que, numa noite sem vento, dá pra ver as estrelas no fundo deste poço. Mesmo de dia.",
-  "emotion": "neutral"
- },
- {
-  "id": "li_poco2",
-  "speaker": "lia",
-  "text": "A corda do poço é nova. Alguém tira água daqui toda tarde e leva até o jardim dos relógios.",
-  "emotion": "tender"
- },
- {
-  "id": "li_noite",
-  "speaker": "lia",
-  "text": "Já escureceu. Melhor acender a lanterna.",
-  "emotion": "neutral"
- },
- {
-  "id": "li_sentar1",
-  "speaker": "lia",
-  "text": "Daqui dá pra ouvir o vento passando na grama. Parece o mar.",
-  "emotion": "tender"
- },
- {
-  "id": "li_sentar2",
-  "speaker": "lia",
-  "text": "Vou ficar mais um pouco. Ninguém está me esperando com pressa.",
-  "emotion": "tender"
- },
- {
-  "id": "li_sentar3",
-  "speaker": "lia",
-  "text": "As nuvens andam tão devagar. Ou sou eu que finalmente parei.",
-  "emotion": "tender"
- },
- {
-  "id": "li_sentar4",
-  "speaker": "lia",
-  "text": "O pai nunca sentava em lugar nenhum. Dizia que mapa não se faz sentado. Acho que ele estava um pouco errado.",
-  "emotion": "tender"
- },
- {
-  "id": "li_mapa_cheio",
-  "speaker": "lia",
-  "text": "Oito lugares. Oito pedaços da mesma família. Já sei como termina. Só falta a Odessa.",
-  "emotion": "tender"
- },
- {
-  "id": "li_estrela",
-  "speaker": "lia",
-  "text": "Uma estrela cadente. Esqueci de fazer um pedido. Tudo bem. Ver já foi bom.",
-  "emotion": "happy"
- },
- {
   "id": "ma_first",
   "speaker": "marta",
-  "text": "Olha só, gente nova na Maré! Senta, não repara a bagunça, o Joca deixa serragem até no meu pão. Você é a moça da Odessa? Ela mandou avisar que você vinha. Mandou avisar há três anos, mas veio, né? Está com fome? Claro que está.",
+  "text": "Olha só! Gente nova na Maré! Pode sentar, não repara na bagunça. Está com fome? Você deve ter vindo de longe, claro que está.",
   "emotion": "excited"
  },
  {
   "id": "ma_odessa",
   "speaker": "marta",
-  "text": "Todo mundo conhece. Ela desce aqui uma vez por década, compra sal e pergunta se o mar continua no mesmo lugar. Continua, eu digo. Ela sempre parece aliviada.",
-  "emotion": "happy"
+  "text": "Lá fora a gente é o povo das pedras. Aqui a gente é só a gente. E todo mundo aqui sabe ler, graças a ela.",
+  "emotion": "tender"
  },
  {
   "id": "ma_lugar",
@@ -1556,8 +1010,8 @@
  {
   "id": "ma_c2",
   "speaker": "marta",
-  "text": "O Tião pesca, a Nina canta, o Joca martela. E eu conto tudo pra todo mundo. Cada um com o seu talento.",
-  "emotion": "happy"
+  "text": "O barco do correio passa uma vez por mês. O último do outono é sagrado: quem perde, só sai na primavera.",
+  "emotion": "neutral"
  },
  {
   "id": "ma_c3",
@@ -1574,25 +1028,25 @@
  {
   "id": "ma_pao",
   "speaker": "marta",
-  "text": "Pão da Celeste! Ainda morno, como é que ela consegue? Toma, leva este peixe defumado pra ela. E diz que o sal é por minha conta, como sempre. E diz que eu não devo dois peixes. É um. Um e meio.",
+  "text": "Pão da Celeste! Ainda morno, como é que ela consegue? Toma, leva este peixe defumado pra ela. E diz que eu não devo dois peixes. É um. Um e meio.",
   "emotion": "excited"
  },
  {
-  "id": "ma_amiga",
+  "id": "ma_dance",
   "speaker": "marta",
-  "text": "Você já é de casa, sabia? Aqui a gente não pergunta de onde a pessoa veio. Pergunta se ela já comeu.",
-  "emotion": "tender"
+  "text": "Vem dançar, menina! Não precisa saber. Ninguém aqui sabe.",
+  "emotion": "excited"
  },
  {
   "id": "ma_voo",
   "speaker": "marta",
-  "text": "Era você montada naquele bicho? Eu vi! A vila inteira viu! A Nina não para de falar nisso. Muito obrigada, viu? Agora sou eu que não durmo.",
+  "text": "Era você montada naquele bicho? Eu vi! A vila inteira viu! A Nina não para de falar nisso.",
   "emotion": "excited"
  },
  {
   "id": "ma_lia1",
   "speaker": "marta",
-  "text": "E você, hein? Tem namorado? Namorada? Mãe viva? Come direito? Desculpa, eu pergunto tudo de uma vez. O Davi diz que eu faço inventário de gente.",
+  "text": "E você, hein? Tem namorado? Namorada? Mãe viva? Come direito? Desculpa, eu pergunto tudo de uma vez.",
   "emotion": "happy"
  },
  {
@@ -1608,51 +1062,9 @@
   "emotion": "tender"
  },
  {
-  "id": "jo_first",
-  "speaker": "joca",
-  "text": "Opa. Cuidado com a serragem. Você é a cartógrafa? Então desenha aí no mapa: aqui mora o melhor construtor de barcos do vale. Que também é o único.",
-  "emotion": "happy"
- },
- {
-  "id": "jo_casco",
-  "speaker": "joca",
-  "text": "Um barco pro Tião. O dele já é mais remendo do que barco. Este aqui fica pronto na primavera. Ou na outra.",
-  "emotion": "neutral"
- },
- {
-  "id": "jo_barco",
-  "speaker": "joca",
-  "text": "Aquele, no fim do píer? Era do mestre Elias, marido da Celeste. Ele dizia que barco parado apodrece por dentro. Se quiser, leva pra passear. Só traz de volta inteiro.",
-  "emotion": "tender"
- },
- {
-  "id": "jo_c1",
-  "speaker": "joca",
-  "text": "Essa tábua aqui: estou curvando ela faz três dias. Ela não quer. Eu também não quero desistir. Vamos ver quem cansa primeiro.",
-  "emotion": "happy"
- },
- {
-  "id": "jo_c2",
-  "speaker": "joca",
-  "text": "Aprendi tudo com o mestre Elias. Ele conversava com os barcos. Eu achava doideira. Hoje eu converso também.",
-  "emotion": "tender"
- },
- {
-  "id": "jo_c3",
-  "speaker": "joca",
-  "text": "Vento pelo lado é o melhor. Vento de frente, nem tente: o barco para e a vela fica batendo. Aí é virar um pouco e ir em zigue-zague.",
-  "emotion": "neutral"
- },
- {
-  "id": "jo_depois",
-  "speaker": "joca",
-  "text": "E aí, velejou? Ela puxa um pouco pra esquerda, né? O mestre dizia que era saudade.",
-  "emotion": "happy"
- },
- {
   "id": "ti_first",
   "speaker": "tiao",
-  "text": "Psiu. Fala baixinho que os peixes escutam. Brincadeira, peixe não escuta nada. Mas eu gosto do silêncio.",
+  "text": "Olá. Fala baixinho, por favor, os peixes vão acabar te escutando. Brincadeira, peixe não escuta nada. Mas eu gosto bastante de silêncio.",
   "emotion": "happy"
  },
  {
@@ -1660,12 +1072,6 @@
   "speaker": "tiao",
   "text": "Hoje? Nada. Ontem também nada. Mas ontem o nada estava mais bonito.",
   "emotion": "happy"
- },
- {
-  "id": "ti_nina",
-  "speaker": "tiao",
-  "text": "É sim. Ela coleciona conchas, histórias e perguntas. As perguntas eu não sei responder. As conchas eu ajudo a achar.",
-  "emotion": "tender"
  },
  {
   "id": "ti_c1",
@@ -1689,12 +1095,6 @@
   "id": "ni_first",
   "speaker": "nina",
   "text": "Oi! Você veio das montanhas? Lá tem dragão? É verdade que lá em cima neva? Neve tem gosto de quê?",
-  "emotion": "excited"
- },
- {
-  "id": "ni_dragao",
-  "speaker": "nina",
-  "text": "Tem? Grande? Maior que o farol? Será que ela me dá carona se eu pedir com educação?",
   "emotion": "excited"
  },
  {
@@ -1770,15 +1170,21 @@
   "emotion": "tender"
  },
  {
-  "id": "da_ve",
+  "id": "li_da_dedos",
+  "speaker": "lia",
+  "text": "Seus dedos…",
+  "emotion": "neutral"
+ },
+ {
+  "id": "da_dedos",
   "speaker": "davi",
-  "text": "O mar inteiro, o vale inteiro. E às vezes uma sombra enorme passando na frente da lua. A Odessa diz que é nuvem. Ela mente muito mal.",
-  "emotion": "happy"
+  "text": "Começou faz uns anos. Não dói, pelo menos não muito. Meu filho saiu pra pescar e não voltou. Eu acendo pra ele.",
+  "emotion": "sad"
  },
  {
   "id": "da_c1",
   "speaker": "davi",
-  "text": "Sabe o pior de um farol? Ninguém agradece quando dá certo. O barco chega, e pronto. Ninguém sobe aqui pra dizer obrigado à lâmpada.",
+  "text": "Sabe o pior de um farol? Ninguém agradece quando dá certo. O barco chega, e pronto.",
   "emotion": "happy"
  },
  {
@@ -1794,27 +1200,9 @@
   "emotion": "tender"
  },
  {
-  "id": "da_carta",
-  "speaker": "davi",
-  "text": "Você conhece a Odessa? A gente se escreve faz quarenta anos. Ela leva uns dez pra responder. Diz que é a letra que anda ruim. Elfa com letra ruim, onde já se viu. Leva esta carta?",
-  "emotion": "happy"
- },
- {
   "id": "da_noite",
   "speaker": "davi",
   "text": "Boa noite, cartógrafa. Fica aí embaixo e olha pra cima. Daqui a pouco eu pisco pra você.",
-  "emotion": "tender"
- },
- {
-  "id": "da_resposta",
-  "speaker": "davi",
-  "text": "Dela? Já? Não em dez anos. Em dez dias. Com licença, cartógrafa. Eu vou ler lá em cima, sozinho, como um velho bobo.",
-  "emotion": "surprised"
- },
- {
-  "id": "da_piscou",
-  "speaker": "davi",
-  "text": "Você viu? Ontem à noite. A luzinha do observatório. Piscou três vezes. Quarenta anos, cartógrafa. Quarenta anos, e ela piscou de volta.",
   "emotion": "tender"
  },
  {
@@ -1832,44 +1220,674 @@
  {
   "id": "da_lia2",
   "speaker": "davi",
-  "text": "Carta devida é a pior dívida. Cresce em silêncio. Tome. Papel bom, do meu. Escreva quando quiser. Não precisa ser hoje. Mas não deixe virar quarenta anos.",
+  "text": "Carta devida é a pior dívida. Cresce em silêncio. Tome. Papel bom, do meu. Escreva quando quiser. Mas não deixe virar quarenta anos.",
   "emotion": "tender"
  },
  {
-  "id": "li_alva_corre",
-  "speaker": "lia",
-  "text": "Ela levantou a cabeça. Acho que eu cheguei rápido demais. Devagar, Lia.",
-  "emotion": "surprised"
+  "id": "lago1",
+  "speaker": "teo",
+  "text": "Pedra boa é chata e lisa. Olha: um, dois, três, quatro!",
+  "emotion": "happy"
  },
  {
-  "id": "li_alva1",
-  "speaker": "lia",
-  "text": "Ela é enorme. E está me olhando como quem decide se eu sou uma pergunta ou uma resposta.",
-  "emotion": "tender"
- },
- {
-  "id": "li_alva2",
-  "speaker": "lia",
-  "text": "Ela abaixou a cabeça até o chão. Acho que é um convite.",
-  "emotion": "tender"
- },
- {
-  "id": "li_voo",
-  "speaker": "lia",
-  "text": "O vale inteiro cabe debaixo das asas dela.",
+  "id": "lago2",
+  "speaker": "mira",
+  "text": "Eu quero sete!",
   "emotion": "excited"
  },
  {
-  "id": "li_voo_fim",
+  "id": "lago3",
+  "speaker": "teo",
+  "text": "Sete ninguém faz. No dia que você fizer sete, eu conto pra vila inteira.",
+  "emotion": "happy"
+ },
+ {
+  "id": "lago4",
+  "speaker": "mira",
+  "text": "Mãe, essa aqui tem um furo. Essa não pula, né?",
+  "emotion": "neutral"
+ },
+ {
+  "id": "lago5",
+  "speaker": "dessa",
+  "text": "Pula sim. Me dá.",
+  "emotion": "happy"
+ },
+ {
+  "id": "lago6",
+  "speaker": "teo",
+  "text": "Dédé, desse jeito você vai ensinar ela melhor do que eu.",
+  "emotion": "happy"
+ },
+ {
+  "id": "lago7",
+  "speaker": "ilsa",
+  "text": "Almoço! Quem chegar por último lava a panela!",
+  "emotion": "happy"
+ },
+ {
+  "id": "lago8",
+  "speaker": "mira",
+  "text": "A Dédé!",
+  "emotion": "excited"
+ },
+ {
+  "id": "lago_r",
   "speaker": "lia",
-  "text": "Obrigada, Vésper. Eu nunca mais vou olhar pra um mapa do mesmo jeito.",
+  "text": "Teo, Ilsa e a filha deles, Mira. E a Dédé, que não era filha, mas estava sempre junto. O gigante do lago é o Teo. Ele ainda está com uma pedra na mão.",
+  "emotion": "tender"
+ },
+ {
+  "id": "arv1",
+  "speaker": "ilsa",
+  "text": "Vem cá, Dédé. Qual é o seu pedido?",
+  "emotion": "tender"
+ },
+ {
+  "id": "arv2",
+  "speaker": "dessa",
+  "text": "Não sei. Eu nunca amarrei.",
+  "emotion": "neutral"
+ },
+ {
+  "id": "arv3",
+  "speaker": "ilsa",
+  "text": "Então eu peço por você: quero que você fique com a gente pra sempre.",
+  "emotion": "tender"
+ },
+ {
+  "id": "arv4",
+  "speaker": "mira",
+  "text": "Eu pedi pra fazer sete pulos!",
+  "emotion": "excited"
+ },
+ {
+  "id": "arv5",
+  "speaker": "ilsa",
+  "text": "Pedido não se conta, senão não vale!",
+  "emotion": "happy"
+ },
+ {
+  "id": "arv6",
+  "speaker": "ilsa",
+  "text": "Você está quente.",
+  "emotion": "surprised"
+ },
+ {
+  "id": "arv7",
+  "speaker": "mira",
+  "text": "É do sol, mãe.",
+  "emotion": "neutral"
+ },
+ {
+  "id": "arv8",
+  "speaker": "teo",
+  "text": "Amanhã ela está boa.",
+  "emotion": "tender"
+ },
+ {
+  "id": "arvore_r",
+  "speaker": "lia",
+  "text": "Nesse dia, a família adotou a Dédé. E a Mira já estava doente.",
+  "emotion": "sad"
+ },
+ {
+  "id": "rel1",
+  "speaker": "auren",
+  "text": "A febre não baixa. Na costa tem casca de salgueiro-branco. É a única coisa que eu conheço que ajuda.",
+  "emotion": "sad"
+ },
+ {
+  "id": "rel2",
+  "speaker": "teo",
+  "text": "A gente vai. Ida e volta é um dia.",
+  "emotion": "neutral"
+ },
+ {
+  "id": "rel3",
+  "speaker": "ilsa",
+  "text": "Eu não vou deixar ela.",
+  "emotion": "sad"
+ },
+ {
+  "id": "rel4",
+  "speaker": "teo",
+  "text": "Precisa de nós dois pra carregar e pra pagar, Ilsa. Seu pai fica. A Dédé fica.",
+  "emotion": "tender"
+ },
+ {
+  "id": "rel5",
+  "speaker": "teo",
+  "text": "Está vendo a sombra? Quando ela chegar no seu nome, amanhã, a gente está de volta.",
+  "emotion": "tender"
+ },
+ {
+  "id": "rel6",
+  "speaker": "mira",
+  "text": "Promete?",
+  "emotion": "neutral"
+ },
+ {
+  "id": "rel7",
+  "speaker": "teo",
+  "text": "Prometo.",
+  "emotion": "tender"
+ },
+ {
+  "id": "rel8",
+  "speaker": "teo",
+  "text": "Cuida dela até eu voltar, Dédé. E deixa o relógio limpinho, pra sombra marcar certo.",
+  "emotion": "tender"
+ },
+ {
+  "id": "rel9",
+  "speaker": "dessa",
+  "text": "Eu cuido.",
+  "emotion": "neutral"
+ },
+ {
+  "id": "rel_r",
+  "speaker": "lia",
+  "text": "Os pais desceram pra costa atrás de remédio. Deixaram a Mira com o avô e com a Dédé. A Odessa limpa esse relógio até hoje.",
+  "emotion": "tender"
+ },
+ {
+  "id": "circ1",
+  "speaker": "sela_m",
+  "text": "Subiu! Mestre, a minha subiu!",
+  "emotion": "excited"
+ },
+ {
+  "id": "circ2",
+  "speaker": "auren",
+  "text": "Subiu, Sela.",
+  "emotion": "sad"
+ },
+ {
+  "id": "circ3",
+  "speaker": "aldren",
+  "text": "Eu já vivi o que tinha pra viver. Leva eu no lugar dela. Eu fico aqui. Não levanto enquanto ela não melhorar.",
+  "emotion": "sad"
+ },
+ {
+  "id": "circ4",
+  "speaker": "auren",
+  "text": "Febre assim, eu nunca vi passar.",
+  "emotion": "sad"
+ },
+ {
+  "id": "circ5",
+  "speaker": "dessa",
+  "text": "Vô, a Mira está chamando o senhor.",
+  "emotion": "neutral"
+ },
+ {
+  "id": "circ6",
+  "speaker": "aldren",
+  "text": "Diz pra ela que o vô está pedindo por ela. Volta lá, Dédé. Fica com ela.",
+  "emotion": "tender"
+ },
+ {
+  "id": "circ_r",
+  "speaker": "lia",
+  "text": "O avô, Aldren, ajoelhou pra pedir pela neta e prometeu não levantar. O vale tem o nome dele.",
+  "emotion": "sad"
+ },
+ {
+  "id": "rosto1",
+  "speaker": "ilsa",
+  "text": "Ela está aqui, Teo. A gente tem que vir aqui todo dia.",
+  "emotion": "sad"
+ },
+ {
+  "id": "rosto2",
+  "speaker": "teo",
+  "text": "Ela não está aqui, Ilsa. Ela não está em lugar nenhum.",
+  "emotion": "sad"
+ },
+ {
+  "id": "rosto3",
+  "speaker": "ilsa",
+  "text": "Você estava com ela.",
+  "emotion": "neutral"
+ },
+ {
+  "id": "rosto4",
+  "speaker": "dessa",
+  "text": "Desculpa, Mira.",
+  "emotion": "sad"
+ },
+ {
+  "id": "rosto_r",
+  "speaker": "lia",
+  "text": "No enterro, cada um foi pra um lado. O Teo desceu pro lago. A Ilsa culpou a Dédé. As mãos da Dédé estavam enfaixadas. Por quê?",
+  "emotion": "sad"
+ },
+ {
+  "id": "monte1",
+  "speaker": "teo",
+  "text": "Desce, Ilsa. Faz um ano.",
+  "emotion": "tired"
+ },
+ {
+  "id": "monte2",
+  "speaker": "ilsa",
+  "text": "Pra quê? Pra olhar na cara de quem deixou ela sozinha?",
+  "emotion": "sad"
+ },
+ {
+  "id": "monte3",
+  "speaker": "teo",
+  "text": "A Dédé tinha dez anos, Ilsa.",
+  "emotion": "tender"
+ },
+ {
+  "id": "monte4",
+  "speaker": "ilsa",
+  "text": "Eu não estou falando da Dédé. Estou falando de mim. Fui eu que desci pra costa.",
+  "emotion": "sad"
+ },
+ {
+  "id": "monte5",
+  "speaker": "teo",
+  "text": "Fomos nós dois.",
+  "emotion": "sad"
+ },
+ {
+  "id": "monte6",
+  "speaker": "ilsa",
+  "text": "Então desce você.",
+  "emotion": "neutral"
+ },
+ {
+  "id": "monte7",
+  "speaker": "teo",
+  "text": "Eu não sei. Eu não sei mais.",
+  "emotion": "sad"
+ },
+ {
+  "id": "monte8",
+  "speaker": "ilsa",
+  "text": "Desculpa, Dédé.",
+  "emotion": "sad"
+ },
+ {
+  "id": "monte_r",
+  "speaker": "lia",
+  "text": "A Ilsa nunca culpou a Dédé de verdade. Culpava a si mesma. A Dédé nunca soube.",
+  "emotion": "sad"
+ },
+ {
+  "id": "torre1",
+  "speaker": "sela",
+  "text": "Mestre, desce daí. A rachadura já passou do terceiro andar.",
+  "emotion": "sad"
+ },
+ {
+  "id": "torre2",
+  "speaker": "auren",
+  "text": "Naquela noite me chamaram, e eu cheguei tarde. Depois disso eu não saí mais. Assim eu não chego tarde de novo.",
+  "emotion": "tired"
+ },
+ {
+  "id": "torre3",
+  "speaker": "sela",
+  "text": "O senhor não chega mais em lugar nenhum. A vila está sem curandeiro faz doze anos.",
+  "emotion": "sad"
+ },
+ {
+  "id": "torre4",
+  "speaker": "auren",
+  "text": "Eu chamei isso de cuidado, Sela. Era medo de levantar.",
+  "emotion": "tired"
+ },
+ {
+  "id": "torre5",
+  "speaker": "sela",
+  "text": "Eu volto amanhã.",
+  "emotion": "sad"
+ },
+ {
+  "id": "torre_r",
+  "speaker": "lia",
+  "text": "O curandeiro deitou e não levantou mais. Alguém chamou ele naquela noite. Quem?",
+  "emotion": "neutral"
+ },
+ {
+  "id": "esc1",
+  "speaker": "mira",
+  "text": "Dédé… está quente.",
+  "emotion": "sad"
+ },
+ {
+  "id": "esc2",
+  "speaker": "dessa",
+  "text": "Vou chamar o Auren. Já volto. Fica aqui.",
+  "emotion": "surprised"
+ },
+ {
+  "id": "esc3",
+  "speaker": "dessa",
+  "text": "Auren! Auren! É a Mira!",
+  "emotion": "surprised"
+ },
+ {
+  "id": "esc4",
+  "speaker": "auren",
+  "text": "Vamos.",
+  "emotion": "neutral"
+ },
+ {
+  "id": "esc_r",
+  "speaker": "lia",
+  "text": "Ela caiu na escada, ralou as mãos na pedra e levantou. Trouxe o Auren. E só caiu quando chegou em casa.",
+  "emotion": "tender"
+ },
+ {
+  "id": "li_hora_lago",
+  "speaker": "lia",
+  "text": "A luz do lago é de manhã. Vou esperar.",
+  "emotion": "neutral"
+ },
+ {
+  "id": "li_hora_arvore",
+  "speaker": "lia",
+  "text": "Aqui o que importa é a luz da tarde. Vou esperar um pouco.",
+  "emotion": "neutral"
+ },
+ {
+  "id": "li_hora_rel",
+  "speaker": "lia",
+  "text": "Quatro e meia, ela disse. Nem um minuto antes.",
+  "emotion": "neutral"
+ },
+ {
+  "id": "li_circ_dia",
+  "speaker": "lia",
+  "text": "Este lugar precisa da noite. Vou esperar.",
+  "emotion": "neutral"
+ },
+ {
+  "id": "li_hora_rosto",
+  "speaker": "lia",
+  "text": "As flores ainda estão fechadas. A luz daqui é a do meio-dia.",
+  "emotion": "neutral"
+ },
+ {
+  "id": "li_hora_monte",
+  "speaker": "lia",
+  "text": "Daqui de cima, a luz é a do nascer do dia. Vou esperar.",
+  "emotion": "neutral"
+ },
+ {
+  "id": "li_hora_torre",
+  "speaker": "lia",
+  "text": "Este lugar pede o fim da tarde. Vou esperar o sol baixar.",
+  "emotion": "neutral"
+ },
+ {
+  "id": "li_hora_escada",
+  "speaker": "lia",
+  "text": "Só depois que escurecer. Ela disse.",
+  "emotion": "neutral"
+ },
+ {
+  "id": "li_ainda_nao",
+  "speaker": "lia",
+  "text": "Ainda não é aqui. A Odessa disse onde está a próxima luz.",
+  "emotion": "neutral"
+ },
+ {
+  "id": "li_luneta",
+  "speaker": "lia",
+  "text": "Tem um ponto de luz ali. Preciso acertar a luneta nele.",
+  "emotion": "neutral"
+ },
+ {
+  "id": "fim1",
+  "speaker": "odessa",
+  "text": "Quatro e meia. A sombra chegou no nome dela.",
+  "emotion": "tender"
+ },
+ {
+  "id": "fim2",
+  "speaker": "odessa",
+  "text": "Pode ir, Mira. Eu cuidei até ele voltar.",
+  "emotion": "tender"
+ },
+ {
+  "id": "fim3",
+  "speaker": "odessa",
+  "text": "Teo. Ilsa. Vô. Auren. Acabou. Ninguém fez nada errado. Vocês podem ir.",
+  "emotion": "tender"
+ },
+ {
+  "id": "fim_lago",
+  "speaker": "lia",
+  "text": "Olha. Lá no lago.",
+  "emotion": "surprised"
+ },
+ {
+  "id": "fim_pulos",
+  "speaker": "tome",
+  "text": "Um, dois, três, quatro, cinco, seis… sete!",
+  "emotion": "excited"
+ },
+ {
+  "id": "fim_maos",
+  "speaker": "odessa",
+  "text": "Lia. As minhas mãos. Estão quentes.",
+  "emotion": "surprised"
+ },
+ {
+  "id": "fim_dede",
+  "speaker": "odessa",
+  "text": "Ninguém me chama de Dédé há seiscentos anos.",
+  "emotion": "tender"
+ },
+ {
+  "id": "fim_lia1",
+  "speaker": "lia",
+  "text": "Obrigada, Dédé.",
+  "emotion": "tender"
+ },
+ {
+  "id": "fim7",
+  "speaker": "anselmo",
+  "text": "Faz oitenta anos que eu não fico acordado vendo pedra virar flor.",
+  "emotion": "happy"
+ },
+ {
+  "id": "fim8",
+  "speaker": "celeste",
+  "text": "Trouxe pão pra todo mundo. Até pra você, Odessa. E pega com a mão, que agora pode.",
+  "emotion": "happy"
+ },
+ {
+  "id": "fim_davi",
+  "speaker": "davi",
+  "text": "Meus dedos… Olha. Voltou a cor.",
+  "emotion": "surprised"
+ },
+ {
+  "id": "fim_marta",
+  "speaker": "marta",
+  "text": "Fechei a taberna cedo, olha só. A primeira vez em trinta anos!",
+  "emotion": "excited"
+ },
+ {
+  "id": "fim_mapa",
+  "speaker": "odessa",
+  "text": "Isto é seu. Seu pai fez há doze anos. Olha as margens.",
+  "emotion": "tender"
+ },
+ {
+  "id": "fim_lia2",
+  "speaker": "lia",
+  "text": "Ele desenhava igual a mim. Ele reparava.",
+  "emotion": "sad"
+ },
+ {
+  "id": "fim11",
+  "speaker": "narrador",
+  "text": "Os gigantes de Aldren ainda estão lá. Mas pararam de crescer. E nas pedras, agora, nasce flor.",
+  "emotion": "tender"
+ },
+ {
+  "id": "li_fome_fim",
+  "speaker": "lia",
+  "text": "Estou com fome. Faz tempo que eu não sinto fome de verdade.",
+  "emotion": "tender"
+ },
+ {
+  "id": "li_carta_mae",
+  "speaker": "lia",
+  "text": "Mãe. Desculpa a demora. Eu disse que estava bem. Não estava. Estou começando a ficar. Volto antes do inverno. Fiz um desenho pra você. Ficou torto. Gostei mesmo assim. Lia.",
+  "emotion": "tender"
+ },
+ {
+  "id": "li_chegada",
+  "speaker": "lia",
+  "text": "Então é aqui. Ele falava deste vale como de nenhum outro lugar.",
+  "emotion": "neutral"
+ },
+ {
+  "id": "li_hospedaria",
+  "speaker": "lia",
+  "text": "A hospedaria do Seu Cosme. Depois, o observatório da Odessa, na colina.",
+  "emotion": "neutral"
+ },
+ {
+  "id": "li_noite1",
+  "speaker": "lia",
+  "text": "Só mais um ponto e eu paro.",
+  "emotion": "tired"
+ },
+ {
+  "id": "li_dormir1",
+  "speaker": "lia",
+  "text": "Amanhã eu compenso.",
+  "emotion": "tired"
+ },
+ {
+  "id": "li_espada",
+  "speaker": "lia",
+  "text": "Uma espada fincada na pedra, com o cabo pra cima. Alguém enterrou aqui um amigo que morreu lutando.",
+  "emotion": "tender"
+ },
+ {
+  "id": "li_aqueduto",
+  "speaker": "lia",
+  "text": "Um aqueduto que não leva mais água a lugar nenhum. O vale já foi bem maior. As ovelhas dormem na sombra dos arcos.",
+  "emotion": "tender"
+ },
+ {
+  "id": "li_balanco",
+  "speaker": "lia",
+  "text": "Alguém pendurou este balanço há muito tempo. As cordas já foram trocadas várias vezes. Gerações de gente cuidando de um balanço.",
+  "emotion": "neutral"
+ },
+ {
+  "id": "li_ponte",
+  "speaker": "lia",
+  "text": "Uma ponte partida no meio. O riacho secou faz séculos. Mesmo assim, o Bastião quer terminar a frase.",
+  "emotion": "neutral"
+ },
+ {
+  "id": "li_ponte2",
+  "speaker": "lia",
+  "text": "A ponte está inteira. Não leva a lugar nenhum que já não desse pra ir. Atravessei duas vezes, só pra garantir.",
+  "emotion": "happy"
+ },
+ {
+  "id": "li_santuario",
+  "speaker": "lia",
+  "text": "Estatuetas cobertas de musgo no meio da floresta. Pedras-memória pequenas, de perdas recentes. Alguém deixou flores frescas aqui. Hoje.",
+  "emotion": "tender"
+ },
+ {
+  "id": "li_banco",
+  "speaker": "lia",
+  "text": "Um banco virado pro oeste. Quem colocou ele aqui sabia exatamente onde o sol se põe.",
+  "emotion": "neutral"
+ },
+ {
+  "id": "li_poco",
+  "speaker": "lia",
+  "text": "Dizem que, numa noite sem vento, dá pra ver as estrelas no fundo deste poço. Mesmo de dia.",
+  "emotion": "neutral"
+ },
+ {
+  "id": "li_poco2",
+  "speaker": "lia",
+  "text": "A corda do poço é nova. Alguém tira água daqui toda tarde e leva até o jardim dos relógios.",
+  "emotion": "tender"
+ },
+ {
+  "id": "li_noite",
+  "speaker": "lia",
+  "text": "Já escureceu. Melhor acender a lanterna.",
+  "emotion": "neutral"
+ },
+ {
+  "id": "li_sentar1",
+  "speaker": "lia",
+  "text": "Pronto. Sentei. Agora vou fazer o quê?",
+  "emotion": "neutral"
+ },
+ {
+  "id": "li_sentar2",
+  "speaker": "lia",
+  "text": "Eu devia estar medindo alguma coisa.",
+  "emotion": "tired"
+ },
+ {
+  "id": "li_sentar3",
+  "speaker": "lia",
+  "text": "As nuvens andam tão devagar. Ou sou eu que finalmente parei.",
+  "emotion": "tender"
+ },
+ {
+  "id": "li_sentar4",
+  "speaker": "lia",
+  "text": "O sol esquenta a pedra. Dá pra sentir na mão.",
+  "emotion": "tender"
+ },
+ {
+  "id": "li_mapa_cheio",
+  "speaker": "lia",
+  "text": "Oito lugares. Oito pedaços da mesma família. Só falta a Odessa.",
+  "emotion": "tender"
+ },
+ {
+  "id": "li_estrela",
+  "speaker": "lia",
+  "text": "Uma estrela cadente. Dizem que é pra pedir alguma coisa. Não me ocorreu nada.",
+  "emotion": "neutral"
+ },
+ {
+  "id": "li_estrela2",
+  "speaker": "lia",
+  "text": "Outra! Essa eu vi inteira.",
+  "emotion": "happy"
+ },
+ {
+  "id": "li_dedos",
+  "speaker": "lia",
+  "text": "As pontas dos meus dedos… estão cinzentas.",
+  "emotion": "surprised"
+ },
+ {
+  "id": "li_dedos_ok",
+  "speaker": "lia",
+  "text": "Os meus dedos. Voltaram.",
   "emotion": "tender"
  },
  {
   "id": "li_mar",
   "speaker": "lia",
   "text": "O mar. Daqui de cima, o vale parecia um mundo inteiro. Ele termina aqui, na areia, e começa outra coisa.",
-  "emotion": "tender"
+  "emotion": "neutral"
  },
  {
   "id": "li_barco0",
@@ -1886,20 +1904,20 @@
  {
   "id": "li_cogumelos",
   "speaker": "lia",
-  "text": "Um círculo perfeito de cogumelos. A Nina diria que é uma porta. O Anselmo diria que choveu. Os dois devem ter razão.",
-  "emotion": "tender"
+  "text": "Um círculo perfeito de cogumelos. A Nina diria que é uma porta. O Anselmo diria que choveu.",
+  "emotion": "neutral"
  },
  {
   "id": "li_tronco",
   "speaker": "lia",
-  "text": "Um tronco oco, cheio de folhas secas. Alguma raposa dorme aqui, dá pra sentir o cheiro. Melhor não incomodar.",
+  "text": "Um tronco oco, cheio de folhas secas. Alguma raposa dorme aqui. Melhor não incomodar.",
   "emotion": "neutral"
  },
  {
   "id": "li_colmeia",
   "speaker": "lia",
   "text": "Uma colmeia num toco velho. As abelhas nem ligam pra mim. Estão ocupadas demais sendo abelhas.",
-  "emotion": "happy"
+  "emotion": "neutral"
  },
  {
   "id": "li_ninho",
@@ -1910,20 +1928,20 @@
  {
   "id": "li_amoras",
   "speaker": "lia",
-  "text": "Amoras maduras, quentes de sol. Agora as minhas mãos estão roxas, mas valeu a pena.",
-  "emotion": "happy"
+  "text": "Uma amoreira carregada. Dá pra colher umas e levar.",
+  "emotion": "neutral"
  },
  {
   "id": "li_estrela_pedra",
   "speaker": "lia",
-  "text": "Uma estrela gravada na pedra, quase apagada pelo musgo. Igual à do Tomé. Os Veladores marcavam os caminhos que davam pro céu.",
-  "emotion": "surprised"
+  "text": "Uma estrela gravada na pedra, quase apagada pelo musgo. Igual às que o Tomé desenha. Alguém marcava os caminhos que davam pro céu.",
+  "emotion": "neutral"
  },
  {
   "id": "li_fonte",
   "speaker": "lia",
-  "text": "Água brotando da pedra, gelada. Alguém colocou um cano de ferro aqui há muito tempo, pra quem passasse com sede. Obrigada, quem quer que tenha sido.",
-  "emotion": "tender"
+  "text": "Água brotando da pedra, gelada. Alguém colocou um cano de ferro aqui há muito tempo, pra quem passasse com sede.",
+  "emotion": "neutral"
  },
  {
   "id": "li_cabana",
@@ -1934,7 +1952,7 @@
  {
   "id": "li_arvore_nomes",
   "speaker": "lia",
-  "text": "Nomes gravados na casca, uns por cima dos outros. Os mais antigos a árvore já engoliu. Ela guarda todo mundo, crescendo devagar por cima.",
+  "text": "Nomes gravados na casca, uns por cima dos outros. Os mais antigos a árvore já engoliu.",
   "emotion": "tender"
  },
  {
@@ -1952,19 +1970,13 @@
  {
   "id": "li_fitas",
   "speaker": "lia",
-  "text": "Centenas de fitas. Cada uma é alguém que morreu e alguém que ficou pra lembrar.",
-  "emotion": "tender"
- },
- {
-  "id": "li_fita_no",
-  "speaker": "lia",
-  "text": "Refiz os dois nós. Não pra prender ninguém. Só pra fita não cair antes da hora.",
-  "emotion": "tender"
+  "text": "Centenas de fitas. Cada uma é um pedido de alguém do vale.",
+  "emotion": "neutral"
  },
  {
   "id": "li_fita_minha",
   "speaker": "lia",
-  "text": "Amarrei a minha no galho de baixo, perto da pedra furada. Não vou contar o que eu pedi.",
+  "text": "Amarrei a minha no galho de baixo. Não vou contar o que eu pedi.",
   "emotion": "tender"
  },
  {
@@ -1976,13 +1988,109 @@
  {
   "id": "li_pulos_bom",
   "speaker": "lia",
-  "text": "Olha só isso. Acho que até o gigante viu.",
-  "emotion": "happy"
+  "text": "Acho que sete eu não consigo agora. Quem sabe um dia.",
+  "emotion": "neutral"
+ },
+ {
+  "id": "li_pulos_cansei",
+  "speaker": "lia",
+  "text": "Hoje não vai. Tudo bem.",
+  "emotion": "tired"
  },
  {
   "id": "li_pulos_zero",
   "speaker": "lia",
-  "text": "Afundou com estilo. O Tomé ia gostar.",
+  "text": "Afundou. O Tomé ia gostar.",
+  "emotion": "neutral"
+ },
+ {
+  "id": "li_fome",
+  "speaker": "lia",
+  "text": "Estou com fome. Faz tempo que eu não como.",
+  "emotion": "tired"
+ },
+ {
+  "id": "li_fome2",
+  "speaker": "lia",
+  "text": "Minhas pernas estão pesadas. Preciso comer alguma coisa.",
+  "emotion": "tired"
+ },
+ {
+  "id": "li_comer1",
+  "speaker": "lia",
+  "text": "Comi. Não tinha gosto de nada.",
+  "emotion": "neutral"
+ },
+ {
+  "id": "li_comer2",
+  "speaker": "lia",
+  "text": "Azeda. Mas é gosto.",
+  "emotion": "neutral"
+ },
+ {
+  "id": "li_comer3",
+  "speaker": "lia",
+  "text": "Que doce.",
   "emotion": "happy"
+ },
+ {
+  "id": "li_arco",
+  "speaker": "lia",
+  "text": "Um arco de caça, bem cuidado. As flechas estão na aljava, do lado.",
+  "emotion": "neutral"
+ },
+ {
+  "id": "li_fruta_alta",
+  "speaker": "lia",
+  "text": "Frutas lá no alto. Daqui não alcanço.",
+  "emotion": "neutral"
+ },
+ {
+  "id": "li_colher",
+  "speaker": "lia",
+  "text": "Colhi algumas. Vão na bolsa.",
+  "emotion": "neutral"
+ },
+ {
+  "id": "li_bolsa_cheia",
+  "speaker": "lia",
+  "text": "A bolsa já está cheia.",
+  "emotion": "neutral"
+ },
+ {
+  "id": "li_cansada",
+  "speaker": "lia",
+  "text": "Só mais uma medição. Ainda não está bom.",
+  "emotion": "tired"
+ },
+ {
+  "id": "li_alva_corre",
+  "speaker": "lia",
+  "text": "Ela levantou a cabeça. Acho que eu cheguei rápido demais. Devagar, Lia.",
+  "emotion": "surprised"
+ },
+ {
+  "id": "li_alva1",
+  "speaker": "lia",
+  "text": "Ela é enorme. E está me olhando como quem decide se eu sou uma pergunta ou uma resposta.",
+  "emotion": "neutral"
+ },
+ {
+  "id": "li_alva2",
+  "speaker": "lia",
+  "text": "Ela abaixou a cabeça até o chão. Acho que é um convite.",
+  "emotion": "neutral"
+ },
+ {
+  "id": "li_voo",
+  "speaker": "lia",
+  "text": "O vale inteiro cabe debaixo das asas dela.",
+  "emotion": "surprised"
+ },
+ {
+  "id": "li_voo_fim",
+  "speaker": "lia",
+  "text": "Obrigada, Vésper.",
+  "emotion": "tender"
  }
 ]
