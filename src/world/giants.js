@@ -103,7 +103,7 @@ const STATUES = {
       K.rot('neck_01', X, -0.12); K.rot('Head', X, -0.18); K.rot('Head', Y, s * 0.12);
     },
     // a pedra de quicar, entre o polegar e os dedos
-    extra(K, add) { const p = K.wp('thumb_03_r').lerp(K.wp('index_02_r'), 0.5).add(V3(0, 0.03, 0.035)); add(blob([p.x, p.y, p.z], 0.085, 1.2, 1.0, 0.3, 5, 0.1, 2)); },
+    extra(K, add) { const p = K.wp('thumb_03_r').lerp(K.wp('index_02_r'), 0.5).add(V3(0, 0.03, 0.035)); const g = blob([0, 0, 0], 0.08, 1.25, 1.0, 0.28, 5, 0.08, 2); g.rotateX(1.0); g.rotateY(-0.5); g.translate(p.x, p.y, p.z); add(g); },
     base: [], rubble: 0,
   },
   // Aldren, o avô, no círculo de pedras: ajoelhado, mãos juntas, cabeça baixa
@@ -501,7 +501,7 @@ export function updateGiants(dt, time) {
   for (const g of giants) {
     g.awake = lerp(g.awake, g.target, 1 - Math.exp(-dt * 0.6));
     const pulse = 0.75 + 0.25 * Math.sin(time * 1.3 + g.x);
-    g.glow.emissiveIntensity = g.awake * 3 * pulse; for (const e of g.eyes) e.visible = g.awake > 0.02; g.rune.material.opacity = g.awake * 0.4 * pulse;
+    g.glow.emissiveIntensity = g.awake * 1.4 * pulse; for (const e of g.eyes) e.visible = g.awake > 0.02; g.rune.material.opacity = g.awake * 0.4 * pulse;
     g.light.intensity = g.awake * 22 * pulse; g.uAwake.value = g.awake;
   }
 }
@@ -528,13 +528,13 @@ export function buildHeadFragment(scene, rockMaps, x, z, rot, S = 2.2) {
     const hc = head.bones.Head.clone().add(V3(0, 0.08, 0)); const cutY = (v) => hc.y - 0.13 + (v.z - hc.z) * 0.3; const k = 20 * S / 2.2;
     // o pescoço vira uma quebra plana; do cabelo, só fica o que está acima da quebra
     const hg = mergeVertices(head.geo, 1.5e-3); { const p = hg.attributes.position; for (let i = 0; i < p.count; i++) { const v = V3(p.getX(i), p.getY(i), p.getZ(i)); v.y = Math.max(v.y, cutY(v)); p.setXYZ(i, v.x, v.y, v.z); } }
-    let rg = mergeVertices(hair.geo, 1.5e-3); { const p = rg.attributes.position, idx = rg.index.array, keep = []; for (let t = 0; t < idx.length; t += 3) { let ok = true; for (let j = 0; j < 3; j++) { const v = V3(p.getX(idx[t + j]), p.getY(idx[t + j]), p.getZ(idx[t + j])); if (v.y < hc.y + 0.035 + Math.max(0, v.z - hc.z) * 0.6) ok = false; } if (ok) keep.push(idx[t], idx[t + 1], idx[t + 2]); } rg.setIndex(keep); }
+    let rg = mergeVertices(hair.geo, 1.5e-3); { const p = rg.attributes.position, idx = rg.index.array, keep = []; for (let t = 0; t < idx.length; t += 3) { let ok = true; for (let j = 0; j < 3; j++) { const v = V3(p.getX(idx[t + j]), p.getY(idx[t + j]), p.getZ(idx[t + j])); if (v.y < hc.y + 0.012 + Math.max(0, v.z - hc.z) * 0.6) ok = false; } if (ok) keep.push(idx[t], idx[t + 1], idx[t + 2]); } rg.setIndex(keep); }
     let g = mergeGeometries([hg, rg]); { const p = g.attributes.position; for (let i = 0; i < p.count; i++) { const v = V3(p.getX(i), p.getY(i), p.getZ(i)).sub(hc).multiplyScalar(k); p.setXYZ(i, v.x, v.y, v.z); } }
     const nb = neighbors(g); smoothTaubin(g, nb, 2, 0.5, -0.53); g.computeVertexNormals();
     const p = g.attributes.position, n = g.attributes.normal; for (let i = 0; i < p.count; i++) { const x0 = p.getX(i), y0 = p.getY(i), z0 = p.getZ(i); const d = fbm3(x0 * 0.6 + 3, y0 * 0.6, z0 * 0.6) * 0.07 * S; p.setXYZ(i, x0 + n.getX(i) * d, y0 + n.getY(i) * d, z0 + n.getZ(i) * d); }
     g.deleteAttribute('normal'); geo = g;
   } else geo = blockHead().scale(S, S, S);
-  const root = new THREE.Group(); root.position.set(x, groundH(x, z) + (LIB.gltf.f_peasant ? -0.55 * S : 0.6), z); root.rotation.set(LIB.gltf.f_peasant ? -0.75 : 0.35, rot, LIB.gltf.f_peasant ? 0.35 : 0.6); scene.add(root); root.updateMatrixWorld(true); geo.applyMatrix4(root.matrixWorld);
+  const root = new THREE.Group(); root.position.set(x, groundH(x, z) + (LIB.gltf.f_peasant ? -0.36 * S : 0.6), z); root.rotation.set(LIB.gltf.f_peasant ? -0.75 : 0.35, rot, LIB.gltf.f_peasant ? 0.35 : 0.6); scene.add(root); root.updateMatrixWorld(true); geo.applyMatrix4(root.matrixWorld);
   if (!geo.index) geo = mergeVertices(geo, 1e-4);
   weather(geo, { ground: groundH, cell: 0.18, reach: 2, mossH: 2.5 }); geo.deleteAttribute('normal'); geo.computeVertexNormals();
   const mesh = new THREE.Mesh(geo, giantMaterial(rockMaps)); mesh.castShadow = true; mesh.receiveShadow = true; scene.add(mesh);
