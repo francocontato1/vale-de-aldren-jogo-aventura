@@ -84,7 +84,7 @@ class Particles {
 // =====================================================================
 // estado
 // =====================================================================
-const S = { rep: {}, bag: {}, fed: 0, said: {}, pulos: 0, ribbons: {}, lumeOrder: [], met: {}, lumes: {}, notes: {}, final: 0, letter: 0, told: 0, chat: {}, day: 0, found: {}, sat: 0, fr: {}, frDay: {}, inv: {}, fav: {}, boat: 0, sailed: 0, flags: {} };
+const S = { rep: {}, bag: {}, fed: null, said: {}, pulos: 0, ribbons: {}, lumeOrder: [], met: {}, lumes: {}, notes: {}, final: 0, letter: 0, told: 0, chat: {}, day: 0, found: {}, sat: 0, fr: {}, frDay: {}, inv: {}, fav: {}, boat: 0, sailed: 0, flags: {} };
 let state = 'loading', hour = 16.4, elapsed = 0, timeLapse = 0;
 const START = { x: 2, z: 44, h: Math.PI };
 const player = { x: 2, z: 44, y: 0, vy: 0, h: Math.PI, onGround: true, stepAcc: 0, speed: 0, sit: null, standT: 0 };
@@ -295,9 +295,15 @@ function updateSitting(dt) {
 function standUp() { if (!player.sit || pH.currentName === 'standUp' || state !== 'play') return; timeLapse = 0; $('lapseHint').classList.remove('on'); if (player.sit.lie) { if (!player.sit.rising) { player.sit.rising = true; player.sit.t = 0; pH.unpose(1); } return; } if (player.sit.spot && player.sit.spot.seat) taken.delete(player.sit.spot.seat); pH.play('standUp', 0.25); $('lapseHint').hidden = true; }
 let lapseText = 'T · deixar o tempo passar · mova-se para levantar';
 // dormir: tela escurece, a noite passa, amanhece
+function faint() {
+  state = 'intro'; const f = $('fade'); pH.play('lie', 0.4); Sound.rustle(player.x, player.z); setTimeout(() => { f.style.opacity = '1'; }, 600);
+  setTimeout(() => { const h = houseOf('hospedaria'); const b = h && h.beds.find(b => !taken.get(b)); S.day++; hour = 9.0; S.wake = S.day * 24 + hour; S.flags.avisouSono = S.flags.avisouSono2 = 0; S.flags.desmaio = 1; if (sky) sky.setHour(hour);
+    if (b) { player.x = b.side.x; player.z = b.side.z; player.y = probe(player.x, player.z, b.y + 0.3).h; } const s = storySpots.inn; teleportNPC(cosme, s.x, s.z); pH.play('idle', 0.3); save();
+    setTimeout(() => { f.style.opacity = '0'; state = 'play'; toast('Você desmaiou', 'Perdeu um dia do prazo. O Seu Cosme trouxe você de volta.'); setTimeout(() => think('li_cansada'), 2500); }, 1400); }, 2600);
+}
 function sleepUntilMorning() {
   if (state !== 'play' || !player.sit || !player.sit.lie || player.sit.sleeping) return; player.sit.sleeping = true; const f = $('fade'); f.style.opacity = '1'; Music.stop(3);
-  setTimeout(() => { hour = 6.6; S.day++; if (sky) sky.setHour(hour); save(); setTimeout(() => { f.style.opacity = '0'; toast('Bom dia', 'A noite passou num instante'); if (player.sit) player.sit.sleeping = false; Music.silence = 4; }, 900); }, 2200);
+  setTimeout(() => { hour = 6.6; S.day++; S.wake = S.day * 24 + hour; S.flags.avisouSono = S.flags.avisouSono2 = 0; if (sky) sky.setHour(hour); save(); setTimeout(() => { f.style.opacity = '0'; toast('Bom dia', 'A noite passou num instante'); if (player.sit) player.sit.sleeping = false; Music.silence = 4; }, 900); }, 2200);
 }
 
 // =====================================================================
@@ -414,6 +420,10 @@ function updateCamera(dt) {
   if (window.__camOverride) { const o = window.__camOverride; if (pH) pH.root.visible = true; camera.position.set(...o.pos); camera.lookAt(...o.look); camera.fov = o.fov || 50; camera.updateProjectionMatrix(); return; }
   const cy = cam.yaw, cp = cam.pitch;
   camFwd.set(-Math.sin(cy) * Math.cos(cp), Math.sin(cp), -Math.cos(cy) * Math.cos(cp));
+  // luneta: pelos olhos da Lia, olhando para o lugar
+  if (state === 'lens' && lens) { const sp = SPOTS[lens.place.place]; const g = giants.find(g => g.id === lens.place.id); const tgt = g ? V3(g.x, groundH(g.x, g.z) + 6, g.z) : V3(sp.x + Math.sin(sp.yaw) * 8, groundH(sp.x, sp.z) + 1.6, sp.z + Math.cos(sp.yaw) * 8);
+    const eye = pH.headPos.clone().add(V3(0, 0.08, 0)); camera.position.lerp(eye, 1 - Math.exp(-dt * 6)); camera.lookAt(tgt); camera.fov = lerp(camera.fov, 30, 1 - Math.exp(-dt * 3)); camera.updateProjectionMatrix(); pH.root.visible = false; return; }
+  if (pH && !pH.root.visible && state !== 'lens') pH.root.visible = true;
   // lume: órbita lenta em volta da lembrança
   if (state === 'lume' && lume) {
     // enquadra todas as figuras da lembrança (inclusive quem está no alto da escada), girando devagar a partir do lado da Lia
@@ -681,7 +691,7 @@ function talkJoca() {
   // na chegada, ele espera a Lia no fim da estrada
   if (!S.flags.chegou) return seq(['jo_cheg1', 'li_jo_cheg', 'jo_cheg2', 'jo_cheg3'], [O('Vamos.', null, () => { pendingAfterDialog = arriveAtInn; })], () => { S.met.joca = 1; });
   // capítulo 1: leva a Lia de barco até o gigante do lago
-  if (currentChapter() === 'lago' && S.met.odessa && joca.ferry) return Nd('jo_lago1', [O('Vamos.', null, () => { pendingAfterDialog = ferryToLake; })]);
+  if (currentChapter() === 'lago' && S.met.odessa && joca.ferry && !S.flags.naBarca) return Nd('jo_lago1', [O('Vamos.', null, () => { pendingAfterDialog = ferryToLake; })]);
   const barco = O('Aquele barco no fim do píer é de quem?', () => Nd('jo_barco', BYE), () => { if (!S.boat) { S.boat = 1; toast('O barco do mestre Elias', 'Agora você pode velejar. Ele fica no fim do píer.'); } save(); });
   if (!S.boat && S.found.mare) return Nd('jo_c1', [barco, ...BYE]);
   if (S.sailed && !S.flags.jocaDepois) return Nd('jo_depois', BYE, () => { S.flags.jocaDepois = 1; friend('joca', 1); });
@@ -698,7 +708,7 @@ function talkCeleste() {
   if (isNight()) return Nd('ce_noite', BYE);
   if (!S.met.celeste) return seq(['ce_first', 'li_ce_obg', 'ce_prova', 'li_ce_otimo'], [O('A Odessa vem sempre aqui?', () => Nd('ce_odessa', BYE)), O('Até mais.', null)], () => { S.met.celeste = 1; friend('celeste', 1); addFood('pao', 2); save(); });
   if (has('peixe')) return Nd('ce_peixe', BYE, () => { take('peixe'); friend('celeste', 2); addFood('pao', 1); });
-  if (S.flags.desmaio === 1) return Nd('ce_desmaio', BYE);
+  if (S.flags.desmaio === 1 && !said('ce_desm')) return Nd('ce_desmaio', BYE, markSaid('ce_desm'));
   if (S.sailed && !S.flags.ceBarco) return Nd('ce_barco', BYE, () => { S.flags.ceBarco = 1; friend('celeste', 1); });
   const r = firstReaction([['ce_pedra', lumesN() >= 1, 'ce_pedra']]); if (r) return r;
   const lia = liaTalk('celeste', 2, 'ce_lia1', [['Sabe… mais ou menos.', 'li_ce1', 'ce_lia2']]); if (lia) return lia;
@@ -1097,6 +1107,11 @@ function director(dt) {
   if (S.flags.escada && !seen('escada') && isNight()) { const g = stairsSpot(); moveNPC(odessa, g.x, g.z, g.yaw); }
   else if (seen('escada') && S.flags.jardim && !S.final && hour > 13.5 && hour < 18.5) { const g = gardenSpot(); moveNPC(odessa, g.x, g.z, g.yaw); }
   else moveNPC(odessa, ...odessa.home0);
+  // cansaço: horas acordada desde a última vez que dormiu. A Lia não para sozinha: avisa, insiste e, se passar do limite, desmaia
+  if (S.flags.chegou && (state === 'play' || state === 'dialog')) { const now = S.day * 24 + hour; if (S.wake == null) S.wake = now; const dh = Math.max(0, now - (director.last ?? now)); director.last = now; if (player.sit) S.wake += dh * 0.7; /* sentada, descansa um pouco */ const aw = now - S.wake;
+    if (aw > 18 && !S.flags.avisouSono) { S.flags.avisouSono = 1; if (state === 'play') think('li_cansada'); }
+    if (aw > 22 && !S.flags.avisouSono2) { S.flags.avisouSono2 = 1; if (state === 'play') think('li_noite1'); }
+    if (aw > 26 && state === 'play' && !player.sit) faint(); }
   // fome
   if (S.flags.chegou && state === 'play') { const h = hunger(); if (h > 0.62 && !S.flags.avisouFome && !player.sit) { S.flags.avisouFome = 1; think('li_fome'); } if (h > 0.85 && !S.flags.avisouFome2 && !player.sit) { S.flags.avisouFome2 = 1; think('li_fome2'); } }
   // frutas no alto: a Lia comenta (uma vez) quando passa embaixo, sem arco
@@ -1113,7 +1128,7 @@ function arriveAtInn() {
   travel('O Joca atravessa o lago com a Lia', () => {
     const s = storySpots.inn; player.x = s.x + Math.sin(s.yaw) * 1.2; player.z = s.z + Math.cos(s.yaw) * 1.2; player.y = probe(player.x, player.z, groundH(player.x, player.z) + 0.5).h; player.h = s.yaw + Math.PI; cam.yaw = player.h + Math.PI; cam.cur.set(player.x - Math.sin(player.h) * 3.4, player.y + 1.8, player.z - Math.cos(player.h) * 3.4);
     teleportNPC(joca, s.x + Math.cos(s.yaw) * 1.6, s.z - Math.sin(s.yaw) * 1.6); joca.yaw = s.yaw - Math.PI / 2;
-    S.flags.chegou = 1; save(); refreshQuest();
+    S.flags.chegou = 1; if (S.fed == null) S.fed = S.day * 24 + hour - 4; save(); refreshQuest();
     setTimeout(() => { joca.onceNode = Nd('jo_cheg4', BYE); openDialog(joca); }, 1400);
   });
 }
@@ -1154,7 +1169,7 @@ function updateLens(dt) {
 const BAG_MAX = 6;
 const bagCount = () => Object.values(S.bag || {}).reduce((a, b) => a + b, 0);
 // fome: 0 (acabou de comer) a 1, em ~16 horas do vale
-function hunger() { const t = (S.day * 24 + hour) - (S.fed ?? (S.day * 24 + hour)); return clamp(t / 16, 0, 1); }
+function hunger() { if (S.fed == null) return 0; const t = (S.day * 24 + hour) - S.fed; return clamp(t / 16, 0, 1); }
 function fed() { S.fed = S.day * 24 + hour; S.flags.avisouFome = 0; S.flags.avisouFome2 = 0; renderBag(); save(); }
 function addFood(kind, n = 1) { S.bag = S.bag || {}; let added = 0; for (let i = 0; i < n; i++) { if (bagCount() >= BAG_MAX) break; S.bag[kind] = (S.bag[kind] || 0) + 1; added++; } if (added) toast('Na bolsa', `${FOOD[kind].icon} ${FOOD[kind].name}${added > 1 ? ' ×' + added : ''}`); else think('li_bolsa_cheia'); renderBag(); save(); return added; }
 // o gosto muda com a história: no começo não tem gosto; depois azeda; no fim, doce
