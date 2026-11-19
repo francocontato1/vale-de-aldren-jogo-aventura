@@ -506,7 +506,7 @@ function buildNPCs() {
   { const s2 = storySpots.tiao; tiao = addNPC({ id: 'tiao', key: 'tiao', day: [s2.x, s2.z, storySpots.tiaoYaw], talk: talkTiao, idle: 'idle', home: houseOf('tiao'), daySeat: harbor.tiaoSeat }); }
   { const [a, b] = [fromUV(HARBOR.u + 34, HARBOR.v - 8), fromUV(HARBOR.u + 40, HARBOR.v + 18)], c = fromUV(HARBOR.u + 30, HARBOR.v + 30), d2 = fromUV(HARBOR.u + 12, HARBOR.v + 6);
     nina = addNPC({ id: 'nina', key: 'nina', day: [d2[0], d2[1], SEA_ROT], talk: talkNina, idle: 'idle', wander: [d2, a, b, c], home: houseOf('tiao') }); }
-  if (storySpots.davi) { const s2 = storySpots.davi; davi = addNPC({ id: 'davi', key: 'davi', day: [s2.x, s2.z, storySpots.daviYaw], talk: talkDavi, idle: 'fold', always: true, nightIdle: 'lantern', lookSky: true, slow: true }); }
+  if (storySpots.davi) { const s2 = storySpots.davi; davi = addNPC({ id: 'davi', key: 'davi', day: [s2.x, s2.z, storySpots.daviYaw], talk: talkDavi, idle: 'idle', always: true, nightIdle: 'lantern', lookSky: true, slow: true }); }
   // cavalete de pintura da Irene
   { const ia = lookAtTree; const ex = ix + Math.sin(ia) * 1.1 + Math.cos(ia) * 0.6, ez = iz + Math.cos(ia) * 1.1 - Math.sin(ia) * 0.6, ey = groundH(ex, ez); const g = new THREE.Group(); for (const a of [-1, 1]) { const l = new THREE.Mesh(new THREE.BoxGeometry(0.05, 1.6, 0.05), M.oldWood); l.position.set(a * 0.35, 0.8, 0); l.rotation.set(0.12, 0, a * -0.08); g.add(l); } const cv = new THREE.Mesh(new THREE.PlaneGeometry(0.8, 0.6), paintingMat()); cv.position.set(0, 1.15, 0.08); cv.rotation.x = 0.12; g.add(cv); g.position.set(ex, ey, ez); g.rotation.y = ia + Math.PI; scene.add(g); addCirc(ex, ez, 0.4); }
 }
@@ -811,6 +811,10 @@ function startLume(place) {
   let at = null; const md = storySpots.miraDial;
   if (place.id === 'relogios' && md) { const toSp = Math.atan2(sp.x - md.x, sp.z - md.z); const P = (a, r, yaw) => ({ x: md.x + Math.sin(toSp + a) * r, z: md.z + Math.cos(toSp + a) * r, yaw });
     at = { mira: P(0.9, 1.5, toSp + 0.9 + Math.PI / 2), auren: P(1.5, 2.1, toSp + 1.5 + Math.PI), teo: P(-0.4, 0.95, toSp - 0.4 + Math.PI), ilsa: P(0.35, 2.6, toSp + 0.35 + Math.PI), dede: P(-1.2, 1.9, toSp - 1.2 + Math.PI) }; c.x = md.x; c.z = md.z; }
+  // na árvore: a Ilsa e a Dédé embaixo do galho baixo, amarrando a fita; a Mira e o Teo do lado de cá, onde a câmera vê
+  const rt = storySpots.ribbonTree;
+  if (place.id === 'arvore' && rt) { const rs = rt.readSpot; const toP = Math.atan2(sp.x - rs.x, sp.z - rs.z); const P = (a, r, yaw) => ({ x: rs.x + Math.sin(toP + a) * r, z: rs.z + Math.cos(toP + a) * r, yaw });
+    at = { ilsa: P(Math.PI / 2, 0.5, toP - Math.PI / 2 + 0.6), dede: P(-Math.PI / 2, 0.5, toP + Math.PI / 2 - 0.6), mira: P(0.55, 1.9, toP + 0.55 + Math.PI), teo: P(1.0, 2.6, toP + 1.0 + Math.PI) }; c.x = rs.x; c.z = rs.z; }
   lume = new Lume(place, c, { at, blocked: blockedXZ, yaw: sp.yaw + Math.PI, top: sp.top, reflect: seenAny ? ri.line : place.reflect, onPeak: () => captureSketch(place.id) }, () => finishLume(place));
   Music.stop(4); setTimeout(() => Music.play('memory', { fade: 3, vol: 0.8 }), 600);
 }
