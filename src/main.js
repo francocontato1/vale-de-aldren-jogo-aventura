@@ -1035,7 +1035,7 @@ function startFinale() {
   player.x = c.x - rgt.x * 0.9 - fwd.x * 0.6; player.z = c.z - rgt.z * 0.9 - fwd.z * 0.6; player.h = Math.atan2(c.x - player.x, c.z - player.z); player.y = probe(player.x, player.z, groundH(player.x, player.z) + 0.5).h; player.speed = 0;
   if (bow) toggleAim(false);
   const lines = FINALE.slice(); let i = -1; let t = 0, waiting = false;
-  finale = { speaker: null, t: 0, rain: null, camera: (dt) => { finale.t += dt; if (finale.shot === 'lake' && lakeShot) { lakeShot.camera(dt); return; } const a = finale.t * 0.03; const center = V3(c.x, groundH(c.x, c.z), c.z); const up = finale.rain ? smooth(0, 14, finale.t - finale.rainT) : 0; const base = Math.atan2(-fwd.x, -fwd.z) + 0.7; const want = center.clone().add(V3(Math.sin(base + a) * lerp(5.5, 8.5, up), lerp(1.7, 1.3, up), Math.cos(base + a) * lerp(5.5, 8.5, up))); cam.cur.lerp(want, 1 - Math.exp(-dt * 1.2)); camera.position.copy(cam.cur); const look = center.clone().add(V3(0, lerp(0.9, 6.5, up), 0)); camera.lookAt(look); camera.fov = lerp(camera.fov, 50, dt); camera.updateProjectionMatrix(); },
+  finale = { speaker: null, t: 0, rain: null, camera: (dt) => { finale.t += dt; if (finale.shot === 'lake' && lakeShot) { lakeShot.camera(dt); return; } const a = finale.t * 0.03; const center = V3(c.x, groundH(c.x, c.z), c.z); const up = finale.rain ? smooth(0, 14, finale.t - finale.rainT) : 0; const base = Math.atan2(fwd.x, fwd.z) + 0.45; const want = center.clone().add(V3(Math.sin(base + a) * lerp(5.5, 8.5, up), lerp(1.7, 1.3, up), Math.cos(base + a) * lerp(5.5, 8.5, up))); cam.cur.lerp(want, 1 - Math.exp(-dt * 1.2)); camera.position.copy(cam.cur); const look = center.clone().add(V3(0, lerp(0.9, 6.5, up), 0)); camera.lookAt(look); camera.fov = lerp(camera.fov, 50, dt); camera.updateProjectionMatrix(); },
     update: (dt) => { t += dt; if (finale.rain) finale.rain.update(dt); if (lakeShot) lakeShot.update(dt); if (liaLume) liaLume.update(dt); pH.root.position.set(player.x, player.y, player.z); pH.root.rotation.y = player.h; pH.locomote(0); pH.lookAtPoint(finale.rain ? V3(player.x, player.y + 8, player.z) : odessa.h.headPos, 0.9); pH.update(dt);
       if (!waiting && t > 2.5) { i++; const id = lines[i]; if (!id) { finale.end(); return; } const [sp] = LINES[id]; finale.speaker = sp; showSub(id); waiting = true;
         if (id === 'fim2') odessa.finaleIdle = 'idle';
@@ -1097,7 +1097,7 @@ const gardenSpot = () => { const md = storySpots.miraDial, sp = SPOTS.garden; if
 const stairsSpot = () => { const sp = SPOTS.stairs; return { x: sp.x + Math.sin(sp.yaw + 1.4) * 2.2, z: sp.z + Math.cos(sp.yaw + 1.4) * 2.2, yaw: sp.yaw + Math.PI }; };
 const nearGarden = (n) => { const g = gardenSpot(); return Math.hypot(n.x - g.x, n.z - g.z) < 7; };
 const nearStairs = (n) => { const g = stairsSpot(); return Math.hypot(n.x - g.x, n.z - g.z) < 8; };
-function moveNPC(n, x, z, yaw) { if (!n) return; if (n.day[0] === x && n.day[1] === z) return; n.day = [x, z, yaw ?? n.day[2]]; n.planKey = null; n.route = null; if (Math.hypot(n.x - x, n.z - z) > 30 && !npcVisible(n)) teleportNPC(n, x, z); }
+function moveNPC(n, x, z, yaw) { if (!n) return; if (n.day[0] === x && n.day[1] === z) { if (Math.hypot(n.x - x, n.z - z) > 40 && !npcVisible(n)) teleportNPC(n, x, z); return; } n.day = [x, z, yaw ?? n.day[2]]; n.planKey = null; n.route = null; if (Math.hypot(n.x - x, n.z - z) > 30 && !npcVisible(n)) teleportNPC(n, x, z); }
 let directorT = 0;
 function director(dt) {
   directorT -= dt; if (directorT > 0) return; directorT = 0.8; renderBag();
