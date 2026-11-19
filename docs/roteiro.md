@@ -104,7 +104,15 @@ Algumas conversas e pistas só aparecem quando ela para: sentar no banco, aceita
 **A carta (voz da Odessa, sobre a Lia subindo a estrada da serra)**
 > "Lia, sou Odessa, do vale de Aldren. Seu pai e eu trocamos cartas por doze anos. Ele tinha aceitado refazer o mapa do vale para a Coroa. Sua mãe me escreveu dizendo que o contrato passou para a família, e que você é cartógrafa. O prazo é o último barco do outono. Se o mapa e o relatório não chegarem, fecham a estrada. Eu dou hospedagem e comida. Tenho também um pedido que era para ele. Explico quando você chegar."
 
-**Celeste, na entrada da vila (primeiro sinal do jeito da Lia)**
+**O Joca, no fim da estrada.** A estrada da serra termina na beira do lago, e a vila fica do outro lado. Quem atravessa os viajantes é o Joca, no barco dele.
+- **Joca:** "Opa. Cuidado com a serragem. Você é a cartógrafa? A Odessa pediu pra eu te buscar."
+- **Lia:** "Sou. Obrigada por esperar."
+- **Joca:** "Esperar é comigo mesmo. Faz um mês que não aparece ninguém. Sobe aí, que eu levo você e a mochila até a hospedaria."
+- Na travessia, o jogador vê pela primeira vez o gigante do lago, com a pedra na mão levantada.
+- **Joca:** "Aquele ali é o Teo. Pelo menos é o que a Odessa diz. Passo por ele todo dia e até hoje não me acostumei."
+- Ele deixa a Lia no cais e aponta a hospedaria: "Amanhã, se precisar de barco, é só chamar."
+
+**Celeste, no caminho do cais até a hospedaria (primeiro sinal do jeito da Lia)**
 - **Celeste:** "Olha só! Gente nova por aqui. Entra, que o pão acabou de sair! Você deve ser a moça que a Odessa falou. Ela encomendou pão pra você. Pode ficar à vontade!"
 - **Lia:** "Obrigada. É muita gentileza."
 - **Celeste:** "Prova enquanto está quente!"
@@ -114,7 +122,7 @@ Algumas conversas e pistas só aparecem quando ela para: sentar no banco, aceita
 **Hospedaria (Cosme)**
 - **Cosme:** "A moça do mapa! A Odessa já pagou o quarto. Pode ficar quanto quiser."
 - **Lia:** "Obrigada. Eu não vou dar trabalho."
-- **Cosme:** "Trabalho é hóspede nenhum. Faz tempo que ninguém de fora sobe essa serra. Lá embaixo acham que a gente dá azar."
+- **Cosme:** "Trabalho é hóspede nenhum. Faz tempo que ninguém de fora vem aqui. Lá embaixo acham que a gente dá azar."
 - **Lia:** "Por causa das pedras?"
 - **Cosme:** "Por causa das pedras. Mas aqui ninguém pega nada de ninguém. A Odessa explica melhor do que eu. Foi ela que me ensinou a ler, sabia?"
 
@@ -123,18 +131,18 @@ Algumas conversas e pistas só aparecem quando ela para: sentar no banco, aceita
 - **Lia:** "Foi ele que me ensinou."
 - **Odessa:** "Você deve ter reparado que eu nunca pego a xícara pela asa. Eu não sinto mais as mãos. Começou nos dedos, trinta anos atrás. Já passou do cotovelo. Quando chegar no peito, acabou pra mim."
 - **Lia:** "Entendo… Sinto muito."
-- **Odessa:** "O mapa é a parte fácil. A Coroa quer saber o que são as pedras. Se acharem que pega, fecham a estrada, e o vale morre devagar."
+- **Odessa:** "Sobre o porquê eu te chamei… Fazer o mapa daqui, na verdade, é a parte fácil pra você. A Coroa quer saber o que são as pedras. Se acharem que pega, fecham a estrada, e o vale morre devagar."
 - **Lia:** "E o que elas são?"
-- **Odessa:** "Eu passei seiscentos anos estudando isso. Ensinei o vale inteiro a ler, a contar, a construir… tentando descobrir. Eu sei como acontece. Não sei por quê."
-- **Odessa** (mostra a luneta): "Pedra guarda luz. Tudo o que aconteceu perto dos gigantes ficou guardado neles. Com essa luneta, dá pra ver. Mas a luz fica presa em pontos exatos: tem que medir ângulo, sombra, distância. É trabalho de cartógrafa. E as minhas mãos já não seguram nada."
+- **Odessa:** "Eu passei seiscentos anos estudando isso. Ensinei o vale inteiro a ler, a contar, a construir… tentando manter de pé esse povo que o mundo abandonou, e tentando descobrir o segredo das pedras. Eu sei como acontece. Consigo ver o que está na minha frente. Mas não sei a razão de acontecer."
+- **Odessa** (mostra a luneta): "Pedra guarda luz. Tudo o que aconteceu perto dos gigantes ficou guardado neles. Com essa luneta, dá pra ver. Mas a luz fica presa em pontos exatos: tem que medir ângulo, sombra, distância. É trabalho de cartógrafa. Eu até poderia estudar mais um pouco, mas as minhas mãos já não seguram nada."
 - **Lia:** "Por que ninguém daqui faz isso?"
 - **Odessa:** "Medo. Aqui dizem que quem olha demais pro passado endurece."
 - **Lia:** "E por que eu?"
-- **Odessa:** "Porque o contrato é seu. Porque você sabe medir. E porque seu pai escrevia que você não desiste de nada. Nem quando devia."
+- **Odessa:** "Porque o contrato é seu. Porque você sabe medir. Porque a Coroa vai acreditar em você. E porque seu pai escrevia que você não desiste de nada. Nem quando devia."
 - **Lia:** "Certo… Estou um pouco cansada da viagem, mas por onde eu começo?"
 - **Odessa:** "Por dormir. Amanhã o Joca te leva no lago."
 - **Lia:** "Eu posso começar hoje."
-- **Odessa:** "Eu sei que pode."
+- **Odessa:** "Eu sei que pode. Descanse, Lia."
 
 **Primeira noite (tutorial do cansaço).** O jogador pode medir a vila de noite. Se insistir, a visão embaça e a Lia diz: "Só mais um ponto e eu paro." Ao dormir: "Amanhã eu compenso."
 
@@ -144,9 +152,9 @@ Algumas conversas e pistas só aparecem quando ela para: sentar no banco, aceita
 - **Tomé:** "Você é a cartógrafa? Prova! É a melhor coisa do mundo!"
 - **Lia** (come): "É amora."
 - **Tomé:** "Só isso?"
-- **Lia:** "Desculpa. É amora."
+- **Lia:** "Desculpa. Não senti muito o gosto."
 - **Tomé:** "A Odessa diz que tem gente que esquece o gosto das coisas. Você esqueceu?"
-- **Lia:** "…Pode ser."
+- **Lia:** "É… Pode ser."
 
 **O arco (na hospedaria)**
 - **Lia:** "Seu Cosme, vi umas frutas no alto das árvores, perto da estrada. O senhor teria alguma coisa pra alcançar? Eu não consigo subir."
@@ -159,8 +167,8 @@ Algumas conversas e pistas só aparecem quando ela para: sentar no banco, aceita
 ## 4. Capítulo 1: Lago, "Os sete pulos"
 
 **Hoje.**
-- O Joca leva a Lia de barco até a ponta de pedra onde está o gigante do lago.
-- **Joca:** "Opa. Cuidado com a serragem. Esse barco aqui eu fiz com o que a Odessa me ensinou de conta. Barco é conta e paciência."
+- A Lia procura o Joca no estaleiro, como ele disse no dia anterior, e ele a leva de barco até a ponta de pedra onde está o gigante do lago.
+- **Joca:** "Bom dia, cartógrafa! Esse barco aqui eu fiz com o que a Odessa me ensinou de conta. Barco é conta e paciência."
 - O Tião pesca na margem: "Olá. Fala baixinho, por favor, os peixes vão acabar te escutando. Brincadeira, peixe não escuta nada. Mas eu gosto bastante de silêncio."
 
 **Sequência ativa.** Travessia com vento forte. O jogador equilibra o barco e desvia das pedras.
@@ -185,6 +193,8 @@ O Teo ensina a Mira a quicar pedras. A Dédé está junto. A Ilsa estende roupa 
 **Caderno:** "Teo, Ilsa e a filha deles, Mira. E a Dédé, que não era filha, mas estava sempre junto. O gigante do lago é o Teo. Ele ainda está com uma pedra na mão."
 
 **Minijogo.** Quicar pedras com timing. O máximo possível agora é 5 pulos. Os 7 ficam para o final.
+- Depois de algumas tentativas, a Lia avisa o jogador para não insistir à toa: "Cinco. Acho que sete eu não consigo agora. Quem sabe um dia."
+- Se o jogador continuar tentando: "Hoje não vai. Tudo bem."
 
 **Depois (observatório)**
 - **Lia:** "Tinha uma menina chamada Dédé."
@@ -199,7 +209,7 @@ A pedra da Odessa sobe um pouco no braço.
 **Hoje (a Irene pinta a árvore)**
 - **Irene:** "De que cor você diria que está a luz agora?"
 - **Lia:** "Amarela… acho."
-- **Irene:** "Quem olha de verdade pra essa árvore nunca diz só amarela."
+- **Irene:** "Você fala pouco, né? Quem olha de verdade pra essa árvore nunca diz só amarela."
 
 No alto da árvore, presa num galho, há uma fita azul desbotada.
 
@@ -213,7 +223,7 @@ No alto da árvore, presa num galho, há uma fita azul desbotada.
 Cada família amarra fitas com pedidos para o ano. A Dédé, órfã, olha de longe: nunca amarrou nenhuma. A Ilsa chama a Dédé e entrega uma fita azul.
 - **Ilsa:** "Vem cá, Dédé. Qual é o seu pedido?"
 - **Dédé:** "Não sei. Eu nunca amarrei."
-- **Ilsa:** "Então eu peço por você: que você fique com a gente. Pra sempre."
+- **Ilsa:** "Então eu peço por você: quero que você fique com a gente pra sempre."
 
 As duas amarram a fita juntas, em primeiro plano. Depois:
 - **Mira:** "Eu pedi pra fazer sete pulos!"
@@ -271,7 +281,7 @@ A Mira está deitada numa esteira à sombra, ao lado do relógio que o Teo fez p
 
 **Hoje.** A ponte até o Círculo está partida. O Bastião está terminando.
 - **Bastião:** "Hum. Visita. Se veio pedir conserto, entra na fila. A fila é o vale inteiro."
-- (depois) "A Odessa me ensinou conta quando eu tinha a idade do Tomé. Ponte é conta."
+- (depois) "A Odessa me ensinou conta quando eu tinha a idade do Tomé. Ponte são muitas contas."
 
 **Sequência ativa.** Ajudar a fechar a ponte: lançar uma corda com flecha até o outro lado e depois atravessar pela viga, com equilíbrio.
 
@@ -301,7 +311,7 @@ A Mira está deitada numa esteira à sombra, ao lado do relógio que o Teo fez p
 **Hoje.** No caminho, o farol do Davi.
 - **Davi:** "Quarenta e dois anos. Nunca vi um navio passar. Mas acendo toda noite. Vai que um dia alguém se perde."
 - A Lia vê as pontas dos dedos dele cinzentas.
-- **Davi:** "Começou faz uns anos. Não dói. Meu filho saiu pra pescar e não voltou. Eu acendo pra ele."
+- **Davi:** "Começou faz uns anos. Não dói, pelo menos não muito. Meu filho saiu pra pescar e não voltou. Eu acendo pra ele."
 
 **Sequência ativa.** Descer o paredão até o rosto esculpido na pedra, com vento e pedras soltas.
 
@@ -321,7 +331,7 @@ A Mira está deitada numa esteira à sombra, ao lado do relógio que o Teo fez p
 **Caderno:** "No enterro, cada um foi pra um lado. A Ilsa culpou a Dédé. As mãos da Dédé estavam enfaixadas. Por quê?"
 
 **Depois: a versão da Odessa (falsa, mas ela acredita)**
-- **Odessa:** "Eu dormi. Ela estava ardendo em febre e eu dormi do lado dela. Quando acordei, era tarde. A Ilsa tinha razão."
+- **Odessa:** "Eu dormi. Ela estava ardendo em febre e eu dormi do lado dela. Sonhei a noite inteira que corria na chuva, chamando o Auren. Quando acordei, já era de manhã. E ela tinha ido. Enquanto ela precisava de mim, eu estava sonhando. A Ilsa tinha razão."
 - **Lia:** "E as suas mãos? Na lembrança estavam enfaixadas."
 - **Odessa:** "…Não lembro disso."
 
@@ -401,14 +411,16 @@ A Lia, de noite, no banco (só acontece se ela sentar):
 4. O jogador corre com a Dédé pela vila na chuva, com raios e lama. Na escada, ela escorrega e cai, ralando as mãos na pedra. Ela se levanta e continua.
 5. Na porta da torre: "Auren! Auren! É a Mira!"
 6. **Auren:** "Vamos."
-7. A tela escurece devagar. Ao amanhecer, a Dédé está segurando a mão da Mira. O Auren abaixa a cabeça. Ninguém fala.
+7. Os dois correm de volta. A Dédé chega encharcada, com as mãos sangrando, e cai desmaiada na porta de casa, de cansaço e de frio. O Auren a carrega para dentro, deita a Dédé ao lado da cama da Mira e vai cuidar da menina.
+8. A tela escurece devagar. Ao amanhecer, a Dédé acorda ao lado da cama. O Auren está de cabeça baixa. A Mira tinha ido durante a noite.
+9. Para quem acordou ali, parecia que tinha só dormido a noite toda. A corrida ficou na memória como um sonho.
 
 **De volta ao presente**
-- **Odessa:** "Eu corri."
-- **Lia:** "Correu. Com dez anos, de noite, na chuva. Caiu e levantou."
-- **Odessa:** "Seiscentos anos achando que eu tinha dormido."
-- **Lia:** "Você cochilou cinco minutos. E correu o resto da noite."
-- **Odessa** (olhando as mãos): "Por isso as mãos…"
+- **Odessa:** "Eu corri. Aquilo não era sonho."
+- **Lia:** "Não era. Você correu na chuva, com dez anos, caiu na escada e levantou. Trouxe o Auren e só caiu quando chegou em casa."
+- **Odessa:** "Eu acordei do lado dela e achei que tinha dormido a noite inteira. Seiscentos anos achando que eu tinha dormido enquanto ela morria."
+- **Lia:** "Você não dormiu. Você desmaiou depois de fazer tudo o que dava pra fazer."
+- **Odessa** (olhando as mãos): "Por isso as mãos estavam enfaixadas…"
 
 ---
 
