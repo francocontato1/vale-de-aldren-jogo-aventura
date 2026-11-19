@@ -176,15 +176,11 @@ export async function buildTerrain(scene, rockMaps) {
   ]);
   const pos = new Float32Array(NV * NV * 3);
   for (let j = 0; j < NV; j++) for (let i = 0; i < NV; i++) { const k = j * NV + i; pos[k * 3] = i * CELL - HALF; pos[k * 3 + 1] = HGT[k]; pos[k * 3 + 2] = j * CELL - HALF; }
-  const idx = new Uint32Array(N * N * 6); let o = 0;
-  for (let j = 0; j < N; j++) for (let i = 0; i < N; i++) { const a = j * NV + i, b = (j + 1) * NV + i, c = (j + 1) * NV + i + 1, d = j * NV + i + 1; idx[o++] = a; idx[o++] = b; idx[o++] = d; idx[o++] = b; idx[o++] = c; idx[o++] = d; }
   const g = new THREE.BufferGeometry();
   g.setAttribute('position', new THREE.BufferAttribute(pos, 3));
   g.setAttribute('normal', new THREE.BufferAttribute(NRM, 3));
   g.setAttribute('splat', new THREE.BufferAttribute(SPLAT, 4));
   g.setAttribute('sandw', new THREE.BufferAttribute(SAND, 1));
-  g.setIndex(new THREE.BufferAttribute(idx, 1));
-  g.computeBoundingSphere();
   const mat = new THREE.MeshStandardMaterial({ roughness: 1, metalness: 0 });
   mat.onBeforeCompile = (s) => {
     Object.assign(s.uniforms, { tGrass: { value: grassC }, tGrassN: { value: grassN }, tDirt: { value: dirtC }, tGravel: { value: gravelC }, tGravelN: { value: gravelN }, tRock: { value: rockMaps.map }, tRockN: { value: rockMaps.normalMap }, tMacro: U.macro, tSand: { value: sandC }, tSandN: { value: sandN } });
@@ -236,7 +232,19 @@ vec4 tri(sampler2D t, vec3 p, vec3 w, float s){ return texture2D(t,p.zy*s)*w.x +
       .replace('#include <roughnessmap_fragment>', 'float roughnessFactor = terrRough;')
       .replace('#include <normal_fragment_maps>', 'normal = normalize((viewMatrix*vec4(terrNW,0.)).xyz);');
   };
-  const mesh = new THREE.Mesh(g, mat); mesh.receiveShadow = true; mesh.name = 'terrain';
+  // O relevo é desenhado em 5x5 pedaços que compartilham os mesmos vértices (só os índices são separados):
+  // os pedaços fora do campo de visão (atrás da câmera, fora do reflexo do lago) deixam de ser desenhados.
+  const mesh = new THREE.Group(); mesh.name = 'terrain';
+  const CH = 80, attrs = g.attributes;
+  for (let cj = 0; cj < N; cj += CH) for (let ci = 0; ci < N; ci += CH) {
+    const ci1 = Math.min(N, ci + CH), cj1 = Math.min(N, cj + CH); const cidx = new Uint32Array((ci1 - ci) * (cj1 - cj) * 6); let q = 0;
+    const box = new THREE.Box3(); const v = new THREE.Vector3();
+    for (let j = cj; j < cj1; j++) for (let i = ci; i < ci1; i++) { const a = j * NV + i, b = (j + 1) * NV + i, c = (j + 1) * NV + i + 1, d = j * NV + i + 1; cidx[q++] = a; cidx[q++] = b; cidx[q++] = d; cidx[q++] = b; cidx[q++] = c; cidx[q++] = d; }
+    for (let j = cj; j <= cj1; j++) for (let i = ci; i <= ci1; i++) { const k = j * NV + i; box.expandByPoint(v.set(pos[k * 3], pos[k * 3 + 1], pos[k * 3 + 2])); }
+    const cg = new THREE.BufferGeometry(); for (const k in attrs) cg.setAttribute(k, attrs[k]); cg.setIndex(new THREE.BufferAttribute(cidx, 1));
+    cg.boundingBox = box; cg.boundingSphere = box.getBoundingSphere(new THREE.Sphere());
+    const cm = new THREE.Mesh(cg, mat); cm.receiveShadow = true; cm.name = 'terrain'; mesh.add(cm);
+  }
   scene.add(mesh);
   // paredão na borda do mapa: o terreno não termina mais 'no ar' visto do mar
   { const sp = [], si = []; const edge = (k) => { const out = []; for (let t = 0; t <= N; t++) { const [i, j] = k === 0 ? [t, 0] : k === 1 ? [N, t] : k === 2 ? [N - t, N] : [0, N - t]; out.push([i * CELL - HALF, HGT[j * NV + i], j * CELL - HALF]); } return out; };
