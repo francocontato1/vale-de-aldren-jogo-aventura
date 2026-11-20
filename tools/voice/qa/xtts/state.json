@@ -1524,10 +1524,10 @@
   "cer": 0.024
  },
  "od_r_relogios": {
-  "attempts": 1,
+  "attempts": 2,
   "best": 9,
   "done": true,
-  "cer": 0.016
+  "cer": 0.014
  },
  "od_r_rosto2": {
   "attempts": 1,
@@ -1858,5 +1858,341 @@
   "best": 9,
   "done": true,
   "cer": 0.0
+ },
+ "an_lia1": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "ba_c1": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "ba_first": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "ba_lia2": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "ba_quase": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "ce_c4": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.017
+ },
+ "ce_cesta": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "ce_noite": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "da_c3": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "da_lia1": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "da_tempo": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "ir_c2": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "ir_c3": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.051
+ },
+ "jo_c3": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.047
+ },
+ "jo_depois": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.039
+ },
+ "li_alva1": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "li_alva2": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "li_alva_corre": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "li_barco0": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "li_cabana": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "li_da1": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "li_dormindo": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "li_ma1": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "li_mar": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "li_noite": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "li_pedra_achar": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.017
+ },
+ "li_ponte2": {
+  "attempts": 2,
+  "best": 0.10377358490566038,
+  "done": true,
+  "cer": 0.066
+ },
+ "li_sentar3": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "li_voo": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "ma_noite": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "ni_c2": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.011
+ },
+ "ni_desenho": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.053
+ },
+ "ni_first": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "ni_lia2": {
+  "attempts": 3,
+  "best": 0.15730337078651685,
+  "done": true,
+  "cer": 0.022
+ },
+ "ti_c1": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.02
+ },
+ "ti_c2": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "ti_c3": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.057
+ },
+ "to_concha": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "to_nina": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.018
+ },
+ "an_pos": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "ba_pos": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "ce_pos": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "da_pos": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.048
+ },
+ "ir_pos": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "jo_pos": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.012
+ },
+ "li_sentar5": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.043
+ },
+ "li_sentar6": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "li_sentar7": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "li_sentar8": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "ma_pos": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.009
+ },
+ "ni_pos": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "od_aqui": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "od_frente": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "od_junto": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.0
+ },
+ "od_vesper": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.01
+ },
+ "ti_pos": {
+  "attempts": 1,
+  "best": 9,
+  "done": true,
+  "cer": 0.011
  }
 }

@@ -480,6 +480,24 @@
   "emotion": "sad"
  },
  {
+  "id": "od_junto",
+  "speaker": "odessa",
+  "text": "E daqui em diante eu vou junto. Uma velha com as mãos de pedra ainda anda. Te espero lá.",
+  "emotion": "tender"
+ },
+ {
+  "id": "od_frente",
+  "speaker": "odessa",
+  "text": "Eu vou na frente. Te espero lá.",
+  "emotion": "tender"
+ },
+ {
+  "id": "od_aqui",
+  "speaker": "odessa",
+  "text": "Estou aqui. Vai, eu não saio daqui.",
+  "emotion": "tender"
+ },
+ {
   "id": "od_r_arvore",
   "speaker": "odessa",
   "text": "A fita azul. Ainda está lá em cima? Eu nunca tive coragem de subir pra ver. Eu sei que ela está lá. E não sinto.",
@@ -494,8 +512,8 @@
  {
   "id": "od_r_relogios",
   "speaker": "odessa",
-  "text": "Ele voltou, sabe. No dia seguinte. E não veio jantar. Eu continuei limpando. Seiscentos anos. Promessa a gente não larga no meio.",
-  "emotion": "tender"
+  "text": "O Teo voltou da costa no dia seguinte, com o remédio. Tarde demais. Depois disso, nunca mais sentou com a gente pra jantar. E eu continuei limpando o relógio da Mira, todo dia, até hoje. Foi a última coisa que ele me pediu.",
+  "emotion": "sad"
  },
  {
   "id": "li_od_r_relogios",
@@ -615,6 +633,12 @@
   "id": "od_jardim",
   "speaker": "odessa",
   "text": "Quatro e meia. No relógio da Mira. Eu espero você lá.",
+  "emotion": "tender"
+ },
+ {
+  "id": "od_vesper",
+  "speaker": "odessa",
+  "text": "A criatura que voa sobre o vale? A Mira chamava ela de Vésper, a estrela da tarde, porque só aparecia no fim do dia. O nome ficou. Ela vive mais do que eu, e é mais teimosa. Se você chegar devagar, ela deixa.",
   "emotion": "tender"
  },
  {
@@ -982,6 +1006,60 @@
   "speaker": "bastiao",
   "text": "Hum. Então ele ia gostar da minha.",
   "emotion": "tender"
+ },
+ {
+  "id": "an_pos",
+  "speaker": "anselmo",
+  "text": "Vi a Moça do monte virada pra vila, hoje cedo. Tirei o chapéu. Bobagem de velho.",
+  "emotion": "tender"
+ },
+ {
+  "id": "ce_pos",
+  "speaker": "celeste",
+  "text": "A Odessa pegou o pão com a mão, sabia? Quente. Eu quase chorei em cima da massa.",
+  "emotion": "happy"
+ },
+ {
+  "id": "ir_pos",
+  "speaker": "irene",
+  "text": "Hoje a luz da árvore está diferente. Ou sou eu que estou. Vou pintar mesmo assim.",
+  "emotion": "tender"
+ },
+ {
+  "id": "ma_pos",
+  "speaker": "marta",
+  "text": "Dizem que as pedras viraram flor! O Tião jura que o gigante do lago acenou pra ele. Ninguém acredita, mas eu finjo.",
+  "emotion": "happy"
+ },
+ {
+  "id": "ti_pos",
+  "speaker": "tiao",
+  "text": "Hoje o lago ficou tão quieto que dava pra ouvir a pedra afundando lá no fundo. Eu gostei.",
+  "emotion": "tender"
+ },
+ {
+  "id": "ni_pos",
+  "speaker": "nina",
+  "text": "É verdade que o gigante jogou a pedra? Quantos pulos? Sete? Por que logo sete?",
+  "emotion": "excited"
+ },
+ {
+  "id": "da_pos",
+  "speaker": "davi",
+  "text": "Meus dedos voltaram. Hoje eu acendo o farol pra mim também. Pode?",
+  "emotion": "tender"
+ },
+ {
+  "id": "jo_pos",
+  "speaker": "joca",
+  "text": "A Odessa desceu até o cais hoje. Andou de barco comigo. Disse que fazia seiscentos anos.",
+  "emotion": "happy"
+ },
+ {
+  "id": "ba_pos",
+  "speaker": "bastiao",
+  "text": "A ponte ficou pronta. E a cartógrafa ainda está aqui. Duas coisas que eu não esperava.",
+  "emotion": "happy"
  },
  {
   "id": "ma_first",
@@ -1852,6 +1930,30 @@
   "speaker": "lia",
   "text": "O sol esquenta a pedra. Dá pra sentir na mão.",
   "emotion": "tender"
+ },
+ {
+  "id": "li_sentar5",
+  "speaker": "lia",
+  "text": "Daqui dá pra ver o vale inteiro. Depois eu meço.",
+  "emotion": "neutral"
+ },
+ {
+  "id": "li_sentar6",
+  "speaker": "lia",
+  "text": "O vento vem do lago. Tem cheiro de água.",
+  "emotion": "tender"
+ },
+ {
+  "id": "li_sentar7",
+  "speaker": "lia",
+  "text": "Ficar parada não é perder tempo. Eu acho.",
+  "emotion": "tender"
+ },
+ {
+  "id": "li_sentar8",
+  "speaker": "lia",
+  "text": "Tem um passarinho cantando a mesma coisa faz um tempão. Ele não cansa.",
+  "emotion": "neutral"
  },
  {
   "id": "li_mapa_cheio",

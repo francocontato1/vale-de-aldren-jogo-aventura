@@ -93,7 +93,7 @@ export class SkySystem {
     this.clouds.renderOrder = 0; scene.add(this.clouds);
     // luzes
     this.sun = new THREE.DirectionalLight(0xffffff, 3); this.sun.castShadow = true;
-    this.sun.shadow.bias = -0.0002; this.sun.shadow.normalBias = 0.03;
+    this.sun.shadow.bias = -0.0002; this.sun.shadow.normalBias = 0.045;
     scene.add(this.sun, this.sun.target);
     this.hemi = new THREE.HemisphereLight(0xbcd4ff, 0x4a4030, 0.0); scene.add(this.hemi);
     // luz ambiente (IBL) gerada de uma cena só com o céu
@@ -162,8 +162,13 @@ export class SkySystem {
     else { this.sun.color.copy(moon); this.sun.intensity = 0.42 * smooth(-0.05, -0.25, sy) + 0.15; ld = md; }
     this.lightDir = ld;
     const q = Q(); const tex = (q.shadowR * 2) / q.shadow;
-    const fx = Math.round(focus.x / tex) * tex, fz = Math.round(focus.z / tex) * tex;
-    this.sun.target.position.set(fx, focus.y, fz); this.sun.position.copy(this.sun.target.position).addScaledVector(ld, 300);
+    // encaixa o centro da sombra na grade de texels NO ESPAÇO DA LUZ (antes era nos eixos do mundo, e as bordas
+    // das sombras tremiam nos telhados quando a Lia andava)
+    const _r = this._sr || (this._sr = new THREE.Vector3()), _u = this._su || (this._su = new THREE.Vector3()), _f = this._sf || (this._sf = new THREE.Vector3());
+    _r.set(0, 1, 0).cross(ld); if (_r.lengthSq() < 1e-6) _r.set(1, 0, 0); _r.normalize(); _u.copy(ld).cross(_r).normalize();
+    const sa = Math.round(_r.dot(focus) / tex) * tex, sb = Math.round(_u.dot(focus) / tex) * tex, sc0 = ld.dot(focus);
+    _f.copy(_r).multiplyScalar(sa).addScaledVector(_u, sb).addScaledVector(ld, sc0);
+    this.sun.target.position.copy(_f); this.sun.position.copy(_f).addScaledVector(ld, 300);
     this.sun.target.updateMatrixWorld();
     // tons do céu para nuvens, névoa e água
     const skyTint = new THREE.Color(0.4, 0.56, 0.78).multiplyScalar(0.25 + 0.75 * this.dayF).lerp(new THREE.Color(0.95, 0.56, 0.38), dusk * 0.55);

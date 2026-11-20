@@ -1,5 +1,5 @@
 import { THREE, loadTex, rand, rr, clamp, U } from '../core.js';
-import { groundH, POI, fromUV, HARBOR, SEA_ROT } from './terrain.js';
+import { groundH, POI, fromUV, HARBOR, SEA_ROT, pathDist } from './terrain.js';
 import { buildLandmarks } from './landmarks.js';
 import { buildHarbor } from './harbor.js';
 import { buildCuriosities, buildForestFloor } from './curiosities.js';
@@ -280,7 +280,7 @@ export function house(x, z, rot, o) {
     if (items) { cyl(0.03, 0.035, 0.12, 8, M.candle, 1, mtx(0.2, 0.86, 0.05, 0, 0, 0, T2), false); cyl(0.11, 0.09, 0.04, 12, M.iron, 1, mtx(-0.3, 0.81, -0.1, 0, 0, 0, T2)); cyl(0.05, 0.04, 0.13, 10, M.clay, 1, mtx(-0.05, 0.86, -0.15, 0, 0, 0, T2)); tableware(T2); }
     for (const b of [-1, 1]) for (const a of [-0.36, 0.36]) seatAt(T2, a, 0.48, b * 0.7, b > 0 ? Math.PI : 0, 'bench');
     col(tx, tz, 0.8, 0.85, tr, fy); return L(tx + 0.2, fy + 0.95, tz + 0.05); };
-  const bed = (bx, bz, br, fy, blanket = M.canvasRed) => { const Bd = mtx(bx, fy, bz, 0, br, 0, B); { const p = new THREE.Vector3(0, 0.52, 0.05).applyMatrix4(Bd); const side = new THREE.Vector3(0.95, 0, 0.1).applyMatrix4(Bd); const bd = { x: p.x, y: p.y, z: p.z, yaw: rot + br, side: { x: side.x, y: side.y, z: side.z }, kind: 'bed' }; hBeds.push(bd); beds.push(bd); } box(1.0, 0.35, 2.0, M.oldWood, 1, mtx(0, 0.2, 0, 0, 0, 0, Bd)); box(0.92, 0.16, 1.9, M.canvas, 1, mtx(0, 0.44, 0, 0, 0, 0, Bd)); box(0.96, 0.08, 1.2, blanket, 1, mtx(0, 0.54, 0.3, 0, 0, 0, Bd)); box(0.6, 0.12, 0.35, M.cloth.white, 1, mtx(0, 0.58, -0.72, 0, 0, 0, Bd)); box(1.05, 0.9, 0.08, M.oldWood, 1, mtx(0, 0.45, -1.02, 0, 0, 0, Bd)); col(bx, bz, 0.55, 1.05, br, fy); };
+  const bed = (bx, bz, br, fy, blanket = M.canvasRed) => { const Bd = mtx(bx, fy, bz, 0, br, 0, B); { const p = new THREE.Vector3(0, 0.52, 0.05).applyMatrix4(Bd); const cen = new THREE.Vector3(0, fy, 0).applyMatrix4(B), sA = new THREE.Vector3(0.95, 0, 0.1).applyMatrix4(Bd), sB = new THREE.Vector3(-0.95, 0, 0.1).applyMatrix4(Bd); const side = sA.distanceToSquared(cen) <= sB.distanceToSquared(cen) ? sA : sB; /* o lado de dentro do quarto (antes podia cair do lado da parede, fora da casa) */ const bd = { x: p.x, y: p.y, z: p.z, yaw: rot + br, side: { x: side.x, y: side.y, z: side.z }, kind: 'bed' }; hBeds.push(bd); beds.push(bd); } box(1.0, 0.35, 2.0, M.oldWood, 1, mtx(0, 0.2, 0, 0, 0, 0, Bd)); box(0.92, 0.16, 1.9, M.canvas, 1, mtx(0, 0.44, 0, 0, 0, 0, Bd)); box(0.96, 0.08, 1.2, blanket, 1, mtx(0, 0.54, 0.3, 0, 0, 0, Bd)); box(0.6, 0.12, 0.35, M.cloth.white, 1, mtx(0, 0.58, -0.72, 0, 0, 0, Bd)); box(1.05, 0.9, 0.08, M.oldWood, 1, mtx(0, 0.45, -1.02, 0, 0, 0, Bd)); col(bx, bz, 0.55, 1.05, br, fy); };
   const shelf = (sx, sz, sr, fy, kind = 'pots') => { const S2 = mtx(sx, fy, sz, 0, sr, 0, B); for (const hy of [0.5, 1.0, 1.5]) box(1.2, 0.04, 0.3, M.oldWood, 1, mtx(0, hy, 0, 0, 0, 0, S2)); for (const a of [-1, 1]) box(0.05, 1.7, 0.3, M.oldWood, 1, mtx(a * 0.6, 0.85, 0, 0, 0, 0, S2));
     for (let r = 0; r < 3; r++) for (let i = 0; i < 4; i++) { if (kind === 'books') { const bw2 = rr(0.05, 0.09), bh = rr(0.2, 0.3); box(bw2, bh, 0.2, M.book[(r * 4 + i) % 5], 1, mtx(-0.45 + i * 0.28 + rr(-0.03, 0.03), 0.52 + r * 0.5 + bh / 2, 0, 0, 0, rr(-0.1, 0.1), S2), false); box(bw2, bh * 0.9, 0.2, M.book[(r * 4 + i + 2) % 5], 1, mtx(-0.38 + i * 0.28, 0.52 + r * 0.5 + bh * 0.45, 0, 0, 0, 0, S2), false); }
       else if (kind === 'bread') { const sp = new THREE.SphereGeometry(0.11, 10, 6); sp.scale(1.4, 0.6, 1); put(boxUV(sp, 0.4), M.bread, mtx(-0.42 + i * 0.28, 0.56 + r * 0.5, 0, 0, rr(0, 3), 0, S2), false); }
@@ -306,12 +306,12 @@ export function house(x, z, rot, o) {
     candle = L(-w * 0.12 + 0.2, fl0 + 0.95, d * 0.08);
   } else if (o.role === 'hospedaria') {
     // salão com balcão e mesas; à direita, atrás de uma parede com porta, a sala dos fundos do Seu Cosme: a cama dele e o arco na parede
-    const px = iw / 2 - 3.0, gap = 1.25;
+    const px = iw / 2 - 3.7, gap = 1.6; // o quarto do Cosme tem a lareira e a cadeira perto da porta: precisa de folga para passar
     { const len = id - gap; const c = L(px, 0, -id / 2 + len / 2); box(0.14, FH, len, M.lime, 2.5, mtx(px, fl0 + FH / 2, -id / 2 + len / 2, 0, 0, 0, B), true); addBox(c.x, c.z, 0.07, len / 2, rot, y0 + fl0 - 0.2, y0 + fl0 + FH);
       box(0.14, FH - 2.2, gap, M.lime, 2.5, mtx(px, fl0 + 2.2 + (FH - 2.2) / 2, id / 2 - gap / 2, 0, 0, 0, B), false); box(0.18, 0.12, gap + 0.1, M.timber, 1, mtx(px, fl0 + 2.2, id / 2 - gap / 2, 0, 0, 0, B), false); }
     { const Ct = mtx(px - 1.0, fl0, -0.5, 0, Math.PI / 2, 0, B); box(2.0, 1.0, 0.6, M.oldWood, 1, mtx(0, 0.5, 0, 0, 0, 0, Ct)); box(2.1, 0.06, 0.7, M.timber, 1, mtx(0, 1.03, 0, 0, 0, 0, Ct)); col(px - 1.0, -0.5, 0.35, 1.05); for (let i = 0; i < 3; i++) cyl(0.05, 0.05, 0.16, 10, M.clay, 1, mtx(-0.6 + i * 0.5, 1.14, 0, 0, 0, 0, Ct), false); }
     table(-2.2, 1.2, 0); table(0.0, 1.5, 0.15); rug(-1.0, 0.2, fl0, M.cloth.green, [2.6, 1.5]);
-    bed(iw / 2 - 0.62, -id / 2 + 1.15, 0, fl0, M.cloth.green); storySpots.cosmeBed = hBeds[hBeds.length - 1]; chest(iw / 2 - 0.6, id / 2 - 1.0, fl0, Math.PI / 2);
+    bed(iw / 2 - 0.62, -id / 2 + 1.15, 0, fl0, M.cloth.green); storySpots.cosmeBed = hBeds[hBeds.length - 1]; chest(iw / 2 - 0.6, -id / 2 + 2.6, fl0, Math.PI / 2);
     storySpots.arcoWall = { p: L(px + 1.05, fl0 + 1.45, -id / 2 + 0.09), yaw: rot }; storySpots.arco = L(px + 1.05, fl0, -id / 2 + 1.0);
     candle = L(px - 1.0, fl0 + 1.25, -0.5);
   } else if (o.role === 'livros') {  } else if (o.role === 'livros') {
@@ -398,7 +398,14 @@ export function house(x, z, rot, o) {
   // placa
   if (o.sign) { const S2 = mtx(dx + DW / 2 + 0.9, base + DH + 0.55, dz + 0.55, 0, 0, 0, B); box(0.06, 0.06, 0.7, M.iron, 1, mtx(0, 0.25, -0.2, 0, 0, 0, S2), false); box(0.7, 0.5, 0.05, M.oldWood, 1, mtx(0, 0, 0.12, 0, Math.PI / 2, 0, S2)); if (o.sign === 'peixe') put(fishGeo(0.6), M.fishSkin, mtx(0.05, 0, 0.12, 0, 0, 0, S2), false); else if (o.sign === 'hospedaria') { const pl = new THREE.PlaneGeometry(0.66, 0.46); const m = signMat('Hospedaria'); for (const a of [1, -1]) put(pl, m, mtx(0.028 * a, 0, 0.12, 0, a * Math.PI / 2, 0, S2), false); } else { const sp = new THREE.SphereGeometry(0.16, 12, 6); sp.scale(1.6, 0.6, 0.5); put(boxUV(sp, 0.4), M.bread, mtx(0.04, 0, 0.12, 0, Math.PI / 2, 0, S2), false); } }
   // hera
-  if (o.ivy) for (let i = 0; i < 40; i++) { const sp = new THREE.IcosahedronGeometry(rr(0.12, 0.26), 0); put(sp, M.leaf, mtx(-w / 2 + rr(0, 1.6), rr(0.2, 3.2), d / 2 + 0.12, rr(0, 3), rr(0, 3), 0, B), false); }
+  // hera: ramos finos que sobem do chão pela quina da parede, cada um com folhas chatas coladas na pedra
+  if (o.ivy) { const leafG = new THREE.CircleGeometry(1, 5); leafG.scale(1, 1.15, 1); const stemG = new THREE.CylinderGeometry(0.012, 0.018, 1, 4); stemG.translate(0, 0.5, 0);
+    for (let st = 0; st < 7; st++) { let x = -w / 2 + 0.15 + rr(0, 1.9), y = base + 0.05; const top = base + rr(1.6, 3.3); let ang = rr(-0.25, 0.25);
+      while (y < top) { const seg = rr(0.16, 0.26); ang = clamp(ang + rr(-0.35, 0.35), -0.7, 0.7); const nx = x + Math.sin(ang) * seg, ny = y + Math.cos(ang) * seg;
+        put(stemG, M.oldWood, mtx(x, y, d / 2 + 0.03, 0, 0, -ang, B).multiply(new THREE.Matrix4().makeScale(1, seg, 1)), false);
+        const nLeaf = 2 + ((rand() * 2) | 0); for (let l = 0; l < nLeaf; l++) { const r = rr(0.06, 0.11) * (1 - (y - base) / (top - base + 0.01) * 0.35); const side = l % 2 ? 1 : -1;
+          put(leafG, M.leaf, mtx(x + side * rr(0.03, 0.1), y + rr(0, seg), d / 2 + 0.035 + l * 0.004, rr(-0.25, 0.25), rr(-0.35, 0.35), rr(0, 6.28), B).multiply(new THREE.Matrix4().makeScale(r, r, 1)), false); }
+        x = nx; y = ny; if (x < -w / 2 + 0.05 || x > w / 2 - 0.05) break; } } }
   // cadeira junto à lareira (todas as casas)
   { const A = F.clone().multiply(mtx(-0.4, fl0, 1.35, 0, -0.5, 0)); armchair(A); const c = new THREE.Vector3().setFromMatrixPosition(A); addBox(c.x, c.z, 0.34, 0.34, rot + fyaw - 0.5, y0 + fl0 - 0.3, y0 + fl0 + 1.7); seatAt(A, 0, 0.47, 0.03, Math.PI, 'chair'); }
   decor(o, B, { iw, id, fl0, F, base, w, d, T, floors });
@@ -482,7 +489,7 @@ export function barrel(x, z) { const y = groundH(x, z); const g = new THREE.Cyli
 export function crate(x, z, s = 0.85) { const y = groundH(x, z); box(s, s, s, M.planks, 0.9, mtx(x, y + s / 2, z, 0, rand() * 6, 0)); addCircle(x, z, s * 0.6); }
 export function hay(x, z) { const y = groundH(x, z); cyl(0.7, 0.7, 1.2, 18, M.hay, 1.5, mtx(x, y + 0.7, z, Math.PI / 2, rand() * 6, 0)); addCircle(x, z, 0.75); }
 export function cart(x, z, rot) { const y = groundH(x, z); const B = mtx(x, y, z, 0, rot, 0); box(2.6, 0.1, 1.3, M.planks, 1.2, mtx(0, 0.85, 0, 0, 0, 0, B)); for (const s of [-1, 1]) box(2.6, 0.45, 0.07, M.planks, 1.2, mtx(0, 1.1, s * 0.62, 0, 0, 0, B)); for (const s of [-1, 1]) { cyl(0.55, 0.55, 0.08, 18, M.oldWood, 1, mtx(0.3, 0.55, s * 0.75, Math.PI / 2, 0, 0, B)); cyl(0.57, 0.57, 0.05, 18, M.iron, 1, mtx(0.3, 0.55, s * 0.78, Math.PI / 2, 0, 0, B)); } for (const s of [-1, 1]) cyl(0.04, 0.05, 2.2, 6, M.oldWood, 1, mtx(-2.2, 0.55, s * 0.4, 0, 0, Math.PI / 2 - 0.25, B)); addBox(x, z, 1.5, 0.9, rot); }
-export function bench(x, z, ry) { const y = groundH(x, z); const B = mtx(x, y, z, 0, ry, 0); for (const a of [-0.45, 0.45]) { const p = new THREE.Vector3(a, 0.5, 0.02).applyMatrix4(B); seats.push({ x: p.x, y: p.y, z: p.z, yaw: ry, kind: 'bench', outdoor: true, exit: 0.55 }); } box(1.8, 0.1, 0.42, M.oldWood, 1, mtx(0, 0.45, 0, 0, 0, 0, B)); box(1.8, 0.35, 0.06, M.oldWood, 1, mtx(0, 0.75, -0.2, -0.15, 0, 0, B)); for (const s2 of [-1, 1]) box(0.12, 0.45, 0.38, M.oldWood, 1, mtx(s2 * 0.75, 0.22, 0, 0, 0, 0, B)); addBox(x, z, 0.9, 0.25, ry); return new THREE.Vector3(x, y, z); }
+export function bench(x, z, ry, yAt) { const y = yAt ?? groundH(x, z); const B = mtx(x, y, z, 0, ry, 0); for (const a of [-0.45, 0.45]) { const p = new THREE.Vector3(a, 0.5, 0.02).applyMatrix4(B); seats.push({ x: p.x, y: p.y, z: p.z, yaw: ry, kind: 'bench', outdoor: true, exit: 0.55 }); } box(1.8, 0.1, 0.42, M.oldWood, 1, mtx(0, 0.45, 0, 0, 0, 0, B)); box(1.8, 0.35, 0.06, M.oldWood, 1, mtx(0, 0.75, -0.2, -0.15, 0, 0, B)); for (const s2 of [-1, 1]) box(0.12, 0.45, 0.38, M.oldWood, 1, mtx(s2 * 0.75, 0.22, 0, 0, 0, 0, B)); addBox(x, z, 0.9, 0.25, ry); return new THREE.Vector3(x, y, z); }
 
 // --------------- moinho de vento ---------------
 export const windmills = [];
@@ -557,7 +564,16 @@ function buildTower() {
 }
 function buildStoryProps(scene) {
   // banco virado para o poente
-  { const cx = 22, cz = -58; storySpots.banco = bench(cx, cz, -Math.PI / 2); }
+  { // o lugar mais plano perto da trilha, numa faixa ao redor do ponto original (a encosta ali é íngreme)
+    const span = (x, z) => { let hi = -1e9, lo = 1e9; for (const [ax, az] of [[-1.4, -1], [1.4, -1], [-1.4, 1], [1.4, 1], [0, 0]]) { const h = groundH(x + ax, z + az); hi = Math.max(hi, h); lo = Math.min(lo, h); } return hi - lo; };
+    let best = [22, -58], bs = 1e9; for (let dx = -26; dx <= 26; dx += 2) for (let dz = -26; dz <= 26; dz += 2) { const x = 22 + dx, z = -58 + dz, pd = pathDist(x, z); if (pd < 2.6 || pd > 7) continue; const sc = span(x, z) + Math.hypot(dx, dz) * 0.004; if (sc < bs) { bs = sc; best = [x, z]; } }
+    const [cx, cz] = best, ry = -Math.PI / 2; // virado para o oeste, onde o sol se põe
+    let hi = -1e9, lo = 1e9; for (const [ax, az] of [[-1.4, -1], [1.4, -1], [-1.4, 1], [1.4, 1]]) { const h = groundH(cx + ax, cz + az); hi = Math.max(hi, h); lo = Math.min(lo, h); }
+    // um mirante: lajes de pedra niveladas, um murinho baixo na frente e um lampião; quem pôs o banco aqui escolheu a vista
+    const top = hi + 0.08, P = mtx(cx, 0, cz, 0, ry, 0); box(3.0, top - lo + 0.35, 2.2, M.stone, 1, mtx(0, (top + lo - 0.35) / 2, 0.15, 0, 0, 0, P));
+    const drop = top - lo > 0.45; if (drop) for (let i = 0; i < 5; i++) box(0.5, 0.38, 0.32, M.stone, 1, mtx(-1.1 + i * 0.55, top + 0.19, 1.15, 0, rr(-0.08, 0.08), 0, P));
+    addWalk(P, -1.5, 1.5, -0.95, 1.25, top); if (drop) { const pw = new THREE.Vector3(0, 0, 1.15).applyMatrix4(P); addBox(pw.x, pw.z, 1.4, 0.18, ry, top - 1, top + 0.38); }
+    storySpots.banco = bench(cx, cz, ry, top); }
   // o balanço
   { const sx = -42, sz = 27, sy = groundH(sx, sz); storySpots.balanco = new THREE.Vector3(sx + 1.5, sy, sz + 1.2);
     for (const s2 of [-1, 1]) { cyl(0.09, 0.12, 3.3, 7, M.bark, 1, mtx(sx + s2 * 1.3, sy + 1.55, sz - 0.5, 0.22, 0, 0)); cyl(0.09, 0.12, 3.3, 7, M.bark, 1, mtx(sx + s2 * 1.3, sy + 1.55, sz + 0.5, -0.22, 0, 0)); addCircle(sx + s2 * 1.3, sz, 0.3); }

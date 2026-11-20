@@ -127,6 +127,10 @@ body.touchmode #dlgOpts button{padding:10px 14px}body.touchmode #dlgOpts button 
 #thought{bottom:calc(9vh + env(safe-area-inset-bottom,0px))}
 #narr{top:50%;transform:translate(-50%,-50%);font-size:clamp(24px,3.2vw,34px);font-style:normal;max-width:30ch}
 #thought.show,#narr.show{opacity:1}
+#itemCard{position:fixed;right:max(24px,6vw);top:14%;width:min(250px,42vw);background:var(--paper);color:var(--paper-ink);border-radius:4px;padding:12px 14px 10px;box-shadow:0 16px 44px rgba(0,0,0,.5),inset 0 0 50px rgba(150,110,60,.22);opacity:0;transform:translateY(10px) rotate(1.5deg);transition:opacity .7s,transform .7s;pointer-events:none;z-index:30}
+#itemCard.show{opacity:1;transform:none}
+#itemCard svg{display:block;width:100%;height:auto}
+#itemCard p{margin:8px 0 0;font-family:var(--f-display);font-style:italic;font-size:15px;line-height:1.3;text-align:center}
 #letter{position:fixed;inset:0;display:grid;place-items:center;background:rgba(6,5,3,.45);opacity:0;transition:opacity 1s;padding:16px;box-sizing:border-box}
 #letter.show{opacity:1}
 #letter .paper{max-width:560px;width:100%;background:var(--paper);color:var(--paper-ink);padding:34px 40px;box-sizing:border-box;border-radius:3px;box-shadow:0 20px 60px rgba(0,0,0,.5),inset 0 0 60px rgba(150,110,60,.25);font-family:var(--f-display);font-size:22px;line-height:1.5;transform:rotate(-1deg)}
@@ -184,6 +188,7 @@ body.touchmode #dlgOpts button{padding:10px 14px}body.touchmode #dlgOpts button 
 #lensTip{position:absolute;left:50%;bottom:calc(5vh + env(safe-area-inset-bottom,0px));transform:translateX(-50%);font-size:13px;letter-spacing:.06em;color:var(--ink-dim);text-shadow:0 1px 4px #000;text-align:center;width:90%}
 /* bolsa, mira e viagem */
 #bag{position:absolute;right:calc(18px + env(safe-area-inset-right,0px));bottom:calc(64px + env(safe-area-inset-bottom,0px));display:flex;gap:10px;align-items:center;font-size:18px;text-shadow:0 1px 4px rgba(0,0,0,.8)}
+#bag .key{font:500 11px var(--f-ui);color:var(--ink-dim,#cfc4b0);opacity:.85}#bag .key kbd{font:600 10px var(--f-ui);border:1px solid rgba(255,255,255,.35);border-radius:3px;padding:1px 4px;margin-right:4px}
 #bag b{font:600 12px var(--f-ui);color:var(--ink);margin-left:2px;vertical-align:top}
 #bag .hungry{font:500 11px var(--f-ui);letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
 #crosshair{position:fixed;left:50%;top:50%;width:18px;height:18px;margin:-9px;pointer-events:none;z-index:5}
@@ -208,6 +213,7 @@ body.touchmode #dlgOpts button{padding:10px 14px}body.touchmode #dlgOpts button 
 <div id="dialog" hidden><div><span id="dlgName"></span><span id="dlgRole"></span></div><div id="dlgText"></div><div id="dlgOpts"></div></div>
 <div id="thought" hidden></div>
 <div id="narr" hidden></div>
+<div id="itemCard" hidden><div id="itemArt"></div><p id="itemCap"></p></div>
 <div id="letter" hidden><div class="paper"><small>Uma carta, dobrada em quatro</small><div id="letterText"></div><div class="hint">Clique para guardar a carta</div></div></div>
 <div id="mapView" hidden><div><div class="wrap"><canvas id="mapCv" width="1400" height="1400"></canvas></div><div class="cap">Mapa do vale · M para fechar</div></div></div>
 <div id="touch" hidden>

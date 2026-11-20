@@ -83,7 +83,7 @@ def post(a):
     for i, p, appr in src:
         l = lines.get(i)
         if not l: continue
-        if man.get(i) and norm(man[i]['text']) == norm(l['text']) and man[i].get('speaker') == l['speaker']: continue
+        if not appr and man.get(i) and norm(man[i]['text']) == norm(l['text']) and man[i].get('speaker') == l['speaker']: continue  # tomada aprovada sempre entra
         x, sr = sf.read(p, dtype='float32')
         if x.ndim > 1: x = x.mean(1)
         if sr != G.SR: x = librosa.resample(x, orig_sr=sr, target_sr=G.SR)

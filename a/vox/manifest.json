@@ -61,7 +61,7 @@
  },
  "jo_c3": {
   "speaker": "joca",
-  "dur": 9.84,
+  "dur": 10.195,
   "text": "Vento pelo lado é o melhor. Vento de frente, nem tente: o barco para e a vela fica batendo. Aí é virar um pouco e ir em zigue-zague."
  },
  "jo_barco": {
@@ -71,7 +71,7 @@
  },
  "jo_depois": {
   "speaker": "joca",
-  "dur": 5.496,
+  "dur": 5.561,
   "text": "E aí, velejou? Ela puxa um pouco pra esquerda, né? O mestre dizia que era saudade."
  },
  "ce_first": {
@@ -116,12 +116,12 @@
  },
  "ce_noite": {
   "speaker": "celeste",
-  "dur": 4.632,
+  "dur": 5.175,
   "text": "O forno já esfriou, querida. Volta amanhã cedo, que tem pão de mel."
  },
  "ce_cesta": {
   "speaker": "celeste",
-  "dur": 7.2,
+  "dur": 8.564,
   "text": "Você vai pros lados do mar? Então leva este pão pra Marta, da taberna da Maré. A gente troca pão por peixe desde antes de você nascer."
  },
  "ce_peixe": {
@@ -136,7 +136,7 @@
  },
  "ce_c4": {
   "speaker": "celeste",
-  "dur": 10.32,
+  "dur": 11.529,
   "text": "A Marta e eu trocamos pão por peixe faz trinta anos. Nunca anotamos nada. Ela jura que eu devo dois peixes. Eu juro que ela me deve um pedido de desculpas desde o casamento dela."
  },
  "ce_pedra": {
@@ -399,6 +399,21 @@
   "dur": 10.097,
   "text": "…Era eu. A Mira não conseguia falar Odessa. A próxima luz está na Árvore das Fitas, na floresta a noroeste. De tarde."
  },
+ "od_junto": {
+  "speaker": "odessa",
+  "dur": 5.948,
+  "text": "E daqui em diante eu vou junto. Uma velha com as mãos de pedra ainda anda. Te espero lá."
+ },
+ "od_frente": {
+  "speaker": "odessa",
+  "dur": 2.028,
+  "text": "Eu vou na frente. Te espero lá."
+ },
+ "od_aqui": {
+  "speaker": "odessa",
+  "dur": 3.091,
+  "text": "Estou aqui. Vai, eu não saio daqui."
+ },
  "od_r_arvore": {
   "speaker": "odessa",
   "dur": 8.928,
@@ -411,8 +426,8 @@
  },
  "od_r_relogios": {
   "speaker": "odessa",
-  "dur": 10.946,
-  "text": "Ele voltou, sabe. No dia seguinte. E não veio jantar. Eu continuei limpando. Seiscentos anos. Promessa a gente não larga no meio."
+  "dur": 16.384,
+  "text": "O Teo voltou da costa no dia seguinte, com o remédio. Tarde demais. Depois disso, nunca mais sentou com a gente pra jantar. E eu continuei limpando o relógio da Mira, todo dia, até hoje. Foi a última coisa que ele me pediu."
  },
  "li_od_r_relogios": {
   "speaker": "lia",
@@ -514,6 +529,11 @@
   "dur": 3.752,
   "text": "Quatro e meia. No relógio da Mira. Eu espero você lá."
  },
+ "od_vesper": {
+  "speaker": "odessa",
+  "dur": 16.271,
+  "text": "A criatura que voa sobre o vale? A Mira chamava ela de Vésper, a estrela da tarde, porque só aparecia no fim do dia. O nome ficou. Ela vive mais do que eu, e é mais teimosa. Se você chegar devagar, ela deixa."
+ },
  "od_pos1": {
   "speaker": "odessa",
   "dur": 7.853,
@@ -591,7 +611,7 @@
  },
  "an_lia1": {
   "speaker": "anselmo",
-  "dur": 6.744,
+  "dur": 6.59,
   "text": "E você, moça? É de onde? Tem cara de quem veio de longe e ainda não chegou direito."
  },
  "li_an1": {
@@ -681,12 +701,12 @@
  },
  "to_nina": {
   "speaker": "tome",
-  "dur": 8.616,
+  "dur": 14.213,
   "text": "Você vai pro mar? Lá mora a Nina. Ela diz que já viu uma baleia. Eu acho que é mentira. Entrega este desenho pra ela? É um gigante. Pra ela ver que aqui também tem coisa grande."
  },
  "to_concha": {
   "speaker": "tome",
-  "dur": 5.088,
+  "dur": 7.685,
   "text": "Dá pra ouvir o mar mesmo! Ou é o meu ouvido? Tanto faz. Vou guardar debaixo do travesseiro."
  },
  "to_r_lago": {
@@ -736,12 +756,12 @@
  },
  "ir_c2": {
   "speaker": "irene",
-  "dur": 7.464,
+  "dur": 6.959,
   "text": "Já reparou que à noite o lago vira outro céu? Às vezes eu não sei em qual dos dois as estrelas estão de verdade."
  },
  "ir_c3": {
   "speaker": "irene",
-  "dur": 7.968,
+  "dur": 7.581,
   "text": "Colho camomila de manhã, pinto à tarde, durmo cedo. As pessoas acham pouco. Eu acho que é o suficiente."
  },
  "ir_fita": {
@@ -766,7 +786,7 @@
  },
  "ba_first": {
   "speaker": "bastiao",
-  "dur": 4.848,
+  "dur": 6.676,
   "text": "Hum. Visita. Se veio pedir conserto, entra na fila. A fila é o vale inteiro."
  },
  "ba_conhecer": {
@@ -786,7 +806,7 @@
  },
  "ba_c1": {
   "speaker": "bastiao",
-  "dur": 2.712,
+  "dur": 4.306,
   "text": "Serrote. Martelo. Paciência. Nessa ordem."
  },
  "ba_c2": {
@@ -796,7 +816,7 @@
  },
  "ba_quase": {
   "speaker": "bastiao",
-  "dur": 5.28,
+  "dur": 5.845,
   "text": "Faltam três pedras. Quando você terminar esse seu mapa, eu termino a minha frase."
  },
  "ba_pronta": {
@@ -816,8 +836,53 @@
  },
  "ba_lia2": {
   "speaker": "bastiao",
-  "dur": 2.376,
+  "dur": 2.774,
   "text": "Hum. Então ele ia gostar da minha."
+ },
+ "an_pos": {
+  "speaker": "anselmo",
+  "dur": 6.833,
+  "text": "Vi a Moça do monte virada pra vila, hoje cedo. Tirei o chapéu. Bobagem de velho."
+ },
+ "ce_pos": {
+  "speaker": "celeste",
+  "dur": 5.825,
+  "text": "A Odessa pegou o pão com a mão, sabia? Quente. Eu quase chorei em cima da massa."
+ },
+ "ir_pos": {
+  "speaker": "irene",
+  "dur": 6.742,
+  "text": "Hoje a luz da árvore está diferente. Ou sou eu que estou. Vou pintar mesmo assim."
+ },
+ "ma_pos": {
+  "speaker": "marta",
+  "dur": 7.627,
+  "text": "Dizem que as pedras viraram flor! O Tião jura que o gigante do lago acenou pra ele. Ninguém acredita, mas eu finjo."
+ },
+ "ti_pos": {
+  "speaker": "tiao",
+  "dur": 6.299,
+  "text": "Hoje o lago ficou tão quieto que dava pra ouvir a pedra afundando lá no fundo. Eu gostei."
+ },
+ "ni_pos": {
+  "speaker": "nina",
+  "dur": 6.363,
+  "text": "É verdade que o gigante jogou a pedra? Quantos pulos? Sete? Por que logo sete?"
+ },
+ "da_pos": {
+  "speaker": "davi",
+  "dur": 5.105,
+  "text": "Meus dedos voltaram. Hoje eu acendo o farol pra mim também. Pode?"
+ },
+ "jo_pos": {
+  "speaker": "joca",
+  "dur": 6.57,
+  "text": "A Odessa desceu até o cais hoje. Andou de barco comigo. Disse que fazia seiscentos anos."
+ },
+ "ba_pos": {
+  "speaker": "bastiao",
+  "dur": 5.616,
+  "text": "A ponte ficou pronta. E a cartógrafa ainda está aqui. Duas coisas que eu não esperava."
  },
  "ma_first": {
   "speaker": "marta",
@@ -851,7 +916,7 @@
  },
  "ma_noite": {
   "speaker": "marta",
-  "dur": 3.792,
+  "dur": 4.699,
   "text": "A taberna já fechou, querida. Mas a porta fica sempre só encostada."
  },
  "ma_pao": {
@@ -876,7 +941,7 @@
  },
  "li_ma1": {
   "speaker": "lia",
-  "dur": 5.088,
+  "dur": 3.858,
   "text": "Mãe viva. Longe. A gente não se fala muito."
  },
  "ma_lia2": {
@@ -896,22 +961,22 @@
  },
  "ti_c1": {
   "speaker": "tiao",
-  "dur": 6.96,
+  "dur": 7.628,
   "text": "Tem dia que o peixe não vem. Aí eu converso com a boia. Ela não responde. Mas também não reclama da sopa."
  },
  "ti_c2": {
   "speaker": "tiao",
-  "dur": 6.24,
+  "dur": 5.79,
   "text": "Quando o mar fica liso assim, feito espelho, minha avó dizia que era o céu se olhando."
  },
  "ti_c3": {
   "speaker": "tiao",
-  "dur": 8.088,
+  "dur": 8.532,
   "text": "Se for velejar, volte antes do farol acender. Não é perigo, não. É que a Marta fica preocupada e fala o dobro."
  },
  "ni_first": {
   "speaker": "nina",
-  "dur": 5.76,
+  "dur": 9.716,
   "text": "Oi! Você veio das montanhas? Lá tem dragão? É verdade que lá em cima neva? Neve tem gosto de quê?"
  },
  "ni_baleia": {
@@ -926,7 +991,7 @@
  },
  "ni_c2": {
   "speaker": "nina",
-  "dur": 4.968,
+  "dur": 6.594,
   "text": "Quer conhecer a Dona Concha? É a minha favorita. Por que todo mundo ri quando eu falo o nome dela?"
  },
  "ni_c3": {
@@ -936,7 +1001,7 @@
  },
  "ni_desenho": {
   "speaker": "nina",
-  "dur": 8.424,
+  "dur": 8.466,
   "text": "Um gigante! Foi o Tomé que desenhou? Ele desenha bem, né? Você leva esta concha pra ele? Sabia que encostando no ouvido dá pra ouvir o mar?"
  },
  "ni_noite": {
@@ -961,7 +1026,7 @@
  },
  "ni_lia2": {
   "speaker": "nina",
-  "dur": 5.112,
+  "dur": 5.566,
   "text": "Mais ou menos? Como é que alguém sabe mais ou menos? Por que você não conta pra ela direito?"
  },
  "da_first": {
@@ -971,7 +1036,7 @@
  },
  "da_tempo": {
   "speaker": "davi",
-  "dur": 7.656,
+  "dur": 7.689,
   "text": "Quarenta e dois anos. Nunca vi um navio passar. Mas acendo toda noite. Vai que um dia alguém se perde."
  },
  "li_da_dedos": {
@@ -996,7 +1061,7 @@
  },
  "da_c3": {
   "speaker": "davi",
-  "dur": 6.48,
+  "dur": 7.338,
   "text": "O mar ensina uma coisa: tudo volta. A maré, os barcos, as pessoas. Só demora."
  },
  "da_noite": {
@@ -1006,12 +1071,12 @@
  },
  "da_lia1": {
   "speaker": "davi",
-  "dur": 2.328,
+  "dur": 2.658,
   "text": "Você escreve cartas, cartógrafa?"
  },
  "li_da1": {
   "speaker": "lia",
-  "dur": 2.832,
+  "dur": 2.256,
   "text": "Devo uma pra minha mãe. Faz um ano."
  },
  "da_lia2": {
@@ -1496,7 +1561,7 @@
  },
  "li_ponte2": {
   "speaker": "lia",
-  "dur": 6.456,
+  "dur": 7.531,
   "text": "A ponte está inteira. Não leva a lugar nenhum que já não desse pra ir. Atravessei duas vezes, só pra garantir."
  },
  "li_santuario": {
@@ -1521,7 +1586,7 @@
  },
  "li_noite": {
   "speaker": "lia",
-  "dur": 2.616,
+  "dur": 2.93,
   "text": "Já escureceu. Melhor acender a lanterna."
  },
  "li_sentar1": {
@@ -1536,13 +1601,33 @@
  },
  "li_sentar3": {
   "speaker": "lia",
-  "dur": 7.08,
+  "dur": 3.974,
   "text": "As nuvens andam tão devagar. Ou sou eu que finalmente parei."
  },
  "li_sentar4": {
   "speaker": "lia",
   "dur": 3.223,
   "text": "O sol esquenta a pedra. Dá pra sentir na mão."
+ },
+ "li_sentar5": {
+  "speaker": "lia",
+  "dur": 3.081,
+  "text": "Daqui dá pra ver o vale inteiro. Depois eu meço."
+ },
+ "li_sentar6": {
+  "speaker": "lia",
+  "dur": 2.847,
+  "text": "O vento vem do lago. Tem cheiro de água."
+ },
+ "li_sentar7": {
+  "speaker": "lia",
+  "dur": 3.225,
+  "text": "Ficar parada não é perder tempo. Eu acho."
+ },
+ "li_sentar8": {
+  "speaker": "lia",
+  "dur": 4.899,
+  "text": "Tem um passarinho cantando a mesma coisa faz um tempão. Ele não cansa."
  },
  "li_mapa_cheio": {
   "speaker": "lia",
@@ -1571,12 +1656,12 @@
  },
  "li_mar": {
   "speaker": "lia",
-  "dur": 7.464,
+  "dur": 7.759,
   "text": "O mar. Daqui de cima, o vale parecia um mundo inteiro. Ele termina aqui, na areia, e começa outra coisa."
  },
  "li_barco0": {
   "speaker": "lia",
-  "dur": 5.4,
+  "dur": 5.825,
   "text": "Um barco bonito, bem cuidado. Melhor perguntar de quem é antes de sair com ele."
  },
  "li_barco": {
@@ -1621,7 +1706,7 @@
  },
  "li_cabana": {
   "speaker": "lia",
-  "dur": 8.16,
+  "dur": 7.958,
   "text": "Uma cabana de caçador. A lanterna está apagada há anos, mas a lenha está empilhada, pronta. Como se alguém fosse voltar."
  },
  "li_arvore_nomes": {
@@ -1636,7 +1721,7 @@
  },
  "li_dormindo": {
   "speaker": "lia",
-  "dur": 4.968,
+  "dur": 4.387,
   "text": "Está dormindo. Melhor não acordar. Amanhã a gente conversa."
  },
  "li_fitas": {
@@ -1651,7 +1736,7 @@
  },
  "li_pedra_achar": {
   "speaker": "lia",
-  "dur": 4.656,
+  "dur": 4.8,
   "text": "Uma pedra boa pra jogar. Achatada, lisa, cabe na curva do dedo."
  },
  "li_pulos_bom": {
@@ -1721,22 +1806,22 @@
  },
  "li_alva_corre": {
   "speaker": "lia",
-  "dur": 4.608,
+  "dur": 5.032,
   "text": "Ela levantou a cabeça. Acho que eu cheguei rápido demais. Devagar, Lia."
  },
  "li_alva1": {
   "speaker": "lia",
-  "dur": 7.032,
+  "dur": 5.646,
   "text": "Ela é enorme. E está me olhando como quem decide se eu sou uma pergunta ou uma resposta."
  },
  "li_alva2": {
   "speaker": "lia",
-  "dur": 3.48,
+  "dur": 4.254,
   "text": "Ela abaixou a cabeça até o chão. Acho que é um convite."
  },
  "li_voo": {
   "speaker": "lia",
-  "dur": 3.912,
+  "dur": 2.505,
   "text": "O vale inteiro cabe debaixo das asas dela."
  },
  "li_voo_fim": {

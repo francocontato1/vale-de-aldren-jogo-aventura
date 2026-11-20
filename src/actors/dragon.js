@@ -42,7 +42,7 @@ function stylize(m) {
 export class Dragon {
   constructor() {
     this.root = new THREE.Group(); this.model = G.scene; this.model.scale.setScalar(S); this.root.add(this.model); scene.add(this.root);
-    this.model.traverse(o => { if (o.isMesh) { o.castShadow = true; o.receiveShadow = true; o.frustumCulled = false; if (o.material) { stylize(o.material); o.material.envMapIntensity = 0.7; } } });
+    this.model.traverse(o => { if (o.isMesh) { o.castShadow = true; o.receiveShadow = false /* receber sombra fazia as asas finas piscarem com a própria sombra */; o.frustumCulled = false; if (o.material) { stylize(o.material); o.material.envMapIntensity = 0.7; } } });
     this.mixer = new THREE.AnimationMixer(this.model); this.act = {}; for (const c of G.animations) { const a = this.mixer.clipAction(c); if (['takeoff', 'land', 'roar'].includes(c.name)) { a.setLoop(THREE.LoopOnce, 1); a.clampWhenFinished = true; } this.act[c.name] = a; }
     this.bones = {}; this.model.traverse(o => { if (o.isBone) this.bones[o.name] = o; });
     this.head = this.bones['Bip001-Head_011']; this.neck = this.bones['Bip001-Neck1_09']; this.saddle = this.bones['Bip001-Spine2_07'] || this.bones['Dummy002_0114'];
@@ -119,15 +119,17 @@ export class Dragon {
   flight(dt, inp) {
     inp = inp || { turn: 0, climb: 0, thrust: 0, brake: 0 };
     // pitch e curva com resposta suave (bicho grande tem inércia)
-    const targetPitch = clamp(inp.climb * 0.42 - (this.speed < 6 ? 0.08 : 0), -0.6, 0.5);
-    this.pitch = lerp(this.pitch, targetPitch, clamp(dt * 1.3, 0, 1));
+    // subir responde rápido e com força das asas; descer (Shift) é uma descida suave, não um mergulho
+    const targetPitch = clamp((inp.climb > 0 ? inp.climb * 0.34 : inp.climb * 0.2) - (this.speed < 6 ? 0.06 : 0), -0.3, 0.4);
+    this.pitch = lerp(this.pitch, targetPitch, clamp(dt * (inp.climb ? 2.2 : 1.6), 0, 1));
     this.turnRate = lerp(this.turnRate || 0, inp.turn * (0.55 + 0.25 * smooth(4, 14, this.speed)), clamp(dt * 1.8, 0, 1));
     this.yaw -= this.turnRate * dt; this.bank = lerp(this.bank, clamp(-this.turnRate * 0.75, -0.42, 0.42), clamp(dt * 1.6, 0, 1));
     // velocidade: empuxo das asas, arrasto, e a gravidade ao longo da trajetória (sobe = perde, mergulha = ganha)
     const effort = clamp(inp.thrust + Math.max(0, inp.climb) * 0.8 + (this.speed < 8 ? 0.6 : 0), 0, 1.4);
-    const acc = effort * 6.5 - 0.012 * this.speed * this.speed - 9.8 * Math.sin(this.pitch) * 0.9 - inp.brake * 5;
-    this.speed = clamp(this.speed + acc * dt, 2.5, 38);
-    let vy = this.speed * Math.sin(this.pitch); if (this.speed < 6) vy -= (6 - this.speed) * 1.2; // perto de estolar, afunda
+    const acc = effort * 6.5 - 0.012 * this.speed * this.speed - 9.8 * Math.sin(this.pitch) * (this.pitch > 0 ? 0.6 : 0.35) - inp.brake * 5;
+    this.speed = clamp(this.speed + acc * dt, 2.5, 30);
+    this.lift = lerp(this.lift || 0, Math.max(0, inp.climb) * 4.5 + Math.min(0, inp.climb) * 2.5, clamp(dt * 2.5, 0, 1)); // as asas empurram para cima mesmo devagar
+    let vy = this.speed * Math.sin(this.pitch) + this.lift; if (this.speed < 6 && inp.climb <= 0) vy -= (6 - this.speed) * 1.2; // perto de estolar, afunda
     this.x += Math.sin(this.yaw) * Math.cos(this.pitch) * this.speed * dt; this.z += Math.cos(this.yaw) * Math.cos(this.pitch) * this.speed * dt; this.y += vy * dt;
     // chão e mar: mantém uma folga mínima; nas bordas do mundo, faz a curva de volta
     const floor = Math.max(groundH(this.x, this.z), WATER) + (this.mode === 'descend' ? AIR * 0.9 : AIR * 0.75 + 4);
