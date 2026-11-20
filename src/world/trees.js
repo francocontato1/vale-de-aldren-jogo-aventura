@@ -86,18 +86,12 @@ export class Trees {
   // Render each variant from 8 directions into an atlas (albedo + alpha), lit flat so we can relight it.
   makeImpostors() {
     const VIEWS = 8, CW = 256, CH = 384;
-    const iscene = new THREE.Scene();
+    const iscene = new THREE.Scene(); 
     const prevTM = renderer.toneMapping; renderer.toneMapping = THREE.NoToneMapping;
-    // Um único alvo com antisserrilhado (MSAA) serve para todas as espécies; cada uma guarda só uma cópia
-    // simples da imagem (sem MSAA e sem profundidade). Antes cada espécie mantinha os próprios buffers MSAA
-    // de cor e profundidade para sempre: ~200 MB de memória de vídeo parados (o iPhone recarregava a página).
-    const msaa = new THREE.WebGLRenderTarget(CW * VIEWS, CH, { samples: 4 }); msaa.texture.colorSpace = THREE.SRGBColorSpace;
-    const blitScene = new THREE.Scene(), blitCam = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
-    const blitMat = new THREE.MeshBasicMaterial({ map: msaa.texture, blending: THREE.NoBlending, depthTest: false, depthWrite: false, toneMapped: false });
-    const blitQuad = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), blitMat); blitQuad.frustumCulled = false; blitScene.add(blitQuad);
+    const prevEnv = iscene.environment;
     for (const v of this.variants) {
       if (v.sp.type === 'bush') continue;
-      const rt = msaa;
+      const rt = new THREE.WebGLRenderTarget(CW * VIEWS, CH, { samples: 4 }); rt.texture.colorSpace = THREE.SRGBColorSpace;
       const bm = new THREE.Mesh(v.bg, new THREE.MeshBasicMaterial({ map: v.bark.map, color: v.bark.color })); const lmesh = new THREE.Mesh(v.lg, new THREE.MeshBasicMaterial({ map: v.leaf.map, color: v.leaf.color, alphaTest: 0.45, side: THREE.DoubleSide }));
       const g = new THREE.Group(); g.add(bm, lmesh); iscene.add(g);
       const w = Math.max(v.radius * 2.2, v.H * 0.5); const h = v.H * 1.05; v.impW = w; v.impH = h;
@@ -108,15 +102,10 @@ export class Trees {
         rt.viewport.set(i * CW, 0, CW, CH); rt.scissor.set(i * CW, 0, CW, CH); rt.scissorTest = true; renderer.setRenderTarget(rt);
         renderer.render(iscene, cam);
       }
-      rt.viewport.set(0, 0, CW * VIEWS, CH); rt.scissorTest = false;
-      // copia exata (cor e alfa) para a textura definitiva da espécie
-      const out = new THREE.WebGLRenderTarget(CW * VIEWS, CH, { depthBuffer: false, stencilBuffer: false }); out.texture.colorSpace = THREE.SRGBColorSpace;
-      renderer.setRenderTarget(out); renderer.render(blitScene, blitCam);
-      renderer.setRenderTarget(null); renderer.setClearColor(0x000000, 1);
+      rt.viewport.set(0, 0, CW * VIEWS, CH); rt.scissorTest = false; renderer.setRenderTarget(null); renderer.setClearColor(0x000000, 1);
       iscene.remove(g); bm.material.dispose(); lmesh.material.dispose();
-      v.impTex = out.texture; v.impRT = out;
+      v.impTex = rt.texture; v.impRT = rt;
     }
-    msaa.dispose(); blitMat.dispose(); blitQuad.geometry.dispose();
     renderer.toneMapping = prevTM;
   }
 
@@ -183,9 +172,9 @@ export class Trees {
     const near = Q().treeNear * (settings.treeK || 1); const shadowR = Math.min(Q().shadowR * 0.75, 36);
     for (const v of this.variants) if (v.imp) { v.imp.mat.uniforms.near.value = near; v.imp.mat.uniforms.amb.value.copy(ambientColor); }
     // só refaz as listas quando a câmera anda ou gira bastante
-    const f = this._f || (this._f = new THREE.Vector2()); if (fwd) f.set(fwd.x, fwd.z).normalize(); else f.set(0, -1);
+    const f = fwd ? new THREE.Vector2(fwd.x, fwd.z).normalize() : new THREE.Vector2(0, -1);
     if (cam.distanceTo(this.nearCenter) < 5 && this.lastFwd && this.lastFwd.dot(f) > 0.96) return;
-    this.nearCenter.copy(cam); (this.lastFwd || (this.lastFwd = new THREE.Vector2())).copy(f);
+    this.nearCenter.copy(cam); this.lastFwd = f.clone();
     const m4 = new THREE.Matrix4(), qt = new THREE.Quaternion(), sv = new THREE.Vector3(), pv = new THREE.Vector3(), yAx = new THREE.Vector3(0, 1, 0);
     const bushR = near * 0.7;
     for (const v of this.variants) {

@@ -41,11 +41,6 @@ void main(){
  #include <colorspace_fragment>
 }`;
 
-// cores e vetores reaproveitados a cada quadro (sem criar objetos novos: menos coleta de lixo, menos engasgos)
-const C_WARM = new THREE.Color(1.0, 0.5, 0.24), C_WHITE = new THREE.Color(1.0, 0.95, 0.86), C_MOON = new THREE.Color(0.55, 0.65, 0.95);
-const C_TINT_DUSK = new THREE.Color(0.95, 0.56, 0.38), C_TINT_NIGHT = new THREE.Color(0.02, 0.03, 0.06), C_FOG_DUSK = new THREE.Color(1.0, 0.66, 0.44), C_FOG_NIGHT = new THREE.Color(0.02, 0.026, 0.045);
-const _md = new THREE.Vector3(), _tint = new THREE.Color(), _fc = new THREE.Color();
-
 export class SkySystem {
   constructor(scene) {
     this.scene = scene; this.meteors = 0.2; this.LST = 0;
@@ -158,10 +153,10 @@ export class SkySystem {
     const eu = this.envSky.material.uniforms; eu.skyScale.value = Math.max(ss, 0.06); eu.warm.value = dusk; for (const k of ['turbidity', 'rayleigh', 'mieCoefficient', 'mieDirectionalG']) eu[k].value = su[k].value; eu.sunPosition.value.copy(sd);
     // sol e lua
     const sc = U.sunColor.value;
-    const warm = C_WARM, white = C_WHITE;
+    const warm = new THREE.Color(1.0, 0.5, 0.24), white = new THREE.Color(1.0, 0.95, 0.86);
     sc.copy(warm).lerp(white, smooth(0.03, 0.45, sy));
-    const moon = C_MOON;
-    const md = _md.set(-sd.x * 0.8, Math.max(-sd.y, 0.0) * 0.9 + 0.35, -sd.z + 0.4).normalize(); this.nightU.moonDir.value.copy(md);
+    const moon = new THREE.Color(0.55, 0.65, 0.95);
+    const md = new THREE.Vector3(-sd.x * 0.8, Math.max(-sd.y, 0.0) * 0.9 + 0.35, -sd.z + 0.4).normalize(); this.nightU.moonDir.value.copy(md);
     let ld;
     if (sy > -0.05) { this.sun.color.copy(sc); this.sun.intensity = 4.0 * smooth(-0.05, 0.16, sy); ld = sd; }
     else { this.sun.color.copy(moon); this.sun.intensity = 0.42 * smooth(-0.05, -0.25, sy) + 0.15; ld = md; }
@@ -171,14 +166,14 @@ export class SkySystem {
     this.sun.target.position.set(fx, focus.y, fz); this.sun.position.copy(this.sun.target.position).addScaledVector(ld, 300);
     this.sun.target.updateMatrixWorld();
     // tons do céu para nuvens, névoa e água
-    const skyTint = _tint.setRGB(0.4, 0.56, 0.78).multiplyScalar(0.25 + 0.75 * this.dayF).lerp(C_TINT_DUSK, dusk * 0.55);
-    skyTint.lerp(C_TINT_NIGHT, this.nightF);
+    const skyTint = new THREE.Color(0.4, 0.56, 0.78).multiplyScalar(0.25 + 0.75 * this.dayF).lerp(new THREE.Color(0.95, 0.56, 0.38), dusk * 0.55);
+    skyTint.lerp(new THREE.Color(0.02, 0.03, 0.06), this.nightF);
     this.cloudU.skyTint.value.copy(skyTint); this.cloudU.sunCol.value.copy(sc); this.cloudU.night.value = this.nightF; this.cloudU.cover.value = 0.04 + 0.05 * Math.sin(U.time.value * 0.003);
     this.nightU.night.value = this.nightF;
     waterSky.color.copy(skyTint).multiplyScalar(0.9); waterSky.night.value = this.nightF;
     // névoa: perspectiva aérea azulada de dia, dourada no fim da tarde, neblina de manhã cedo
-    const fc = _fc.setRGB(0.5, 0.62, 0.78).lerp(C_FOG_DUSK, dusk * 0.6).multiplyScalar(0.12 + 0.88 * this.dayF);
-    fc.lerp(C_FOG_NIGHT, this.nightF * 0.95);
+    const fc = new THREE.Color(0.5, 0.62, 0.78).lerp(new THREE.Color(1.0, 0.66, 0.44), dusk * 0.6).multiplyScalar(0.12 + 0.88 * this.dayF);
+    fc.lerp(new THREE.Color(0.02, 0.026, 0.045), this.nightF * 0.95);
     fog.color.copy(fc);
     fog.near = (0.0006 + dusk * 0.0007 + this.nightF * 0.0004 + smooth(5.0, 6.5, this.hour) * (1 - smooth(6.5, 8.6, this.hour)) * 0.0045);
     setFogSun(sd);

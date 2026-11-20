@@ -1,6 +1,6 @@
 // Animais do vale: ovelhas no pasto do Seu Anselmo, cervos na orla da floresta, uma raposa curiosa.
 // Modelos CC0 da Quaternius. Comportamento simples e calmo: pastam, andam, e os cervos fogem se você chega perto.
-import { THREE, loadGLTF, scene, camera, clamp, lerp, rand, rr, lerpAng, angDiff, Q } from '../core.js';
+import { THREE, loadGLTF, scene, camera, clamp, lerp, rand, rr, lerpAng, angDiff } from '../core.js';
 import * as SkeletonUtils from 'three/addons/utils/SkeletonUtils.js';
 import { groundH, WATER } from '../world/terrain.js';
 
@@ -34,8 +34,6 @@ class Animal {
   update(dt, player, nightF) {
     const dpx = this.x - player.x, dpz = this.z - player.z, dp = Math.hypot(dpx, dpz);
     const camD = Math.hypot(this.x - camera.position.x, this.z - camera.position.z); this.root.visible = camD < 130; if (!this.root.visible) return;
-    // só projeta sombra dentro da área coberta pelo mapa de sombras (sem recorte por câmera, eles eram desenhados no mapa mesmo longe dele)
-    const cast = camD < Q().shadowR + 8; if (cast !== this.cast) { this.cast = cast; this.root.traverse(o => { if (o.isMesh) o.castShadow = cast; }); }
     const d = this.d; this.t -= dt; let want = 0;
     if (d.shy && dp < d.shy && this.state !== 'flee') { this.state = 'flee'; this.t = rr(3, 5); }
     switch (this.state) {
