@@ -85,6 +85,7 @@ export function makeBow() {
   const a0 = -Math.PI * 0.4 + Math.PI / 2, a1 = a0 + Math.PI * 0.8; const p0 = new THREE.Vector3(Math.cos(a0) * 0.55, Math.sin(a0) * 0.55, 0), p1 = new THREE.Vector3(Math.cos(a1) * 0.55, Math.sin(a1) * 0.55, 0);
   const str = new THREE.Mesh(new THREE.CylinderGeometry(0.003, 0.003, p0.distanceTo(p1), 4), new THREE.MeshBasicMaterial({ color: 0xe8e0cc })); str.position.copy(p0).add(p1).multiplyScalar(0.5); str.lookAt(p1); str.rotateX(Math.PI / 2); g.add(str);
   g.traverse(o => { if (o.isMesh) o.castShadow = true; });
-  g.scale.setScalar(0.78); // arco curto de caça, ~85 cm
-  return g;
+  // a origem passa a ser a empunhadura (antes era o centro da curva, e o arco ficava longe da mão, rodeando a Lia)
+  const outer = new THREE.Group(); g.position.x = -0.55; outer.add(g); outer.scale.setScalar(0.78); // arco curto de caça, ~85 cm
+  return outer;
 }
