@@ -122,7 +122,7 @@ export const HOUSES = [
   // x, z, rot, opções
   [-24, -16, 0.35, { role: 'padaria', w: 8, d: 6, floors: 2, lower: 'stoneWarm', upper: 'plasterOchre', roof: 'roof', door: 'red', shutters: 'ochre', flowers: true, sign: 'pão' }],
   [22, -22, -0.5, { role: 'familia', w: 7, d: 5.6, floors: 2, lower: 'plasterBlue', upper: 'plasterBlue', frame: true, roof: 'roofDark', door: 'blue', shutters: 'blue', flowers: true }],
-  [-14, 32, 3.0, { role: 'hospedaria', w: 9, d: 6.2, floors: 2, lower: 'stone', upper: 'plaster', roof: 'roofMoss', door: 'wood', shutters: 'green', jetty: true, sign: 'hospedaria', flowers: true }],
+  [-14, 32, 3.0, { role: 'hospedaria', w: 11, d: 7.4, floors: 2, frame: true, lower: 'stone', upper: 'plaster', roof: 'roofMoss', door: 'wood', shutters: 'green', jetty: true, sign: 'hospedaria', flowers: true }],
   [16, 30, -2.8, { role: 'irene', w: 6.4, d: 5.2, floors: 1, lower: 'plasterSage', frame: true, roof: 'thatch', door: 'green', shutters: 'green', flowers: true, herbs: true }],
   [-32, -38, 0.6, { role: 'vazia', w: 6.4, d: 5.2, floors: 1, lower: 'stone', roof: 'roofMoss', door: 'wood', shutters: null, ivy: true }],
   [-44, 2, 1.57, { role: 'torre', w: 6.2, d: 5.6, floors: 2, lower: 'block', upper: 'plasterRose', roof: 'roofDark', door: 'ochre', shutters: 'red', pitch: 0.95 }],
@@ -214,10 +214,13 @@ export function house(x, z, rot, o) {
     addWalk(B, sx0, sxB, szc - stairW / 2, szc + stairW / 2, prev + rise, prev + 0.02, 'x');
     // laje com abertura sobre a escada inteira (e um pouco além do pé): ninguém bate a cabeça, e a câmera,
     // que vem atrás e acima da Lia, não atravessa o assoalho de cima durante a subida
-    const hxb = Math.min(sxB + 0.35, iw / 2 - 1.2), hz1 = szc + stairW / 2 + 0.03;
+    // a abertura do piso vai por cima de quase toda a escada: a câmera, que sobe atrás da Lia, passa pela abertura e não pelo piso
+    const hxb = iw / 2 - 1.22, hz1 = szc + stairW / 2 + 0.03;
     const slabY = fy + SLAB / 2;
     box(iw / 2 - hxb, SLAB, id, M.floor, 1.4, mtx((hxb + iw / 2) / 2, slabY, 0, 0, 0, 0, B), true);
     box(hxb + iw / 2, SLAB, id / 2 - hz1, M.floor, 1.4, mtx((hxb - iw / 2) / 2, slabY, (hz1 + id / 2) / 2, 0, 0, 0, B), true);
+    // a abertura encosta nas paredes: uma faixa estreita de piso junto delas fecha a fresta da parede na altura da laje
+    box(hxb + iw / 2, SLAB, 0.14, M.floor, 1.4, mtx((hxb - iw / 2) / 2, slabY, -id / 2 + 0.07, 0, 0, 0, B), false); box(0.14, SLAB, hz1 + id / 2, M.floor, 1.4, mtx(-iw / 2 + 0.07, slabY, (hz1 - id / 2) / 2, 0, 0, 0, B), false);
     addSolid(B, hxb, iw / 2, -id / 2, id / 2, fy, fy + SLAB); addSolid(B, -iw / 2, hxb, hz1, id / 2, fy, fy + SLAB);
     const fl = fy + SLAB;
     addWalk(B, hxb, iw / 2, -id / 2, id / 2, fl); addWalk(B, -iw / 2, hxb, hz1, id / 2, fl);
@@ -302,14 +305,16 @@ export function house(x, z, rot, o) {
     { const cx2 = iw / 2 - 0.7, cz2 = id / 2 - 0.9; box(0.55, 0.06, 0.55, M.oldWood, 1, mtx(cx2, fl0 + 0.45, cz2, 0, 0, 0, B)); box(0.55, 0.7, 0.06, M.oldWood, 1, mtx(cx2, fl0 + 0.8, cz2 - 0.27, -0.12, 0, 0, B)); for (const a of [-1, 1]) for (const b of [-1, 1]) box(0.05, 0.45, 0.05, M.oldWood, 1, mtx(cx2 + a * 0.24, fl0 + 0.22, cz2 + b * 0.24, 0, 0, 0, B)); col(cx2, cz2, 0.3, 0.3); seatAt(B, cx2, fl0 + 0.48, cz2 + 0.02, 0, 'chair'); }
     candle = L(-w * 0.12 + 0.2, fl0 + 0.95, d * 0.08);
   } else if (o.role === 'hospedaria') {
-    // balcão do Seu Cosme, duas mesas e, na parede dos fundos, o arco do filho dele
-    { const Ct = mtx(iw / 2 - 1.0, fl0, -0.4, 0, Math.PI / 2, 0, B); box(2.0, 1.0, 0.6, M.oldWood, 1, mtx(0, 0.5, 0, 0, 0, 0, Ct)); box(2.1, 0.06, 0.7, M.timber, 1, mtx(0, 1.03, 0, 0, 0, 0, Ct)); col(iw / 2 - 1.0, -0.4, 0.35, 1.05); }
-    table(-1.6, 0.9, 0); table(0.4, 1.3, 0.2); rug(-0.6, -0.6, fl0, M.cloth.green, [2.2, 1.3]);
-    { const bx = -iw / 2 + 1.4, bz = -id / 2 + 0.07, by = fl0 + 1.45;
-      storySpots.arcoWall = { p: L(bx, by, bz + 0.05), yaw: rot };
-      storySpots.arco = L(bx, fl0, bz + 1.0); }
-    candle = L(iw / 2 - 1.0, fl0 + 1.25, -0.4);
-  } else if (o.role === 'livros') {
+    // salão com balcão e mesas; à direita, atrás de uma parede com porta, a sala dos fundos do Seu Cosme: a cama dele e o arco na parede
+    const px = iw / 2 - 3.0, gap = 1.25;
+    { const len = id - gap; const c = L(px, 0, -id / 2 + len / 2); box(0.14, FH, len, M.lime, 2.5, mtx(px, fl0 + FH / 2, -id / 2 + len / 2, 0, 0, 0, B), true); addBox(c.x, c.z, 0.07, len / 2, rot, y0 + fl0 - 0.2, y0 + fl0 + FH);
+      box(0.14, FH - 2.2, gap, M.lime, 2.5, mtx(px, fl0 + 2.2 + (FH - 2.2) / 2, id / 2 - gap / 2, 0, 0, 0, B), false); box(0.18, 0.12, gap + 0.1, M.timber, 1, mtx(px, fl0 + 2.2, id / 2 - gap / 2, 0, 0, 0, B), false); }
+    { const Ct = mtx(px - 1.0, fl0, -0.5, 0, Math.PI / 2, 0, B); box(2.0, 1.0, 0.6, M.oldWood, 1, mtx(0, 0.5, 0, 0, 0, 0, Ct)); box(2.1, 0.06, 0.7, M.timber, 1, mtx(0, 1.03, 0, 0, 0, 0, Ct)); col(px - 1.0, -0.5, 0.35, 1.05); for (let i = 0; i < 3; i++) cyl(0.05, 0.05, 0.16, 10, M.clay, 1, mtx(-0.6 + i * 0.5, 1.14, 0, 0, 0, 0, Ct), false); }
+    table(-2.2, 1.2, 0); table(0.0, 1.5, 0.15); rug(-1.0, 0.2, fl0, M.cloth.green, [2.6, 1.5]);
+    bed(iw / 2 - 0.62, -id / 2 + 1.15, 0, fl0, M.cloth.green); storySpots.cosmeBed = hBeds[hBeds.length - 1]; chest(iw / 2 - 0.6, id / 2 - 1.0, fl0, Math.PI / 2);
+    storySpots.arcoWall = { p: L(px + 1.05, fl0 + 1.45, -id / 2 + 0.09), yaw: rot }; storySpots.arco = L(px + 1.05, fl0, -id / 2 + 1.0);
+    candle = L(px - 1.0, fl0 + 1.25, -0.5);
+  } else if (o.role === 'livros') {  } else if (o.role === 'livros') {
     table(0.6, d * 0.05, 0); shelf(iw / 2 - 0.2, id / 2 - 0.85, Math.PI / 2, fl0, 'books'); shelf(-iw / 2 + 0.2, 0.8, -Math.PI / 2, fl0, 'books'); rug(0.6, d * 0.05 + 1.2, fl0, M.cloth.blue);
     candle = L(0.8, fl0 + 0.95, d * 0.05);
   } else if (o.role === 'taberna') {
@@ -339,6 +344,17 @@ export function house(x, z, rot, o) {
   }
   // andares de cima: quartos
   for (const u of outs) {
+    if (o.role === 'hospedaria') {
+      // corredor junto à escada e três quartos com porta; o primeiro, perto do patamar, é o da Lia
+      const fy = u.fl, hz1 = -id / 2 + 0.02 + 0.95 + 0.03, wz = hz1 + 1.1, dW = 0.95;
+      const xs = [-iw / 2, -iw / 2 + 3.4, -iw / 2 + 6.9, iw / 2 - 1.3];
+      const wallSeg = (x0, x1, z, solid = true) => { const ln = x1 - x0; if (ln < 0.05) return; const cx = (x0 + x1) / 2; box(ln, FH, 0.12, M.lime, 2.5, mtx(cx, fy + FH / 2, z, 0, 0, 0, B), solid); const c = L(cx, 0, z); addBox(c.x, c.z, ln / 2, 0.06, rot, y0 + fy - 0.2, y0 + fy + FH); };
+      for (let r = 0; r < 3; r++) { const x0 = xs[r], x1 = xs[r + 1], dc = (x0 + x1) / 2; wallSeg(x0 + 0.06, dc - dW / 2, wz); wallSeg(dc + dW / 2, x1 - 0.06, wz); box(dW, FH - 2.15, 0.12, M.lime, 2.5, mtx(dc, fy + 2.15 + (FH - 2.15) / 2, wz, 0, 0, 0, B), false); box(dW + 0.12, 0.1, 0.16, M.timber, 1, mtx(dc, fy + 2.15, wz, 0, 0, 0, B), false);
+        if (r < 2) { const ln = id / 2 - wz; box(0.12, FH, ln, M.lime, 2.5, mtx(x1, fy + FH / 2, wz + ln / 2, 0, 0, 0, B), true); const c = L(x1, 0, wz + ln / 2); addBox(c.x, c.z, 0.06, ln / 2, rot, y0 + fy - 0.2, y0 + fy + FH); }
+        bed(dc - 0.55, id / 2 - 1.12, Math.PI, fy, [M.canvasRed, M.cloth.blue, M.cloth.ochre][r]); if (r === 0) storySpots.liaBed = hBeds[hBeds.length - 1];
+        rug(dc + 0.6, wz + 1.2, fy, [M.cloth.ochre, M.cloth.green, M.cloth.blue][r], [1.2, 0.9]); box(0.6, 0.6, 0.4, M.oldWood, 1, mtx(dc + 1.0, fy + 0.3, id / 2 - 0.35, 0, 0, 0, B)); col(dc + 1.0, id / 2 - 0.35, 0.3, 0.2, 0, fy); cyl(0.03, 0.035, 0.12, 8, M.candle, 1, mtx(dc + 1.0, fy + 0.66, id / 2 - 0.35, 0, 0, 0, B), false); }
+      continue;
+    }
     const fy = u.fl; rug(0.6, 0.3, fy, u.f === 1 ? M.cloth.ochre : M.cloth.blue, [1.8, 1.2]);
     bed(iw / 2 - 0.62, -id / 2 + 1.65, 0, fy, u.f === 1 ? M.canvasRed : M.cloth.blue);
     if (o.kidBed) bed(-iw / 2 + 0.6, id / 2 - 1.25, 0, fy, M.cloth.green);
@@ -458,7 +474,7 @@ function decor(o, B, I) {
   // ganchos com capa
   { const g = new THREE.PlaneGeometry(0.42, 0.95, 3, 6); const pp = g.attributes.position; for (let k = 0; k < pp.count; k++) { const yy = pp.getY(k); pp.setZ(k, Math.sin(pp.getX(k) * 12) * 0.03 + (0.47 - yy) * 0.04); } g.computeVertexNormals(); put(g, M.cloth.green, mtx(-0.95, fl0 + 1.25, d / 2 - T - 0.06, 0, Math.PI, 0, B), false); box(0.5, 0.06, 0.05, M.oldWood, 1, mtx(-0.95, fl0 + 1.75, d / 2 - T - 0.03, 0, 0, 0, B), false); }
   // quarto de cima: lavatório com bacia e jarro, cortinas
-  if (floors > 1 && !o.kidBed) { const fy = base + FH + SLAB; const W = mtx(-iw / 2 + 0.35, fy, 0.35, 0, Math.PI / 2, 0, B); box(0.7, 0.75, 0.42, M.oldWood, 1, mtx(0, 0.375, 0, 0, 0, 0, W)); cyl(0.17, 0.11, 0.08, 16, M.ceramic, 1, mtx(-0.1, 0.79, 0, 0, 0, 0, W), false); cyl(0.05, 0.08, 0.24, 12, M.ceramic, 1, mtx(0.2, 0.87, 0.05, 0, 0, 0, W), false); const c = new THREE.Vector3(-iw / 2 + 0.35, 0, 0.35).applyMatrix4(B); addBox(c.x, c.z, 0.22, 0.36, rot0(B) + Math.PI / 2, new THREE.Vector3().setFromMatrixPosition(B).y + fy - 0.3, new THREE.Vector3().setFromMatrixPosition(B).y + fy + 1.7); }
+  if (floors > 1 && !o.kidBed && o.role !== 'hospedaria') { const fy = base + FH + SLAB; const W = mtx(-iw / 2 + 0.35, fy, 0.35, 0, Math.PI / 2, 0, B); box(0.7, 0.75, 0.42, M.oldWood, 1, mtx(0, 0.375, 0, 0, 0, 0, W)); cyl(0.17, 0.11, 0.08, 16, M.ceramic, 1, mtx(-0.1, 0.79, 0, 0, 0, 0, W), false); cyl(0.05, 0.08, 0.24, 12, M.ceramic, 1, mtx(0.2, 0.87, 0.05, 0, 0, 0, W), false); const c = new THREE.Vector3(-iw / 2 + 0.35, 0, 0.35).applyMatrix4(B); addBox(c.x, c.z, 0.22, 0.36, rot0(B) + Math.PI / 2, new THREE.Vector3().setFromMatrixPosition(B).y + fy - 0.3, new THREE.Vector3().setFromMatrixPosition(B).y + fy + 1.7); }
 }
 function rot0(B) { return new THREE.Euler().setFromRotationMatrix(B, 'YXZ').y; }
 export function woodpile(x, z, rot) { const B = mtx(x, groundH(x, z), z, 0, rot, 0); for (let r = 0; r < 4; r++) for (let i = 0; i < 6 - r; i++) cyl(0.16, 0.16, 1.4, 8, M.bark, 1, mtx(-1.1 + i * 0.36 + r * 0.18, 0.17 + r * 0.29, 0, Math.PI / 2, 0, 0, B)); addBox(x, z, 1.2, 0.8, rot); }

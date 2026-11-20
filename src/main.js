@@ -164,7 +164,13 @@ async function boot() {
   roomLight = new VLight(0xfff0dc, 0, 9, 1.4, 2);
   LightPool.init(Q().lights || 4); buildLamps(); updateObsBlink(0); buildLantern(); buildRipples();
   const had = !!store.get(SAVE_KEY);
-  await step('Últimos detalhes…', 0.9, () => { initNav(); buildPlayer(); buildBoat(); buildNPCs(); initPetrify({ player: pH, odessa, davi }); spawnAnimals(); spawnFauna(FLOWER_ZONES()); POI.ninho = { x: NINHO.x, z: NINHO.z, name: 'O Ninho da Vésper' }; buildMapBase(); orchard = new Orchard(trees, { radius: 300, count: 16, ok: (x, z) => pathDistOK(x, z, 12) && Math.hypot(x - POI.observatory.x, z - POI.observatory.z) > 20 }); if (storySpots.arcoWall && !has('arco')) { wallBow = makeBow(); wallBow.position.copy(storySpots.arcoWall.p); wallBow.rotation.set(0, storySpots.arcoWall.yaw, 0); scene.add(wallBow); } if (has('arco')) setBow(); if (S.flags.liaPedra && !S.final) setLiaStone(true); renderBag(); });
+  await step('Últimos detalhes…', 0.9, () => { initNav(); buildPlayer(); buildBoat(); buildNPCs(); initPetrify({ player: pH, odessa, davi }); spawnAnimals(); spawnFauna(FLOWER_ZONES()); POI.ninho = { x: NINHO.x, z: NINHO.z, name: 'O Ninho da Vésper' }; buildMapBase(); orchard = new Orchard(trees, { radius: 300, count: 16, ok: (x, z) => pathDistOK(x, z, 12) && Math.hypot(x - POI.observatory.x, z - POI.observatory.z) > 20 }); if (storySpots.arcoWall && !has('arco')) { wallBow = makeBow(); const y = storySpots.arcoWall.yaw; wallBow.position.copy(storySpots.arcoWall.p).add(V3(Math.sin(y) * 0.06, 0, Math.cos(y) * 0.06)); wallBow.rotation.set(0, y, Math.PI / 2 + 0.25, 'YXZ'); wallBow.scale.setScalar(1.0); scene.add(wallBow);
+    // dois pinos de madeira segurando o arco e, ao lado, a aljava com as flechas
+    const wood = new THREE.MeshStandardMaterial({ color: 0x5a3d22, roughness: 0.8 }), leather = new THREE.MeshStandardMaterial({ color: 0x6e4a2c, roughness: 0.75 }); const fx = Math.sin(y), fz = Math.cos(y), rx = Math.cos(y), rz = -Math.sin(y); const P0 = storySpots.arcoWall.p;
+    wallBow.userData.extra = [];
+    for (const k of [-0.32, 0.32]) { const peg = new THREE.Mesh(new THREE.CylinderGeometry(0.018, 0.018, 0.14, 8), wood); peg.position.set(P0.x + rx * k + fx * 0.07, P0.y + 0.05, P0.z + rz * k + fz * 0.07); peg.rotation.set(Math.PI / 2, y, 0, 'YXZ'); scene.add(peg); wallBow.userData.extra.push(peg); }
+    const q = new THREE.Group(); const body = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.05, 0.55, 12), leather); q.add(body); for (let i = 0; i < 5; i++) { const a = new THREE.Mesh(new THREE.CylinderGeometry(0.005, 0.005, 0.32, 4), wood); a.position.set(Math.cos(i * 1.3) * 0.025, 0.4, Math.sin(i * 1.3) * 0.025); q.add(a); const f = new THREE.Mesh(new THREE.ConeGeometry(0.016, 0.06, 4), new THREE.MeshStandardMaterial({ color: 0xe8e0cc })); f.position.set(a.position.x, 0.58, a.position.z); q.add(f); }
+    q.position.set(P0.x + rx * 0.75 + fx * 0.1, P0.y - 0.35, P0.z + rz * 0.75 + fz * 0.1); q.rotation.z = 0.12; scene.add(q); wallBow.userData.extra.push(q); } if (has('arco')) setBow(); if (S.flags.liaPedra && !S.final) setLiaStone(true); renderBag(); });
   post = new Post(); post.setSize(innerWidth, innerHeight);
   player.y = groundH(player.x, player.z);
   for (let i = 0; i < 30; i++) grass.update(player.x, player.z, 100);
@@ -285,7 +291,7 @@ function updateSitting(dt) {
   const st = player.sit; st.t += dt;
   if (st.lie) { // deitada
     if (!st.rising) { st.k = Math.min(1, st.k + dt / 1.4); const k = smooth(0, 1, st.k); player.x = lerp(st.from.x, st.to.x, k); player.z = lerp(st.from.z, st.to.z, k); player.y = lerp(st.from.y, st.to.y, k); player.h = lerpAng(player.h, st.to.yaw, dt * 5); }
-    else if (pH.done() || st.t > 5) { player.x = st.lie.side.x; player.z = st.lie.side.z; player.y = probe(player.x, player.z, player.y + 0.3).h; taken.delete(st.lie); player.sit = null; cam.mode = 'follow'; $('lapseHint').hidden = true; $('lapseHint').textContent = lapseText; pH.play('idle', 0.3); }
+    else if (pH.done() || st.t > 5) { const back = st.from || st.lie.side; player.x = back.x; player.z = back.z; player.y = probe(player.x, player.z, (back.y ?? player.y) + 0.3).h; taken.delete(st.lie); player.sit = null; cam.mode = 'follow'; cam.yaw = player.h + Math.PI; cam.cur.set(player.x - Math.sin(player.h) * 1.6, player.y + 1.7, player.z - Math.cos(player.h) * 1.6); $('lapseHint').hidden = true; $('lapseHint').textContent = lapseText; pH.play('idle', 0.3); }
     pH.root.position.set(player.x, player.y, player.z); pH.root.rotation.y = player.h; pH.lookAtPoint(null); pH.update(dt); return;
   }
   if (pH.currentName === 'sitDown' && pH.done()) pH.play('sit', 0.4);
@@ -298,9 +304,10 @@ let lapseText = 'T · deixar o tempo passar · mova-se para levantar';
 // dormir: tela escurece, a noite passa, amanhece
 function faint() {
   state = 'intro'; const f = $('fade'); pH.play('lie', 0.4); Sound.rustle(player.x, player.z); setTimeout(() => { f.style.opacity = '1'; }, 600);
-  setTimeout(() => { const h = houseOf('hospedaria'); const b = h && h.beds.find(b => !taken.get(b)); S.day++; hour = 9.0; S.wake = S.day * 24 + hour; S.flags.avisouSono = S.flags.avisouSono2 = 0; S.flags.desmaio = 1; if (sky) sky.setHour(hour);
-    if (b) { player.x = b.side.x; player.z = b.side.z; player.y = probe(player.x, player.z, b.y + 0.3).h; } const s = storySpots.inn; teleportNPC(cosme, s.x, s.z); pH.play('idle', 0.3); save();
-    setTimeout(() => { f.style.opacity = '0'; state = 'play'; toast('Você desmaiou', 'Perdeu um dia do prazo. O Seu Cosme trouxe você de volta.'); setTimeout(() => think('li_cansada'), 2500); }, 1400); }, 2600);
+  setTimeout(() => { const b = storySpots.liaBed; S.day++; hour = 9.0; S.wake = S.day * 24 + hour; S.flags.avisouSono = S.flags.avisouSono2 = 0; S.flags.desmaio = 1; if (sky) sky.setHour(hour);
+    if (bow) toggleAim(false); if (b) { player.x = b.side.x; player.z = b.side.z; player.y = b.side.y; player.h = b.yaw; state = 'play'; lieAt(b); player.sit.k = 1; } else { const s = storySpots.inn; player.x = s.x; player.z = s.z; player.y = probe(s.x, s.z, groundH(s.x, s.z) + 0.5).h; }
+    pH.play('idle', 0.3); save();
+    setTimeout(() => { f.style.opacity = '0'; state = 'play'; toast('Você desmaiou', 'O Seu Cosme trouxe você para o seu quarto na hospedaria. Perdeu um dia do prazo.'); setTimeout(() => think('li_cansada'), 2500); }, 1400); }, 2600);
 }
 function sleepUntilMorning() {
   if (state !== 'play' || !player.sit || !player.sit.lie || player.sit.sleeping) return; player.sit.sleeping = true; const f = $('fade'); f.style.opacity = '1'; Music.stop(3);
@@ -451,18 +458,23 @@ function updateCamera(dt) {
   if (state === 'finale' && finale) { finale.camera(dt); return; }
   cam.inK = lerp(cam.inK || 0, insideHouse(player.x, player.z) ? 1 : 0, 1 - Math.exp(-dt * 4));
   if (cam.mode === 'lie' && player.sit && player.sit.lie) {
-    const b = player.sit.lie; const head = pH.headPos; const sd = V3(b.side.x - b.x, 0, b.side.z - b.z).normalize(); const fw = V3(Math.sin(b.yaw), 0, Math.cos(b.yaw));
-    let want = head.clone().addScaledVector(sd, 1.25).addScaledVector(fw, 0.9 + Math.sin(elapsed * 0.05) * 0.2).add(V3(0, 1.05, 0)); let last = head.clone();
-    for (let i = 1; i <= 12; i++) { const q = head.clone().lerp(want, i / 12); if (insideBox(q.x, q.z, 0.15, player.y) || inSolid(q.x, q.y, q.z, 0.18)) break; last = q; }
-    cam.cur.lerp(last, 1 - Math.exp(-dt * 3)); camera.position.copy(cam.cur); camera.lookAt(head.x, head.y - 0.15, head.z); camera.fov = lerp(camera.fov, 50, 1 - Math.exp(-dt * 3)); camera.updateProjectionMatrix(); if (pH) pH.root.visible = true; return;
+    // deitada: câmera alta, de três quartos, vendo a Lia inteira na cama (nunca dentro dela nem colada no pescoço)
+    const b = player.sit.lie; const bc = V3(b.x, b.y, b.z); const sd = V3(b.side.x - b.x, 0, b.side.z - b.z).normalize(); const fw = V3(Math.sin(b.yaw), 0, Math.cos(b.yaw));
+    const look = bc.clone().add(V3(0, 0.45, 0)); const ceil = probe(b.x, b.z, b.y + 0.3).h + 2.35;
+    let best = null; for (const [ka, kb] of [[1.7, 0.9], [1.7, -0.9], [1.3, 1.4], [1.3, -1.4], [1.0, 0.4]]) { const w = bc.clone().addScaledVector(sd, ka).addScaledVector(fw, kb); w.y = Math.min(b.y + 2.05, ceil); let ok = true; for (let i = 1; i <= 10; i++) { const q = look.clone().lerp(w, i / 10); if (insideBox(q.x, q.z, 0.12, player.y) || inSolid(q.x, q.y, q.z, 0.15)) { ok = false; break; } } if (ok) { best = w; break; } }
+    if (!best) { best = look.clone().add(V3(0, 1.4, 0)).addScaledVector(sd, 0.4); }
+    cam.cur.lerp(best, 1 - Math.exp(-dt * 3)); camera.position.copy(cam.cur); camera.lookAt(look); camera.fov = lerp(camera.fov, 55, 1 - Math.exp(-dt * 3)); camera.updateProjectionMatrix(); if (pH) pH.root.visible = true; return;
   }
+  // na escada de uma casa: câmera mais perto e mais alta, para subir pela abertura do piso junto com a Lia
+  let onSt = false; for (const h of interiors) { if (Math.abs(h.x - player.x) > 12 || Math.abs(h.z - player.z) > 12) continue; for (const st of h.stair) { const ax = st.foot.x, az = st.foot.z, bx = st.top.x, bz = st.top.z; const dx = bx - ax, dz = bz - az; const t = clamp(((player.x - ax) * dx + (player.z - az) * dz) / (dx * dx + dz * dz), 0, 1); if (Math.hypot(ax + dx * t - player.x, az + dz * t - player.z) < 1.0 && player.y > st.foot.y - 0.3 && player.y < st.floorY + 0.4) onSt = true; } }
+  cam.stK = lerp(cam.stK || 0, onSt ? 1 : 0, 1 - Math.exp(-dt * 4));
   const sitK = cam.mode === 'sit' ? 1 : 0; cam.sitK = lerp(cam.sitK || 0, sitK, 1 - Math.exp(-dt * 1.2));
   cam.aimK = lerp(cam.aimK || 0, bow && bow.aiming ? 1 : 0, 1 - Math.exp(-dt * 8));
   const dist = lerp(lerp(lerp(3.5, 1.9, cam.inK), 5.2, cam.sitK * (1 - cam.inK)), 1.55, cam.aimK), shoulder = lerp(lerp(0.3, 0.18, cam.inK), 0.62, cam.aimK), fov = lerp(lerp(lerp(52, 62, cam.inK), 46, cam.sitK), 40, cam.aimK);
   if (cam.mode === 'sit') { cam.yaw = lerpAng(cam.yaw, player.h + Math.PI + 0.5 + Math.sin(elapsed * 0.05) * 0.15, dt * 0.25); cam.pitch = lerp(cam.pitch, -0.05, dt * 0.4); }
   const right = V3(Math.cos(cy), 0, -Math.sin(cy));
-  const pivot = V3(player.x, player.y + (player.sit ? 1.0 : 1.5), player.z);
-  let want = pivot.clone().addScaledVector(camFwd, -dist).addScaledVector(right, shoulder).add(V3(0, 0.12, 0));
+  const pivot = V3(player.x, player.y + (player.sit ? 1.0 : 1.5) + cam.stK * 0.35, player.z);
+  let want = pivot.clone().addScaledVector(camFwd, -lerp(dist, 1.8, cam.stK)).addScaledVector(right, shoulder * (1 - cam.stK)).add(V3(0, 0.12, 0));
   const steps = 14; let last = pivot.clone().addScaledVector(right, shoulder * 0.3);
   for (let i = 1; i <= steps; i++) { const t = i / steps; const q = pivot.clone().lerp(want, t); if (q.y < groundH(q.x, q.z) + 0.3 || insideBox(q.x, q.z, 0.15, player.y) || inSolid(q.x, q.y, q.z, 0.18) || q.y < probe(q.x, q.z, player.y + 0.4).h + 0.25) break; last = q; }
   want = last; if (player.swim) want.y = Math.max(want.y, WATER + 0.7);
@@ -499,7 +511,9 @@ function buildNPCs() {
   const bs = storySpots.bastiao; bastiao = addNPC({ id: 'bastiao', key: 'bastiao', day: [bs.x, bs.z, storySpots.bastiaoYaw + Math.PI], talk: talkBastiao, idle: 'kneel', home: houseOf('torre') });
   // o Seu Cosme, na porta da hospedaria
   { const h = houseOf('hospedaria'); const dp = h.door.p, fw = [Math.sin(h.rot), Math.cos(h.rot)]; storySpots.inn = { x: dp.x + fw[0] * 1.3, z: dp.z + fw[1] * 1.3, yaw: h.rot };
-    cosme = addNPC({ id: 'cosme', key: 'cosme', day: [dp.x + fw[0] * 1.6 + fw[1] * 1.2, dp.z + fw[1] * 1.6 - fw[0] * 1.2, h.rot], talk: talkCosme, idle: 'fold', home: h, slow: true }); }
+    cosme = addNPC({ id: 'cosme', key: 'cosme', day: [dp.x + fw[0] * 1.6 + fw[1] * 1.2, dp.z + fw[1] * 1.6 - fw[0] * 1.2, h.rot], talk: talkCosme, idle: 'fold', home: h, slow: true });
+    // o Seu Cosme dorme na sala dos fundos, no térreo; o quarto de cima é da Lia
+    if (storySpots.cosmeBed) { cosme.homeBed = storySpots.cosmeBed; taken.set(storySpots.cosmeBed, cosme); } }
   // Vila da Maré
   { const s2 = storySpots.marta; marta = addNPC({ id: 'marta', key: 'marta', day: [s2.x, s2.z, storySpots.martaYaw], talk: talkMarta, idle: 'idle', home: houseOf('taberna'), slow: true }); }
   { const s2 = storySpots.joca; joca = addNPC({ id: 'joca', key: 'joca', day: [s2.x, s2.z, storySpots.jocaYaw], talk: talkJoca, idle: 'idle', work: 'kneel', home: houseOf('barqueiro') }); }
@@ -1187,9 +1201,15 @@ function eatMeal() { fed(); setTimeout(() => think(tasteLine()), 1200); }
 function renderBag() { const b = $('bag'); if (!b) return; const ks = Object.keys(S.bag || {}).filter(k => S.bag[k] > 0); b.hidden = !ks.length && !has('arco'); b.innerHTML = ks.map(k => `<span>${FOOD[k].icon}<b>${S.bag[k]}</b></span>`).join('') + (hunger() > 0.62 ? '<span class="hungry">com fome</span>' : ''); }
 // o arco
 let bow = null, orchard = null, wallBow = null;
-function setBow() { if (!has('arco') || bow) return; bow = { mesh: makeBow(), aiming: false, cool: 0 }; pH.root.add(bow.mesh); placeBow(); if (isTouch) $('tbBow').hidden = false; renderBag(); }
-function placeBow() { if (!bow) return; const b = bow.aiming ? pH.bones.hand_l : pH.bones.spine_03; if (!b) return; if (bow.mesh.parent !== b) b.add(bow.mesh); if (bow.aiming) { bow.mesh.position.set(0, 0.02, 0); bow.mesh.rotation.set(0, Math.PI / 2, 0); bow.mesh.scale.setScalar(1); } else { bow.mesh.position.set(0.05, -0.18, -0.16); bow.mesh.rotation.set(0.2, 0, 0.5); bow.mesh.scale.setScalar(1); } }
-function toggleAim(on) { if (!bow || state !== 'play' || player.sit) return; bow.aiming = on ?? !bow.aiming; placeBow(); $('crosshair').hidden = !bow.aiming; if (bow.aiming && !S.flags.arcoTut) { S.flags.arcoTut = 1; toast('Mirando', isTouch ? 'Toque em Usar para atirar · Arco de novo para guardar' : 'Clique ou E para atirar · R para guardar'); } }
+function setBow() { if (!has('arco') || bow) return; bow = { mesh: makeBow(), aiming: false, cool: 0 }; scene.add(bow.mesh); updateBow(); if (isTouch) $('tbBow').hidden = false; renderBag(); }
+// o arco fica no mundo (não preso a um osso, que tem outra escala): nas costas, na diagonal; na mão esquerda quando mira
+function updateBow() {
+  if (!bow) return; const m = bow.mesh; m.visible = pH.root.visible && state !== 'lume' && state !== 'finale' && !(player.sit && player.sit.lie);
+  const yaw = player.h, fx = Math.sin(yaw), fz = Math.cos(yaw);
+  if (bow.aiming) { const hp = pH.handPos ? pH.handPos('l') : V3(player.x, player.y + 1.3, player.z); m.position.copy(hp).add(V3(fx * 0.05, 0, fz * 0.05)); m.rotation.set(0, yaw - Math.PI / 2, 0, 'YXZ'); }
+  else { const sp = pH.bones.spine_03; const c = sp ? sp.getWorldPosition(V3()) : V3(player.x, player.y + 1.25, player.z); m.position.set(c.x - fx * 0.19, c.y - 0.05, c.z - fz * 0.19); m.rotation.set(0, yaw + Math.PI / 2, 0.55, 'YXZ'); }
+}
+function toggleAim(on) { if (!bow || state !== 'play' || player.sit) return; bow.aiming = on ?? !bow.aiming; updateBow(); $('crosshair').hidden = !bow.aiming; if (bow.aiming && !S.flags.arcoTut) { S.flags.arcoTut = 1; toast('Mirando', isTouch ? 'Toque em Usar para atirar · Arco de novo para guardar' : 'Clique ou E para atirar · R para guardar'); } }
 function shoot() {
   if (!bow || !bow.aiming || bow.cool > 0) return; bow.cool = 0.7; pH.play('throw', 0.1);
   const o = camera.position.clone(), d = camFwd.clone().normalize(); const from = pH.handPos ? pH.handPos('l') : V3(player.x, player.y + 1.4, player.z);
@@ -1220,7 +1240,7 @@ function interactables() {
   { const ls = lakeThrowSpot(); if (ls) out.push({ x: ls.x, z: ls.z, r: 3, label: 'Procurar uma pedra e jogar no lago', act: enterSkip }); }
   if (orchard) { const f = orchard.groundNear(player.x, player.z, 2.2); if (f) out.push({ x: f.pos.x, z: f.pos.z, r: 2.2, label: 'Pegar ' + (f.kind === 'maca' ? 'a maçã' : f.kind === 'laranja' ? 'a laranja' : 'o figo'), act: () => { if (addFood(f.kind, 1)) { orchard.take(f); pH.play('pickup', 0.2); } } }); }
   { const am = storySpots.amoras; if (am && Math.abs(am.x - player.x) < 4 && Math.abs(am.z - player.z) < 4) out.push({ x: am.x, z: am.z, r: 2.6, label: S.flags.amoraDia === S.day ? 'Já colhi as amoras de hoje' : 'Colher amoras', act: () => { if (S.flags.amoraDia === S.day) { think('li_amoras'); return; } if (addFood('amora', 3)) { S.flags.amoraDia = S.day; pH.play('harvest', 0.2); setTimeout(() => think('li_colher'), 700); } } }); }
-  if (S.flags.arcoOk && !has('arco') && storySpots.arco && Math.abs(storySpots.arco.x - player.x) < 3 && Math.abs(storySpots.arco.z - player.z) < 3) out.push({ x: storySpots.arco.x, z: storySpots.arco.z, r: 2.2, label: 'Pegar o arco do filho do Seu Cosme', act: () => { give('arco'); if (wallBow) { wallBow.parent && wallBow.parent.remove(wallBow); wallBow = null; } setBow(); think('li_arco'); toast('O arco', isTouch ? 'Toque em Arco para mirar, Usar para atirar' : 'R para mirar · clique ou E para atirar · Q para comer'); } });
+  if (S.flags.arcoOk && !has('arco') && storySpots.arco && Math.abs(storySpots.arco.x - player.x) < 3 && Math.abs(storySpots.arco.z - player.z) < 3) out.push({ x: storySpots.arco.x, z: storySpots.arco.z, r: 2.2, label: 'Pegar o arco do filho do Seu Cosme', act: () => { give('arco'); if (wallBow) { for (const o of wallBow.userData.extra || []) if (o.isGroup) scene.remove(o); /* leva a aljava; os pinos ficam */ wallBow.parent && wallBow.parent.remove(wallBow); wallBow = null; } setBow(); think('li_arco'); toast('O arco', isTouch ? 'Toque em Arco para mirar, Usar para atirar' : 'R para mirar · clique ou E para atirar · Q para comer'); } });
   for (const k in NOTES) { const sp = storySpots[k]; if (sp) out.push({ x: sp.x, z: sp.z, r: 2.4, label: S.notes[k] ? 'Olhar de novo' : 'Observar', act: () => readNote(k) }); }
   // a Alva
   if (alva && (alva.mode === 'rest' || alva.mode === 'ground')) { const d = Math.hypot(alva.x - player.x, alva.z - player.z); if (d < 21) { if (!S.alva) out.push({ x: alva.x, z: alva.z, r: 19, label: 'Aproximar-se devagar da dragoa', act: () => { if (player.speed > 2.2 || alva.alert > 0.5) { think('li_alva_corre'); return; } alva.bow = 1; think('li_alva1', () => { think('li_alva2'); S.alva = 1; alva.trust = 1; save(); setTimeout(() => { if (alva) alva.bow = 0; }, 8000); }); } }); else out.push({ x: alva.x, z: alva.z, r: 19, label: 'Montar na Vésper e voar', act: mountDragon }); } }
@@ -1570,7 +1590,7 @@ function frame(fixedDt) {
   updateDoors(dt); updateInteriorLights(dt); updateLantern(dt); updateRipples(dt); updateLamps(); updateObsBlink(dt);
   if (alva && state !== 'fly' && alva.target && alva.mode === 'auto' && Math.hypot(player.x - alva.target.px, player.z - alva.target.pz) > 35 && (!alva.retT || elapsed - alva.retT > 2)) { alva.retT = elapsed; const sp = alvaSpot(player.x, player.z); if (sp) alva.target = sp; }
   if (alva && state !== 'fly') { alva.update(dt, null, player); if (alva.alert > 0.9 && state === 'play' && !S.alva && (!alva.spookT || elapsed - alva.spookT > 40)) { alva.spookT = elapsed; think('li_alva_corre'); } }
-  updateOcean(); updateHarbor(dt, elapsed, scene); if (boat && state !== 'sail') boat.update(dt, null, elapsed); updateGiants(dt, elapsed); if (orchard) orchard.update(dt); const obj = state !== 'menu' ? objectives()[0] : null; updateSpirits(dt, elapsed, player, obj ? obj.tgt : null, sky.nightF, player.speed > 0.3); if (motes) motes.update(elapsed, camera.position.x, camera.position.z, sky.dayF, sky.nightF, U.wind.value);
+  updateOcean(); updateHarbor(dt, elapsed, scene); if (boat && state !== 'sail') boat.update(dt, null, elapsed); updateGiants(dt, elapsed); if (orchard) orchard.update(dt); if (bow) updateBow(); const obj = state !== 'menu' ? objectives()[0] : null; updateSpirits(dt, elapsed, player, obj ? obj.tgt : null, sky.nightF, player.speed > 0.3); if (motes) motes.update(elapsed, camera.position.x, camera.position.z, sky.dayF, sky.nightF, U.wind.value);
   post.updateLook(U.sunDir.value, sky.dayF, sky.nightF, sky.dusk || 0, U.sunColor.value);
   const focus = state === 'menu' ? camera.position : V3(player.x, 0, player.z);
   grass.update(focus.x, focus.z, 2); updateProps(camera.position.x, camera.position.z);

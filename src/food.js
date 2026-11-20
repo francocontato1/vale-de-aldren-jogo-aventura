@@ -79,11 +79,12 @@ export class Orchard {
 
 // o arco: na mão esquerda quando a Lia mira, nas costas quando não
 export function makeBow() {
-  const g = new THREE.Group(); const wood = new THREE.MeshStandardMaterial({ color: 0x6b4a2a, roughness: 0.7 });
-  const limb = new THREE.Mesh(new THREE.TorusGeometry(0.55, 0.018, 6, 20, Math.PI * 0.8), wood); limb.rotation.z = Math.PI / 2 - Math.PI * 0.4; g.add(limb);
+  const g = new THREE.Group(); const wood = new THREE.MeshStandardMaterial({ color: 0x3e2a18, roughness: 0.62 });
+  const limb = new THREE.Mesh(new THREE.TorusGeometry(0.55, 0.014, 6, 24, Math.PI * 0.8), wood); limb.rotation.z = Math.PI / 2 - Math.PI * 0.4; g.add(limb);
   const grip = new THREE.Mesh(new THREE.CylinderGeometry(0.024, 0.024, 0.14, 8), new THREE.MeshStandardMaterial({ color: 0x3a2618, roughness: 0.9 })); grip.position.x = 0.55; g.add(grip);
   const a0 = -Math.PI * 0.4 + Math.PI / 2, a1 = a0 + Math.PI * 0.8; const p0 = new THREE.Vector3(Math.cos(a0) * 0.55, Math.sin(a0) * 0.55, 0), p1 = new THREE.Vector3(Math.cos(a1) * 0.55, Math.sin(a1) * 0.55, 0);
   const str = new THREE.Mesh(new THREE.CylinderGeometry(0.003, 0.003, p0.distanceTo(p1), 4), new THREE.MeshBasicMaterial({ color: 0xe8e0cc })); str.position.copy(p0).add(p1).multiplyScalar(0.5); str.lookAt(p1); str.rotateX(Math.PI / 2); g.add(str);
   g.traverse(o => { if (o.isMesh) o.castShadow = true; });
+  g.scale.setScalar(0.78); // arco curto de caça, ~85 cm
   return g;
 }
